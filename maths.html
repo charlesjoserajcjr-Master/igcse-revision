@@ -332,6 +332,61 @@ function svgTree(){
   ${T(205, 62, 'R', 'lbl')}${T(205, 182, 'B', 'lbl')}${T(392, 34, 'RR: 0.4 × 0.4 = 0.16', 'mono')}${T(392, 104, 'RB: 0.4 × 0.6 = 0.24', 'mono')}${T(392, 154, 'BR: 0.6 × 0.4 = 0.24', 'mono')}${T(392, 224, 'BB: 0.6 × 0.6 = 0.36', 'mono')}
   ${T(16, 130, 'start', 'mut')}${T(560, 245, 'total = 1', 'mid acct')}</svg>`;
 }
+function svgFactorTree(){
+  const n = (x, y, t, prime) => `<circle cx="${x}" cy="${y}" r="20" class="${prime ? 'accf' : 'metal'}" style="${prime ? 'fill-opacity:.35;' : ''}stroke:var(--ink);stroke-width:1.6"/>${T(x, y + 5, t, 'mid mono lbl')}`;
+  const l = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1 + 20}" x2="${x2}" y2="${y2 - 20}" class="thin"/>`;
+  return `<svg viewBox="0 0 700 270" role="img" aria-label="Factor tree of 60">
+  ${l(160,40,100,110)}${l(160,40,220,110)}${l(220,110,180,180)}${l(220,110,260,180)}
+  ${n(160,40,'60')}${n(100,110,'2',1)}${n(220,110,'30')}${n(180,180,'2',1)}${n(260,180,'15')}${l(260,180,230,240)}${l(260,180,290,240)}${n(230,240,'3',1)}${n(290,240,'5',1)}
+  ${T(380, 70, 'Split until every end is prime', 'lbl')}${T(380, 100, '(the shaded circles).', 'lbl')}
+  ${T(380, 140, '60 = 2 × 2 × 3 × 5', 'mono')}${T(380, 166, '60 = 2² × 3 × 5', 'mono acct')}${T(380, 200, 'Write repeats with an index.', 'mut')}</svg>`;
+}
+function svgHcfLcm(){
+  return `<svg viewBox="0 0 640 230" role="img" aria-label="HCF and LCM from prime factors">
+  ${T(40, 40, '12 = 2² × 3', 'mono lbl')}${T(40, 70, '18 = 2 × 3²', 'mono lbl')}
+  ${T(40, 112, 'HCF: lowest power of each COMMON prime', 'acct')}${T(40, 138, '2¹ × 3¹ = 6', 'mono lbl')}
+  ${T(40, 176, 'LCM: highest power of EVERY prime', 'hott')}${T(40, 202, '2² × 3² = 36', 'mono lbl')}
+  ${T(360, 112, 'Check: HCF × LCM = product', 'mut')}${T(360, 138, '6 × 36 = 216 = 12 × 18 ✓', 'mono')}</svg>`;
+}
+function svgPctBar(){
+  return `<svg viewBox="0 0 640 230" role="img" aria-label="Percentage bar and multipliers">
+  ${Array.from({length:10}, (_, i) => `<rect x="${40 + i * 56}" y="30" width="56" height="40" class="${i < 3 ? 'accf' : 'metal'}" style="${i < 3 ? 'fill-opacity:.4;' : ''}stroke:var(--ink);stroke-width:1.4"/>${T(68 + i * 56, 55, '10%', 'mid mono')}`).join('')}
+  ${T(40, 96, '100% of 80 = 80    10% = 8    35% = 3 × 8 + half of 8 = 28', 'mono')}
+  ${T(40, 136, 'Increase by 20%  →  × 1.20', 'mono acct')}${T(40, 160, 'Decrease by 20%  →  × 0.80', 'mono hott')}
+  ${T(340, 136, 'Increase by 5%  →  × 1.05', 'mono acct')}${T(340, 160, 'Decrease by 35%  →  × 0.65', 'mono hott')}
+  ${T(40, 200, 'multiplier = (100 ± percentage) ÷ 100', 'lbl')}</svg>`;
+}
+function svgExpandGrid(){
+  return `<svg viewBox="0 0 560 230" role="img" aria-label="Area model of (x + 3)(x + 2)">
+  <rect x="80" y="40" width="140" height="100" class="metal" style="stroke:var(--ink);stroke-width:1.6"/><rect x="220" y="40" width="70" height="100" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/>
+  <rect x="80" y="140" width="140" height="50" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/><rect x="220" y="140" width="70" height="50" class="metal" style="stroke:var(--ink);stroke-width:1.6"/>
+  ${T(150, 96, 'x²', 'mid mono lbl')}${T(255, 96, '2x', 'mid mono lbl')}${T(150, 170, '3x', 'mid mono lbl')}${T(255, 170, '6', 'mid mono lbl')}
+  ${T(150, 30, 'x', 'mid acct')}${T(255, 30, '+ 3', 'mid acct')}${T(60, 96, 'x', 'mid acct')}${T(60, 170, '+ 2', 'mid acct')}
+  ${T(330, 70, '(x + 3)(x + 2)', 'mono lbl')}${T(330, 100, '= x² + 2x + 3x + 6', 'mono')}${T(330, 130, '= x² + 5x + 6', 'mono acct')}${T(330, 170, 'Multiply every term by every term.', 'mut')}</svg>`;
+}
+function svgPyth(){
+  return `<svg viewBox="0 0 620 240" role="img" aria-label="Pythagoras on a 3, 4, 5 triangle">
+  <polygon points="60,200 260,200 60,80" class="metal" style="stroke:var(--ink);stroke-width:2"/><polyline points="60,180 80,180 80,200" class="thin" fill="none"/>
+  ${T(160, 220, '4', 'mid mono lbl')}${T(44, 146, '3', 'end mono lbl')}${T(176, 128, 'c = 5', 'mono hott')}${T(130, 62, 'hypotenuse: longest side,', 'mut')}${T(130, 78, 'opposite the right angle', 'mut')}
+  ${T(330, 60, 'a² + b² = c²', 'mono acct')}${T(330, 96, 'Find c:   c² = 3² + 4² = 9 + 16 = 25', 'mono')}${T(330, 122, '          c = √25 = 5', 'mono')}
+  ${T(330, 158, 'Find a short side:  subtract', 'mono hott')}${T(330, 184, 'a² = c² − b²', 'mono hott')}</svg>`;
+}
+function svgTrig(){
+  return `<svg viewBox="0 0 620 240" role="img" aria-label="Sides of a right-angled triangle and SOH CAH TOA">
+  <polygon points="40,200 260,200 260,70" class="metal" style="stroke:var(--ink);stroke-width:2"/><polyline points="240,200 240,180 260,180" class="thin" fill="none"/>
+  <path d="M90 200 A50 50 0 0 0 86 184" class="hotl"/>${T(110, 192, 'θ', 'hott')}
+  ${T(150, 224, 'adjacent (next to θ)', 'mid')}${T(272, 140, 'opposite', 'lbl')}${T(130, 116, 'hypotenuse', 'mid lbl')}
+  ${T(340, 50, 'SOH   sin θ = opposite ÷ hypotenuse', 'mono')}${T(340, 84, 'CAH   cos θ = adjacent ÷ hypotenuse', 'mono')}${T(340, 118, 'TOA   tan θ = opposite ÷ adjacent', 'mono')}
+  ${T(340, 160, 'Label sides from the angle.', 'acct')}${T(340, 186, 'Calculator in degree (DEG) mode.', 'mut')}</svg>`;
+}
+function svgIndex(){
+  return `<svg viewBox="0 0 640 250" role="img" aria-label="Index laws and standard form">
+  ${T(30, 36, 'Index laws (same base)', 'lbl')}${T(30, 64, 'aᵐ × aⁿ = aᵐ⁺ⁿ     add', 'mono')}${T(30, 88, 'aᵐ ÷ aⁿ = aᵐ⁻ⁿ     subtract', 'mono')}${T(30, 112, '(aᵐ)ⁿ  = aᵐⁿ      multiply', 'mono')}${T(30, 136, 'a⁰ = 1      a⁻ⁿ = 1 ÷ aⁿ', 'mono acct')}
+  ${T(340, 36, 'Standard form: a × 10ⁿ', 'lbl')}${T(340, 64, '1 ≤ a < 10, n a whole number', 'mono')}${T(340, 92, '45 000   = 4.5 × 10⁴', 'mono acct')}${T(340, 116, '0.0006  = 6 × 10⁻⁴', 'mono hott')}
+  ${T(340, 148, 'big number: n positive', 'mut')}${T(340, 168, 'small number: n negative', 'mut')}
+  ${T(30, 190, '(2 × 10⁴) × (3 × 10⁵) = 6 × 10⁹:  multiply a’s, add n’s', 'mono')}${T(30, 214, 'If a ≥ 10 afterwards, adjust: 12 × 10⁸ = 1.2 × 10⁹', 'mono hott')}</svg>`;
+}
+
 /* ---------- content ---------- */
 const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
 const CH = {
@@ -729,9 +784,265 @@ prob: {
     { q: 'A spinner landed on red 18 times in 60 spins. (a) Write down the relative frequency of red. [1] (b) How many reds are expected in 200 spins? [2]', m: 3,
       p: ['18/60 = ==0.3==', '0.3 × 200', '==60=='] }
   ]
+},
+numb: {
+  code: 'Number', name: 'Factors, multiples and primes',
+  lede: 'Prime factors are the key to HCF and LCM. Learn the tests and the method once and it works every time.',
+  learn: [
+    { h: 'Types of number', list: ['A ==factor== divides exactly into a number. 12 has factors 1, 2, 3, 4, 6, 12.', 'A ==multiple== is in the times table. Multiples of 12: 12, 24, 36, …', 'A ==prime number== has ==exactly two factors==: 1 and itself. ==1 is not prime==. ==2 is the only even prime==.', 'Primes up to 50: ==2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47==.', '==Square numbers==: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144. ==Cube numbers==: 1, 8, 27, 64, 125.'] },
+    { h: 'Prime factors, HCF and LCM', list: ['Write a number as a ==product of prime factors== using a factor tree or repeated division by 2, 3, 5, 7, …', '==HCF== (highest common factor): multiply the ==common== primes, using the ==lowest== power of each.', '==LCM== (lowest common multiple): multiply ==every== prime, using the ==highest== power of each.', 'Check: ==HCF × LCM = the two numbers multiplied together==.', 'Use HCF for ==sharing into equal groups==. Use LCM for ==events that repeat together==.'], f: ['12 = 2² × 3', '18 = 2 × 3²', 'HCF = 6, LCM = 36'] },
+    { h: 'Divisibility tests', table: [['Divisible by', 'Test'], ['2', 'last digit even'], ['3', 'digit sum divisible by 3'], ['4', 'last two digits divisible by 4'], ['5', 'ends in 0 or 5'], ['6', 'divisible by both 2 and 3'], ['9', 'digit sum divisible by 9'], ['10', 'ends in 0']] }
+  ],
+  mistakes: ['Saying ==1 is a prime number==. It is not.', 'Mixing up ==HCF== (smaller or equal) and ==LCM== (bigger or equal).', 'Stopping the factor tree before every branch ends in a ==prime==.', 'Writing 2 × 2 × 3 but not using ==indices== when asked: 2² × 3.', 'Forgetting that a prime like 91 = 7 × 13 is ==not prime== even though it looks it.'],
+  diagrams: [
+    { svg: svgFactorTree, cap: 'Factor tree of 60. The ==shaded ends are primes==: 60 = 2² × 3 × 5.' },
+    { svg: svgHcfLcm, cap: '==HCF== takes the ==lowest== common powers; ==LCM== takes the ==highest== of every prime.' }
+  ],
+  worked: [
+    W('Write 60 as a product of prime factors.', 'Divide by the ==smallest prime== that goes in, again and again, until you reach 1.', 'Write the answer with indices: 2² × 3 × 5.', 'Divide by primes: 2, 3, 5, …',
+      [['Divide by 2', '60 ÷ 2 = 30', '2 is the smallest prime, and 60 is even.'], ['Divide by 2 again', '30 ÷ 2 = 15', '30 is even, so 2 goes in again.'], ['Divide by 3', '15 ÷ 3 = 5', '15 is not even. 3 goes in (digit sum 6).'], ['5 is prime. Write the product', '60 = 2 × 2 × 3 × 5 = 2² × 3 × 5', 'Collect the repeats with an index.']],
+      [['60', '= 2 × 30', 0], ['30', '= 2 × 15', 1], ['15', '= 3 × 5', 2], ['Answer', '2² × 3 × 5', 3]]),
+    W('Find the HCF and LCM of 12 and 18.', 'Write both as ==prime factors== first. Then compare the ==powers==.', 'Check: 6 × 36 = 216 = 12 × 18.', 'HCF: lowest powers of common primes. LCM: highest powers of all primes.',
+      [['Prime factors', '12 = 2² × 3   and   18 = 2 × 3²', 'Use a factor tree or repeated division for each.'], ['HCF', '2 × 3 = 6', 'Both numbers have 2 and 3. Take the LOWEST power of each: 2¹ and 3¹.'], ['LCM', '2² × 3² = 4 × 9 = 36', 'Take the HIGHEST power of each: 2² and 3².'], ['Check', '6 × 36 = 216 and 12 × 18 = 216 ✓', 'HCF × LCM must equal the product of the two numbers.']],
+      [['12', '2² × 3', 0], ['18', '2 × 3²', 0], ['HCF', '2 × 3 = 6', 1], ['LCM', '2² × 3² = 36', 2], ['Check', '216 = 216 ✓', 3]]),
+    W('Find the HCF and LCM of 24 and 36.', 'Same method: ==prime factors==, then ==lowest== powers for HCF, ==highest== for LCM.', 'The HCF can never be bigger than the smaller number.', 'Prime factors, then compare',
+      [['Prime factors', '24 = 2³ × 3   and   36 = 2² × 3²', '24 = 8 × 3 and 36 = 4 × 9.'], ['HCF', '2² × 3 = 12', 'Lowest powers: 2² and 3¹.'], ['LCM', '2³ × 3² = 8 × 9 = 72', 'Highest powers: 2³ and 3².'], ['Check', '12 × 72 = 864 = 24 × 36 ✓', '']],
+      [['24', '2³ × 3', 0], ['36', '2² × 3²', 0], ['HCF', '2² × 3 = 12', 1], ['LCM', '2³ × 3² = 72', 2], ['Check', '864 = 864 ✓', 3]]),
+    W('Is 91 a prime number? Is 97 a prime number?', 'To test a number, try dividing by ==primes== up to its ==square root==. If none go in, it is prime.', 'Do not guess: 91 looks prime but is not.', 'Test primes up to the square root',
+      [['91: try the small primes', '91 ÷ 7 = 13', '2, 3 and 5 do not go in. But 7 does: 7 × 13 = 91.'], ['91: conclusion', '91 = 7 × 13, so 91 is NOT prime', 'It has factors other than 1 and 91.'], ['97: how far to test', '√97 is just under 10, so test 2, 3, 5, 7', 'If there were a bigger factor, there would be a smaller one too.'], ['97: conclusion', 'None of 2, 3, 5, 7 divide 97, so 97 IS prime', '97 ÷ 7 = 13.86… so 7 does not divide it.']],
+      [['91', '7 × 13: not prime', 1], ['97: test up to', 'primes ≤ 9: 2, 3, 5, 7', 2], ['97', 'prime', 3]]),
+    W('Two buses leave a station together. One leaves every 12 minutes and the other every 15 minutes. After how many minutes do they next leave together?', '“Together again” means ==LCM==. A common multiple of both times.', 'If the question is about repeating events, think ==LCM==.', 'LCM of 12 and 15',
+      [['Prime factors', '12 = 2² × 3   and   15 = 3 × 5', ''], ['LCM: highest power of every prime', '2² × 3 × 5', 'Take 2², 3 and 5.'], ['Work out', '4 × 3 × 5 = 60', ''], ['Answer', '60 minutes', 'Check: 60 ÷ 12 = 5 and 60 ÷ 15 = 4, both whole numbers.']],
+      [['12', '2² × 3', 0], ['15', '3 × 5', 0], ['LCM', '2² × 3 × 5', 1], ['Minutes', '60', 3]]),
+    W('A teacher has 24 chocolates and 36 biscuits. She makes identical gift bags using all of them. What is the largest number of bags she can make, and what is in each bag?', '“Largest number of equal groups” means ==HCF==.', 'If the question is about sharing equally, think ==HCF==.', 'HCF of 24 and 36',
+      [['Largest number of bags', 'HCF of 24 and 36', 'The number of bags must divide into both 24 and 36.'], ['Work it out', '24 = 2³ × 3 and 36 = 2² × 3², so HCF = 2² × 3 = 12', 'From the previous example.'], ['Chocolates per bag', '24 ÷ 12 = 2', ''], ['Biscuits per bag', '36 ÷ 12 = 3', 'So 12 bags, each with 2 chocolates and 3 biscuits.']],
+      [['Bags', 'HCF = 12', 1], ['Chocolates each', '24 ÷ 12 = 2', 2], ['Biscuits each', '36 ÷ 12 = 3', 3]])
+  ],
+  drill: 'numb',
+  quiz: [
+    { q: 'Which of these is a prime number?', o: ['21', '23', '27', '33'], a: 1, w: '21 = 3 × 7, 27 = 3 × 9, 33 = 3 × 11. Only ==23== is prime.' },
+    { q: 'What is the smallest prime number?', o: ['0', '1', '2', '3'], a: 2, w: '==2==. 1 is not prime.' },
+    { q: 'The HCF of 8 and 12 is…', o: ['2', '4', '24', '1'], a: 1, w: 'Factors of 8: 1, 2, 4, 8. Of 12: 1, 2, 3, 4, 6, 12. Highest common: ==4==.' },
+    { q: 'The LCM of 4 and 6 is…', o: ['2', '24', '12', '10'], a: 2, w: 'Multiples of 4: 4, 8, 12. Of 6: 6, 12. First common: ==12==.' },
+    { q: 'The number 1 is…', o: ['prime', 'neither prime nor composite', 'composite', 'even'], a: 1, w: '1 has only ONE factor, so it is ==not prime==.' },
+    { q: 'Which is a square number?', o: ['48', '64', '72', '80'], a: 1, w: '8 × 8 = ==64==.' }
+  ],
+  exam: [
+    { q: 'Write 180 as a product of its prime factors. Give your answer using indices.', m: 3,
+      p: ['Uses a ==factor tree== or repeated division by primes', '2 × 2 × 3 × 3 × 5', '==2² × 3² × 5=='] },
+    { q: 'Find (a) the HCF and (b) the LCM of 36 and 48.', m: 4,
+      p: ['36 = ==2² × 3²== and 48 = ==2⁴ × 3==', 'HCF = 2² × 3 = ==12==', 'LCM = 2⁴ × 3²', '==144=='] },
+    { q: 'Two lighthouses flash every 20 seconds and every 30 seconds. They flash together at midnight. After how many seconds will they next flash together? Explain how you know.', m: 3,
+      p: ['The answer is the ==LCM== of 20 and 30', 'LCM = 2² × 3 × 5', '==60 seconds=='] }
+  ]
+},
+pow: {
+  code: 'Number', name: 'Powers, roots and standard form',
+  lede: 'Index laws, standard form and rounding. Standard form is a favourite exam topic.',
+  learn: [
+    { h: 'Index laws', list: ['aᵐ × aⁿ = ==aᵐ⁺ⁿ== (==add== the powers). Example: 2³ × 2⁴ = 2⁷.', 'aᵐ ÷ aⁿ = ==aᵐ⁻ⁿ== (==subtract==). Example: 5⁶ ÷ 5² = 5⁴.', '(aᵐ)ⁿ = ==aᵐⁿ== (==multiply==). Example: (3²)³ = 3⁶.', 'a⁰ = ==1==.   a⁻ⁿ = ==1 ÷ aⁿ==. Example: 2⁻³ = 1/8.', '==Square root== undoes squaring: √49 = 7. ==Cube root== undoes cubing: ∛27 = 3.'] },
+    { h: 'Standard form', list: ['A number in standard form is ==a × 10ⁿ== where ==1 ≤ a < 10== and ==n is a whole number==.', '==Large== numbers have a ==positive== n: 45 000 = 4.5 × 10⁴.', '==Small== numbers have a ==negative== n: 0.0006 = 6 × 10⁻⁴.', '==Multiply==: multiply the a’s, ==add== the powers. If a comes out as 10 or more, adjust.', '==Divide==: divide the a’s, ==subtract== the powers.'] },
+    { h: 'Rounding and estimating', list: ['==Decimal places (d.p.)== count digits ==after the decimal point==.', '==Significant figures (s.f.)== count from the ==first non-zero digit==.', 'Look at the ==next digit==: 5 or more rounds up, 4 or less stays.', '==Estimate== by rounding every number to ==1 significant figure==, then calculate.'] }
+  ],
+  mistakes: ['Multiplying the powers when ==multiplying== numbers (you ==add== them).', 'Writing 12 × 10⁸ as the final answer: it must be ==1.2 × 10⁹==.', 'Using a ==positive== power for a small number.', 'Counting ==zeros after the point== as significant figures.', 'Rounding each step: ==round only at the end==.'],
+  diagrams: [
+    { svg: svgIndex, cap: 'Index laws and standard form at a glance.' }
+  ],
+  worked: [
+    W('Simplify (a) 2⁵ × 2³ (b) 7⁶ ÷ 7⁴ (c) (3²)³. Give the value of each.', 'The base stays the same. Only the ==powers== change: ==add==, ==subtract== or ==multiply==.', 'Check which operation is between them before choosing the law.', 'Same base: add, subtract or multiply the powers',
+      [['(a) Multiply: add the powers', '2⁵ × 2³ = 2⁵⁺³ = 2⁸', '5 + 3 = 8.'], ['(a) Value', '2⁸ = 256', ''], ['(b) Divide: subtract the powers', '7⁶ ÷ 7⁴ = 7⁶⁻⁴ = 7² = 49', '6 − 4 = 2.'], ['(c) Power of a power: multiply', '(3²)³ = 3⁶ = 729', '2 × 3 = 6, and 3⁶ = 729.']],
+      [['(a)', '2⁸ = 256', 1], ['(b)', '7² = 49', 2], ['(c)', '3⁶ = 729', 3]]),
+    W('Write (a) 45 000 and (b) 0.0006 in standard form.', 'Move the ==decimal point== so there is one digit (1 to 9) before it. Count the moves for the power.', 'Check: a must be between 1 and 10.', 'a × 10ⁿ with 1 ≤ a < 10',
+      [['(a) Place the point after the first digit', '4.5', 'Standard form needs a number from 1 up to (but not including) 10.'], ['(a) Count the moves', '4 places to the left, so n = 4', 'A big number gives a positive power.'], ['(a) Answer', '45 000 = 4.5 × 10⁴', ''], ['(b) Small number: move right', '0.0006 → 6, which is 4 places, so n = −4', 'A small number gives a negative power.'], ['(b) Answer', '0.0006 = 6 × 10⁻⁴', '']],
+      [['45 000', '4.5 × 10⁴', 2], ['0.0006', '6 × 10⁻⁴', 4]]),
+    W('Work out (3 × 10⁴) × (2 × 10⁵). Give your answer in standard form.', 'Multiply the ==front numbers==, and ==add== the powers of 10.', 'If a is 10 or more, move one place and change the power.', 'Multiply a’s, add n’s',
+      [['Multiply the front numbers', '3 × 2 = 6', ''], ['Add the powers of 10', '10⁴ × 10⁵ = 10⁹', '4 + 5 = 9.'], ['Answer', '6 × 10⁹', '6 is between 1 and 10, so it is already in standard form.']],
+      [['a’s', '3 × 2 = 6', 0], ['Powers', '10⁴ × 10⁵ = 10⁹', 1], ['Answer', '6 × 10⁹', 2]]),
+    W('Work out (8 × 10⁶) ÷ (4 × 10²). Give your answer in standard form.', '==Divide== the front numbers, ==subtract== the powers.', 'Always check a is between 1 and 10 at the end.', 'Divide a’s, subtract n’s',
+      [['Divide the front numbers', '8 ÷ 4 = 2', ''], ['Subtract the powers of 10', '10⁶ ÷ 10² = 10⁴', '6 − 2 = 4.'], ['Answer', '2 × 10⁴', 'This is 20 000.']],
+      [['a’s', '8 ÷ 4 = 2', 0], ['Powers', '10⁶ ÷ 10² = 10⁴', 1], ['Answer', '2 × 10⁴', 2]]),
+    W('Estimate 4.82 × 19.7 ÷ 0.51 by rounding each number to 1 significant figure.', '==Round each number to 1 s.f.==, then do an easy calculation. The estimate checks the real answer is sensible.', 'Show the rounded numbers. They earn the marks.', 'Round to 1 s.f., then calculate',
+      [['Round each to 1 s.f.', '4.82 → 5,  19.7 → 20,  0.51 → 0.5', 'Look at the first non-zero digit only.'], ['Write the estimate', '5 × 20 ÷ 0.5', ''], ['Multiply first', '5 × 20 = 100', ''], ['Divide', '100 ÷ 0.5 = 200', 'Dividing by 0.5 is the same as doubling.']],
+      [['Rounded', '5, 20, 0.5', 0], ['5 × 20', '100', 2], ['Estimate', '200', 3]]),
+    W('Round 3.14159 to 3 decimal places, and 0.0408 to 2 significant figures.', '==d.p.== count after the point. ==s.f.== start at the first ==non-zero== digit.', 'Zeros at the start of 0.0408 do not count as significant figures.', 'Look at the next digit',
+      [['3 d.p.: keep 3.141', 'The next digit is 5', 'The digits after the point: 1, 4, 1. The next one decides.'], ['Round up', '3.142', '5 rounds the last digit up.'], ['2 s.f.: first non-zero digit', '0.0408: the 4 is the first s.f., 0 is the second', 'Leading zeros do not count.'], ['Next digit is 8, so round up', '0.041', '0.040 becomes 0.041.']],
+      [['3 d.p.', '3.142', 1], ['2 s.f.', '0.041', 3]])
+  ],
+  drill: 'pow',
+  quiz: [
+    { q: 'a⁰ is equal to…', o: ['0', '1', 'a', 'undefined'], a: 1, w: 'Any number (except 0) to the power 0 is ==1==.' },
+    { q: '2³ × 2⁴ = ?', o: ['2⁷', '2¹²', '4⁷', '2¹'], a: 0, w: 'Add the powers: 3 + 4 = ==7==.' },
+    { q: '4.5 × 10³ as an ordinary number is…', o: ['45', '450', '4500', '45 000'], a: 2, w: 'Move the point 3 places right: ==4500==.' },
+    { q: '0.007 in standard form is…', o: ['7 × 10³', '7 × 10⁻³', '0.7 × 10⁻²', '70 × 10⁻⁴'], a: 1, w: 'Small number: negative power. ==7 × 10⁻³==.' },
+    { q: 'The square root of 81 is…', o: ['9', '8.1', '40.5', '6561'], a: 0, w: '9 × 9 = 81.' },
+    { q: '10⁻² is equal to…', o: ['−100', '0.01', '0.1', '−20'], a: 1, w: '10⁻² = 1 ÷ 10² = ==0.01==.' }
+  ],
+  exam: [
+    { q: '(a) Write 3 600 000 in standard form. [1] (b) Calculate (2.4 × 10⁵) × (5 × 10³). Give your answer in standard form. [2]', m: 3,
+      p: ['==3.6 × 10⁶==', '2.4 × 5 = 12 and 10⁵ × 10³ = 10⁸', '==1.2 × 10⁹== (must be in standard form)'] },
+    { q: 'Simplify (a) x³ × x⁴ [1] (b) y⁸ ÷ y³ [1] (c) (2z²)³ [2]', m: 4,
+      p: ['==x⁷==', '==y⁵==', '2³ = ==8==', '(z²)³ = ==z⁶=='] },
+    { q: 'Estimate the value of 6.1 × 19.8 ÷ 0.52 by rounding each number to 1 significant figure. Show your working.', m: 3,
+      p: ['Rounds to ==6, 20 and 0.5==', '6 × 20 = 120', '120 ÷ 0.5 = ==240=='] }
+  ]
+},
+pct: {
+  code: 'Number', name: 'Percentages',
+  lede: 'Percentage of an amount, increase and decrease, reverse percentages and interest. The multiplier method makes them all easy.',
+  learn: [
+    { h: 'Percentage basics', list: ['Per cent means ==out of 100==.', '==10% = ÷ 10==, ==1% = ÷ 100==. Build other percentages from these.', 'Convert: 0.35 = 35% = 35/100 = 7/20.', 'To write one amount as a percentage of another: ==part ÷ whole × 100==.'], f: ['35% of 80', '10% = 8,  30% = 24,  5% = 4', '24 + 4 = 28'] },
+    { h: 'Increase and decrease', list: ['==Multiplier method==: increase by 15% → × ==1.15==. Decrease by 15% → × ==0.85==.', '==Percentage change = change ÷ original × 100==.', 'The change is always compared with the ==original== value.', 'Profit % = profit ÷ cost price × 100.'] },
+    { h: 'Reverse percentages and interest', list: ['==Reverse percentage==: the new amount is a percentage of the original. ==Divide== to find 1%, then ×100.', '==Simple interest== I = ==P × R × T ÷ 100== (same interest every year).', '==Compound interest==: A = P × (1 + R/100)ⁿ. Interest is added each year, then earns interest.'] }
+  ],
+  mistakes: ['Working out the percentage change ==from the new value== instead of the ==original==.', 'In a reverse percentage, ==taking the percentage off the new value==. Divide instead.', 'Using ==1.5== for a 5% increase. It is ==1.05==.', 'Forgetting to ==add (or subtract)== the percentage after finding it.', 'Treating ==compound== interest as simple.'],
+  diagrams: [
+    { svg: svgPctBar, cap: 'Build percentages from ==10%==. Use ==multipliers== for increase and decrease.' }
+  ],
+  worked: [
+    W('Find 35% of 80.', 'Build it from ==10%== and ==5%==.', 'Check with a multiplier: 80 × 0.35 = 28.', '10% = ÷ 10',
+      [['Find 10%', '80 ÷ 10 = 8', 'To find 10%, divide by 10.'], ['Find 30%', '3 × 8 = 24', '30% is three lots of 10%.'], ['Find 5%', '8 ÷ 2 = 4', '5% is half of 10%.'], ['Add them', '24 + 4 = 28', '30% + 5% = 35%.']],
+      [['10%', '8', 0], ['30%', '24', 1], ['5%', '4', 2], ['35%', '28', 3]]),
+    W('A phone costs Rs 12 000. In a sale there is a 15% discount. What is the sale price?', 'Use a ==multiplier==: a 15% decrease leaves 85%, so multiply by ==0.85==.', 'Check: the sale price must be less than the original.', 'decrease: × (100 − %) ÷ 100',
+      [['Find the multiplier', '100% − 15% = 85% = 0.85', 'You keep 85% of the price.'], ['Multiply', '12 000 × 0.85', ''], ['Answer', 'Rs 10 200', '12 000 × 0.85 = 10 200.']],
+      [['Multiplier', '0.85', 0], ['Calculation', '12 000 × 0.85', 1], ['Sale price', 'Rs 10 200', 2]]),
+    W('The price of a bag rises from Rs 250 to Rs 300. Find the percentage increase.', 'Percentage change = ==change ÷ original × 100==.', 'Always divide by the ORIGINAL, not the new price.', 'change ÷ original × 100',
+      [['Find the change', '300 − 250 = 50', 'How much the price went up.'], ['Divide by the original', '50 ÷ 250 = 0.2', 'The original is 250.'], ['Multiply by 100', '0.2 × 100 = 20', 'This turns the decimal into a percentage.'], ['Answer', '20% increase', '']],
+      [['Change', '50', 0], ['Fraction', '50 ÷ 250 = 0.2', 1], ['Percentage', '20%', 3]]),
+    W('After a 20% reduction a coat costs Rs 640. What was the original price?', 'The new price is ==80%== of the original. Divide to find ==1%== then ==100%==.', 'Check: 800 × 0.8 = 640 ✓.', 'Reverse percentage: do NOT take 20% of 640',
+      [['What percentage is 640?', '100% − 20% = 80%', 'The reduced price is 80% of the original.'], ['Find 1%', '640 ÷ 80 = 8', 'Divide the known amount by its percentage.'], ['Find 100%', '8 × 100 = 800', ''], ['Answer and check', 'Rs 800.  800 × 0.80 = 640 ✓', '']],
+      [['640 is', '80% of original', 0], ['1%', '8', 1], ['100%', 'Rs 800', 2], ['Check', '640 ✓', 3]]),
+    W('Find the simple interest on Rs 5000 at 6% per year for 3 years. What is the total?', '==Simple interest== is the ==same each year==: I = P × R × T ÷ 100.', 'Total = original + interest.', 'I = P × R × T ÷ 100',
+      [['Write the formula', 'I = P × R × T ÷ 100', 'P = 5000, R = 6, T = 3.'], ['Substitute', 'I = 5000 × 6 × 3 ÷ 100', ''], ['Work out', 'I = 900', '5000 ÷ 100 = 50, then 50 × 6 × 3 = 900.'], ['Total', '5000 + 900 = Rs 5900', 'The interest is added to the original amount.']],
+      [['P, R, T', '5000, 6%, 3 years', -1], ['Interest', '900', 2], ['Total', 'Rs 5900', 3]]),
+    W('Rs 2000 is invested at 5% compound interest for 2 years. Find the total after 2 years.', 'Compound interest: ==multiply by 1.05 each year==. Two years means ×1.05 twice.', 'Compound interest is bigger than simple interest (2200 here).', 'A = P × (1 + R/100)ⁿ',
+      [['Multiplier for one year', '100% + 5% = 105% = 1.05', ''], ['Two years: use the power 2', 'A = 2000 × 1.05²', 'Each year the multiplier is applied again.'], ['Work out 1.05²', '1.05 × 1.05 = 1.1025', ''], ['Answer', '2000 × 1.1025 = Rs 2205', 'Simple interest would give only Rs 2200.']],
+      [['Multiplier', '1.05', 0], ['Formula', '2000 × 1.05²', 1], ['1.05²', '1.1025', 2], ['Total', 'Rs 2205', 3]])
+  ],
+  drill: 'pct',
+  quiz: [
+    { q: '25% as a fraction is…', o: ['1/5', '1/4', '2/5', '1/2'], a: 1, w: '25/100 = ==1/4==.' },
+    { q: '10% of 70 is…', o: ['700', '7', '0.7', '70'], a: 1, w: 'Divide by 10: ==7==.' },
+    { q: 'To increase an amount by 20% you multiply by…', o: ['0.2', '0.8', '1.2', '20'], a: 2, w: '100% + 20% = 120% = ==1.2==.' },
+    { q: 'To decrease an amount by 30% you multiply by…', o: ['0.3', '0.7', '1.3', '0.03'], a: 1, w: '100% − 30% = 70% = ==0.7==.' },
+    { q: 'Percentage change is…', o: ['change ÷ new × 100', 'change ÷ original × 100', 'original ÷ change × 100', 'new ÷ original × 100'], a: 1, w: '==change ÷ original × 100==.' },
+    { q: 'After a 50% increase, a price is Rs 90. The original price was…', o: ['Rs 45', 'Rs 60', 'Rs 135', 'Rs 40'], a: 1, w: '90 is 150% of the original. 90 ÷ 150 = 0.6, so 1% = 0.6 and 100% = ==60==.' }
+  ],
+  exam: [
+    { q: '(a) Find 15% of Rs 840. [2] (b) Increase Rs 840 by 15%. [1]', m: 3,
+      p: ['10% = 84 and 5% = 42 (or 0.15 × 840)', '==Rs 126==', '840 + 126 = ==Rs 966=='] },
+    { q: 'The price of a laptop falls from Rs 50 000 to Rs 42 000. Work out the percentage decrease.', m: 3,
+      p: ['Change = ==8000==', '8000 ÷ 50 000 × 100 (==divide by the original==)', '==16%=='] },
+    { q: 'In a sale a jacket is reduced by 30%. The sale price is Rs 1400. Work out the original price.', m: 3,
+      p: ['Sale price = ==70%== of the original', '1400 ÷ 70 = 20 (this is 1%)', '==Rs 2000=='] }
+  ]
+},
+alg: {
+  code: 'Algebra', name: 'Algebraic skills',
+  lede: 'Simplify, expand, factorise and rearrange. Do each step slowly and watch the signs.',
+  learn: [
+    { h: 'Simplifying', list: ['Collect ==like terms== (same letter and power) and keep the ==sign in front==.', '3a + 2b + a − 5b = ==4a − 3b==.', 'Multiplying: 3a × 2b = ==6ab==. a × a = ==a²==.', 'a² and a are ==not like terms==: you cannot add them.'] },
+    { h: 'Expanding and factorising', list: ['==Expand== a single bracket: multiply ==every term== inside. 3(x + 4) = 3x + 12.', '==Expand two brackets==: each term in the first times each term in the second. (x + 3)(x + 2) = x² + 5x + 6.', '==Factorise== is the reverse. Take out the ==highest common factor==: 12x + 18 = 6(2x + 3).', 'Factorising x² + bx + c: find two numbers that ==multiply to c== and ==add to b==.'], f: ['x² + 7x + 12', '3 × 4 = 12,  3 + 4 = 7', '(x + 3)(x + 4)'] },
+    { h: 'Substitution and changing the subject', list: ['==Substitute== by replacing letters with numbers. Use ==brackets== for negatives: (−2)² = 4.', 'To ==change the subject==, undo the operations in ==reverse order== (like solving an equation).', 'v = u + at → v − u = at → ==a = (v − u) ÷ t==.'] }
+  ],
+  mistakes: ['Not multiplying ==every term== in the bracket: 3(x + 4) is not 3x + 4.', 'Writing ==−2² = 4==. With a negative number use brackets: (−2)² = 4.', 'Adding ==unlike terms== such as 3x + 2y = 5xy.', 'Losing the ==sign== of the first term.', 'Taking out a common factor but ==not the highest one==: 12x + 18 is 6(2x + 3), not 3(4x + 6).'],
+  diagrams: [
+    { svg: svgExpandGrid, cap: 'Area model for expanding (x + 3)(x + 2): add the four pieces.' }
+  ],
+  worked: [
+    W('Simplify 3a + 2b + a − 5b.', 'Only ==like terms== can be added or taken away. Group the a’s and the b’s.', 'The sign in front belongs to the term after it: −5b.', 'Collect like terms',
+      [['Group the a terms', '3a + a = 4a', 'a means 1a.'], ['Group the b terms', '2b − 5b = −3b', '2 − 5 = −3.'], ['Write together', '4a − 3b', 'Cannot simplify any further: a and b are different letters.']],
+      [['a terms', '3a + a = 4a', 0], ['b terms', '2b − 5b = −3b', 1], ['Answer', '4a − 3b', 2]]),
+    W('Expand and simplify 3(x + 4) − 2(x − 1).', 'Expand each bracket first. Take care: −2 times −1 is ==+2==.', 'A minus sign in front of a bracket changes the signs inside.', 'Expand, then collect like terms',
+      [['Expand the first bracket', '3(x + 4) = 3x + 12', '3 × x and 3 × 4.'], ['Expand the second bracket', '−2(x − 1) = −2x + 2', '−2 × x = −2x and −2 × −1 = +2.'], ['Put them together', '3x + 12 − 2x + 2', ''], ['Collect like terms', 'x + 14', '3x − 2x = x and 12 + 2 = 14.']],
+      [['First', '3x + 12', 0], ['Second', '−2x + 2', 1], ['x terms', '3x − 2x = x', 3], ['Answer', 'x + 14', 3]]),
+    W('Expand (x + 3)(x + 2).', 'Multiply ==every term in the first bracket by every term in the second==. That is 4 products.', 'Check with x = 1: (4)(3) = 12 and 1 + 5 + 6 = 12 ✓.', 'First, Outer, Inner, Last',
+      [['x × x', 'x²', 'First terms.'], ['x × 2 and 3 × x', '2x and 3x', 'Outer and inner terms.'], ['3 × 2', '6', 'Last terms.'], ['Add and collect', 'x² + 2x + 3x + 6 = x² + 5x + 6', '2x + 3x = 5x.']],
+      [['x²', 'x × x', 0], ['2x', 'x × 2', 1], ['3x', '3 × x', 1], ['6', '3 × 2', 2], ['Answer', 'x² + 5x + 6', 3]]),
+    W('Factorise 12x + 18.', 'Find the ==highest common factor== of 12 and 18, and take it outside a bracket.', 'Check by expanding: 6(2x + 3) = 12x + 18 ✓.', 'Take out the HCF',
+      [['Find the HCF of 12 and 18', '6', '6 is the biggest number that goes into both.'], ['Divide each term by 6', '12x ÷ 6 = 2x   and   18 ÷ 6 = 3', ''], ['Write with the bracket', '6(2x + 3)', 'Check by expanding: 6 × 2x = 12x and 6 × 3 = 18.']],
+      [['HCF', '6', 0], ['Inside', '2x and 3', 1], ['Answer', '6(2x + 3)', 2]]),
+    W('Factorise x² + 7x + 12.', 'Find two numbers that ==multiply to 12== and ==add to 7==.', 'List the factor pairs of 12 and check which add to 7.', 'Two numbers: multiply to c, add to b',
+      [['Factor pairs of 12', '1 × 12, 2 × 6, 3 × 4', 'Look for a pair that adds to 7.'], ['Which pair adds to 7?', '3 + 4 = 7', '1 + 12 = 13 and 2 + 6 = 8 do not work.'], ['Write the brackets', '(x + 3)(x + 4)', 'Check by expanding: x² + 4x + 3x + 12 = x² + 7x + 12 ✓.']],
+      [['Multiply to 12', 'pairs: 1,12  2,6  3,4', 0], ['Add to 7', '3 and 4', 1], ['Answer', '(x + 3)(x + 4)', 2]]),
+    W('Make a the subject of v = u + at.', 'Treat it like an equation: ==undo== what is done to a, in ==reverse order==.', 'Whatever you do to one side, do to the other.', 'Undo + then ×',
+      [['Undo the + u', 'v − u = at', 'Subtract u from both sides.'], ['Undo the × t', 'a = (v − u) ÷ t', 'Divide both sides by t.'], ['Check with numbers', 'v = 30, u = 6, t = 4 gives a = 24 ÷ 4 = 6', 'Put a = 6 back: 6 + 6 × 4 = 30 ✓.']],
+      [['Start', 'v = u + at', -1], ['After − u', 'v − u = at', 0], ['a =', '(v − u) ÷ t', 1], ['Check', '6 + 6 × 4 = 30 ✓', 2]]),
+    W('Find the value of 3x² − 2y when x = −2 and y = 5.', 'Use ==brackets== for negatives. Square first, then multiply.', '(−2)² = 4, not −4.', 'BIDMAS: powers before multiplying',
+      [['Substitute', '3 × (−2)² − 2 × 5', 'Put the numbers in using brackets.'], ['Square first', '(−2)² = 4', 'A negative times a negative is positive.'], ['Multiply', '3 × 4 − 10 = 12 − 10', ''], ['Answer', '2', '']],
+      [['x, y', '−2 and 5', -1], ['(−2)²', '4', 1], ['3 × 4', '12', 2], ['Answer', '12 − 10 = 2', 3]])
+  ],
+  drill: 'alg',
+  quiz: [
+    { q: 'Simplify 4a + 3a.', o: ['7a', '7a²', '12a', '43a'], a: 0, w: 'Add the numbers, keep the letter: ==7a==.' },
+    { q: 'Expand 2(x + 5).', o: ['2x + 5', '2x + 10', 'x + 10', '2x + 7'], a: 1, w: 'Multiply every term: ==2x + 10==.' },
+    { q: 'Factorise 4x + 8.', o: ['4(x + 8)', '4(x + 2)', '2(2x + 8)', '4x(8)'], a: 1, w: 'HCF is 4: ==4(x + 2)==.' },
+    { q: 'Expand (x + 1)(x + 2).', o: ['x² + 2', 'x² + 3x + 2', 'x² + 2x + 2', '2x + 3'], a: 1, w: 'x² + 2x + x + 2 = ==x² + 3x + 2==.' },
+    { q: 'Find 2x² when x = 3.', o: ['12', '18', '36', '9'], a: 1, w: 'x² = 9 first, then × 2 = ==18==.' },
+    { q: 'Make t the subject of d = st.', o: ['t = ds', 't = d − s', 't = d ÷ s', 't = s ÷ d'], a: 2, w: 'Divide both sides by s: ==t = d ÷ s==.' }
+  ],
+  exam: [
+    { q: '(a) Simplify 5x + 3y − 2x + y. [2] (b) Expand and simplify 2(3x − 1) + 4(x + 2). [2]', m: 4,
+      p: ['==3x==', '==4y==', 'Expands: 6x − 2 + 4x + 8', '==10x + 6=='] },
+    { q: '(a) Factorise 15x − 10. [1] (b) Factorise x² + 8x + 15. [2]', m: 3,
+      p: ['==5(3x − 2)==', 'Two numbers that multiply to 15 and add to 8: 3 and 5', '==(x + 3)(x + 5)=='] },
+    { q: 'v = u + at. (a) Make a the subject of the formula. [2] (b) Find a when v = 30, u = 6 and t = 4. [1]', m: 3,
+      p: ['v − u = at', '==a = (v − u) ÷ t==', '==a = 6=='] }
+  ]
+},
+pyth: {
+  code: 'Geometry', name: 'Pythagoras and trigonometry',
+  lede: 'Find missing sides and angles in right-angled triangles. Always label the sides first.',
+  learn: [
+    { h: 'Pythagoras’ theorem', list: ['Only for ==right-angled== triangles.', 'The ==hypotenuse== is the ==longest side, opposite the right angle==.', '==a² + b² = c²==, where c is the hypotenuse.', 'To find the ==hypotenuse==: ==add== the squares, then square root.', 'To find a ==shorter side==: ==subtract== the squares, then square root.', 'Whole-number triples: ==3, 4, 5==; ==5, 12, 13==; ==8, 15, 17==; ==7, 24, 25== (and multiples like 6, 8, 10).'] },
+    { h: 'The three trig ratios', list: ['Label the sides from the angle θ: ==hypotenuse== (opposite the right angle), ==opposite== (across from θ), ==adjacent== (next to θ).', '==SOH==: sin θ = opposite ÷ hypotenuse.', '==CAH==: cos θ = adjacent ÷ hypotenuse.', '==TOA==: tan θ = opposite ÷ adjacent.', 'Useful exact values: sin 30° = 0.5, cos 60° = 0.5, tan 45° = 1.'] },
+    { h: 'Using trigonometry', list: ['==Finding a side==: write the ratio, then rearrange. opposite = hypotenuse × sin θ.', '==Finding an angle==: use the ==inverse== function: θ = ==sin⁻¹(opposite ÷ hypotenuse)==.', 'Make sure the calculator is in ==degrees (DEG)== mode.', '==Angle of elevation==: angle ==up== from the horizontal. ==Angle of depression==: angle ==down== from the horizontal.'] }
+  ],
+  mistakes: ['Using Pythagoras on a triangle that has ==no right angle==.', '==Adding== the squares when finding a shorter side (you must ==subtract==).', 'Forgetting the final ==square root==.', 'Labelling opposite and adjacent from the ==wrong angle==.', 'Calculator in ==radians== instead of degrees.'],
+  diagrams: [
+    { svg: svgPyth, cap: 'Pythagoras on the 3, 4, 5 triangle: ==a² + b² = c²==.' },
+    { svg: svgTrig, cap: 'Label ==hypotenuse, opposite, adjacent== from the angle θ, then pick ==SOH, CAH or TOA==.' }
+  ],
+  worked: [
+    W('A right-angled triangle has shorter sides of 6 cm and 8 cm. Find the length of the hypotenuse.', 'To find the ==hypotenuse==, ==add== the squares of the two shorter sides, then take the ==square root==.', 'Check: the hypotenuse must be the longest side.', 'c² = a² + b²',
+      [['Write the theorem', 'c² = a² + b²', 'c is the hypotenuse.'], ['Substitute', 'c² = 6² + 8² = 36 + 64', '6² = 36 and 8² = 64.'], ['Add', 'c² = 100', ''], ['Square root', 'c = √100 = 10 cm', 'Check: 10 is bigger than 6 and 8 ✓.']],
+      [['a, b', '6 and 8', -1], ['a² + b²', '36 + 64 = 100', 2], ['c', '√100 = 10 cm', 3]]),
+    W('A right-angled triangle has a hypotenuse of 13 cm and one shorter side of 5 cm. Find the other side.', 'To find a ==shorter side==, ==subtract==: a² = c² − b².', 'Subtract the smaller square from the larger.', 'a² = c² − b²',
+      [['Rearrange', 'a² = c² − b²', 'We know the hypotenuse c, so we subtract.'], ['Substitute', 'a² = 13² − 5² = 169 − 25', '13² = 169 and 5² = 25.'], ['Subtract', 'a² = 144', ''], ['Square root', 'a = √144 = 12 cm', '5, 12, 13 is a Pythagorean triple.']],
+      [['c, b', '13 and 5', -1], ['c² − b²', '169 − 25 = 144', 2], ['a', '√144 = 12 cm', 3]]),
+    W('A 5 m ladder leans against a wall. Its foot is 3 m from the wall. How high up the wall does it reach?', 'Draw the ==right-angled triangle==. The ladder is the ==hypotenuse==.', 'Always draw a quick sketch and label it.', 'Ladder = hypotenuse',
+      [['Identify the sides', 'hypotenuse = 5 (ladder), one side = 3 (ground)', 'The ladder is opposite the right angle (wall meets ground).'], ['Subtract', 'h² = 5² − 3² = 25 − 9', 'We want a shorter side, so we subtract.'], ['Square root', 'h = √16', ''], ['Answer', 'h = 4 m', '3, 4, 5 triple.']],
+      [['Hypotenuse', '5 m', -1], ['Ground', '3 m', -1], ['h²', '25 − 9 = 16', 1], ['Height', '4 m', 3]]),
+    W('In a right-angled triangle the hypotenuse is 10 cm and the angle is 30°. Find the side opposite the angle.', 'You know the ==hypotenuse== and want the ==opposite==: that is ==SOH==.', 'Check: sin 30° = 0.5, so the side is half the hypotenuse.', 'sin θ = opposite ÷ hypotenuse',
+      [['Choose the ratio', 'Opposite and hypotenuse: use sin', 'SOH.'], ['Write it', 'sin 30° = opp ÷ 10', ''], ['Rearrange', 'opp = 10 × sin 30°', 'Multiply both sides by 10.'], ['Answer', 'opp = 10 × 0.5 = 5 cm', 'sin 30° = 0.5.']],
+      [['Known', 'hyp 10, angle 30°', -1], ['Ratio', 'sin (SOH)', 0], ['Side', '10 × 0.5', 2], ['Opposite', '5 cm', 3]]),
+    W('You stand 20 m from the base of a tree. The angle of elevation of the top is 35°. Find the height of the tree.', 'The ==adjacent== side is 20 m and you want the ==opposite==: that is ==TOA==, so use ==tan==.', 'Angle of elevation is measured from the horizontal.', 'tan θ = opposite ÷ adjacent',
+      [['Label the sides', 'adjacent = 20 m, opposite = height h', 'The angle is at your feet.'], ['Choose the ratio', 'Opposite and adjacent: use tan (TOA)', ''], ['Write and rearrange', 'tan 35° = h ÷ 20, so h = 20 × tan 35°', ''], ['Calculate', 'h = 20 × 0.7002 = 14.0 m (1 d.p.)', 'Calculator in degree mode.']],
+      [['Adjacent', '20 m', -1], ['Angle', '35°', -1], ['Ratio', 'tan (TOA)', 1], ['Height', '20 × tan 35° = 14.0 m', 3]]),
+    W('A right-angled triangle has an adjacent side of 6 cm and a hypotenuse of 10 cm. Find the angle θ.', 'To find an ==angle==, use the ==inverse== ratio (cos⁻¹).', 'You need a calculator for the inverse.', 'θ = cos⁻¹(adjacent ÷ hypotenuse)',
+      [['Choose the ratio', 'Adjacent and hypotenuse: use cos (CAH)', ''], ['Write it', 'cos θ = 6 ÷ 10 = 0.6', ''], ['Use the inverse', 'θ = cos⁻¹(0.6)', 'Press SHIFT then cos on the calculator.'], ['Answer', 'θ = 53.1° (1 d.p.)', '']],
+      [['Adjacent, hyp', '6 and 10', -1], ['Ratio', 'cos θ = 0.6', 1], ['θ', 'cos⁻¹(0.6) = 53.1°', 3]])
+  ],
+  drill: 'pyth',
+  quiz: [
+    { q: 'The hypotenuse of a right-angled triangle is…', o: ['the shortest side', 'the side next to the angle', 'the longest side, opposite the right angle', 'any side'], a: 2, w: 'The ==longest side, opposite the right angle==.' },
+    { q: 'SOH means…', o: ['sin = opp ÷ hyp', 'sin = adj ÷ hyp', 'sin = opp ÷ adj', 'sin = hyp ÷ opp'], a: 0, w: '==sin θ = opposite ÷ hypotenuse==.' },
+    { q: 'A right-angled triangle has shorter sides 3 and 4. The hypotenuse is…', o: ['5', '7', '12', '25'], a: 0, w: '9 + 16 = 25, √25 = ==5==.' },
+    { q: 'tan 45° equals…', o: ['0', '0.5', '1', '45'], a: 2, w: 'tan 45° = ==1==.' },
+    { q: 'Which is a Pythagorean triple?', o: ['4, 5, 6', '5, 12, 13', '6, 7, 8', '2, 3, 4'], a: 1, w: '25 + 144 = 169 = 13². So ==5, 12, 13==.' },
+    { q: 'A right-angled triangle has hypotenuse 13 and one side 12. The other side is…', o: ['1', '5', '25', '√313'], a: 1, w: '169 − 144 = 25, √25 = ==5==.' }
+  ],
+  exam: [
+    { q: 'Triangle ABC has a right angle at B. AB = 9 cm and BC = 12 cm. Calculate the length of AC.', m: 3,
+      p: ['AC² = 9² + 12²', '81 + 144 = ==225==', 'AC = ==15 cm=='] },
+    { q: 'A right-angled triangle has a hypotenuse of 17 cm and one other side of 8 cm. Calculate the length of the third side.', m: 3,
+      p: ['x² = 17² − 8² (==subtract==)', '289 − 64 = ==225==', 'x = ==15 cm=='] },
+    { q: 'A ramp rises 1.5 m over a horizontal distance of 6 m. Calculate the angle the ramp makes with the horizontal.', m: 3,
+      p: ['tan θ = ==opposite ÷ adjacent== = 1.5 ÷ 6', 'θ = tan⁻¹(0.25)', '==14.0°== (1 d.p.)'] }
+  ]
 }
 };
 /* ---------- drill generators ---------- */
+const sup = n => String(n).split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
 const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
 const choiceItem = (q, correct, wrongs, s) => { const o = shuffle([correct, ...wrongs]); return { kind:'choice', q, choices:o, ans:o.indexOf(correct), s }; };
 const fr = (n, d) => { const g = gcd(n, d); n /= g; d /= g; return d === 1 ? String(n) : n + '/' + d; };
@@ -863,10 +1174,96 @@ const DRILLS = {
     () => { const s = rint(2, 12), ways = 6 - Math.abs(s - 7);
       return { kind:'frac', q:`Two fair dice are thrown. Find P(total = ${s}) as a simplified fraction.`, ans:fr(ways, 36),
         s:[['Total outcomes', '36'],['Ways to make ' + s, String(ways)],['P', fr(ways, 36)]] }; }
+  ],
+  numb: [
+    () => { const n = pick([12, 18, 20, 24, 28, 30, 36, 40, 42, 45, 48, 50, 54, 60, 63, 72, 75, 80, 84, 90, 96, 100, 108, 120, 126, 132, 150, 180]); const fs = []; let m = n;
+      for (let p = 2; m > 1; p++) while (m % p === 0) { fs.push(p); m /= p; }
+      return { kind:'pf', q:`Write ${n} as a product of prime factors. (Type it like 2*2*3*5 or 2^2*3*5.)`, ans:fs,
+        s:[['Divide by primes', fs.join(' × ')],['With indices', [...new Set(fs)].map(p => p + (fs.filter(x => x === p).length > 1 ? sup(fs.filter(x => x === p).length) : '')).join(' × ')]] }; },
+    () => { const g = pick([2, 3, 4, 5, 6, 7, 8, 9, 10, 12]); let p, q; do { p = rint(2, 9); q = rint(2, 9); } while (gcd(p, q) !== 1 || p === q);
+      return { kind:'num', q:`Find the HCF of ${g * p} and ${g * q}.`, ans:g, tol:0, s:[['Common factors', `${g * p} = ${g} × ${p} and ${g * q} = ${g} × ${q}`],['HCF', String(g)]] }; },
+    () => { const g = pick([2, 3, 4, 5, 6, 7, 8, 9, 10]); let p, q; do { p = rint(2, 9); q = rint(2, 9); } while (gcd(p, q) !== 1 || p === q);
+      return { kind:'num', q:`Find the LCM of ${g * p} and ${g * q}.`, ans:g * p * q, tol:0, s:[['HCF', String(g)],['LCM = HCF × p × q', `${g} × ${p} × ${q}`],['Answer', String(g * p * q)]] }; },
+    () => { const n = pick([51, 57, 91, 87, 93, 119, 121, 133, 143, 169, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113]); let f = 0;
+      for (let p = 2; p * p <= n; p++) if (n % p === 0) { f = p; break; }
+      return choiceItem(`Is ${n} a prime number?`, f ? 'No' : 'Yes', [f ? 'Yes' : 'No'], [['Test the primes up to √' + n, 'try 2, 3, 5, 7, 11'],[f ? 'A factor is found' : 'No factor is found', f ? `${n} = ${f} × ${n / f}` : 'so it is prime'],['Answer', f ? 'not prime' : 'prime']]); },
+    () => { const d = pick([3, 4, 6, 9]); const n = rint(100, 999); const ok = d === 3 ? (n % 3 === 0) : d === 9 ? (n % 9 === 0) : d === 4 ? (n % 4 === 0) : (n % 6 === 0);
+      return choiceItem(`Is ${n} divisible by ${d}?`, ok ? 'Yes' : 'No', [ok ? 'No' : 'Yes'], [['Check', d === 3 || d === 9 ? `digit sum = ${String(n).split('').reduce((a, c) => a + +c, 0)}` : d === 4 ? `last two digits = ${n % 100}` : 'must be divisible by 2 and 3'],['Answer', ok ? 'yes' : 'no']]); }
+  ],
+  pow: [
+    () => { const b = pick([2, 3, 5]), m = rint(1, 4), n = rint(1, 3), t = pick(['×', '÷', 'p']); let v, e, q;
+      if (t === '×') { e = m + n; v = b ** e; q = `Work out ${b}${sup(m)} × ${b}${sup(n)}.`; }
+      else if (t === '÷') { e = m; v = b ** e; q = `Work out ${b}${sup(m + n)} ÷ ${b}${sup(n)}.`; }
+      else { e = m * n; v = b ** e; q = `Work out (${b}${sup(m)})${sup(n)}.`; }
+      return { kind:'num', q, ans:v, tol:0, s:[['Use the index law', `${t === '×' ? 'add' : t === '÷' ? 'subtract' : 'multiply'} the powers: ${b}${sup(e)}`],['Value', String(v)]] }; },
+    () => { const up = Math.random() < .5, a = pick([1.2, 2.5, 3.6, 4.5, 5.8, 7.2, 8.4, 9.1]), n = rint(2, 5);
+      const txt = up ? String(Math.round(a * 10 ** n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : (a / 10 ** n).toFixed(n + 1).replace(/0+$/, '');
+      const right = `${a} × 10${up ? sup(n) : '⁻' + sup(n)}`;
+      const wrongs = [`${Math.round(a * 10)} × 10${up ? sup(n - 1) : '⁻' + sup(n + 1)}`, `${a} × 10${up ? sup(n + 1) : '⁻' + sup(n - 1)}`, `${a} × 10${up ? '⁻' + sup(n) : sup(n)}`];
+      return choiceItem(`Write ${txt} in standard form.`, right, wrongs, [['Move the point so one digit (1 to 9) is in front', String(a)],['Count the places moved', `${n} places ${up ? 'left: positive power' : 'right: negative power'}`],['Answer', right]]); },
+    () => { const A = pick([1.5, 2, 2.5, 3, 4]), B = pick([2, 3]), m = rint(2, 6), n = rint(2, 6), prod = A * B, ok = prod < 10;
+      const ans = ok ? `${prod} × 10${sup(m + n)}` : `${prod / 10} × 10${sup(m + n + 1)}`;
+      const cand = [ok ? `${prod} × 10${sup(m * n)}` : `${prod} × 10${sup(m + n)}`, `${prod} × 10${sup(m + n + 1)}`, `${A + B} × 10${sup(m + n)}`, `${prod} × 10${sup(m + n - 1)}`];
+      const wrongs = cand.filter((x, i) => x !== ans && cand.indexOf(x) === i).slice(0, 3);
+      return choiceItem(`Work out (${A} × 10${sup(m)}) × (${B} × 10${sup(n)}). Give the answer in standard form.`, ans, wrongs,
+        [['Multiply the front numbers', `${A} × ${B} = ${prod}`],['Add the powers', `${m} + ${n} = ${m + n}`],['Standard form', ans]]); },
+    () => { const r1 = rint(2, 9), r2 = rint(1, 9) * 10, c0 = pick([0.5, 0.2, 0.4]);
+      const a = (r1 + pick([-0.3, -0.2, 0.1, 0.2, 0.3])).toFixed(1), b = r2 + rint(-4, 4), c = (c0 + pick([-0.03, -0.02, 0.01, 0.02, 0.04])).toFixed(2), ans = r1 * r2 / c0;
+      return { kind:'num', q:`Estimate ${a} × ${b} ÷ ${c} by rounding each number to 1 significant figure.`, ans, tol:0.01,
+        s:[['Round to 1 s.f.', `${r1} × ${r2} ÷ ${c0}`],['Calculate', `${r1 * r2} ÷ ${c0} = ${ans}`]] }; },
+    () => { const x = rint(10000, 99999) / 10000, dp = rint(1, 2), ans = Math.round(x * 10 ** dp) / 10 ** dp;
+      return { kind:'num', q:`Round ${x} to ${dp} decimal place${dp > 1 ? 's' : ''}.`, ans, tol:0.00001, s:[['Keep ' + dp + ' digit' + (dp > 1 ? 's' : '') + ' after the point', 'then look at the next digit'],['Answer', String(ans)]] }; }
+  ],
+  pct: [
+    () => { const N = rint(2, 30) * 20, x = pick([5, 10, 15, 20, 25, 30, 35, 40, 60, 75]);
+      return { kind:'num', q:`Find ${x}% of ${N}.`, ans:N * x / 100, tol:0, s:[['10% is ÷ 10', String(N / 10)],['Multiplier', `${x}% = ${x / 100}`],['Answer', `${N} × ${x / 100} = ${N * x / 100}`]] }; },
+    () => { const old = rint(2, 20) * 20, p = pick([10, 20, 25, 30, 50]), up = Math.random() < .5, nw = old * (100 + (up ? p : -p)) / 100;
+      return { kind:'num', q:`A price changes from Rs ${old} to Rs ${nw}. Find the percentage ${up ? 'increase' : 'decrease'}.`, ans:p, tol:0.01,
+        s:[['Change', `${Math.abs(nw - old)}`],['Change ÷ original × 100', `${Math.abs(nw - old)} ÷ ${old} × 100`],['Answer', `${p}%`]] }; },
+    () => { const orig = rint(2, 12) * 100, p = pick([10, 20, 25, 40]), up = Math.random() < .5, nw = orig * (100 + (up ? p : -p)) / 100, pc = 100 + (up ? p : -p);
+      return { kind:'num', q:`After a ${p}% ${up ? 'increase' : 'decrease'} a price is Rs ${nw}. Find the original price.`, ans:orig, tol:0.01,
+        s:[['New price is', `${pc}% of the original`],['Find 1%', `${nw} ÷ ${pc} = ${nw / pc}`],['Find 100%', `${nw / pc} × 100 = ${orig}`]] }; },
+    () => { const P = rint(1, 20) * 100, R = rint(2, 8), T = rint(1, 5);
+      return { kind:'num', q:`Find the simple interest on Rs ${P} at ${R}% per year for ${T} year${T > 1 ? 's' : ''}.`, ans:P * R * T / 100, tol:0.01, s:[['I = P × R × T ÷ 100', `${P} × ${R} × ${T} ÷ 100`],['Answer', `Rs ${P * R * T / 100}`]] }; },
+    () => { const P = rint(1, 10) * 1000, r = pick([10, 20]), m = 1 + r / 100, ans = Math.round(P * m * m * 100) / 100;
+      return { kind:'num', q:`Rs ${P} is invested at ${r}% compound interest for 2 years. Find the total after 2 years.`, ans, tol:0.01, s:[['Multiplier', String(m)],['A = P × multiplier²', `${P} × ${m}² = ${P} × ${Math.round(m * m * 100) / 100}`],['Answer', `Rs ${ans}`]] }; }
+  ],
+  alg: [
+    () => { const a = rint(2, 9), b = rint(1, 9), right = `${a}x + ${a * b}`;
+      const cw = [`${a}x + ${b}`, `x + ${a * b}`, `${a}x + ${a + b}`, `${a}x + ${a * b + 1}`, `${a}x − ${a * b}`].filter((w, i, arr) => w !== right && arr.indexOf(w) === i).slice(0, 3);
+      return choiceItem(`Expand ${a}(x + ${b}).`, right, cw, [['Multiply every term in the bracket', `${a} × x = ${a}x   and   ${a} × ${b} = ${a * b}`],['Answer', right]]); },
+    () => { const g = rint(2, 7); let p, q; do { p = rint(1, 5); q = rint(1, 6); } while (gcd(p, q) !== 1 && p !== 1);
+      const e = `${lin(g * p, g * q)}`, right = `${g}(${lin(p, q)})`;
+      const wrongs = [`${g}(${lin(p, g * q)})`, `${g}(${lin(g * p, q)})`, `${g + 1}(${lin(p, q)})`];
+      return choiceItem(`Factorise ${e}.`, right, wrongs, [['HCF of the two terms', String(g)],['Divide each term by ' + g, `${lin(p, q)}`],['Answer', right]]); },
+    () => { const x = pick([-4, -3, -2, -1, 1, 2, 3, 4]), y = rint(1, 9), a = rint(2, 5), b = rint(2, 6), ans = a * x * x - b * y;
+      return { kind:'num', q:`Find the value of ${a}x² − ${b}y when x = ${x} and y = ${y}.`, ans, tol:0, s:[['Substitute with brackets', `${a} × (${x})² − ${b} × ${y}`],['Square first', `(${x})² = ${x * x}`],['Answer', `${a * x * x} − ${b * y} = ${ans}`]] }; },
+    () => { let p, q; do { p = rint(1, 8); q = rint(1, 8); } while (p > q);
+      const right = p === q ? `(x + ${p})²` : `(x + ${p})(x + ${q})`; const acc = p === q ? `(x + ${p})(x + ${q})` : right;
+      const ans = acc; const wrongs = [`(x − ${p})(x − ${q})`, `(x + ${p + q})(x + ${p * q})`, `(x + ${p})(x + ${q + 1})`, `(x + ${p + 1})(x + ${q})`].filter(w => w !== ans).slice(0, 3);
+      return choiceItem(`Factorise x² + ${p + q}x + ${p * q}.`, ans, wrongs, [['Two numbers that multiply to ' + p * q + ' and add to ' + (p + q), `${p} and ${q}`],['Answer', ans]]); },
+    () => { const a = rint(2, 6), b = rint(1, 9), right = `(y − ${b}) ÷ ${a}`;
+      return choiceItem(`Make x the subject of y = ${a}x + ${b}.`, right, [`(y + ${b}) ÷ ${a}`, `y − ${b} ÷ ${a}`, `${a}(y − ${b})`], [['Undo the + ' + b, `y − ${b} = ${a}x`],['Undo the × ' + a, `x = (y − ${b}) ÷ ${a}`],['Answer', right]]); }
+  ],
+  pyth: [
+    () => { const [a, b, c] = pick([[3, 4, 5], [5, 12, 13], [8, 15, 17], [6, 8, 10], [9, 12, 15], [7, 24, 25], [12, 16, 20], [20, 21, 29], [15, 20, 25], [10, 24, 26]]); const t = rint(0, 1);
+      return t ? { kind:'num', q:`A right-angled triangle has shorter sides ${a} cm and ${b} cm. Find the hypotenuse.`, ans:c, tol:0, s:[['c² = a² + b²', `${a}² + ${b}² = ${a * a} + ${b * b} = ${c * c}`],['Square root', `${c} cm`]] }
+        : { kind:'num', q:`A right-angled triangle has hypotenuse ${c} cm and one shorter side ${a} cm. Find the other side.`, ans:b, tol:0, s:[['b² = c² − a²', `${c}² − ${a}² = ${c * c} − ${a * a} = ${b * b}`],['Square root', `${b} cm`]] }; },
+    () => { const a = rint(2, 12), b = rint(2, 12), c = Math.sqrt(a * a + b * b);
+      return { kind:'num', q:`A right-angled triangle has shorter sides ${a} cm and ${b} cm. Find the hypotenuse to 2 decimal places.`, ans:Math.round(c * 100) / 100, tol:0.011, s:[['c² = a² + b²', `${a * a} + ${b * b} = ${a * a + b * b}`],['Square root', `${num(c)} cm`]] }; },
+    () => { const [k, k2, r] = pick([['the hypotenuse and the side opposite θ', 'sin', 'SOH'], ['the hypotenuse and the side adjacent to θ', 'cos', 'CAH'], ['the opposite and the adjacent sides', 'tan', 'TOA']]).concat([]);
+      return choiceItem(`In a right-angled triangle you know ${k}. Which ratio links them to angle θ?`, k2, ['sin', 'cos', 'tan'].filter(x => x !== k2), [['Match the sides', `${k2 === 'sin' ? 'opp, hyp' : k2 === 'cos' ? 'adj, hyp' : 'opp, adj'}`],['Remember', r]]); },
+    () => { const h = rint(5, 30), th = rint(20, 70), f = pick(['sin', 'cos', 'tan']); const rad = th * Math.PI / 180; const v = f === 'sin' ? Math.sin(rad) : f === 'cos' ? Math.cos(rad) : Math.tan(rad);
+      const name = f === 'sin' ? ['hypotenuse', 'opposite'] : f === 'cos' ? ['hypotenuse', 'adjacent'] : ['adjacent', 'opposite']; const ans = Math.round(h * v * 100) / 100;
+      return { kind:'num', q:`In a right-angled triangle the ${name[0]} is ${h} cm and the angle is ${th}°. Find the ${name[1]} side to 2 decimal places. (Calculator in degrees.)`, ans, tol:0.011,
+        s:[['Ratio', `${f} ${th}° = ${name[1]} ÷ ${name[0]}`],['Rearrange', `${name[1]} = ${h} × ${f} ${th}°`],['Answer', `${num(ans)} cm`]] }; },
+    () => { const [o, h] = pick([[3, 5], [5, 13], [4, 5], [7, 25], [8, 17], [6, 10], [9, 15], [12, 13], [2, 4], [5, 8]]); const ans = Math.round(Math.asin(o / h) * 180 / Math.PI * 100) / 100;
+      return { kind:'num', q:`In a right-angled triangle the side opposite angle θ is ${o} cm and the hypotenuse is ${h} cm. Find θ to 1 decimal place.`, ans, tol:0.06,
+        s:[['SOH', `sin θ = ${o} ÷ ${h}`],['Inverse', `θ = sin⁻¹(${num(o / h)})`],['Answer', `${(Math.round(ans * 10) / 10).toFixed(1)}°`]] }; }
   ]
 };
 
-const MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2]];
+const MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0]];
 
 /* ---------- worked examples: live working table and notes ---------- */
 for (const key in CH) CH[key].worked.forEach(w => {
@@ -874,7 +1271,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -891,13 +1288,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob'];
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
-  <p class="lede">Eight topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Thirteen topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
@@ -1031,6 +1428,9 @@ let drillCur = null, streak = 0;
 function judge(raw){
   const d = drillCur;
   if (d.kind === 'num') { const x = parseFloat(raw.replace(',', '.')); if (isNaN(x)) return null; return { ok: Math.abs(x - d.ans) <= (d.tol != null ? d.tol : Math.abs(d.ans)*0.02) + 1e-9 }; }
+  if (d.kind === 'pf') { const sp = x => x.replace(/²/g, '^2').replace(/³/g, '^3'); const out = []; let m; const re = /(\d+)(?:\^(\d+))?/g; const r = sp(Array.isArray(raw) ? raw.join('*') : String(raw));
+    while ((m = re.exec(r))) { const e = m[2] ? +m[2] : 1; for (let i = 0; i < e; i++) out.push(+m[1]); } if (!out.length) return null;
+    return { ok: out.slice().sort((a, b) => a - b).join(',') === d.ans.join(',') }; }
   if (d.kind === 'text') { const n = s => s.replace(/\s+/g, '').replace(/[−–]/g, '-').toLowerCase(); const r = n(raw); if (!r) return null; return { ok: r === n(d.ans) }; }
   if (d.kind === 'frac') { const P = s => { const m = s.replace(/\s+/g, '').match(/^(-?\d+)(?:\/(\d+))?$/); return m ? [+m[1], m[2] ? +m[2] : 1] : null; };
     const x = P(raw), y = P(d.ans); if (!x) return raw.trim() ? { ok:false, note:'Write it like 7/12.' } : null; if (!x[1]) return { ok:false };
@@ -1041,7 +1441,7 @@ function judge(raw){
     if (r === d.ans) return { ok:true }; if (r.toLowerCase() === d.ans.toLowerCase()) return { ok:true, note:`Watch the capital letters: ${sub(d.ans)}` }; return { ok:false }; }
   return null;
 }
-const answerText = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'num' ? num(d.ans) : d.ans;
+const answerText = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'num' ? num(d.ans) : d.kind === 'pf' ? d.ans.join(' × ') : d.ans;
 function showResult(ok, note){
   streak = ok ? streak + 1 : 0;
   if (streak > (store.drill[cur] || 0)) { store.drill[cur] = streak; save(); }
@@ -1058,7 +1458,7 @@ function newDrill(){
   const d = drillCur;
   const input = d.kind === 'choice'
     ? `<div class="opts" id="dch">${d.choices.map((o,j) => `<button class="opt" type="button" data-dc="${j}">${o}</button>`).join('')}</div>`
-    : `<form class="answer" id="dform"><label for="dans" class="note">Your answer</label><input id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" ${d.kind==='num'?'inputmode="decimal"':''} placeholder="${d.kind==='text'?'type your answer':d.kind==='frac'?'e.g. 7/12':'number'}"><button class="btn primary" type="submit">Check</button></form>`;
+    : `<form class="answer" id="dform"><label for="dans" class="note">Your answer</label><input id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" ${d.kind==='num'?'inputmode="decimal"':''} placeholder="${d.kind==='pf'?'e.g. 2*2*3':d.kind==='text'?'type your answer':d.kind==='frac'?'e.g. 7/12':'number'}"><button class="btn primary" type="submit">Check</button></form>`;
   box.innerHTML = `<div class="scorebar"><span class="eyebrow">Practice drill</span><span class="stat">streak ${streak} · best ${store.drill[cur] || 0}</span></div>
     <p class="drillq">${d.q}</p>${input}<div id="dfb"></div>
     <div class="row"><button class="btn ghost" type="button" id="dskip">Skip to a new question</button></div>`;
