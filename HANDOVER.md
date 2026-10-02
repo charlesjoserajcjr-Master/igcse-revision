@@ -28,7 +28,7 @@ Handed over from a Claude chat session on 2 Oct 2026. Read `CLAUDE.md` for how t
 - [x] Chemistry pack — same, plus dot-and-cross / periodic table / reactivity series / salt-prep diagrams, 34-mark mock
 - [x] CS pack — same, plus logic gate explorer and circuit simulator ("Try it"), truth-table drill, 33 explanatory worked examples with side working tables, 36-mark mock
 - [x] Physics and Chemistry worked examples now explanatory (Key idea, why lines, exam tip, live side table)
-- [x] Maths pack `maths.html` (8 topics from the term 1 portion list, 44 worked examples, 28 drill generators). Drill kinds `text` and `frac` added.
+- [x] Maths pack `maths.html` (8 topics from the term 1 portion list, 44 worked examples, 35 drill generators). Drill kinds `text` and `frac` added.
 - [x] Drill generators self-checked (Chemistry 5,100 items, CS 7,200 items: every answer key accepted)
 
 ## Open tasks (suggested order)
