@@ -210,7 +210,8 @@ const save = () => { try { localStorage.setItem('mathpack-v1', JSON.stringify(st
 /* ---------- diagrams ---------- */
 function arrowDefs(id){
   return `<defs><marker id="a-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="inkf"/></marker>
-  <marker id="b-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="accf"/></marker></defs>`;
+  <marker id="b-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="accf"/></marker>
+  <marker id="h-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="hotf"/></marker></defs>`;
 }
 const T = (x, y, s, cls = '') => `<text x="${x}" y="${y}" class="${cls}">${s}</text>`;
 const sq = (x, y, s, cls = 'metal') => `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="3" class="${cls}"/>`;
@@ -580,6 +581,37 @@ function svgMatMul(){
   ${T(480, 106, '=', 'mid lbl')}${br(505, 56, 130, 70)}${T(540, 88, '22', 'mid mono acct')}${T(540, 118, '21', 'mid mono acct')}
   ${T(30, 176, 'Order (2 × 2) × (2 × 1) gives (2 × 1): the inner numbers must match.', 'acct')}
   ${T(30, 202, 'Top answer: row 1 of the left matrix × the column.', 'mut')}${T(30, 224, 'AB is not usually the same as BA.', 'hott')}</svg>`;
+}
+function svgPlaceValue(){
+  const cols = ['millions', 'hundred thousands', 'ten thousands', 'thousands', 'hundreds', 'tens', 'units'], dig = ['7', '2', '5', '0', '0', '0', '0'];
+  return `<svg viewBox="0 0 860 260" role="img" aria-label="Place value columns for 7 250 000">
+  ${cols.map((c, i) => `<rect x="${30 + i * 115}" y="60" width="108" height="64" class="${i < 3 ? 'nonmetal' : 'cardf'}" style="stroke:var(--ink);stroke-width:1.5"/>${T(84 + i * 115, 100, dig[i], 'mid mono lbl')}${T(84 + i * 115, 50, c, 'mid mut')}`).join('')}
+  ${T(30, 170, '7 250 000 = seven million, two hundred and fifty thousand', 'lbl')}${T(30, 200, '8017 = eight thousand and seventeen   (not “eight thousand one hundred and seven”)', 'mut')}
+  ${T(30, 230, 'A zero in a column keeps the other digits in the right place.', 'mut')}</svg>`;
+}
+function svgBounds(){
+  const X = v => 100 + (v - 3.1) * 3300;
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="Bounds of 3.2 kg correct to the nearest 100 g on a number line">
+  <line x1="${X(3.1)}" y1="110" x2="${X(3.3)}" y2="110" class="ln"/>
+  <line x1="${X(3.15)}" y1="110" x2="${X(3.25)}" y2="110" class="acc" style="stroke-width:6"/>
+  <circle cx="${X(3.15)}" cy="110" r="7" class="accf"/><circle cx="${X(3.25)}" cy="110" r="7" class="cardf" style="stroke:var(--accent);stroke-width:2.5"/>
+  ${[3.1, 3.15, 3.2, 3.25, 3.3].map(v => `<line x1="${X(v)}" y1="104" x2="${X(v)}" y2="124" class="thin"/>${T(X(v), 146, v, 'mid mono ' + (v === 3.2 ? 'hott' : 'mut'))}`).join('')}
+  ${T(X(3.15), 84, 'lower bound', 'mid acct')}${T(X(3.25), 84, 'upper bound', 'mid acct')}${T(X(3.2), 70, 'm = 3.2 kg', 'mid hott')}
+  ${T(430, 190, '3.15 ≤ m < 3.25', 'mid mono lbl')}${T(430, 216, 'Correct to the nearest 0.1: the bounds are 0.05 either side.', 'mid mut')}</svg>`;
+}
+function svgExchange(){
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="Converting pounds and dollars with an exchange rate">${arrowDefs('ex')}
+  <rect x="60" y="60" width="200" height="70" rx="10" class="metal" style="stroke:var(--ink);stroke-width:1.8"/>${T(160, 102, '£ pounds', 'mid lbl')}
+  <rect x="600" y="60" width="200" height="70" rx="10" class="nonmetal" style="stroke:var(--ink);stroke-width:1.8"/>${T(700, 102, '$ dollars', 'mid lbl')}
+  <line x1="270" y1="80" x2="590" y2="80" class="acc" marker-end="url(#b-ex)"/>${T(430, 68, '× 1.28', 'mid mono acct')}
+  <line x1="590" y1="112" x2="270" y2="112" class="hotl" marker-end="url(#h-ex)"/>${T(430, 134, '÷ 1.28', 'mid mono hott')}
+  ${T(430, 180, '£1 = $1.28.  £250 → 250 × 1.28 = $320.   $200 → 200 ÷ 1.28 = £156.25.', 'mid lbl')}${T(430, 208, 'Check: one pound buys MORE than one dollar, so the dollar total is bigger.', 'mid mut')}</svg>`;
+}
+function svgRecurring(){
+  return `<svg viewBox="0 0 860 260" role="img" aria-label="Converting 0.262626... to a fraction">
+  ${T(40, 40, 'Write 0.262626… (the 26 repeats) as a fraction.', 'lbl')}
+  ${T(60, 90, 'Let  x = 0.262626…', 'mono')}${T(60, 122, '100x = 26.262626…', 'mono')}${T(60, 154, '100x − x = 26', 'mono acct')}${T(60, 186, '99x = 26', 'mono acct')}${T(60, 218, 'x = 26 ÷ 99', 'mono hott')}
+  ${T(430, 122, '× 100 because TWO digits repeat', 'hott')}${T(430, 154, 'Subtract: the repeating tails cancel.', 'mut')}${T(430, 186, 'One digit repeating: × 10, then 9x.', 'mut')}</svg>`;
 }
 const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
 const CH = {
@@ -1968,6 +2000,105 @@ matx: {
     { q: `Find the inverse of ${M([4, 3], [1, 1])}.`, m: 3,
       p: ['determinant = 4 × 1 − 3 × 1 = ==1==', 'swap a and d, change signs of b and c', `${M([1, '−3'], ['−1', 4])}`] }
   ]
+},
+round: {
+  code: 'Number', name: 'Place value, rounding, estimation and bounds',
+  lede: 'Read and write big numbers, round them sensibly, estimate answers without a calculator, and find the smallest and largest values a rounded number could be.',
+  learn: [
+    { h: 'Place value and words', list: ['Each column is ==ten times== the one to its right: units, tens, hundreds, thousands, ten thousands, hundred thousands, millions.', 'Say the number in ==groups of three digits==: 7 250 000 = ==seven million, two hundred and fifty thousand==.', 'Use ==and== before the last two digits: 8017 = ==eight thousand and seventeen==.', 'A ==zero== holds a place: 16 062 has no hundreds, so write ==16 062==, not 1662.', '==Million== = 1 000 000. 7.25 million = ==7 250 000==.'] },
+    { h: 'Rounding', list: ['==Nearest 10, 100, 1000==: look at the digit ==one place to the right==. If it is 5 or more, round up.', '==Decimal places (d.p.)== count digits ==after the point==. 5.396 to 1 d.p. is ==5.4==.', '==Significant figures (s.f.)== count from the ==first non-zero digit==. 0.04567 to 2 s.f. is ==0.046==. 12.7 to 1 s.f. is ==10==.', 'Zeros ==after the point at the end== show accuracy: 3.50 is 3 s.f.', 'Write the ==rounded digit and then stop==: do not leave extra digits.'] },
+    { h: 'Estimating', list: ['To ==estimate==, round ==every number to 1 significant figure== first, then calculate.', 'Choose rounded values that make the sum ==easy==: 1.97 → 2 and 5.79 → 6.', '==Show the rounded numbers== in the working: this earns the method mark.', 'Estimates are used to ==check== a calculator answer.'], f: ['estimate: round each number to 1 s.f., then work it out'] },
+    { h: 'Bounds', list: ['A number rounded to a given accuracy could have been ==half a unit== bigger or smaller.', '==Nearest 100 g== for 3.2 kg: the bounds are ==3.15 kg== (lower) and ==3.25 kg== (upper), written ==3.15 ≤ m < 3.25==.', '12.7 s correct to ==3 s.f.== (nearest 0.1): ==12.65 ≤ t < 12.75==.', 'The ==lower bound is included==; the ==upper bound is not== (use < for the upper).', 'Largest ==a + b==: both upper. Largest ==a × b==: both upper. Largest ==a − b==: ==upper − lower==. Largest ==a ÷ b==: ==upper ÷ lower==.'] }
+  ],
+  mistakes: ['Writing ==8017 as eight thousand one hundred and seven==.', 'Counting ==s.f. from the decimal point== instead of the first non-zero digit.', 'Giving ==3.2 as the bound== instead of 3.15 and 3.25.', 'Using the ==upper bound of both numbers== for a − b.', 'Estimating with ==2 or 3 s.f.== instead of 1 s.f.'],
+  diagrams: [
+    { svg: svgPlaceValue, cap: '==Place value== columns for 7 250 000.' },
+    { svg: svgBounds, cap: '==Bounds==: 3.2 kg correct to the nearest 100 g.' }
+  ],
+  worked: [
+    W('Write (a) 8017 in words, (b) sixteen thousand and sixty-two in figures, (c) 7.25 million in figures.', 'Group the digits in ==threes== and read the columns. A zero keeps the place.', 'Check by saying your figures back out loud.', 'thousands, hundreds, tens, units',
+      [['(a) 8017', 'eight thousand and seventeen', 'There are no hundreds. Put “and” before the last two digits.'], ['(b) Sixteen thousand', '16 000', 'Sixteen thousand is 16 followed by three zeros.'], ['(b) and sixty-two', '16 062', '0 hundreds, 6 tens, 2 units.'], ['(c) 7.25 million', '7.25 × 1 000 000 = 7 250 000', '0.25 million is 250 000.']],
+      [['(a)', 'eight thousand and seventeen', 0], ['(b)', '16 062', 2], ['(c)', '7 250 000', 3]], true),
+    W('Round (a) 10 069 to the nearest ten, (b) 5.396 to 1 decimal place, (c) 0.04567 to 2 significant figures.', 'Look at the ==next digit==. 5 or more rounds up.', 'For s.f. start at the first non-zero digit.', 'check the digit after',
+      [['(a) Nearest ten', '10 069: the units digit is 9, so round up to 10 070', ''], ['(b) 1 d.p.', '5.396: the second decimal is 9, so round up to 5.4', '5.3 becomes 5.4.'], ['(c) 2 s.f.', '0.04567: the first non-zero digit is 4, the second is 5, the next digit is 6, so round up: 0.046', 'The zeros at the start do not count.']],
+      [['(a)', '10 070', 0], ['(b)', '5.4', 1], ['(c)', '0.046', 2]]),
+    W('By rounding each number to 1 significant figure, estimate (42.8 + 17.4) ÷ (1.97 × 5.79).', '==Round first==, then calculate. Show the rounded numbers.', 'Pick the easiest result.', '1 s.f. then work it out',
+      [['Round the top', '42.8 → 40 and 17.4 → 20', '1 s.f.'], ['Round the bottom', '1.97 → 2 and 5.79 → 6', ''], ['Top', '40 + 20 = 60', ''], ['Bottom', '2 × 6 = 12', ''], ['Divide', '60 ÷ 12 = 5', 'Estimate 5.']],
+      [['Top', '40 + 20 = 60', 2], ['Bottom', '2 × 6 = 12', 3], ['Estimate', '5', 4]]),
+    W('The mass of a stone is 3.2 kg, correct to the nearest 100 g. Write down the lower and upper bounds.', 'Half of 100 g is ==50 g== = 0.05 kg.', 'Write the error interval with ≤ and <.', 'value ± half the unit',
+      [['Half a unit', '100 g ÷ 2 = 50 g = 0.05 kg', ''], ['Lower bound', '3.2 − 0.05 = 3.15 kg', ''], ['Upper bound', '3.2 + 0.05 = 3.25 kg', ''], ['Error interval', '3.15 ≤ m < 3.25', 'Lower bound included, upper not.']],
+      [['Half unit', '0.05 kg', 0], ['Lower', '3.15 kg', 1], ['Upper', '3.25 kg', 2]]),
+    W('A rectangle has length 12 cm and width 8 cm, both correct to the nearest cm. Find the largest and smallest possible area.', 'Use ==upper bounds== for the largest, ==lower bounds== for the smallest.', 'Half a cm is 0.5 cm.', 'upper × upper, lower × lower',
+      [['Bounds', 'length 11.5 to 12.5; width 7.5 to 8.5', 'Each is ±0.5 cm.'], ['Largest area', '12.5 × 8.5 = 106.25 cm²', 'Upper × upper.'], ['Smallest area', '11.5 × 7.5 = 86.25 cm²', 'Lower × lower.']],
+      [['Bounds', '±0.5 cm', 0], ['Largest', '106.25 cm²', 1], ['Smallest', '86.25 cm²', 2]])
+  ],
+  drill: 'round',
+  quiz: [
+    { q: 'Which is eight thousand and seventeen?', o: ['8017', '8170', '80 017', '817'], a: 0, w: '==8017==.' },
+    { q: '0.04567 to 2 s.f. is…', o: ['0.04', '0.046', '0.05', '0.0457'], a: 1, w: 'First non-zero digit 4, then 5, next digit 6: ==0.046==.' },
+    { q: 'To estimate, round each number to…', o: ['1 s.f.', '2 d.p.', '3 s.f.', 'the nearest 10 always'], a: 0, w: '==1 significant figure==.' },
+    { q: '4.7 correct to 1 d.p. has a lower bound of…', o: ['4.6', '4.65', '4.7', '4.75'], a: 1, w: '4.7 − 0.05 = ==4.65==.' },
+    { q: 'The largest possible value of a − b uses…', o: ['upper a, upper b', 'lower a, lower b', 'upper a, lower b', 'lower a, upper b'], a: 2, w: '==Upper a − lower b==.' },
+    { q: '3.50 has how many significant figures?', o: ['1', '2', '3', '4'], a: 2, w: '==3==: the final zero counts.' }
+  ],
+  exam: [
+    { q: 'Write 70 000 000 in words.', m: 1, p: ['==seventy million=='] },
+    { q: 'The time for a race is 12.7 seconds, correct to 3 significant figures. Write down the lower bound and the upper bound.', m: 2,
+      p: ['lower bound ==12.65=='  , 'upper bound ==12.75=='] },
+    { q: 'By writing each number correct to 1 significant figure, estimate (38.6 + 21.4) ÷ (3.04 × 4.91). Show your working.', m: 3,
+      p: ['==40 + 20== (or 60) in the numerator', '==3 × 5== (or 15) in the denominator', '==4=='] },
+    { q: 'A square has side 9 cm correct to the nearest cm. Find the upper bound of its perimeter.', m: 3,
+      p: ['upper bound of side = ==9.5==', 'perimeter = 4 × 9.5', '==38 cm=='] }
+  ]
+},
+numb2: {
+  code: 'Number', name: 'Fractions, reciprocals, recurring decimals and exchange rates',
+  lede: 'Order fractions, find reciprocals, change recurring decimals into fractions, and convert money using an exchange rate.',
+  learn: [
+    { h: 'Ordering fractions and reciprocals', list: ['To order fractions, give them a ==common denominator== (or change them to ==decimals==), then compare the top numbers.', '3/4, 5/8 and 7/10 over 40: 30/40, 25/40, 28/40. Smallest to largest: ==5/8, 7/10, 3/4==.', 'The ==reciprocal== of a number is ==1 divided by it==. Turn the fraction ==upside down==: the reciprocal of 2/3 is ==3/2==.', 'Reciprocal of a whole number: 5 is 5/1, so the reciprocal is ==1/5==. Reciprocal of 0.25 = 1/(1/4) = ==4==.', 'A number times its reciprocal is ==1==.'] },
+    { h: 'Recurring decimals', list: ['A ==recurring decimal== has digits that ==repeat for ever==: 0.333… = 1/3, 0.262626… (the 26 repeats).', 'One digit repeats: ==multiply by 10==. Two digits repeat: ==multiply by 100==.', 'Method: let ==x== = the decimal. Multiply to move the repeat. ==Subtract== to cancel the repeating tails. ==Solve for x==.', '0.2626… : 100x = 26.2626…, so 99x = 26, and x = ==26/99==.', 'If the repeat does not start straight after the point (0.1333…), multiply so the ==repeat lines up== before subtracting.'] },
+    { h: 'Exchange rates', list: ['An ==exchange rate== says how much of one currency equals one unit of another. £1 = $1.28.', '==Multiply== by the rate to go ==from the £ to the $== (the currency with “1”).', '==Divide== by the rate to go ==back== to £.', '==Check==: £1 buys more than $1, so a $ total is larger than the £ total.', 'Show the ==rate== in the working: 250 × 1.28.'] }
+  ],
+  mistakes: ['Comparing fractions by ==the denominators alone==.', 'Taking the reciprocal of 5 as ==−5== or 0.5.', 'Multiplying by ==10 instead of 100== when two digits repeat.', 'Forgetting to ==subtract== to remove the repeating tail.', '==Multiplying instead of dividing== when converting back.'],
+  diagrams: [
+    { svg: svgRecurring, cap: '==Recurring decimal== to fraction: multiply, subtract, solve.' },
+    { svg: svgExchange, cap: '==Exchange rate==: multiply one way, divide the other.' }
+  ],
+  worked: [
+    W('Write 3/4, 5/8 and 7/10 in order, smallest first.', 'Use a ==common denominator==: 40 works for all three.', 'Convert each, then compare the tops.', 'denominator 40',
+      [['Common denominator', 'LCM of 4, 8 and 10 is 40', ''], ['Convert', '3/4 = 30/40, 5/8 = 25/40, 7/10 = 28/40', 'Multiply top and bottom.'], ['Order the tops', '25 < 28 < 30', ''], ['Answer', '5/8, 7/10, 3/4', 'Write the original fractions.']],
+      [['3/4', '30/40', 1], ['5/8', '25/40', 1], ['7/10', '28/40', 1], ['Order', '5/8, 7/10, 3/4', 3]]),
+    W('Write down the reciprocal of (a) 5, (b) 2/3, (c) 0.25.', 'Turn the number ==upside down== (1 divided by it).', 'Write whole numbers and decimals as fractions first.', 'flip it',
+      [['(a) 5', '5 = 5/1, so the reciprocal is 1/5', ''], ['(b) 2/3', 'the reciprocal is 3/2', 'Flip the fraction.'], ['(c) 0.25', '0.25 = 1/4, so the reciprocal is 4/1 = 4', '']],
+      [['(a)', '1/5', 0], ['(b)', '3/2', 1], ['(c)', '4', 2]]),
+    W('Write the recurring decimal 0.262626… as a fraction.', 'Two digits repeat, so ==multiply by 100==.', 'Subtract so the repeating part cancels.', '100x − x',
+      [['Let x', 'x = 0.262626…', ''], ['Multiply by 100', '100x = 26.262626…', 'Two digits repeat.'], ['Subtract', '100x − x = 26', 'The tails 0.2626… cancel.'], ['Solve', '99x = 26, so x = 26/99', 'It does not simplify.']],
+      [['x', '0.2626…', 0], ['100x', '26.2626…', 1], ['99x', '26', 2], ['x', '26/99', 3]]),
+    W('Write 0.1333… (only the 3 repeats) as a fraction in its simplest form.', 'The repeat does not start straight away: make ==two multiples== with the repeat in the same place.', 'Use 10x and 100x.', '100x − 10x',
+      [['Let x', 'x = 0.1333…', ''], ['10x', '10x = 1.333…', ''], ['100x', '100x = 13.333…', 'Same repeating tail as 10x.'], ['Subtract', '100x − 10x = 12, so 90x = 12', ''], ['Simplify', 'x = 12/90 = 2/15', 'Divide by 6.']],
+      [['10x', '1.333…', 1], ['100x', '13.333…', 2], ['90x', '12', 3], ['x', '2/15', 4]]),
+    W('The exchange rate is £1 = $1.28. Convert (a) £250 to dollars (b) $200 to pounds.', 'Pounds to dollars: ==multiply==. Back to pounds: ==divide==.', 'Check the sizes: dollars are the larger number.', '£ × 1.28 = $',
+      [['(a) £ to $', '250 × 1.28 = 320', 'Multiply by the rate.'], ['(a) Answer', '$320', 'Bigger than 250 ✓.'], ['(b) $ to £', '200 ÷ 1.28 = 156.25', 'Divide by the rate.'], ['(b) Answer', '£156.25', 'Smaller than 200 ✓.']],
+      [['(a)', '$320', 1], ['(b)', '£156.25', 3]])
+  ],
+  drill: 'numb2',
+  quiz: [
+    { q: 'The reciprocal of 4 is…', o: ['−4', '1/4', '0.4', '4'], a: 1, w: '==1/4==.' },
+    { q: 'The reciprocal of 3/5 is…', o: ['5/3', '3/5', '−3/5', '15'], a: 0, w: '==5/3==.' },
+    { q: '0.333… as a fraction is…', o: ['1/3', '1/33', '3/10', '33/100'], a: 0, w: '==1/3==.' },
+    { q: 'To convert 0.4545… we multiply by…', o: ['10', '100', '1000', '45'], a: 1, w: '==100== (two digits repeat).' },
+    { q: '£1 = $1.25. £80 in dollars is…', o: ['$64', '$100', '$81.25', '$1.25'], a: 1, w: '80 × 1.25 = ==$100==.' },
+    { q: 'Which fraction is the largest?', o: ['2/5', '3/8', '7/20', '1/2'], a: 3, w: 'In decimals: 0.4, 0.375, 0.35, ==0.5==.' }
+  ],
+  exam: [
+    { q: 'Write 0.545454… (the 54 repeats) as a fraction in its simplest form.', m: 3,
+      p: ['==100x = 54.5454…==', '==99x = 54==', '==6/11=='] },
+    { q: 'Write down the reciprocal of 0.2.', m: 1, p: ['==5=='] },
+    { q: 'The exchange rate is £1 = $1.28. A jacket costs $96. Work out the cost in pounds.', m: 2,
+      p: ['96 ÷ 1.28', '==£75=='] },
+    { q: 'Write these fractions in order, smallest first: 2/3, 5/8, 7/12.', m: 2,
+      p: ['common denominator 24: ==16/24, 15/24, 14/24==', '==7/12, 5/8, 2/3=='] }
+  ]
 }
 
 };
@@ -2402,10 +2533,58 @@ const DRILLS = {
       return { kind:'frac', q:`The inverse of ${M([a, b], [c, d])} is (1 ÷ det) × ${M(['d', '−b'], ['−c', 'a'])}. Find the TOP-LEFT entry of the inverse (as a fraction, like 3/2 or −2).`, ans, s:[['Determinant', `${a} × ${d} − ${b} × ${c} = ${det}`], ['Top-left', `${d} ÷ ${det} = ${ans}`]] }; },
     () => { const it = pick([['2 × 3', '3 × 1', 'yes, giving a 2 × 1 matrix'], ['2 × 2', '2 × 2', 'yes, giving a 2 × 2 matrix'], ['2 × 3', '2 × 3', 'no'], ['1 × 2', '2 × 2', 'yes, giving a 1 × 2 matrix']]);
       return choiceItem(`Can a ${it[0]} matrix be multiplied by a ${it[1]} matrix (in that order)?`, it[2], ['yes, giving a 2 × 1 matrix', 'yes, giving a 2 × 2 matrix', 'no', 'yes, giving a 1 × 2 matrix'].filter(x => x !== it[2]).slice(0, 3), [['Rule', 'inner numbers must match; outer numbers give the order']]); }
+  ],
+  round: [
+    () => { const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'], tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+      const w2 = n => n < 20 ? ones[n] : tens[Math.floor(n / 10)] + (n % 10 ? '-' + ones[n % 10] : '');
+      const w3 = n => { const h = Math.floor(n / 100), r = n % 100; return (h ? ones[h] + ' hundred' + (r ? ' and ' : '') : '') + (r ? w2(r) : ''); };
+      const words = n => { const t = Math.floor(n / 1000), r = n % 1000; return (t ? w3(t) + ' thousand' + (r ? (r < 100 ? ' and ' : ' ') : '') : '') + (r ? w3(r) : ''); };
+      const th = rint(1, 99), r = pick([rint(1, 99), rint(101, 999), 0]), n = th * 1000 + r; const fig = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      const wrong = [th * 1000 + (r < 100 ? r * 10 + 0 : Math.floor(r / 10)), (th * 100) + r, th * 10000 + r, (r < 100 && r > 0) ? th * 1000 + 100 + r : th * 1000 + r + 100].filter(x => x !== n && x > 0);
+      const w = [...new Set(wrong)].slice(0, 3); while (w.length < 3) w.push(n + (w.length + 1) * 1000);
+      return choiceItem(`Which number is “${words(n)}”?`, fig(n), w.map(fig), [['Words to figures', `${words(n)} = ${fig(n)}`]]); },
+    () => { const u = pick([10, 100, 1000]), n = rint(1100, 99999), ans = Math.round(n / u) * u;
+      if ((n % u) * 2 === u) return DRILLS.round[1]();
+      return { kind:'num', q:`Round ${n} to the nearest ${u}.`, ans, tol:0, s:[['Look at the digit to the right', `${n}`], ['Answer', `${ans}`]] }; },
+    () => { const d = pick([1, 2]), x = rint(10000, 99999) / 1000, s = x.toFixed(3), tail = s.slice(s.length - (3 - d)); if (/^50*$/.test(tail)) return DRILLS.round[2]();
+      const ans = Number(x.toFixed(d));
+      return { kind:'num', q:`Round ${s} to ${d} decimal place${d > 1 ? 's' : ''}.`, ans, tol:0, s:[['Count decimal places', `${d}`], ['Look at the next digit', tail[0]], ['Answer', `${ans}`]] }; },
+    () => { const sf = pick([1, 2, 3]), m = rint(10000, 99999), x = m / pick(sf === 3 ? [100, 1000, 10000] : [100, 1000, 10000, 100000]), str = String(x).replace('.', '').replace(/^0+/, ''), tail = str.slice(sf);
+      if (/^50*$/.test(tail) || str.length <= sf) return DRILLS.round[3]();
+      const ans = Number(x.toPrecision(sf));
+      return { kind:'num', q:`Round ${x} to ${sf} significant figure${sf > 1 ? 's' : ''}.`, ans, tol:0, s:[['First non-zero digit starts the count', `${x}`], ['Answer', `${ans}`]] }; },
+    () => { const P = pick([20, 30, 40, 50, 60, 80]), Q = pick([2, 3, 4, 5, 6]), R = pick([2, 4, 5, 10]);
+      const mk = (v, unit) => { for (let i = 0; i < 80; i++) { const c = Math.round(v * (1 + (Math.random() - 0.5) * 0.16) * 10) / 10; if (Number(c.toPrecision(1)) === v && c !== v) return c; } return v + 0.1 * (v < 10 ? 1 : 0); };
+      const a = mk(P), b = mk(Q), c = mk(R), ans = P * Q / R;
+      return { kind:'num', q:`By rounding each number to 1 significant figure, estimate ${a} × ${b} ÷ ${c}.`, ans:Math.round(ans * 100) / 100, tol:0, s:[['Round to 1 s.f.', `${a} → ${P}, ${b} → ${Q}, ${c} → ${R}`], ['Calculate', `${P} × ${Q} ÷ ${R} = ${ans}`]] }; },
+    () => { const u = pick([['1', 1], ['0.1', 0.1], ['10', 10], ['100', 100]]), v = u[1] >= 1 ? rint(5, 90) * u[1] : Math.round(rint(10, 90) * u[1] * 100) / 100 + (u[1] === 0.1 ? 0 : 0), up = Math.random() < 0.5, half = u[1] / 2, ans = Math.round((up ? v + half : v - half) * 1000) / 1000;
+      return { kind:'num', q:`A length is ${v} cm, correct to the nearest ${u[0]} cm. Find its ${up ? 'upper' : 'lower'} bound.`, ans, tol:0.0001, s:[['Half a unit', `${u[0]} ÷ 2 = ${half}`], ['Bound', `${v} ${up ? '+' : '−'} ${half} = ${ans}`]] }; },
+    () => { const a = rint(5, 20), b = rint(4, 15), big = Math.random() < 0.5, ans = big ? (a + 0.5) * (b + 0.5) : (a - 0.5) * (b - 0.5);
+      return { kind:'num', q:`A rectangle is ${a} cm by ${b} cm, both correct to the nearest cm. Find the ${big ? 'largest' : 'smallest'} possible area (cm²).`, ans, tol:0.001, s:[['Bounds', `${a - 0.5} to ${a + 0.5} and ${b - 0.5} to ${b + 0.5}`], ['Area', `${big ? (a + 0.5) : (a - 0.5)} × ${big ? (b + 0.5) : (b - 0.5)} = ${ans}`]] }; }
+  ],
+  numb2: [
+    () => { const ds = pick([[4, 5, 8], [3, 4, 6], [2, 3, 5], [5, 8, 10], [4, 6, 9]]), fr3 = ds.map(d => { const n = rint(1, d - 1); return [n, d]; }), v = fr3.map(f => f[0] / f[1]);
+      if (new Set(v.map(x => x.toFixed(6))).size < 3) return DRILLS.numb2[0]();
+      const small = Math.random() < 0.5, tgt = small ? Math.min(...v) : Math.max(...v), i = v.indexOf(tgt), f = x => x[0] + '/' + x[1];
+      return choiceItem(`Which fraction is the ${small ? 'smallest' : 'largest'}?`, f(fr3[i]), fr3.filter((_, j) => j !== i).map(f), [['Change to decimals', fr3.map(x => `${f(x)} = ${num(x[0] / x[1])}`).join(', ')]]); },
+    () => { const n = rint(2, 12); let a, b; do { a = rint(1, 9); b = rint(2, 11); } while (gcd(a, b) !== 1 || a === b);
+      return Math.random() < 0.5 ? { kind:'frac', q:`Write down the reciprocal of ${n}. Give a fraction like 1/5.`, ans:'1/' + n, s:[['Reciprocal', `1 ÷ ${n} = 1/${n}`]] }
+        : { kind:'frac', q:`Write down the reciprocal of ${a}/${b}.`, ans:b + '/' + a, s:[['Flip it', `${b}/${a}`]] }; },
+    () => { const it = pick([[0.5, 2], [0.25, 4], [0.2, 5], [0.1, 10], [0.125, 8], [0.05, 20]]);
+      return { kind:'num', q:`Write down the reciprocal of ${it[0]}.`, ans:it[1], tol:0, s:[['Write as a fraction', `${it[0]} = 1/${it[1]}`], ['Flip', `${it[1]}`]] }; },
+    () => { if (Math.random() < 0.4) { const d = rint(1, 8); return { kind:'frac', q:`Write the recurring decimal 0.${d}${d}${d}… (the ${d} repeats) as a fraction in its simplest form.`, ans:fr(d, 9), s:[['x', `x = 0.${d}${d}…`], ['10x − x', `9x = ${d}`], ['x', fr(d, 9)]] }; }
+      let a, b; do { a = rint(1, 9); b = rint(0, 9); } while (a === b);
+      const n = a * 10 + b; return { kind:'frac', q:`Write the recurring decimal 0.${a}${b}${a}${b}… (the ${a}${b} repeats) as a fraction in its simplest form.`, ans:fr(n, 99), s:[['100x', `${n}.${a}${b}…`], ['99x', `${n}`], ['x', `${n}/99 = ${fr(n, 99)}`]] }; },
+    () => { const r = pick([1.2, 1.25, 1.3, 1.4, 1.5, 1.28, 1.35]), p = rint(2, 40) * 10, ans = Math.round(p * r * 100) / 100;
+      return { kind:'num', q:`£1 = $${r}. Convert £${p} to dollars.`, ans, tol:0.005, s:[['Multiply by the rate', `${p} × ${r} = ${ans}`]] }; },
+    () => { const r = pick([1.25, 1.5, 1.2, 1.28, 1.6, 1.4]), p = rint(2, 40) * 5, d = Math.round(p * r * 100) / 100;
+      return { kind:'num', q:`£1 = $${r}. Convert $${d} to pounds.`, ans:p, tol:0.005, s:[['Divide by the rate', `${d} ÷ ${r} = ${p}`]] }; },
+    () => { const it = pick([['£ to $', 'multiply by the rate'], ['$ to £', 'divide by the rate']]);
+      return choiceItem(`The rate is £1 = $1.25. To change ${it[0]} you…`, it[1], ['multiply by the rate', 'divide by the rate'].filter(x => x !== it[1]), [['Rule', 'the currency with the 1: multiply to get the other']]); }
   ]
 };
 
-let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0],['ineq',0],['loci',0],['matx',0]];
+let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0],['ineq',0],['loci',0],['matx',0],['round',0],['numb2',0]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -2421,7 +2600,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['ineq','Graphs','Inequality regions'],['loci','Geometry','Loci'],['matx','Number','Matrices'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['ineq','Graphs','Inequality regions'],['loci','Geometry','Loci'],['matx','Number','Matrices'],['round','Number','Rounding & bounds'],['numb2','Number','Recurring & rates'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2438,13 +2617,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func','bear','graph','tree','ineq','loci','matx'];
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func','bear','graph','tree','ineq','loci','matx','round','numb2'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
-  <p class="lede">Twenty-nine topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Thirty-one topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
