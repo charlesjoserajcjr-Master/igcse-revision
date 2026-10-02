@@ -430,6 +430,71 @@ function svgStates(){
   ${T(135, 214, 'regular, touching', 'mid')}${T(135, 232, 'vibrate on the spot', 'mid mut')}${T(355, 214, 'irregular, touching', 'mid')}${T(355, 232, 'slide past each other', 'mid mut')}${T(575, 214, 'far apart', 'mid')}${T(575, 232, 'move fast and randomly', 'mid mut')}
   ${T(350, 272, 'Heating adds energy: solid → liquid (melting) → gas (boiling).', 'mid acct')}</svg>`;
 }
+function svgWaveTerms(){
+  const X = x => 60 + x, Y = y => 125 - y; const pts = []; for (let x = 0; x <= 400; x += 5) pts.push(`${X(x)},${Y(45 * Math.sin(x / 100 * 2 * Math.PI))}`);
+  return `<svg viewBox="0 0 760 250" role="img" aria-label="Transverse wave with amplitude and wavelength">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(420)}" y2="${Y(0)}" class="thin"/><polyline points="${pts.join(' ')}" class="acc" fill="none"/>
+  <line x1="${X(25)}" y1="${Y(0)}" x2="${X(25)}" y2="${Y(45)}" class="hotl"/>${T(X(25) + 40, Y(22) + 2, 'amplitude', 'hott')}
+  <line x1="${X(25)}" y1="${Y(-70)}" x2="${X(125)}" y2="${Y(-70)}" class="hotl"/><line x1="${X(25)}" y1="${Y(-62)}" x2="${X(25)}" y2="${Y(-78)}" class="hotl"/><line x1="${X(125)}" y1="${Y(-62)}" x2="${X(125)}" y2="${Y(-78)}" class="hotl"/>${T(X(75), Y(-70) + 20, 'wavelength λ', 'mid hott')}
+  ${T(X(25), Y(55), 'crest', 'mid')}${T(X(75), Y(-55), 'trough', 'mid')}
+  ${T(500, 56, 'v = f × λ', 'mono acct')}${T(500, 84, 'f = 1 ÷ T', 'mono acct')}${T(500, 116, 'f: waves per second (Hz)', 'mut')}${T(500, 138, 'T: time for one wave (s)', 'mut')}${T(500, 170, 'Waves transfer energy,', 'lbl')}${T(500, 190, 'not matter.', 'lbl')}</svg>`;
+}
+function svgDiffraction(){
+  return `<svg viewBox="0 0 760 240" role="img" aria-label="Diffraction of waves through a gap">
+  <line x1="260" y1="20" x2="260" y2="90" class="ln"/><line x1="260" y1="150" x2="260" y2="220" class="ln"/>
+  ${[60, 110, 160, 210].map(x => `<line x1="${x}" y1="30" x2="${x}" y2="210" class="acc"/>`).join('')}
+  ${[30, 60, 90].map(r => `<path d="M${260 + r} ${120 - r * 0.9} A${r} ${r} 0 0 1 ${260 + r} ${120 + r * 0.9}" class="acc" fill="none"/>`).join('')}
+  ${T(60, 16, 'plane waves', 'mid mut')}${T(400, 16, 'waves spread out', 'mid mut')}
+  ${T(500, 70, 'Diffraction: waves spread', 'lbl')}${T(500, 92, 'out through a gap or round', 'lbl')}${T(500, 114, 'an edge.', 'lbl')}${T(500, 150, 'Most spreading when the gap', 'mut')}${T(500, 172, 'is about one wavelength wide.', 'mut')}${T(500, 204, 'Wavelength does not change.', 'acct')}</svg>`;
+}
+function svgReflect(){
+  return `<svg viewBox="0 0 760 250" role="img" aria-label="Reflection in a plane mirror">${arrowDefs('r')}
+  <line x1="60" y1="190" x2="400" y2="190" class="ln"/><line x1="60" y1="190" x2="400" y2="190" class="thin" stroke-dasharray="1 7" transform="translate(0 8)"/>
+  <line x1="230" y1="190" x2="230" y2="50" class="thin" stroke-dasharray="5 4"/>${T(230, 40, 'normal', 'mid mut')}
+  <line x1="130" y1="60" x2="230" y2="190" class="acc" marker-end="url(#b-r)"/><line x1="230" y1="190" x2="330" y2="60" class="hotl" marker-end="url(#h-r)"/>
+  ${T(120, 112, 'incident ray', 'end acct')}${T(340, 70, 'reflected ray', 'hott')}${T(214, 160, 'i', 'end mono acct')}${T(246, 160, 'r', 'mono hott')}
+  ${T(480, 60, 'angle i = angle r', 'lbl')}${T(480, 88, 'Both are measured from the NORMAL,', 'mut')}${T(480, 108, 'not from the mirror.', 'mut')}${T(480, 144, 'Plane mirror image: same size,', 'mono')}${T(480, 166, 'same distance behind, virtual,', 'mono')}${T(480, 188, 'laterally inverted.', 'mono')}</svg>`;
+}
+function svgRefract(){
+  return `<svg viewBox="0 0 760 270" role="img" aria-label="Refraction in a glass block">${arrowDefs('g')}
+  <rect x="120" y="110" width="260" height="90" class="scr" style="stroke:var(--ink);stroke-width:2"/>
+  <line x1="170" y1="40" x2="190" y2="110" class="acc" marker-end="url(#b-g)"/><line x1="190" y1="110" x2="214" y2="200" class="acc"/>
+  <line x1="190" y1="60" x2="190" y2="160" class="thin" stroke-dasharray="5 4"/>${T(196, 70, 'normal', 'mut')}
+  ${T(158, 78, 'i', 'end mono acct')}${T(204, 150, 'r', 'mono hott')}${T(300, 80, 'air', 'lbl')}${T(300, 160, 'glass', 'lbl')}
+  ${T(430, 60, 'Air to glass: bends TOWARDS the normal', 'lbl')}${T(430, 84, 'Glass to air: bends AWAY from it', 'lbl')}
+  ${T(430, 120, 'n = sin i ÷ sin r', 'mono acct')}${T(430, 148, 'sin c = 1 ÷ n   (critical angle)', 'mono acct')}${T(430, 184, 'Total internal reflection: light', 'mut')}${T(430, 204, 'stays in the glass if i > c.', 'mut')}</svg>`;
+}
+function svgEMS(){
+  const names = ['radio', 'micro-', 'infra-', 'visible', 'ultra-', 'X-rays', 'gamma'], sub = ['waves', 'waves', 'red', 'light', 'violet', '', 'rays'], cols = [.12, .18, .24, .3, .24, .18, .12];
+  return `<svg viewBox="0 0 760 250" role="img" aria-label="The electromagnetic spectrum">${arrowDefs('s')}
+  ${names.map((n, i) => `<rect x="${40 + i * 95}" y="60" width="95" height="60" class="${i === 3 ? 'accf' : 'scr'}" style="stroke:var(--ink);stroke-width:1.5;${i === 3 ? 'fill-opacity:.35;' : ''}"/>${T(87 + i * 95, 88, n, 'mid lbl')}${T(87 + i * 95, 106, sub[i], 'mid mut')}`).join('')}
+  <line x1="40" y1="160" x2="700" y2="160" class="acc" marker-end="url(#b-s)"/>${T(40, 184, 'long wavelength, low frequency', 'mut')}${T(700, 184, 'short wavelength, high frequency', 'end mut')}
+  ${T(40, 40, 'All are transverse waves travelling at 3 × 10⁸ m/s in a vacuum.', 'lbl')}${T(380, 222, 'Mnemonic: Raging Martians Invade Venus Using X-ray Guns', 'mid acct')}</svg>`;
+}
+function svgCircuits(){
+  const cell = (x, y) => `<line x1="${x}" y1="${y - 14}" x2="${x}" y2="${y + 14}" class="ln"/><line x1="${x + 10}" y1="${y - 8}" x2="${x + 10}" y2="${y + 8}" class="ln" style="stroke-width:4"/>`;
+  const res = (x, y) => `<rect x="${x}" y="${y - 9}" width="44" height="18" class="part"/>`;
+  return `<svg viewBox="0 0 780 260" role="img" aria-label="Series and parallel circuits">
+  <polyline points="60,70 60,100 60,150 60,180 200,180 200,70 60,70" class="ln" fill="none"/>${cell(54, 125)}${res(98, 70)}${res(98, 180)}
+  ${T(130, 40, 'SERIES', 'mid lbl')}${T(130, 230, 'same current; p.d.s add;', 'mid')}${T(130, 248, 'R = R₁ + R₂', 'mid mono acct')}
+  <polyline points="440,60 600,60 600,200 440,200 440,60" class="ln" fill="none"/>${cell(434, 130)}<line x1="440" y1="105" x2="600" y2="105" class="ln"/><line x1="440" y1="155" x2="600" y2="155" class="ln"/>${res(498, 105)}${res(498, 155)}
+  ${T(520, 36, 'PARALLEL', 'mid lbl')}${T(520, 230, 'same p.d.; currents add;', 'mid')}${T(520, 248, 'total R is smaller', 'mid mono acct')}
+  ${T(660, 80, 'V = I × R', 'mono acct')}${T(660, 110, 'I = Q ÷ t', 'mono acct')}${T(660, 140, 'P = I × V', 'mono acct')}${T(660, 170, 'E = P × t', 'mono acct')}</svg>`;
+}
+function svgMagnet(){
+  const loop = (h, d) => `<path d="M ${240 - d} 100 C ${240 - d} ${100 - h} ${320 + d} ${100 - h} ${320 + d} 100" class="thin" fill="none"/><path d="M ${240 - d} 130 C ${240 - d} ${130 + h} ${320 + d} ${130 + h} ${320 + d} 130" class="thin" fill="none"/>`;
+  return `<svg viewBox="0 0 780 260" role="img" aria-label="Magnetic field of a bar magnet">
+  <rect x="230" y="100" width="50" height="30" class="hotf" style="fill-opacity:.4;stroke:var(--ink);stroke-width:2"/><rect x="280" y="100" width="50" height="30" class="accf" style="fill-opacity:.4;stroke:var(--ink);stroke-width:2"/>${T(255, 120, 'N', 'mid lbl')}${T(305, 120, 'S', 'mid lbl')}
+  ${loop(45, 0)}${loop(80, 25)}${loop(115, 50)}
+  ${T(470, 56, 'Field lines go from N to S', 'lbl')}${T(470, 80, 'outside the magnet.', 'lbl')}${T(470, 116, 'Like poles repel, unlike attract.', 'mut')}${T(470, 148, 'Magnetic materials: iron, steel,', 'mut')}${T(470, 168, 'nickel, cobalt.', 'mut')}${T(470, 204, 'Closer lines = stronger field.', 'acct')}</svg>`;
+}
+function svgTransformer(){
+  return `<svg viewBox="0 0 860 250" role="img" aria-label="Transformer">
+  <rect x="190" y="50" width="200" height="140" rx="4" class="scr" style="stroke:var(--ink);stroke-width:2"/><rect x="230" y="90" width="120" height="60" class="cardf" style="stroke:var(--ink);stroke-width:2"/>
+  ${[0, 1, 2, 3, 4].map(i => `<ellipse cx="190" cy="${70 + i * 24}" rx="26" ry="8" class="acc" fill="none"/>`).join('')}${[0, 1, 2].map(i => `<ellipse cx="390" cy="${86 + i * 28}" rx="26" ry="8" class="hotl" fill="none"/>`).join('')}
+  ${T(120, 130, 'primary', 'end acct')}${T(120, 150, 'Np turns, Vp', 'end acct')}${T(450, 130, 'secondary', 'hott')}${T(450, 150, 'Ns turns, Vs', 'hott')}${T(290, 40, 'iron core', 'mid mut')}
+  ${T(540, 60, 'Vp ÷ Vs = Np ÷ Ns', 'mono acct')}${T(540, 92, 'Step-up: more turns on secondary.', 'mut')}${T(540, 114, 'Step-down: fewer turns.', 'mut')}${T(540, 148, 'Works only with a.c.', 'lbl')}${T(540, 182, '100%: Vp × Ip = Vs × Is', 'mono')}</svg>`;
+}
 
 const CH = {
 density: {
@@ -841,6 +906,255 @@ particles: {
     { q: 'A gas of volume 12 cm³ has a pressure of 100 kPa. The volume is reduced to 4 cm³ at constant temperature. Calculate the new pressure.', m: 3,
       p: ['==p₁V₁ = p₂V₂==', '100 × 12 = p₂ × 4', '==300 kPa=='] }
   ]
+},
+waves: {
+  code: 'Topic 3', name: 'Waves',
+  lede: 'All waves share the same words and the same equation. Learn the labels on the wave diagram.',
+  learn: [
+    { h: 'What a wave does', list: ['A wave transfers ==energy== from place to place ==without transferring matter==.', '==Transverse== waves: the vibrations are ==at right angles== to the direction of travel (light, water ripples, all electromagnetic waves).', '==Longitudinal== waves: the vibrations are ==along== the direction of travel, in compressions and rarefactions (sound).'] },
+    { h: 'Wave terms and the wave equation', list: ['==Amplitude==: the ==maximum displacement== from the rest position.', '==Wavelength (λ)==: the distance between ==two matching points== on neighbouring waves (crest to crest).', '==Frequency (f)==: the number of waves passing a point ==each second==. Unit: ==hertz (Hz)==.', '==Period (T)==: the time for ==one== wave. f = 1 ÷ T.', '==Wave speed (v) = frequency × wavelength==.'], f: 'v = f × λ     f = 1 ÷ T' },
+    { h: 'Wave behaviour', list: ['==Reflection==: the wave bounces off a surface. Angle i = angle r.', '==Refraction==: the wave changes ==speed== (and direction) when it enters a new medium.', '==Diffraction==: the wave ==spreads out== when it passes through a gap or round an edge. Most when the gap is about ==one wavelength== wide.', 'The ==wavelength changes== in refraction but ==not in diffraction==. The ==frequency never changes==.'] }
+  ],
+  mistakes: ['Measuring ==wavelength== from crest to ==trough==. It is crest to crest.', 'Measuring ==amplitude== as the whole height. It is from the rest line to the crest.', 'Saying waves ==carry matter==. They carry energy.', 'Using ==cm== with m/s in v = fλ. Convert first.', 'Saying ==the wave slows down== means the frequency changes. Frequency stays the same.'],
+  diagrams: [
+    { svg: svgWaveTerms, cap: '==Amplitude== from the rest line; ==wavelength== from crest to crest.' },
+    { svg: svgDiffraction, cap: '==Diffraction==: waves spread out through a gap. The wavelength stays the same.' }
+  ],
+  worked: [
+    W('A wave has a frequency of 50 Hz and a wavelength of 0.4 m. Calculate its speed.', 'Use the ==wave equation==: v = f × λ.', 'Units: Hz × m = m/s.', 'v = f × λ',
+      [['Write the equation', 'v = f × λ', ''], ['Substitute', 'v = 50 × 0.4', 'f = 50 Hz, λ = 0.4 m.'], ['Answer with unit', 'v = 20 m/s', '']],
+      [['f, λ', '50 Hz, 0.4 m', -1], ['v', '20 m/s', 2]]),
+    W('20 waves pass a point in 4 s. Find the frequency and the period.', '==Frequency = waves per second==. ==Period = 1 ÷ frequency==.', 'Frequency in hertz, period in seconds.', 'f = waves ÷ time, T = 1 ÷ f',
+      [['Frequency', 'f = 20 ÷ 4', 'Number of waves divided by the time.'], ['Answer', 'f = 5 Hz', ''], ['Period', 'T = 1 ÷ f = 1 ÷ 5', ''], ['Answer with unit', 'T = 0.2 s', 'One wave takes 0.2 s.']],
+      [['Frequency', '5 Hz', 1], ['Period', '0.2 s', 3]]),
+    W('Water waves of wavelength 6 cm travel at 12 cm/s. Find the frequency.', 'Rearrange the wave equation: ==f = v ÷ λ==.', 'Keep both lengths in cm so the units match.', 'f = v ÷ λ',
+      [['Rearrange', 'f = v ÷ λ', 'Divide both sides by λ.'], ['Substitute', 'f = 12 ÷ 6', 'v = 12 cm/s, λ = 6 cm.'], ['Answer with unit', 'f = 2 Hz', 'cm/s ÷ cm = 1/s = Hz.']],
+      [['v, λ', '12 cm/s, 6 cm', -1], ['f', '2 Hz', 2]]),
+    W('A sound wave has frequency 500 Hz and speed 340 m/s. Find its wavelength.', 'Rearrange: ==λ = v ÷ f==.', 'Check: higher frequency means shorter wavelength.', 'λ = v ÷ f',
+      [['Rearrange', 'λ = v ÷ f', ''], ['Substitute', 'λ = 340 ÷ 500', ''], ['Answer with unit', 'λ = 0.68 m', '']],
+      [['v, f', '340 m/s, 500 Hz', -1], ['λ', '0.68 m', 2]]),
+    W('Describe what happens when water waves pass through a gap that is about one wavelength wide.', 'This is ==diffraction==. Say what changes and what does not.', 'Name the effect, then describe it.', 'Diffraction',
+      [['Name the effect', 'Diffraction', ''], ['What the waves do', 'The waves spread out as they pass through the gap', 'Circular waves appear on the far side.'], ['What stays the same', 'Wavelength, frequency and speed do not change', 'Only the direction of the wave fronts changes.']],
+      [['Effect', 'diffraction', 0], ['Shape', 'waves spread out', 1], ['Unchanged', 'λ, f and speed', 2]], true),
+    W('Explain the difference between transverse and longitudinal waves. Give one example of each.', 'Compare the ==direction of the vibration== with the ==direction of travel==.', 'Give a comparison, not two separate definitions.', 'Right angles v along',
+      [['Transverse', 'Vibrations at right angles to the direction of travel', ''], ['Example', 'Light (or water waves)', ''], ['Longitudinal', 'Vibrations along the direction of travel (compressions and rarefactions)', ''], ['Example', 'Sound', '']],
+      [['Transverse', 'at right angles', 0], ['Example', 'light', 1], ['Longitudinal', 'along the direction', 2], ['Example', 'sound', 3]], true)
+  ],
+  drill: 'waves',
+  quiz: [
+    { q: 'A wave transfers…', o: ['matter only', 'energy without transferring matter', 'both energy and matter', 'neither'], a: 1, w: '==Energy without transferring matter==.' },
+    { q: 'The unit of frequency is the…', o: ['metre', 'second', 'hertz', 'watt'], a: 2, w: '==Hertz (Hz)==.' },
+    { q: 'The wave equation is…', o: ['v = f ÷ λ', 'v = f × λ', 'v = λ ÷ f', 'v = f + λ'], a: 1, w: '==v = f × λ==.' },
+    { q: 'Light waves are…', o: ['longitudinal', 'transverse', 'both', 'neither'], a: 1, w: 'All electromagnetic waves are ==transverse==.' },
+    { q: 'During refraction which quantity does NOT change?', o: ['speed', 'wavelength', 'frequency', 'direction'], a: 2, w: 'The ==frequency== stays the same.' },
+    { q: 'The period of a wave of frequency 4 Hz is…', o: ['4 s', '0.25 s', '16 s', '2 s'], a: 1, w: '1 ÷ 4 = ==0.25 s==.' }
+  ],
+  exam: [
+    { q: 'A wave has a frequency of 25 Hz and a wavelength of 3.2 m. Calculate its speed.', m: 3,
+      p: ['v = ==f × λ==', '25 × 3.2', '==80 m/s=='] },
+    { q: 'State what is meant by (a) the amplitude (b) the frequency of a wave.', m: 2,
+      p: ['Amplitude: the ==maximum displacement== from the rest (undisturbed) position', 'Frequency: the ==number of waves passing a point per second== (or number of vibrations per second)'] },
+    { q: 'Describe diffraction and state one condition for it to be most noticeable.', m: 3,
+      p: ['Diffraction is the ==spreading out== of a wave', 'as it passes through a ==gap== or round an ==edge==', 'Most noticeable when the gap is about ==the same size as the wavelength=='] }
+  ]
+},
+light: {
+  code: 'Topic 3', name: 'Light',
+  lede: 'Reflection, refraction, total internal reflection and lenses. Always measure angles from the normal.',
+  learn: [
+    { h: 'Reflection', list: ['Law of reflection: ==angle of incidence = angle of reflection==.', 'Both angles are measured from the ==normal== (the line at 90° to the mirror).', 'A ==plane mirror== image is the ==same size==, as far ==behind== the mirror as the object is in front, ==virtual== and ==laterally inverted==.', 'A ==virtual== image cannot be shown on a screen.'] },
+    { h: 'Refraction', list: ['Light ==changes speed== when it passes from one medium to another, so it ==bends== (unless it hits along the normal).', 'Into a ==denser== medium (air to glass): slows down and bends ==towards== the normal.', 'Into a ==less dense== medium (glass to air): speeds up and bends ==away== from the normal.', '==Refractive index n = sin i ÷ sin r== (i in air).', 'Speed of light in a vacuum = ==3 × 10⁸ m/s==.'] },
+    { h: 'Total internal reflection and lenses', list: ['==Total internal reflection== happens when light in a denser medium hits the boundary at an angle ==greater than the critical angle==.', '==sin c = 1 ÷ n==.', 'Uses: ==optical fibres==, prisms, reflectors.', 'A ==converging (convex) lens== brings parallel rays together at the ==principal focus==. The ==focal length== is the distance from the lens to the focus.', 'A converging lens used as a ==magnifying glass== gives an ==upright, magnified, virtual== image when the object is ==inside the focal length==.'] }
+  ],
+  mistakes: ['Measuring angles from the ==mirror== instead of the ==normal==.', 'Bending the ray the ==wrong way== at the boundary: into glass it bends ==towards== the normal.', 'Forgetting to ==switch the calculator to degrees==.', 'Writing ==n = sin r ÷ sin i==. It is sin i ÷ sin r.', 'Saying total internal reflection happens at ==any angle==. It needs i > critical angle.'],
+  diagrams: [
+    { svg: svgReflect, cap: '==Angle of incidence = angle of reflection==, measured from the normal.' },
+    { svg: svgRefract, cap: '==Refraction==: bends ==towards== the normal going into glass.' }
+  ],
+  worked: [
+    W('A ray hits a plane mirror with an angle of incidence of 35°. State the angle of reflection and the angle between the reflected ray and the mirror.', 'The angles are measured from the ==normal==. The normal is ==90° to the mirror==.', 'Draw the normal first.', 'i = r',
+      [['Law of reflection', 'angle of reflection = angle of incidence = 35°', ''], ['The normal is at 90° to the mirror', '90° − 35°', 'The angle with the mirror is what is left.'], ['Angle with the mirror', '55°', '']],
+      [['i', '35°', -1], ['r', '35°', 0], ['Angle to mirror', '55°', 2]]),
+    W('A ray in air strikes glass with i = 45° and refracts at r = 30°. Calculate the refractive index.', '==n = sin i ÷ sin r==. Use your calculator in ==degree mode==.', 'Refractive index has no unit.', 'n = sin i ÷ sin r',
+      [['Write the formula', 'n = sin i ÷ sin r', ''], ['Substitute', 'n = sin 45° ÷ sin 30°', ''], ['Values', 'n = 0.7071 ÷ 0.5', 'sin 45° = 0.7071 and sin 30° = 0.5.'], ['Answer', 'n = 1.41', 'No unit.']],
+      [['i, r', '45°, 30°', -1], ['sin i, sin r', '0.7071, 0.5', 2], ['n', '1.41', 3]]),
+    W('Glass has a refractive index of 1.5. Find the critical angle.', 'Use ==sin c = 1 ÷ n==, then the ==inverse sine==.', 'Light must hit the boundary at more than c to be totally internally reflected.', 'sin c = 1 ÷ n',
+      [['Write the formula', 'sin c = 1 ÷ n', ''], ['Substitute', 'sin c = 1 ÷ 1.5 = 0.667', ''], ['Inverse sine', 'c = sin⁻¹(0.667)', 'Press SHIFT then sin.'], ['Answer', 'c = 41.8°', 'Light inside the glass that hits the surface at more than 41.8° is totally internally reflected.']],
+      [['n', '1.5', -1], ['sin c', '0.667', 1], ['c', '41.8°', 3]]),
+    W('Explain how light travels along an optical fibre.', 'Use the keywords: ==total internal reflection==, ==critical angle==, ==denser==.', 'The light must hit the wall at an angle greater than the critical angle.', 'TIR at the walls',
+      [['Light enters the fibre', 'It travels in the glass core', ''], ['At the wall', 'It hits the boundary at an angle greater than the critical angle', 'The glass is denser than the outside.'], ['Total internal reflection', 'All the light is reflected back into the core', 'None escapes.'], ['Result', 'The light zigzags along the fibre to the other end', '']],
+      [['Core', 'glass', 0], ['At the wall', 'i > critical angle', 1], ['Reflection', 'total internal', 2], ['Result', 'light reaches the end', 3]], true),
+    W('An object is 2 m in front of a plane mirror. Where is the image, and how far is the image from the object?', 'A plane mirror image is as far ==behind== the mirror as the object is in front.', 'The image is virtual.', 'image distance = object distance',
+      [['Image distance behind the mirror', '2 m', 'Same as the object distance in front.'], ['Distance between object and image', '2 + 2 = 4 m', 'Object to mirror, then mirror to image.'], ['Describe the image', 'Same size, virtual, laterally inverted', '']],
+      [['Object distance', '2 m', -1], ['Image distance', '2 m behind', 0], ['Object to image', '4 m', 1]], true),
+    W('Describe what a converging lens does to parallel rays, and what a magnifying glass image looks like.', 'Use the keywords: ==principal focus==, ==focal length==, ==upright==, ==virtual==.', 'The object must be inside the focal length for a magnifying glass.', 'Converging lens',
+      [['Parallel rays', 'They are refracted and meet at the principal focus', ''], ['Focal length', 'The distance from the lens to the principal focus', ''], ['Magnifying glass', 'The object is placed inside the focal length', ''], ['The image', 'Upright, magnified and virtual', 'It cannot be shown on a screen.']],
+      [['Parallel rays', 'meet at the focus', 0], ['Focal length', 'lens to focus', 1], ['Object', 'inside the focal length', 2], ['Image', 'upright, magnified, virtual', 3]], true)
+  ],
+  drill: 'light',
+  quiz: [
+    { q: 'Angles of incidence and reflection are measured from the…', o: ['mirror', 'normal', 'ray', 'surface'], a: 1, w: 'The ==normal==.' },
+    { q: 'A ray in air enters glass. It bends…', o: ['away from the normal', 'towards the normal', 'along the normal', 'does not bend'], a: 1, w: 'Into a denser medium: ==towards the normal==.' },
+    { q: 'Refractive index n is equal to…', o: ['sin r ÷ sin i', 'sin i ÷ sin r', 'i ÷ r', 'sin i × sin r'], a: 1, w: '==sin i ÷ sin r==.' },
+    { q: 'Total internal reflection needs the angle of incidence to be…', o: ['less than the critical angle', 'greater than the critical angle', 'exactly 90°', 'zero'], a: 1, w: '==Greater than the critical angle==.' },
+    { q: 'A plane mirror image is…', o: ['real and inverted', 'virtual, same size, laterally inverted', 'real and magnified', 'smaller'], a: 1, w: '==Virtual, same size, laterally inverted==.' },
+    { q: 'The speed of light in a vacuum is…', o: ['3 × 10⁶ m/s', '3 × 10⁸ m/s', '3 × 10¹⁰ m/s', '340 m/s'], a: 1, w: '==3 × 10⁸ m/s==.' }
+  ],
+  exam: [
+    { q: 'A ray of light hits a plane mirror at an angle of incidence of 40°. (a) State the angle of reflection. [1] (b) Calculate the angle between the incident ray and the mirror surface. [1]', m: 2,
+      p: ['==40°==', '90 − 40 = ==50°=='] },
+    { q: 'A ray of light passes from air into glass. The angle of incidence is 60° and the angle of refraction is 35°. Calculate the refractive index of the glass.', m: 3,
+      p: ['n = ==sin i ÷ sin r==', 'sin 60° ÷ sin 35° = 0.866 ÷ 0.574', '==1.51=='] },
+    { q: 'Describe what is meant by total internal reflection and give one use.', m: 3,
+      p: ['Light in a ==denser medium== hits the boundary', 'at an angle ==greater than the critical angle==, so ==all the light is reflected==', 'Use: ==optical fibres== (or prisms)'] }
+  ]
+},
+emspec: {
+  code: 'Topic 3', name: 'The electromagnetic spectrum',
+  lede: 'Seven types of wave, in order. Know a use and a danger for each.',
+  learn: [
+    { h: 'The spectrum in order', list: ['From ==long wavelength== to ==short wavelength==: ==radio, microwaves, infrared, visible light, ultraviolet, X-rays, gamma rays==.', '==Frequency and energy increase== from radio to gamma.', 'All are ==transverse== waves and all travel at ==3 × 10⁸ m/s== in a vacuum.', 'Mnemonic: ==R==aging ==M==artians ==I==nvade ==V==enus ==U==sing ==X==-ray ==G==uns.', '==c = f × λ== for all of them.'] },
+    { h: 'Uses', table: [['Wave', 'Uses'], ['Radio', 'broadcasting, communications, radar'], ['Microwaves', 'cooking, satellite communication, mobile phones'], ['Infrared', 'remote controls, heaters, toasters, night-vision cameras'], ['Visible light', 'seeing, photography, optical fibres'], ['Ultraviolet', 'security marking, sterilising water, fluorescent lamps'], ['X-rays', 'medical imaging, airport security'], ['Gamma rays', 'sterilising equipment, treating cancer']] },
+    { h: 'Dangers', list: ['==Microwaves==: can ==heat body cells== (internal heating).', '==Infrared==: ==skin burns==.', '==Ultraviolet==: ==skin cancer and eye damage==.', '==X-rays and gamma rays==: ==ionising radiation== that ==damages or kills cells== and can cause ==cancer== or mutations.', 'Protection: ==limit exposure time==, use ==lead shielding==, keep distance.'] }
+  ],
+  mistakes: ['Getting the ==order== wrong. Use the mnemonic.', 'Saying X-rays have a ==longer== wavelength than ultraviolet. They are shorter.', 'Saying some waves ==need a medium==. All of them travel in a vacuum.', 'Mixing up ==infrared== (heat) and ==ultraviolet== (skin cancer).', 'Naming a use with ==no detail== (say “sterilising medical equipment”).'],
+  diagrams: [{ svg: svgEMS, cap: 'The spectrum: ==wavelength decreases== and ==frequency increases== from radio to gamma.' }],
+  worked: [
+    W('Put these in order of increasing wavelength: X-rays, radio waves, visible light, gamma rays.', 'Use the order from ==gamma (shortest wavelength)== to ==radio (longest)==.', 'Check which end the question asks about: increasing wavelength.', 'Gamma, X, visible, radio',
+      [['Shortest wavelength', 'gamma rays', ''], ['Next', 'X-rays', ''], ['Next', 'visible light', ''], ['Longest wavelength', 'radio waves', 'Order of increasing wavelength: gamma, X-rays, visible, radio.']],
+      [['1st (shortest)', 'gamma rays', 0], ['2nd', 'X-rays', 1], ['3rd', 'visible light', 2], ['4th (longest)', 'radio waves', 3]], true),
+    W('A radio station broadcasts at a frequency of 100 MHz (1 × 10⁸ Hz). Calculate the wavelength. (c = 3 × 10⁸ m/s)', 'Use ==c = f × λ==, so ==λ = c ÷ f==.', 'Convert MHz to Hz first: 1 MHz = 10⁶ Hz.', 'λ = c ÷ f',
+      [['Rearrange', 'λ = c ÷ f', ''], ['Substitute', 'λ = 3 × 10⁸ ÷ 1 × 10⁸', 'Frequency 100 MHz = 1 × 10⁸ Hz.'], ['Answer with unit', 'λ = 3 m', '']],
+      [['c', '3 × 10⁸ m/s', -1], ['f', '1 × 10⁸ Hz', -1], ['λ', '3 m', 2]]),
+    W('A microwave oven uses waves of frequency 2.4 GHz (2.4 × 10⁹ Hz). Calculate the wavelength.', 'Use ==λ = c ÷ f==. Giga means ×10⁹.', 'Check: microwaves have a wavelength of a few centimetres.', 'λ = c ÷ f',
+      [['Write the formula', 'λ = c ÷ f', ''], ['Substitute', 'λ = 3 × 10⁸ ÷ 2.4 × 10⁹', ''], ['Work out', 'λ = 0.125 m', '3 ÷ 24 = 0.125.'], ['In centimetres', '12.5 cm', 'A sensible size for microwaves.']],
+      [['f', '2.4 × 10⁹ Hz', -1], ['λ', '0.125 m', 2], ['In cm', '12.5 cm', 3]]),
+    W('State one use and one danger of ultraviolet radiation.', 'Give a ==specific use== and the ==harm== it can cause to the body.', 'Use the keywords from the learn cards.', 'Use and danger',
+      [['A use', 'Sterilising water (or security marking)', ''], ['A danger', 'It can cause skin cancer and damage the eyes', ''], ['A precaution', 'Wear sunscreen and UV-blocking sunglasses', 'Limit exposure.']],
+      [['Use', 'sterilising water', 0], ['Danger', 'skin cancer', 1], ['Precaution', 'sunscreen', 2]], true),
+    W('Explain why X-rays and gamma rays are more dangerous than radio waves.', 'Compare ==energy== and ==ionisation==.', 'Say what the radiation does to cells.', 'High frequency, high energy',
+      [['Energy', 'They have a much higher frequency and carry more energy per photon', 'Energy increases from radio to gamma.'], ['Ionisation', 'They are ionising radiation', 'They can remove electrons from atoms.'], ['Effect on cells', 'They damage or kill cells and can cause cancer', 'Radio waves are not ionising and carry little energy.']],
+      [['Energy', 'much higher', 0], ['Ionising', 'yes', 1], ['Effect', 'damage cells, cancer', 2]], true),
+    W('Which has the higher frequency, ultraviolet or infrared? Which has the longer wavelength?', 'In the spectrum, frequency ==increases== towards gamma. Wavelength ==decreases== towards gamma.', 'Check with the mnemonic: Infrared comes before Visible, Ultraviolet after.', 'Higher frequency = shorter wavelength',
+      [['Order', 'infrared → visible → ultraviolet', 'Ultraviolet is further towards gamma.'], ['Higher frequency', 'Ultraviolet', ''], ['Longer wavelength', 'Infrared', 'Frequency and wavelength go opposite ways.']],
+      [['Higher f', 'ultraviolet', 1], ['Longer λ', 'infrared', 2]], true)
+  ],
+  drill: 'emspec',
+  quiz: [
+    { q: 'Which wave has the shortest wavelength?', o: ['radio', 'infrared', 'X-rays', 'gamma rays'], a: 3, w: '==Gamma rays==.' },
+    { q: 'All electromagnetic waves travel at ___ in a vacuum.', o: ['340 m/s', '3 × 10⁸ m/s', '3 × 10⁶ m/s', 'different speeds'], a: 1, w: '==3 × 10⁸ m/s==.' },
+    { q: 'Which radiation is used for night-vision cameras?', o: ['ultraviolet', 'gamma rays', 'infrared', 'radio'], a: 2, w: '==Infrared==.' },
+    { q: 'Overexposure to ultraviolet can cause…', o: ['skin cancer', 'burns from microwaves', 'radio interference', 'nothing'], a: 0, w: '==Skin cancer== and eye damage.' },
+    { q: 'Which is used to treat cancer?', o: ['radio waves', 'gamma rays', 'visible light', 'infrared'], a: 1, w: '==Gamma rays==.' },
+    { q: 'Electromagnetic waves are…', o: ['longitudinal', 'transverse', 'sound waves', 'mechanical'], a: 1, w: 'All are ==transverse==.' }
+  ],
+  exam: [
+    { q: 'Write the seven regions of the electromagnetic spectrum in order from longest to shortest wavelength.', m: 3,
+      p: ['==radio, microwaves, infrared==', '==visible light==', '==ultraviolet, X-rays, gamma rays=='] },
+    { q: 'A radio wave has a frequency of 150 MHz. Calculate its wavelength. (c = 3 × 10⁸ m/s)', m: 3,
+      p: ['λ = ==c ÷ f==', '3 × 10⁸ ÷ 1.5 × 10⁸', '==2 m=='] },
+    { q: 'Give one use and one danger of X-rays.', m: 2,
+      p: ['Use: ==medical imaging== (broken bones) or airport security', 'Danger: ==ionising== radiation that damages cells and can cause cancer'] }
+  ]
+},
+circuits: {
+  code: 'Topic 4', name: 'Electric circuits',
+  lede: 'Current, voltage, resistance and power. Learn the four equations and the series and parallel rules.',
+  learn: [
+    { h: 'Current, voltage and resistance', list: ['==Current (I)==: the ==rate of flow of charge==. Unit: ==ampere (A)==. I = Q ÷ t (charge in coulombs).', '==Potential difference / voltage (V)==: the ==energy transferred per unit charge==. Unit: ==volt (V)==.', '==Resistance (R)==: opposition to current. Unit: ==ohm (Ω)==.', '==V = I × R==.', 'An ammeter goes in ==series==. A voltmeter goes in ==parallel== across a component.'], f: 'V = I × R     I = Q ÷ t' },
+    { h: 'Series and parallel', table: [['', 'Series', 'Parallel'], ['Current', 'same everywhere', 'adds up in branches'], ['Voltage', 'shared (adds up)', 'same across each branch'], ['Resistance', 'R = R₁ + R₂', 'total is smaller than any one'], ['If one lamp breaks', 'all go out', 'the others stay on']] },
+    { h: 'Power, energy and safety', list: ['==Power = current × voltage== (P = I × V). Unit: ==watt (W)==.', '==Energy transferred = power × time== (E = P × t).', 'Domestic electricity is billed in ==kilowatt-hours (kWh)==: kW × hours.', 'A ==fuse== melts if the current is too high and ==breaks the circuit==. The fuse goes in the ==live wire==.', 'Never use ==water== near electricity or ==damaged insulation==.'] }
+  ],
+  mistakes: ['Putting a ==voltmeter in series==.', 'Using ==milliamps== in V = IR without converting to amps.', 'Adding ==resistances in parallel==.', 'Forgetting to convert ==watts to kilowatts== for kWh.', 'Saying current is ==used up== in a lamp. It is the same all round a series circuit.'],
+  diagrams: [{ svg: svgCircuits, cap: '==Series==: same current. ==Parallel==: same voltage across each branch.' }],
+  worked: [
+    W('A charge of 60 C flows past a point in 20 s. Calculate the current.', '==Current = charge ÷ time==.', 'Charge in coulombs, time in seconds, current in amperes.', 'I = Q ÷ t',
+      [['Write the formula', 'I = Q ÷ t', ''], ['Substitute', 'I = 60 ÷ 20', ''], ['Answer with unit', 'I = 3 A', '']],
+      [['Q, t', '60 C, 20 s', -1], ['I', '3 A', 2]]),
+    W('A current of 2 A flows through a 6 Ω resistor. Calculate the potential difference across it.', '==V = I × R==.', 'Units: A × Ω = V.', 'V = I × R',
+      [['Write the formula', 'V = I × R', ''], ['Substitute', 'V = 2 × 6', ''], ['Answer with unit', 'V = 12 V', '']],
+      [['I, R', '2 A, 6 Ω', -1], ['V', '12 V', 2]]),
+    W('A 4 Ω resistor and a 6 Ω resistor are in series with a 12 V supply. Find the total resistance, the current and the voltage across the 4 Ω resistor.', 'In ==series==: add the resistances. The current is the ==same== through both.', 'The voltages across the resistors add up to 12 V.', 'Series: R = R₁ + R₂',
+      [['Total resistance', 'R = 4 + 6 = 10 Ω', 'In series, resistances add.'], ['Current', 'I = V ÷ R = 12 ÷ 10 = 1.2 A', 'Rearrange V = IR.'], ['Voltage across 4 Ω', 'V = I × R = 1.2 × 4 = 4.8 V', 'Same current, R = 4 Ω.'], ['Check', '4.8 + 7.2 = 12 V ✓', 'The 6 Ω resistor has 1.2 × 6 = 7.2 V.']],
+      [['Total R', '10 Ω', 0], ['I', '1.2 A', 1], ['V across 4 Ω', '4.8 V', 2], ['Check', '4.8 + 7.2 = 12 V ✓', 3]]),
+    W('Two lamps are in parallel. The current through one is 2 A and through the other is 3 A. What is the current from the supply?', 'In ==parallel==, the currents in the branches ==add up== to the supply current.', 'Current splits at a junction and rejoins.', 'Parallel: currents add',
+      [['Add the branch currents', '2 + 3', ''], ['Answer', '5 A', 'The supply gives 5 A in total.'], ['Voltage', 'The same across each lamp', 'In parallel, each branch gets the full supply voltage.']],
+      [['Branch 1', '2 A', -1], ['Branch 2', '3 A', -1], ['Supply', '5 A', 1]]),
+    W('A kettle is rated 230 V, 5 A. Calculate its power. It is used for 2 hours. How much energy does it use in kWh?', '==P = I × V==. For ==kWh== use ==kW × hours==.', 'Convert watts to kilowatts by dividing by 1000.', 'P = IV, E = Pt',
+      [['Power', 'P = I × V = 5 × 230', ''], ['Answer', 'P = 1150 W = 1.15 kW', 'Divide by 1000 for kW.'], ['Energy', 'E = P × t = 1.15 × 2', 'kW × hours = kWh.'], ['Answer', 'E = 2.3 kWh', '']],
+      [['P', '1150 W', 1], ['In kW', '1.15 kW', 1], ['Energy', '2.3 kWh', 3]]),
+    W('Electricity costs Rs 8 per kWh. Find the cost of using the kettle above for 2 hours.', '==Cost = number of kWh × price per kWh==.', 'Round money sensibly.', 'cost = kWh × price',
+      [['Energy used', '2.3 kWh', 'From the previous example.'], ['Multiply by the price', '2.3 × 8', ''], ['Answer', 'Rs 18.40', '']],
+      [['kWh', '2.3', -1], ['Price', 'Rs 8 per kWh', -1], ['Cost', 'Rs 18.40', 2]])
+  ],
+  drill: 'circuits',
+  quiz: [
+    { q: 'The unit of resistance is the…', o: ['ampere', 'volt', 'ohm', 'watt'], a: 2, w: '==Ohm (Ω)==.' },
+    { q: 'A voltmeter is connected in…', o: ['series', 'parallel', 'either', 'neither'], a: 1, w: 'In ==parallel== across the component.' },
+    { q: 'A 12 V supply is connected to 4 Ω. The current is…', o: ['48 A', '3 A', '0.33 A', '8 A'], a: 1, w: '12 ÷ 4 = ==3 A==.' },
+    { q: 'In a series circuit the current is…', o: ['biggest at the cell', 'the same everywhere', 'used up by lamps', 'zero'], a: 1, w: '==The same everywhere==.' },
+    { q: 'Power is…', o: ['V ÷ I', 'I × V', 'I ÷ V', 'R × t'], a: 1, w: '==I × V==.' },
+    { q: 'A fuse is placed in the…', o: ['neutral wire', 'live wire', 'earth wire', 'any wire'], a: 1, w: 'The ==live wire==.' }
+  ],
+  exam: [
+    { q: 'A current of 0.5 A flows through a resistor for 40 s. Calculate the charge that flows.', m: 3,
+      p: ['Q = ==I × t==', '0.5 × 40', '==20 C=='] },
+    { q: 'A 3 Ω and a 6 Ω resistor are connected in series to a 9 V battery. Calculate (a) the total resistance [1] (b) the current [2].', m: 3,
+      p: ['3 + 6 = ==9 Ω==', 'I = V ÷ R = 9 ÷ 9', '==1 A=='] },
+    { q: 'An electric heater is rated 2 kW and runs for 3 hours. Electricity costs Rs 8 per kWh. Calculate the cost.', m: 3,
+      p: ['Energy = 2 × 3 = ==6 kWh==', '6 × 8', '==Rs 48=='] }
+  ]
+},
+magnet: {
+  code: 'Topic 4', name: 'Magnetism and electromagnetism',
+  lede: 'Magnets, electromagnets, generators and transformers. Know what increases each effect.',
+  learn: [
+    { h: 'Magnets', list: ['==Like poles repel==, ==unlike poles attract==.', 'Magnetic materials: ==iron, steel, nickel and cobalt==. ==Soft iron== is easy to magnetise and demagnetise (used in electromagnets). ==Steel== keeps its magnetism (permanent magnets).', 'The ==magnetic field== is the region where a magnet exerts a force. ==Field lines== go from ==north to south== outside the magnet and are closest where the field is ==strongest==.'] },
+    { h: 'Electromagnets and the motor effect', list: ['A ==current== in a wire creates a ==magnetic field== around it.', 'An ==electromagnet== is a coil with an ==iron core==. Its strength is increased by ==more turns==, ==more current== or a ==soft iron core==.', 'A ==current-carrying wire in a magnetic field== feels a ==force== (the ==motor effect==). Reverse the current or the field and the force reverses.', 'Uses: ==electric motors==, relays, loudspeakers, doorbells, cranes.'] },
+    { h: 'Induction, generators and transformers', list: ['==Electromagnetic induction==: a voltage is ==induced== in a conductor when it ==cuts magnetic field lines== (or the field through a coil changes).', 'A ==bigger voltage== from: a ==stronger magnet==, ==faster movement==, ==more turns== on the coil.', 'A ==generator== turns a coil in a field to make ==a.c.==', 'A ==transformer== changes the voltage of an ==alternating== supply: ==Vp ÷ Vs = Np ÷ Ns==.', '==Step-up==: more turns on the secondary. ==Step-down==: fewer. A transformer has ==two coils== and an ==iron core==.'], f: 'Vp ÷ Vs = Np ÷ Ns' }
+  ],
+  mistakes: ['Saying ==magnetic field lines go S to N== outside the magnet.', 'Forgetting the ==iron core== when listing ways to strengthen an electromagnet.', 'Saying a transformer works with ==d.c.== It needs a.c.', 'Putting the turns the ==wrong way round== in the transformer equation.', 'Saying a steady magnet near a coil ==induces a voltage==. The field must be ==changing== (moving).'],
+  diagrams: [
+    { svg: svgMagnet, cap: '==Field lines== run from ==N to S== outside the magnet.' },
+    { svg: svgTransformer, cap: 'A ==transformer==: Vp ÷ Vs = Np ÷ Ns.' }
+  ],
+  worked: [
+    W('A transformer has 200 turns on the primary coil and 50 turns on the secondary. The primary voltage is 240 V. Calculate the secondary voltage.', 'Use ==Vp ÷ Vs = Np ÷ Ns==. Here the secondary has fewer turns, so it is a ==step-down== transformer.', 'Check: fewer turns on the secondary means a lower voltage.', 'Vs = Vp × Ns ÷ Np',
+      [['Write the equation', 'Vp ÷ Vs = Np ÷ Ns', ''], ['Rearrange', 'Vs = Vp × Ns ÷ Np', ''], ['Substitute', 'Vs = 240 × 50 ÷ 200', ''], ['Answer with unit', 'Vs = 60 V', 'A step-down transformer: 60 V is less than 240 V.']],
+      [['Vp, Np, Ns', '240 V, 200, 50', -1], ['Vs', '60 V', 3]]),
+    W('A transformer has 100 turns on the primary and 500 turns on the secondary. The primary voltage is 12 V. Find the secondary voltage.', 'More turns on the secondary gives a ==step-up== transformer.', 'Check: the answer must be bigger than 12 V.', 'Vs = Vp × Ns ÷ Np',
+      [['Substitute', 'Vs = 12 × 500 ÷ 100', ''], ['Work out', 'Vs = 12 × 5', '500 ÷ 100 = 5.'], ['Answer with unit', 'Vs = 60 V', 'Step-up: the voltage increases.']],
+      [['Vp, Np, Ns', '12 V, 100, 500', -1], ['Vs', '60 V', 2]]),
+    W('A transformer is 100% efficient. Its primary is 240 V with a current of 0.5 A. The secondary voltage is 12 V. Find the secondary current.', 'For a ==100% efficient== transformer, ==power in = power out==: Vp × Ip = Vs × Is.', 'The lower voltage side carries the bigger current.', 'Vp Ip = Vs Is',
+      [['Power in', '240 × 0.5 = 120 W', ''], ['Power out equals power in', '12 × Is = 120', ''], ['Solve', 'Is = 120 ÷ 12', ''], ['Answer with unit', 'Is = 10 A', 'The secondary has a lower voltage, so a higher current.']],
+      [['Power in', '120 W', 0], ['Power out', '120 W', 1], ['Is', '10 A', 3]]),
+    W('State three ways to increase the strength of an electromagnet.', 'List ways to increase the ==field==. Use the keywords.', 'One mark each, so give three different ones.', 'Turns, current, core',
+      [['Way 1', 'Increase the number of turns on the coil', ''], ['Way 2', 'Increase the current', 'A bigger current gives a stronger field.'], ['Way 3', 'Use a soft iron core', 'Iron concentrates the field.']],
+      [['1', 'more turns', 0], ['2', 'more current', 1], ['3', 'soft iron core', 2]], true),
+    W('State how to increase the voltage induced in a generator.', 'Think about ==how fast the field lines are cut== and ==how many==.', 'Faster, stronger, more.', 'Faster, stronger, more',
+      [['Faster', 'Turn the coil faster', 'It cuts the field lines more quickly.'], ['Stronger', 'Use a stronger magnet', ''], ['More', 'Use more turns on the coil', '']],
+      [['Faster', 'turn faster', 0], ['Stronger', 'stronger magnet', 1], ['More', 'more turns', 2]], true),
+    W('Why does a transformer need an alternating current?', 'A ==changing== current gives a ==changing magnetic field==, which induces a voltage.', 'Name induction in the answer.', 'Changing field, induced voltage',
+      [['Alternating current in the primary', 'Produces a changing magnetic field in the core', ''], ['Changing field', 'Cuts the secondary coil', 'This is electromagnetic induction.'], ['Result', 'A voltage is induced in the secondary coil', 'With d.c. the field would not change and no voltage would be induced.']],
+      [['Primary', 'a.c. makes a changing field', 0], ['Core', 'passes it to the secondary', 1], ['Secondary', 'voltage is induced', 2]], true)
+  ],
+  drill: 'magnet',
+  quiz: [
+    { q: 'Unlike magnetic poles…', o: ['repel', 'attract', 'do nothing', 'cancel'], a: 1, w: '==Attract==.' },
+    { q: 'Which material is used for the core of an electromagnet?', o: ['steel', 'copper', 'soft iron', 'plastic'], a: 2, w: '==Soft iron==.' },
+    { q: 'Field lines outside a magnet go from…', o: ['S to N', 'N to S', 'side to side', 'nowhere'], a: 1, w: '==N to S==.' },
+    { q: 'A transformer works only with…', o: ['direct current', 'alternating current', 'any current', 'static charge'], a: 1, w: '==Alternating current==.' },
+    { q: 'A step-up transformer has…', o: ['more turns on the primary', 'more turns on the secondary', 'equal turns', 'no core'], a: 1, w: '==More turns on the secondary==.' },
+    { q: 'A voltage can be induced in a coil by…', o: ['a steady magnet', 'moving a magnet in and out', 'heating it', 'cooling it'], a: 1, w: 'A ==changing== field: moving the magnet.' }
+  ],
+  exam: [
+    { q: 'A transformer has 400 turns on the primary coil and 100 turns on the secondary coil. The primary voltage is 240 V. Calculate the secondary voltage.', m: 3,
+      p: ['==Vp ÷ Vs = Np ÷ Ns==', '240 × 100 ÷ 400', '==60 V=='] },
+    { q: 'State two ways of increasing the strength of an electromagnet.', m: 2,
+      p: ['Increase the ==number of turns== (or use more coils)', 'Increase the ==current== (or add a ==soft iron core==)'] },
+    { q: 'Describe how a voltage is induced in a coil of wire using a magnet.', m: 3,
+      p: ['Move the ==magnet== in and out of the coil (or move the coil)', 'The ==field lines are cut== by the coil', 'A ==voltage is induced== (it is bigger if the movement is faster)'] }
+  ]
 }
 };
 
@@ -935,6 +1249,55 @@ const DRILLS = {
         : { q: `Convert ${c + 273} K to °C.`, ans: c, unit: '°C', s: [['Formula', '°C = K − 273'],['Answer', `${c + 273} − 273 = ${c} °C`]] }; },
     () => { const p1 = rint(1, 8) * 100, V1 = rint(2, 6) * 6, V2 = V1 * 2, ans = p1 * V1 / V2;
       return { q: `A gas of volume ${V1} cm³ is at ${p1} kPa. It expands to ${V2} cm³ at constant temperature. Calculate the new pressure.`, ans, unit: 'kPa', s: [['Boyle’s law', 'p₁V₁ = p₂V₂'],['Substitute', `${p1} × ${V1} = p₂ × ${V2}`],['Answer', `p₂ = ${ans} kPa`]] }; }
+  ],
+  waves: [
+    () => { const f = pick([2, 5, 10, 20, 25, 40, 50, 100, 200, 500]), lam = pick([0.2, 0.4, 0.5, 1, 2, 3, 4, 0.25]), w = rint(0, 2), v = f * lam;
+      if (w === 0) return { q: `A wave has a frequency of ${f} Hz and a wavelength of ${lam} m. Calculate its speed.`, ans: v, unit: 'm/s', s: [['Formula', 'v = f × λ'],['Substitute', `${f} × ${lam}`],['Answer', `${num(v)} m/s`]] };
+      if (w === 1) return { q: `A wave travels at ${num(v)} m/s and has a frequency of ${f} Hz. Calculate its wavelength.`, ans: lam, unit: 'm', s: [['Formula', 'λ = v ÷ f'],['Substitute', `${num(v)} ÷ ${f}`],['Answer', `${lam} m`]] };
+      return { q: `A wave has a speed of ${num(v)} m/s and a wavelength of ${lam} m. Calculate its frequency.`, ans: f, unit: 'Hz', s: [['Formula', 'f = v ÷ λ'],['Substitute', `${num(v)} ÷ ${lam}`],['Answer', `${f} Hz`]] }; },
+    () => { const f = pick([2, 4, 5, 8, 10, 20, 50]), t = rint(2, 10), n = f * t, w = rint(0, 1);
+      return w ? { q: `${n} waves pass a point in ${t} s. Calculate the frequency.`, ans: f, unit: 'Hz', s: [['Formula', 'f = waves ÷ time'],['Substitute', `${n} ÷ ${t}`],['Answer', `${f} Hz`]] }
+        : { q: `A wave has a frequency of ${f} Hz. Calculate its period.`, ans: 1 / f, unit: 's', s: [['Formula', 'T = 1 ÷ f'],['Substitute', `1 ÷ ${f}`],['Answer', `${num(1 / f)} s`]] }; }
+  ],
+  light: [
+    () => { const i = rint(10, 80), w = rint(0, 1);
+      return w ? { q: `A ray strikes a plane mirror at an angle of incidence of ${i}°. What angle does the reflected ray make with the mirror?`, ans: 90 - i, unit: '°', s: [['Angle of reflection', `${i}°`],['Angle to the mirror', `90 − ${i} = ${90 - i}°`]] }
+        : { q: `The angle between the incident ray and the mirror is ${90 - i}°. Find the angle of reflection.`, ans: i, unit: '°', s: [['Angle of incidence', `90 − ${90 - i} = ${i}°`],['Angle of reflection = angle of incidence', `${i}°`]] }; },
+    () => { const [n, a] = pick([[1.5, 30], [1.5, 40], [1.33, 30], [1.33, 45], [1.41, 30], [1.6, 35]]); const i = Math.round(Math.asin(n * Math.sin(a * Math.PI / 180)) * 180 / Math.PI * 10) / 10;
+      return { q: `Light passes from air into a material with refractive index ${n}. The angle of refraction is ${a}°. Calculate the angle of incidence (1 d.p.).`, ans: i, unit: '°', s: [['Formula', 'sin i = n × sin r'],['Substitute', `sin i = ${n} × sin ${a}° = ${num(n * Math.sin(a * Math.PI / 180))}`],['Inverse sine', `i = ${i}°`]] }; },
+    () => { const i = pick([30, 40, 45, 50, 60]), r = pick([20, 25, 30, 35]); if (r >= i) return { q: 'Light travels at 3 × 10⁸ m/s in a vacuum. How far does it travel in 2 s? (Give the answer in units of 10⁸ m.)', ans: 6, unit: '× 10⁸ m', s: [['d = v × t', '3 × 10⁸ × 2'],['Answer', '6 × 10⁸ m']] };
+      const n = Math.round(Math.sin(i * Math.PI / 180) / Math.sin(r * Math.PI / 180) * 100) / 100;
+      return { q: `In air the angle of incidence is ${i}° and the angle of refraction in glass is ${r}°. Calculate the refractive index (2 d.p.).`, ans: n, unit: '', s: [['Formula', 'n = sin i ÷ sin r'],['Substitute', `sin ${i}° ÷ sin ${r}°`],['Answer', String(n)]] }; },
+    () => { const n = pick([1.33, 1.41, 1.5, 1.6, 1.9, 2.4]), c = Math.round(Math.asin(1 / n) * 180 / Math.PI * 10) / 10;
+      return { q: `A material has a refractive index of ${n}. Calculate the critical angle (1 d.p.).`, ans: c, unit: '°', s: [['Formula', 'sin c = 1 ÷ n'],['Substitute', `sin c = 1 ÷ ${n} = ${num(1 / n)}`],['Answer', `c = ${c}°`]] }; }
+  ],
+  emspec: [
+    () => { const f = pick([[1e8, '1 × 10⁸', 3], [1.5e8, '1.5 × 10⁸', 2], [3e8, '3 × 10⁸', 1], [6e8, '6 × 10⁸', 0.5], [1e9, '1 × 10⁹', 0.3], [3e9, '3 × 10⁹', 0.1], [3e10, '3 × 10¹⁰', 0.01]]);
+      return { q: `An electromagnetic wave has a frequency of ${f[1]} Hz. Calculate its wavelength. (c = 3 × 10⁸ m/s)`, ans: f[2], unit: 'm', s: [['Formula', 'λ = c ÷ f'],['Substitute', `3 × 10⁸ ÷ ${f[1]}`],['Answer', `${f[2]} m`]] }; },
+    () => { const lam = pick([[3, 1e8, '1 × 10⁸'], [1.5, 2e8, '2 × 10⁸'], [0.3, 1e9, '1 × 10⁹'], [0.03, 1e10, '1 × 10¹⁰'], [6, 5e7, '5 × 10⁷'], [0.6, 5e8, '5 × 10⁸']]);
+      return { q: `An electromagnetic wave has a wavelength of ${lam[0]} m. Calculate its frequency in units of hertz, written as a number. (c = 3 × 10⁸ m/s.) You can type 1e8 for 1 × 10⁸.`, ans: lam[1], unit: 'Hz', s: [['Formula', 'f = c ÷ λ'],['Substitute', `3 × 10⁸ ÷ ${lam[0]}`],['Answer', `${lam[2]} Hz`]] }; }
+  ],
+  circuits: [
+    () => { const I = rint(1, 10), R = rint(2, 20), V = I * R, w = rint(0, 2);
+      if (w === 0) return { q: `A current of ${I} A flows through a ${R} Ω resistor. Calculate the potential difference.`, ans: V, unit: 'V', s: [['Formula', 'V = I × R'],['Substitute', `${I} × ${R}`],['Answer', `${V} V`]] };
+      if (w === 1) return { q: `A potential difference of ${V} V is applied across a ${R} Ω resistor. Calculate the current.`, ans: I, unit: 'A', s: [['Formula', 'I = V ÷ R'],['Substitute', `${V} ÷ ${R}`],['Answer', `${I} A`]] };
+      return { q: `A current of ${I} A flows when the potential difference is ${V} V. Calculate the resistance.`, ans: R, unit: 'Ω', s: [['Formula', 'R = V ÷ I'],['Substitute', `${V} ÷ ${I}`],['Answer', `${R} Ω`]] }; },
+    () => { const t = rint(2, 20), I = rint(1, 8), Q = I * t;
+      return { q: `A charge of ${Q} C flows past a point in ${t} s. Calculate the current.`, ans: I, unit: 'A', s: [['Formula', 'I = Q ÷ t'],['Substitute', `${Q} ÷ ${t}`],['Answer', `${I} A`]] }; },
+    () => { const R1 = rint(1, 12), R2 = rint(1, 12), V = (R1 + R2) * rint(1, 3);
+      return { q: `A ${R1} Ω and a ${R2} Ω resistor are in series across a ${V} V supply. Calculate the current.`, ans: V / (R1 + R2), unit: 'A', s: [['Total resistance', `${R1} + ${R2} = ${R1 + R2} Ω`],['Formula', 'I = V ÷ R'],['Answer', `${V} ÷ ${R1 + R2} = ${V / (R1 + R2)} A`]] }; },
+    () => { const V = pick([6, 9, 12, 230]), I = pick([0.5, 1, 2, 3, 5]), P = V * I;
+      return { q: `A device runs on ${V} V and draws ${I} A. Calculate its power.`, ans: P, unit: 'W', s: [['Formula', 'P = I × V'],['Substitute', `${I} × ${V}`],['Answer', `${P} W`]] }; },
+    () => { const kW = pick([1, 1.5, 2, 3]), h = rint(2, 6), price = pick([6, 8, 10]), e = kW * h;
+      return { q: `A ${kW} kW heater runs for ${h} hours. Electricity costs Rs ${price} per kWh. Calculate the cost.`, ans: e * price, unit: 'Rs', s: [['Energy', `${kW} × ${h} = ${e} kWh`],['Cost', `${e} × ${price}`],['Answer', `Rs ${e * price}`]] }; }
+  ],
+  magnet: [
+    () => { const Np = pick([100, 200, 400, 500, 1000]), k = pick([2, 4, 5, 10, 0.5, 0.25, 0.2]), Ns = Np * k, Vp = pick([12, 24, 120, 230, 240]), Vs = Vp * k;
+      return { q: `A transformer has ${Np} turns on the primary and ${Ns} turns on the secondary. The primary voltage is ${Vp} V. Calculate the secondary voltage.`, ans: Vs, unit: 'V', s: [['Formula', 'Vs = Vp × Ns ÷ Np'],['Substitute', `${Vp} × ${Ns} ÷ ${Np}`],['Answer', `${num(Vs)} V`]] }; },
+    () => { const Vp = pick([120, 230, 240]), Vs = pick([6, 12, 24]), Ip = pick([0.1, 0.2, 0.5, 1]), ans = Vp * Ip / Vs;
+      return { q: `A transformer is 100% efficient. The primary is ${Vp} V with a current of ${Ip} A. The secondary voltage is ${Vs} V. Calculate the secondary current.`, ans, unit: 'A', s: [['Power in', `${Vp} × ${Ip} = ${num(Vp * Ip)} W`],['Power out = power in', `${Vs} × Is = ${num(Vp * Ip)}`],['Answer', `${num(ans)} A`]] }; },
+    () => { let Vp, Vs, Np, ans; do { Vp = pick([12, 24, 120, 240]); Vs = pick([6, 12, 48, 60, 240, 480]); Np = pick([100, 200, 500, 1000]); ans = Np * Vs / Vp; } while (!Number.isInteger(ans) || Vs === Vp);
+      return { q: `A transformer has ${Np} turns on the primary. The primary voltage is ${Vp} V and the secondary voltage is ${Vs} V. How many turns are on the secondary?`, ans, unit: 'turns', s: [['Formula', 'Ns = Np × Vs ÷ Vp'],['Substitute', `${Np} × ${Vs} ÷ ${Vp}`],['Answer', `${num(ans)} turns`]] }; }
   ]
 };
 
@@ -949,7 +1312,7 @@ function drawMock(){
 if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state ---------- */
-const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['waves','Topic 3','Waves'],['light','Topic 3','Light'],['emspec','Topic 3','EM spectrum'],['circuits','Topic 4','Circuits'],['magnet','Topic 4','Magnetism'],['mock','','Mini mock']];
 let cur = 'start'; let sub = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -977,7 +1340,7 @@ function render(){
 }
 
 function renderStart(){
-  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles'].map(k => {
+  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles','waves','light','emspec','circuits','magnet'].map(k => {
     const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz best ${qb}/${qt}</span></div>
       <div class="bar"><i style="width:${Math.round(100*qb/qt)}%"></i></div>
