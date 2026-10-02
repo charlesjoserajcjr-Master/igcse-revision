@@ -324,6 +324,70 @@ function svgVacc(){
   ${[200, 415, 630].map(x => `<line x1="${x}" y1="72" x2="${x + 28}" y2="72" class="ln" marker-end="url(#a-v)"/>`).join('')}
   ${T(430, 150, 'Antigens on the pathogen are the markers the lymphocytes detect.', 'mid lbl')}${T(430, 176, 'Antibodies are specific: each one fits only one antigen.', 'mid lbl')}${T(430, 210, 'Herd immunity: when most people are immune, the pathogen cannot spread easily.', 'mid mut')}</svg>`;
 }
+function svgBreath(){
+  const panel = (x, inh) => {
+    const dTop = inh ? 205 : 180;   /* diaphragm height */
+    const ribY = inh ? 66 : 78;
+    return `<rect x="${x}" y="${inh ? 50 : 64}" width="300" height="${inh ? 200 : 186}" rx="26" class="cardf" style="stroke:var(--ink);stroke-width:2"/>
+    <ellipse cx="${x + 150}" cy="${inh ? 130 : 138}" rx="${inh ? 98 : 84}" ry="${inh ? 66 : 56}" class="nonmetal" style="stroke:var(--accent);stroke-width:2"/>
+    <path d="M${x + 6} 250 Q${x + 150} ${dTop} ${x + 294} 250" class="hotl" fill="none" style="stroke-width:3.5"/>
+    ${inh ? `<line x1="${x + 150}" y1="46" x2="${x + 150}" y2="82" class="acc" marker-end="url(#b-br)"/>` : `<line x1="${x + 150}" y1="96" x2="${x + 150}" y2="48" class="hotl" marker-end="url(#h-br)"/>`}
+    ${T(x + 150, 282, inh ? 'diaphragm contracts and flattens' : 'diaphragm relaxes, domes up', 'mid mut')}`;
+  };
+  return `<svg viewBox="0 0 760 340" role="img" aria-label="Breathing in and breathing out">${arrowDefs('br')}
+  ${panel(30, true)}${panel(430, false)}
+  ${T(180, 330, 'BREATHING IN (inhaling)', 'mid acct')}${T(580, 330, 'BREATHING OUT (exhaling)', 'mid hott')}
+  ${T(180, 36, 'ribs up and out, volume UP', 'mid lbl')}${T(580, 36, 'ribs down and in, volume DOWN', 'mid lbl')}
+  <text x="180" y="132" class="mid mut">lung</text><text x="580" y="140" class="mid mut">lung</text>
+  <text x="180" y="150" class="mid mut">pressure down</text><text x="580" y="158" class="mid mut">pressure up</text></svg>`;
+}
+function svgAlveolus(){
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="Gas exchange at an alveolus">${arrowDefs('al')}
+  <circle cx="230" cy="165" r="120" class="nonmetal" style="stroke:var(--ink);stroke-width:3"/>${T(230, 160, 'alveolus', 'mid lbl')}${T(230, 182, '(air)', 'mid mut')}
+  <path d="M356 70 Q420 165 356 260" class="hotl" fill="none" style="stroke-width:16;stroke-opacity:.5"/><path d="M356 70 Q420 165 356 260" class="hotl" fill="none" style="stroke-width:3"/>
+  <line x1="320" y1="130" x2="395" y2="130" class="acc" marker-end="url(#b-al)"/>${T(310, 118, 'O₂', 'end acct')}
+  <line x1="395" y1="200" x2="320" y2="200" class="hotl" marker-end="url(#h-al)"/>${T(310, 226, 'CO₂', 'end hott')}
+  ${T(470, 56, 'Alveoli are adapted for gas exchange:', 'lbl')}
+  ${T(470, 90, '• wall is ONE cell thick: short diffusion distance', '')}${T(470, 118, '• many alveoli: very large surface area', '')}${T(470, 146, '• moist surface: gases dissolve', '')}${T(470, 174, '• rich blood supply (capillaries)', '')}${T(470, 202, '• ventilation keeps a steep gradient', '')}
+  ${T(470, 250, 'Oxygen diffuses INTO the blood.', 'acct')}${T(470, 274, 'Carbon dioxide diffuses OUT of the blood.', 'hott')}${T(470, 308, 'Both move by diffusion, down their gradients.', 'mut')}</svg>`;
+}
+function svgUrinary(){
+  const b = (x, y, w, h, t, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + w / 2, y + h / 2 + 5, t, 'mid')}`;
+  return `<svg viewBox="0 0 860 340" role="img" aria-label="The urinary system and what the kidney does">${arrowDefs('u')}
+  ${b(30, 20, 150, 44, 'liver: makes urea', 'nonmetal')}
+  <line x1="180" y1="42" x2="248" y2="42" class="ln" marker-end="url(#a-u)"/>${T(214, 32, 'blood', 'mid mut')}
+  ${b(250, 20, 160, 44, 'kidney (x2)', 'nonmetal')}${T(330, 86, 'filters the blood', 'mid mut')}
+  <line x1="330" y1="96" x2="330" y2="136" class="ln" marker-end="url(#a-u)"/>${T(374, 122, 'ureter', 'acct')}
+  ${b(250, 140, 160, 44, 'bladder: stores urine')}
+  <line x1="330" y1="184" x2="330" y2="236" class="ln" marker-end="url(#a-u)"/>${T(376, 214, 'urethra', 'acct')}${T(330, 256, 'urine leaves the body', 'mid lbl')}
+  ${T(470, 40, 'The kidney:', 'lbl')}${T(470, 68, 'filters urea, water and salts from blood', '')}${T(470, 94, 'reabsorbs all the glucose', '')}${T(470, 120, 'reabsorbs the water the body needs', '')}${T(470, 146, 'urine = urea + extra water + extra salts', 'hott')}
+  ${T(470, 196, 'Renal artery brings blood IN.', 'mut')}${T(470, 218, 'Renal vein takes blood OUT (less urea).', 'mut')}
+  ${T(470, 262, 'Kidney failure: dialysis or a transplant.', 'acct')}${T(470, 288, 'Dialysis fluid has normal glucose and salt levels,', 'mut')}${T(470, 308, 'so only urea (and extra salt) diffuses out.', 'mut')}</svg>`;
+}
+function svgReflex(){
+  const b = (x, t, s, cls) => `<rect x="${x}" y="50" width="130" height="70" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + 65, 80, t, 'mid')}${T(x + 65, 102, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 900 270" role="img" aria-label="A reflex arc">${arrowDefs('rf')}
+  ${b(20, 'stimulus', 'hot object', 'cardf')}${b(180, 'receptor', 'detects change', 'metal')}${b(340, 'sensory neurone', 'to the CNS', 'nonmetal')}${b(500, 'relay neurone', 'in the spinal cord', 'nonmetal')}${b(660, 'motor neurone', 'to the muscle', 'nonmetal')}
+  ${[150, 310, 470, 630].map(x => `<line x1="${x}" y1="85" x2="${x + 30}" y2="85" class="ln" marker-end="url(#a-rf)"/>`).join('')}
+  <line x1="725" y1="120" x2="725" y2="168" class="ln" marker-end="url(#a-rf)"/><rect x="660" y="170" width="130" height="70" rx="8" class="cardf" style="stroke:var(--ink);stroke-width:1.5"/>${T(725, 200, 'effector', 'mid')}${T(725, 222, 'muscle contracts', 'mid mut')}
+  ${T(30, 190, 'A reflex is fast, automatic and protective.', 'lbl')}${T(30, 216, 'It does not wait for the brain to decide.', 'mut')}${T(30, 242, 'At a synapse, a chemical (neurotransmitter) diffuses across.', 'mut')}</svg>`;
+}
+function svgPupil(){
+  const eye = (x, r, t, sub) => `<circle cx="${x}" cy="110" r="70" class="nonmetal" style="stroke:var(--ink);stroke-width:2.5"/><circle cx="${x}" cy="110" r="${r}" class="inkf"/>${T(x, 215, t, 'mid lbl')}${T(x, 238, sub, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 270" role="img" aria-label="The pupil reflex in bright and dim light">
+  ${eye(150, 14, 'bright light', 'circular muscles contract')}${T(150, 258, 'pupil gets smaller', 'mid acct')}
+  ${eye(430, 40, 'dim light', 'radial muscles contract')}${T(430, 258, 'pupil gets larger', 'mid acct')}
+  ${T(580, 50, 'The iris controls the pupil.', 'lbl')}${T(580, 80, 'Bright: protects the retina.', '')}${T(580, 106, 'Dim: lets in more light.', '')}${T(580, 150, 'Cornea and lens focus light', 'mut')}${T(580, 172, 'onto the retina.', 'mut')}${T(580, 200, 'Optic nerve: impulses', 'mut')}${T(580, 222, 'to the brain.', 'mut')}</svg>`;
+}
+function svgSmoke(){
+  const b = (y, t, s, cls = 'metal') => `<rect x="20" y="${y}" width="240" height="46" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(140, y + 29, t, 'mid')}${T(290, y + 29, s, '')}`;
+  return `<svg viewBox="0 0 880 280" role="img" aria-label="Harmful substances in tobacco smoke and their effects">
+  ${b(20, 'nicotine', 'addictive; raises heart rate and blood pressure', 'nonmetal')}
+  ${b(80, 'tar', 'carcinogen: causes lung cancer; coats and damages cilia', 'nonmetal')}
+  ${b(140, 'carbon monoxide', 'binds to haemoglobin: less oxygen carried', 'nonmetal')}
+  ${b(200, 'smoke particles', 'irritate lungs: bronchitis, emphysema', 'nonmetal')}
+  ${T(20, 276, 'Smoking while pregnant: less oxygen to the foetus, low birth mass.', 'mut')}</svg>`;
+}
 /* ---------- content ---------- */
 const CH = {
 char: {
@@ -767,6 +831,184 @@ disease: {
       p: ['==treat sewage / clean drinking water==', '==hygiene== / boil water / vaccination'] }
   ]
 }
+,
+resp: {
+  code: 'Topic 11', name: 'Gas exchange and respiration',
+  lede: 'How air gets into the lungs, how oxygen reaches the blood, and how cells release energy with and without oxygen.',
+  learn: [
+    { h: 'The gas exchange system', list: ['Air passes through the ==trachea==, the ==bronchi== and ==bronchioles== to the ==alveoli==.', 'The trachea has ==C-shaped rings of cartilage== to keep it open, ==ciliated cells== that sweep mucus up, and ==goblet cells== that make ==mucus== to trap dust and bacteria.', 'The ==alveoli== are the gas exchange surface. They have a ==large surface area==, ==walls one cell thick==, a ==moist lining==, and a ==rich blood supply==. Breathing keeps a ==steep concentration gradient==.', '==Oxygen== diffuses from the alveolus into the blood. ==Carbon dioxide== diffuses from the blood into the alveolus.'] },
+    { h: 'Breathing', table: [['', 'Breathing in', 'Breathing out'], ['==ribs==', 'move ==up and out==', 'move ==down and in=='], ['==intercostal muscles==', 'external contract', 'internal contract (forced); external relax'], ['==diaphragm==', '==contracts==, flattens', '==relaxes==, domes up'], ['chest ==volume==', '==increases==', '==decreases=='], ['==pressure== in the lungs', 'decreases (below outside)', 'increases (above outside)'], ['air', 'moves ==in==', 'moves ==out==']], list: ['Air always moves from ==high to low pressure==.'], f: ['ventilation rate = breathing rate × tidal volume', 'breathing rate = breaths per minute'] },
+    { h: 'Inspired and expired air', table: [['Gas', 'Inspired (in)', 'Expired (out)'], ['==oxygen==', 'about 21 %', 'about 16 %'], ['==carbon dioxide==', 'about 0.04 %', 'about 4 %'], ['nitrogen', 'about 78 %', 'about 78 %'], ['==water vapour==', 'variable', '==more==']], list: ['==Limewater== turns ==cloudy== (milky) with carbon dioxide. ==Hydrogencarbonate indicator== turns from red to ==yellow== in more CO₂.', 'During ==exercise== you breathe ==faster and deeper== to get more oxygen and remove more CO₂.'] },
+    { h: 'Respiration', list: ['==Respiration== is the chemical reactions in cells that ==break down nutrient molecules== (glucose) to ==release energy==. It happens all the time in ==all living cells==.', '==Aerobic respiration== uses oxygen. ==Anaerobic== does not, and releases ==less energy==.', 'In human muscles, anaerobic respiration makes ==lactic acid==. After hard exercise you must repay the ==oxygen debt== by breathing hard.', 'In ==yeast==, anaerobic respiration makes ==ethanol== and ==carbon dioxide== (fermentation, used in baking and brewing).', 'Energy is used for ==muscle contraction==, ==protein synthesis==, ==growth==, active transport and keeping ==body temperature== constant.'], f: ['aerobic: glucose + oxygen → carbon dioxide + water', 'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O', 'anaerobic (muscle): glucose → lactic acid', 'anaerobic (yeast): glucose → ethanol + carbon dioxide'] }
+  ],
+  mistakes: ['Saying ==respiration is breathing==. Breathing is moving air; respiration is a chemical reaction.', 'Saying ==plants only respire at night==. All living cells respire all the time.', 'Saying the ==diaphragm relaxes when breathing in==. It contracts and flattens.', 'Saying ==anaerobic respiration makes no energy==. It makes less.', 'Saying ==we breathe out only CO₂==. Breathed-out air still contains about 16 % oxygen.'],
+  diagrams: [{ svg: svgBreath, cap: '==Breathing in== and ==breathing out==: diaphragm and ribs.' }, { svg: svgAlveolus, cap: '==Gas exchange== at an alveolus.' }],
+  worked: [
+    W('A student breathes 15 times per minute. Each breath moves 500 cm³ of air. Calculate the volume of air breathed each minute.', 'Multiply ==breaths per minute== by ==volume per breath==.', 'Show the unit cm³ per minute.', 'ventilation = rate × tidal volume',
+      [['Formula', 'ventilation = breathing rate × tidal volume', ''], ['Substitute', '15 × 500', ''], ['Answer', '7500 cm³ per minute', 'About 7.5 dm³ every minute.']],
+      [['Breathing rate', '15 per min', -1], ['Tidal volume', '500 cm³', -1], ['Ventilation', '7500 cm³/min', 2]]),
+    W('Explain how the alveoli are adapted for gas exchange.', 'Link each ==feature== to ==diffusion==.', 'Four features, four reasons.', 'Feature + because',
+      [['Many alveoli', 'This gives a very large surface area.', ''], ['Thin walls', 'The wall is one cell thick, so there is a short diffusion distance.', ''], ['Capillaries', 'A rich blood supply takes oxygen away, keeping a steep concentration gradient.', ''], ['Ventilation', 'Breathing brings in fresh air and removes CO₂, keeping the gradient steep.', '']],
+      [['Many', 'large surface area', 0], ['Thin', 'short distance', 1], ['Blood', 'steep gradient', 2], ['Breathing', 'steep gradient', 3]], true),
+    W('Describe how air is drawn into the lungs when you breathe in.', 'Follow the order: ==muscles → volume → pressure → air==.', 'Always say pressure is lower than outside.', 'Contract → volume up → pressure down',
+      [['Muscles', 'The diaphragm contracts and flattens. The external intercostal muscles contract and raise the ribs up and out.', ''], ['Volume', 'The volume of the chest increases.', ''], ['Pressure', 'The pressure in the lungs falls below atmospheric pressure.', ''], ['Air', 'Air moves in down the pressure gradient.', '']],
+      [['Muscles', 'diaphragm, ribs', 0], ['Volume', 'increases', 1], ['Pressure', 'decreases', 2], ['Air', 'in', 3]], true),
+    W('Explain why a sprinter breathes heavily for several minutes after the race.', 'Think ==anaerobic respiration== and ==lactic acid==.', 'Use the words oxygen debt.', 'Lactic acid → oxygen debt',
+      [['In the race', 'The muscles needed energy faster than oxygen could be supplied, so they respired anaerobically.', ''], ['Product', 'Lactic acid was made.', ''], ['After', 'Extra oxygen is needed to break down the lactic acid. This is the oxygen debt.', ''], ['Result', 'The runner keeps breathing fast and deep until it is repaid.', '']],
+      [['Race', 'anaerobic', 0], ['Made', 'lactic acid', 1], ['Debt', 'extra O₂ needed', 2]], true)
+  ],
+  drill: 'resp',
+  quiz: [
+    { q: 'When you breathe in, the diaphragm…', o: ['relaxes and domes up', 'contracts and flattens', 'moves sideways', 'stays still'], a: 1, w: '==Contracts and flattens==.' },
+    { q: 'Which gas turns limewater cloudy?', o: ['oxygen', 'nitrogen', 'carbon dioxide', 'hydrogen'], a: 2, w: '==Carbon dioxide==.' },
+    { q: 'Anaerobic respiration in muscles produces…', o: ['ethanol', 'lactic acid', 'water only', 'oxygen'], a: 1, w: '==Lactic acid==.' },
+    { q: 'The balanced equation for aerobic respiration has how many CO₂?', o: ['1', '2', '6', '12'], a: 2, w: '==6CO₂==.' },
+    { q: 'Mucus in the trachea…', o: ['absorbs oxygen', 'traps dust and bacteria', 'warms blood', 'makes cartilage'], a: 1, w: 'It ==traps dust and bacteria==.' },
+    { q: 'About how much oxygen is in expired air?', o: ['21 %', '16 %', '4 %', '0 %'], a: 1, w: 'About ==16 %==.' }
+  ],
+  exam: [
+    { q: 'State the word equation for aerobic respiration.', m: 2,
+      p: ['==glucose + oxygen==', '→ ==carbon dioxide + water=='] },
+    { q: 'Describe the differences between inspired air and expired air.', m: 3,
+      p: ['expired air has ==less oxygen==', 'expired air has ==more carbon dioxide==', 'expired air has ==more water vapour=='] },
+    { q: 'Explain why breathing rate and heart rate both increase during exercise.', m: 3,
+      p: ['muscles respire ==faster==, needing more oxygen and glucose', 'more ==CO₂== must be removed', 'faster breathing and heartbeat ==deliver oxygen and remove CO₂ faster=='] },
+    { q: 'Compare aerobic and anaerobic respiration in humans.', m: 3,
+      p: ['aerobic uses ==oxygen==, anaerobic does not', 'aerobic releases ==more energy==', 'anaerobic produces ==lactic acid==, aerobic produces CO₂ and water'] }
+  ]
+},
+excr: {
+  code: 'Topic 12', name: 'Excretion in humans',
+  lede: 'How the body gets rid of toxic waste: the lungs, skin and kidneys, and what happens when the kidneys fail.',
+  learn: [
+    { h: 'Excretion and the organs involved', list: ['==Excretion== is the removal of ==toxic materials== and ==waste products of metabolism== from the body. Egestion (faeces) is different.', '==Lungs== excrete ==carbon dioxide== and water vapour.', '==Kidneys== excrete ==urea==, excess water and excess salts in ==urine==.', '==Skin== loses water, salts and a little urea in ==sweat==, mainly to cool the body.', 'The ==liver== breaks down excess ==amino acids== (==deamination==) making ==urea==. The urea travels in the blood to the kidneys.'] },
+    { h: 'The kidney', list: ['The kidneys ==filter the blood== and make urine. Blood arrives in the ==renal artery== and leaves in the ==renal vein==, with less urea.', 'Urine travels down the ==ureter== to the ==bladder== (stores it) and leaves through the ==urethra==.', 'Small molecules (==urea, water, glucose, salts==) are ==filtered== out of the blood. The body then ==reabsorbs== all the glucose and the water and salts it needs.', 'Urine contains ==urea, excess water and excess salts==. It should contain ==no glucose== and no protein.', 'If you drink little water, the urine is ==dark and concentrated==. If you drink a lot, it is ==pale and dilute==.'] },
+    { h: 'Kidney failure', list: ['Failed kidneys cannot remove ==urea== and excess water. Treatment: ==dialysis== or a ==kidney transplant==.', 'In a ==dialysis machine== the blood flows past a ==partially permeable membrane== with ==dialysis fluid== on the other side. ==Urea diffuses out== of the blood. The fluid has normal levels of glucose and salts so those are ==not lost==.', 'Dialysis: lifelong, several hours, three times a week, but no waiting. Transplant: a ==matching donor== is needed, risk of ==rejection==, lifelong drugs, but a normal life.'] }
+  ],
+  mistakes: ['Saying ==urea is made in the kidney==. It is made in the liver.', 'Mixing up ==excretion and egestion==.', 'Saying ==glucose is found in urine== of a healthy person. It is all reabsorbed.', 'Saying the ==ureter takes urine out of the body==. That is the urethra.', 'Saying the ==dialysis fluid has no glucose==. It matches blood so none is lost.'],
+  diagrams: [{ svg: svgUrinary, cap: 'The ==urinary system==: liver, kidney, ureter, bladder, urethra.' }],
+  worked: [
+    W('Of 150 dm³ of fluid filtered by the kidneys in a day, 3 dm³ leaves as urine. Calculate the percentage reabsorbed.', 'First find ==how much== was reabsorbed.', 'Divide by the amount filtered.', '% = reabsorbed ÷ filtered × 100',
+      [['Reabsorbed', '150 − 3 = 147 dm³', 'What was filtered but not lost.'], ['Fraction', '147 ÷ 150', ''], ['Answer', '× 100 = 98 %', 'The kidneys reabsorb nearly all the water.']],
+      [['Filtered', '150 dm³', -1], ['Urine', '3 dm³', -1], ['Reabsorbed', '147 dm³', 0], ['Percentage', '98 %', 2]]),
+    W('Explain the difference between excretion and egestion, with an example of each.', 'One is about ==metabolism==; one is about ==undigested food==.', 'Give an example of each.', 'Waste of cells v waste food',
+      [['Excretion', 'Removal of toxic waste made by the body’s cells.', 'Example: urea in urine.'], ['Egestion', 'Removal of undigested food from the gut.', 'Example: faeces.'], ['Key point', 'Faeces were never inside the body’s cells.', 'They never entered the blood.']],
+      [['Excretion', 'metabolic waste', 0], ['Egestion', 'undigested food', 1]], true),
+    W('Explain why dialysis fluid contains glucose.', 'Think about ==concentration gradients==.', 'Use diffusion.', 'No gradient = no loss',
+      [['Aim', 'Urea must be removed, but glucose must stay in the blood.', ''], ['Dialysis fluid', 'It has the same glucose concentration as normal blood.', ''], ['Result', 'There is no concentration gradient for glucose, so none diffuses out.', ''], ['Urea', 'The fluid has no urea, so urea diffuses out of the blood.', '']],
+      [['Aim', 'keep glucose', 0], ['Fluid', 'same glucose', 1], ['Result', 'no diffusion', 2], ['Urea', 'diffuses out', 3]], true),
+    W('Describe the role of the liver and the kidney in dealing with excess protein in the diet.', 'Follow the ==path of the urea==.', 'Say what happens at each organ.', 'Liver → blood → kidney → urine',
+      [['Liver', 'Excess amino acids are broken down (deamination) to make urea.', ''], ['Blood', 'Urea is carried in the blood plasma to the kidneys.', ''], ['Kidney', 'It filters out the urea.', ''], ['Urine', 'Urea leaves in the urine via the ureter, bladder and urethra.', '']],
+      [['Liver', 'makes urea', 0], ['Blood', 'carries it', 1], ['Kidney', 'filters it', 2], ['Out', 'urine', 3]], true)
+  ],
+  drill: 'excr',
+  quiz: [
+    { q: 'Where is urea made?', o: ['kidney', 'bladder', 'liver', 'skin'], a: 2, w: 'In the ==liver==.' },
+    { q: 'Which tube carries urine from the kidney to the bladder?', o: ['urethra', 'ureter', 'renal vein', 'aorta'], a: 1, w: 'The ==ureter==.' },
+    { q: 'Which is NOT normally found in urine?', o: ['urea', 'water', 'salts', 'glucose'], a: 3, w: '==Glucose== is fully reabsorbed.' },
+    { q: 'The lungs excrete…', o: ['urea', 'carbon dioxide', 'bile', 'faeces'], a: 1, w: '==Carbon dioxide==.' },
+    { q: 'In dialysis, urea leaves the blood by…', o: ['osmosis', 'active transport', 'diffusion', 'filtration only'], a: 2, w: '==Diffusion== across the membrane.' },
+    { q: 'One disadvantage of a kidney transplant is…', o: ['lifelong dialysis', 'risk of rejection', 'no urea removal', 'low water'], a: 1, w: 'The body may ==reject== it.' }
+  ],
+  exam: [
+    { q: 'State two organs that excrete waste, and name the waste each removes.', m: 4,
+      p: ['==lungs==', '==carbon dioxide==', '==kidneys==', '==urea== (water, salts)'] },
+    { q: 'Explain how urea is formed.', m: 2,
+      p: ['excess ==amino acids== are broken down in the ==liver==', 'the nitrogen part is made into ==urea=='] },
+    { q: 'Describe how a kidney dialysis machine works.', m: 3,
+      p: ['blood flows past a ==partially permeable membrane==', '==dialysis fluid== on the other side contains normal glucose and salt levels', '==urea diffuses out== of the blood into the fluid'] },
+    { q: 'Give one advantage and one disadvantage of a kidney transplant compared with dialysis.', m: 2,
+      p: ['advantage: ==normal life== / no regular dialysis sessions', 'disadvantage: ==rejection== / need for lifelong drugs / need a matching donor'] }
+  ]
+},
+coord: {
+  code: 'Topic 13', name: 'Coordination and response',
+  lede: 'How the nervous system and hormones control the body, how the eye responds to light, and how plants respond to their surroundings.',
+  learn: [
+    { h: 'The nervous system and reflexes', list: ['The ==central nervous system (CNS)== is the ==brain== and ==spinal cord==. ==Nerves== carry electrical ==impulses==.', '==Sensory neurones== carry impulses from ==receptors== to the CNS. ==Relay neurones== are inside the CNS. ==Motor neurones== carry impulses to ==effectors== (muscles or glands).', 'A ==reflex arc==: stimulus → ==receptor== → ==sensory neurone== → ==relay neurone== → ==motor neurone== → ==effector== → response.', 'A ==reflex action== is ==fast==, ==automatic== and ==protective==, and does not involve conscious thought.', 'A ==synapse== is a gap between two neurones. A ==chemical (neurotransmitter)== diffuses across the gap and starts an impulse in the next neurone.'] },
+    { h: 'Hormones and homeostasis', table: [['', 'Nervous system', 'Hormones'], ['carried by', 'electrical impulses along neurones', 'chemicals in the ==blood=='], ['speed', '==very fast==', 'slower'], ['duration', 'short', 'longer lasting'], ['target', 'precise (muscle or gland)', 'target organs']], list: ['A ==hormone== is a chemical made by a ==gland==, carried by the ==blood== to a ==target organ==, where it changes activity.', '==Adrenaline== (fight or flight): ==heart rate up==, ==pupils wider==, more ==glucose== released, more blood to muscles.', '==Insulin== lowers blood glucose. In ==diabetes== the body does not control glucose well.', '==Homeostasis== is keeping the internal environment constant, using ==negative feedback==.', 'When hot: ==sweating==, ==vasodilation== (skin capillaries widen). When cold: ==shivering==, ==vasoconstriction==, hairs stand up.'] },
+    { h: 'The eye and plant responses', list: ['==Cornea== and ==lens== focus light on the ==retina==, which has light receptors. The ==optic nerve== carries impulses to the brain. The ==iris== controls the ==pupil==.', '==Bright light==: pupil ==gets smaller==. ==Dim light==: pupil ==gets larger==.', 'Plants respond to stimuli. ==Phototropism== is growth towards or away from ==light==. ==Gravitropism== is growth in response to ==gravity==.', 'Shoots show ==positive phototropism== and ==negative gravitropism==. Roots show ==positive gravitropism==.', '==Auxin== is a plant hormone made in the shoot tip. It makes cells on the ==shaded side== elongate more, so the shoot bends towards the light.'] }
+  ],
+  mistakes: ['Saying ==hormones travel in nerves==. They travel in the blood.', 'Saying a ==reflex involves the brain thinking==. It is automatic.', 'Saying ==sensory neurones carry impulses from the CNS==. They carry them to the CNS.', 'Saying the ==pupil gets bigger in bright light==. It gets smaller.', 'Saying ==auxin makes the lit side grow==. It builds up on the shaded side.'],
+  diagrams: [{ svg: svgReflex, cap: 'A ==reflex arc==: from stimulus to response.' }, { svg: svgPupil, cap: 'The ==pupil reflex== in bright and dim light.' }],
+  worked: [
+    W('Describe the pathway when a person touches a hot object and pulls their hand away.', 'Follow the ==six boxes== of the reflex arc.', 'Name each part in order.', 'Receptor → sensory → relay → motor → effector',
+      [['Stimulus', 'The hot object.', ''], ['Receptor', 'Temperature receptors in the skin detect it.', ''], ['Sensory neurone', 'Impulses travel to the spinal cord.', ''], ['Relay neurone', 'It passes the impulse to a motor neurone in the spinal cord.', ''], ['Motor neurone', 'Impulses travel to the muscle.', ''], ['Effector', 'The muscle in the arm contracts and pulls the hand away.', 'This is the response.']],
+      [['Receptor', 'skin', 1], ['Sensory', 'to spinal cord', 2], ['Relay', 'spinal cord', 3], ['Motor', 'to muscle', 4], ['Effector', 'muscle contracts', 5]], true),
+    W('Compare the nervous system and hormones as methods of coordination.', 'Compare ==what carries it==, ==speed== and ==duration==.', 'Use pairs.', 'Impulses v chemicals',
+      [['Carried by', 'Nerves: electrical impulses. Hormones: chemicals in the blood.', ''], ['Speed', 'Nerves: very fast. Hormones: slower.', ''], ['Duration', 'Nerves: short. Hormones: longer lasting.', '']],
+      [['Carried', 'impulse v blood', 0], ['Speed', 'fast v slow', 1], ['Effect', 'short v long', 2]], true),
+    W('Explain how the body responds when it gets too hot.', 'Use ==sweating== and ==vasodilation==.', 'Say how each cools the body.', 'Lose heat',
+      [['Detect', 'The brain detects a rise in blood temperature.', ''], ['Sweat', 'Sweat glands release sweat. Evaporation of the sweat takes heat from the skin.', ''], ['Vasodilation', 'Skin capillaries widen, so more blood flows near the surface and more heat is lost.', ''], ['Result', 'Body temperature falls back to normal (negative feedback).', '']],
+      [['Detect', 'brain', 0], ['Sweat', 'evaporation cools', 1], ['Capillaries', 'vasodilation', 2], ['Result', 'normal temperature', 3]], true),
+    W('Explain why a shoot grows towards light.', 'Name the hormone and where it ==builds up==.', 'Put it in order.', 'Auxin on the shaded side',
+      [['Light', 'Light comes from one side.', ''], ['Auxin', 'Auxin moves to the shaded side of the shoot.', ''], ['Growth', 'Cells on the shaded side elongate more.', ''], ['Result', 'The shoot bends towards the light (positive phototropism).', '']],
+      [['Light', 'one side', 0], ['Auxin', 'shaded side', 1], ['Cells', 'elongate more', 2], ['Result', 'bends to light', 3]], true)
+  ],
+  drill: 'coord',
+  quiz: [
+    { q: 'Which neurone carries impulses to a muscle?', o: ['sensory', 'relay', 'motor', 'receptor'], a: 2, w: 'The ==motor neurone==.' },
+    { q: 'Hormones travel in the…', o: ['nerves', 'blood', 'xylem', 'bile'], a: 1, w: 'The ==blood==.' },
+    { q: 'In bright light the pupil…', o: ['gets larger', 'gets smaller', 'stays the same', 'closes completely'], a: 1, w: '==Gets smaller==.' },
+    { q: 'Adrenaline causes…', o: ['slower heart rate', 'faster heart rate', 'smaller pupils', 'lower blood glucose'], a: 1, w: 'A ==faster heart rate==.' },
+    { q: 'Shoots show…', o: ['negative phototropism', 'positive phototropism', 'positive gravitropism', 'no response'], a: 1, w: '==Positive phototropism==.' },
+    { q: 'A synapse is…', o: ['a muscle', 'a gap between neurones', 'a hormone', 'a gland'], a: 1, w: 'A ==gap between two neurones==.' }
+  ],
+  exam: [
+    { q: 'Define the term reflex action.', m: 2,
+      p: ['a ==fast / automatic== response', 'to a stimulus, ==protective==, does not involve the brain thinking'] },
+    { q: 'Describe how the pupil changes when a person moves from a dark room into bright sunlight, and explain why.', m: 3,
+      p: ['the pupil gets ==smaller==', 'by ==circular muscles contracting== in the iris', 'to ==protect the retina== from damage'] },
+    { q: 'State what is meant by a hormone and give one example of its effect.', m: 3,
+      p: ['a ==chemical== made by a gland', 'carried by the ==blood== to a target organ', 'example: adrenaline increases heart rate / insulin lowers blood glucose'] },
+    { q: 'Explain how the body prevents a fall in body temperature in cold weather.', m: 3,
+      p: ['==shivering== produces heat from respiration in muscles', '==vasoconstriction==: skin capillaries narrow, less heat lost', 'hairs stand up / less sweat'] }
+  ]
+},
+drugs: {
+  code: 'Topic 14', name: 'Drugs',
+  lede: 'What drugs are, how medicines and misused drugs affect the body, and the harm done by tobacco and alcohol.',
+  learn: [
+    { h: 'What is a drug?', list: ['A ==drug== is any substance taken into the body that ==modifies or affects chemical reactions== in the body.', '==Antibiotics== (for example penicillin) ==kill bacteria== but do not work against ==viruses==. Overuse leads to ==resistance==.', '==Painkillers== reduce pain. Many drugs are ==addictive==: the user feels they cannot do without them.', '==Withdrawal symptoms== happen when someone dependent stops taking a drug.'] },
+    { h: 'Misused drugs', table: [['Drug', 'Type', 'Effects'], ['==heroin==', 'depressant', 'slows brain activity; ==addiction==; risk of infection from shared needles (HIV); overdose can stop breathing'], ['==alcohol==', 'depressant', 'slower reactions, ==reduced self-control==, ==liver damage== (cirrhosis), addiction'], ['==nicotine==', 'stimulant', '==addictive==; raises heart rate and blood pressure'], ['==caffeine==', 'stimulant', 'increases alertness and heart rate']], list: ['A ==depressant== slows down the activity of the nervous system, so reactions are ==slower==.', 'Alcohol is a risk for road accidents because of slower reactions.'] },
+    { h: 'Tobacco smoke', list: ['==Nicotine== is addictive. ==Tar== is a ==carcinogen== (causes cancer) and damages the ==cilia==. ==Carbon monoxide== combines with ==haemoglobin==, reducing the oxygen carried by the blood.', 'Smoking causes ==lung cancer==, ==chronic bronchitis== (inflamed airways) and ==emphysema== (alveoli damaged), and raises the risk of ==coronary heart disease==.', 'Smoking in pregnancy reduces oxygen to the ==foetus== and can cause ==low birth mass==.', 'Cilia damaged by tar can no longer sweep mucus out, so ==mucus builds up== and causes ==smoker’s cough== and infections.'] }
+  ],
+  mistakes: ['Saying ==antibiotics treat all diseases==. They treat bacterial infections only.', 'Saying ==nicotine causes lung cancer==. Tar causes it.', 'Saying ==carbon monoxide blocks the trachea==. It binds to haemoglobin.', 'Saying ==alcohol is a stimulant==. It is a depressant.', 'Saying drugs are ==always harmful==. Medicines help; misuse harms.'],
+  diagrams: [{ svg: svgSmoke, cap: 'The ==harmful substances== in tobacco smoke.' }],
+  worked: [
+    W('In a study, 450 of 3000 smokers and 90 of 3000 non-smokers developed lung disease. Calculate the percentage in each group and compare.', 'Use ==part ÷ whole × 100== for each group.', 'Then say how many times bigger.', '% = part ÷ whole × 100',
+      [['Smokers', '450 ÷ 3000 × 100 = 15 %', ''], ['Non-smokers', '90 ÷ 3000 × 100 = 3 %', ''], ['Compare', '15 ÷ 3 = 5', 'Smokers were 5 times more likely.']],
+      [['Smokers', '15 %', 0], ['Non-smokers', '3 %', 1], ['Ratio', '5 times', 2]]),
+    W('Explain why smoking reduces the amount of oxygen carried in the blood.', 'Name the ==gas== and the ==molecule== it joins.', 'Link to the effect on the body.', 'CO + haemoglobin',
+      [['Gas', 'Tobacco smoke contains carbon monoxide.', ''], ['Joins', 'It binds to haemoglobin in red blood cells more strongly than oxygen does.', ''], ['Result', 'Less oxygen is carried.', ''], ['Effect', 'The heart works harder. A foetus gets less oxygen and may have a low birth mass.', '']],
+      [['Gas', 'carbon monoxide', 0], ['Binds to', 'haemoglobin', 1], ['Result', 'less O₂ carried', 2]], true),
+    W('Describe the effects of alcohol on the body.', 'Give effects on the ==brain==, ==liver== and ==behaviour==.', 'At least three points.', 'Depressant, liver, addiction',
+      [['Nervous system', 'Alcohol is a depressant. It slows reactions and reduces self-control.', 'It increases the risk of accidents.'], ['Liver', 'Long-term use damages the liver (cirrhosis).', ''], ['Dependence', 'It is addictive.', 'Withdrawal symptoms follow when stopping.']],
+      [['Brain', 'slower reactions', 0], ['Liver', 'cirrhosis', 1], ['Addiction', 'yes', 2]], true),
+    W('Explain why smokers often have a persistent cough.', 'Follow what ==tar== does to the ==cilia==.', 'Use mucus.', 'Cilia damaged → mucus builds up',
+      [['Normal', 'Cilia sweep mucus with trapped dust and bacteria out of the airways.', ''], ['Smoking', 'Tar damages and paralyses the cilia.', ''], ['Result', 'Mucus builds up and infections develop. The smoker coughs to clear it.', '']],
+      [['Normal', 'cilia clear mucus', 0], ['Tar', 'damages cilia', 1], ['Result', 'mucus builds, cough', 2]], true)
+  ],
+  drill: 'drugs',
+  quiz: [
+    { q: 'Which part of tobacco smoke causes cancer?', o: ['nicotine', 'tar', 'carbon monoxide', 'oxygen'], a: 1, w: '==Tar==.' },
+    { q: 'Carbon monoxide binds to…', o: ['plasma', 'haemoglobin', 'platelets', 'cilia'], a: 1, w: '==Haemoglobin==.' },
+    { q: 'Alcohol is a…', o: ['stimulant', 'depressant', 'antibiotic', 'vitamin'], a: 1, w: 'A ==depressant==.' },
+    { q: 'Antibiotics work against…', o: ['viruses', 'bacteria', 'all pathogens', 'cancer'], a: 1, w: '==Bacteria==.' },
+    { q: 'Which is addictive in tobacco?', o: ['tar', 'nicotine', 'carbon monoxide', 'particles'], a: 1, w: '==Nicotine==.' },
+    { q: 'Heavy drinking over many years damages the…', o: ['kidney only', 'liver', 'lungs', 'skin'], a: 1, w: 'The ==liver==.' }
+  ],
+  exam: [
+    { q: 'Define the term drug.', m: 2,
+      p: ['a substance taken into the body', 'that ==modifies or affects chemical reactions== in the body'] },
+    { q: 'Describe the effects of tobacco smoke on the gas exchange system.', m: 4,
+      p: ['==tar== damages ==cilia== so mucus builds up', 'tar is a ==carcinogen== (lung cancer)', '==emphysema==: alveoli damaged, less surface area', '==bronchitis== / smoker’s cough'] },
+    { q: 'Explain why drinking alcohol makes driving dangerous.', m: 2,
+      p: ['alcohol is a ==depressant== that ==slows reactions==', '==reduced self-control / judgement== / poor muscle coordination'] },
+    { q: 'State two effects of heroin on a user.', m: 2,
+      p: ['==addiction== / withdrawal symptoms', '==slows brain activity== / overdose / risk of HIV from shared needles'] }
+  ]
+}
 
 };
 
@@ -906,9 +1148,64 @@ const DRILLS = {
     () => { const it = pick([['antigen', 'a marker on the pathogen'], ['antibody', 'made by lymphocytes and specific to one antigen'], ['memory cell', 'allows a faster response to a second infection']]);
       return choiceItem(`What is an ${it[0]}?`.replace('an memory', 'a memory'), it[1], ['a marker on the pathogen', 'made by lymphocytes and specific to one antigen', 'allows a faster response to a second infection', 'a drug that kills bacteria'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
   ]
+,
+  resp: [
+    () => { const r = rint(10, 25), v = pick([400, 450, 500, 550, 600]), a = r * v;
+      return { kind:'num', q:`A person breathes ${r} times per minute and moves ${v} cm³ of air each breath. Calculate the volume of air breathed per minute (cm³).`, ans:a, tol:0, s:[['Formula', 'rate × tidal volume'], ['Substitute', `${r} × ${v} = ${a} cm³`]] }; },
+    () => { const n = rint(5, 12), t = pick([30, 20, 60]), a = n * 60 / t;
+      return { kind:'num', q:`A student counts ${n} breaths in ${t} seconds. How many breaths per minute?`, ans:a, tol:0, s:[['Scale to 60 s', `${n} × (60 ÷ ${t}) = ${a}`]] }; },
+    () => { const it = pick([['breathing in', 'contracts and flattens'], ['breathing out', 'relaxes and domes up']]);
+      return choiceItem(`During ${it[0]}, the diaphragm…`, it[1], ['contracts and flattens', 'relaxes and domes up', 'stays still'].filter(x => x !== it[1]), [['Rule', 'in: contracts and flattens; out: relaxes and domes up']]); },
+    () => { const it = pick([['more oxygen', 'inspired air'], ['more carbon dioxide', 'expired air'], ['more water vapour', 'expired air'], ['about 21 % oxygen', 'inspired air']]);
+      return choiceItem(`Which air has ${it[0]}?`, it[1], [it[1] === 'inspired air' ? 'expired air' : 'inspired air'], [['Fact', 'inspired: 21 % O₂, 0.04 % CO₂; expired: 16 % O₂, 4 % CO₂']]); },
+    () => { const it = pick([['aerobic respiration in humans', 'carbon dioxide and water'], ['anaerobic respiration in muscle', 'lactic acid'], ['anaerobic respiration in yeast', 'ethanol and carbon dioxide']]);
+      return choiceItem(`What is produced by ${it[0]}?`, it[1], ['carbon dioxide and water', 'lactic acid', 'ethanol and carbon dioxide', 'oxygen and glucose'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ' → ' + it[1]]]); },
+    () => { const it = pick([['turns limewater cloudy', 'carbon dioxide'], ['is used in aerobic respiration', 'oxygen'], ['is the main gas in air', 'nitrogen']]);
+      return choiceItem(`Which gas ${it[0]}?`, it[1], ['carbon dioxide', 'oxygen', 'nitrogen', 'hydrogen'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); }
+  ],
+  excr: [
+    () => { const F = pick([100, 150, 180, 200]), U = pick([1, 2, 3, 4, 5]), a = (F - U) * 100 / F;
+      return { kind:'num', q:`The kidneys filter ${F} dm³ of fluid in a day and ${U} dm³ leaves as urine. What percentage is reabsorbed?`, ans:Math.round(a * 100) / 100, tol:0.02, s:[['Reabsorbed', `${F} − ${U} = ${F - U} dm³`], ['Percentage', `${F - U} ÷ ${F} × 100 = ${num(a)} %`]] }; },
+    () => { const it = pick([['carbon dioxide', 'lungs'], ['urea', 'kidneys'], ['sweat', 'skin'], ['urea is made', 'liver']]);
+      return choiceItem(it[0] === 'urea is made' ? 'In which organ is urea made?' : `Which organ excretes ${it[0]}?`, it[1], ['lungs', 'kidneys', 'skin', 'liver'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['carries urine from kidney to bladder', 'ureter'], ['carries urine out of the body', 'urethra'], ['stores urine', 'bladder'], ['brings blood to the kidney', 'renal artery'], ['takes blood from the kidney', 'renal vein']]);
+      return choiceItem(`Which part ${it[0]}?`, it[1], ['ureter', 'urethra', 'bladder', 'renal artery', 'renal vein'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['glucose', 'is not'], ['urea', 'is'], ['excess water', 'is'], ['protein', 'is not']]);
+      return choiceItem(`In a healthy person, ${it[0]} ______ found in urine.`, it[1], ['is', 'is not'].filter(x => x !== it[1]), [['Rule', 'urine has urea, extra water and salts; no glucose or protein']]); },
+    () => { const it = pick([['a person drinks very little water', 'dark and concentrated'], ['a person drinks a lot of water', 'pale and dilute']]);
+      return choiceItem(`What is the urine like if ${it[0]}?`, it[1], ['dark and concentrated', 'pale and dilute'].filter(x => x !== it[1]), [['Rule', 'less water: concentrated urine']]); }
+  ],
+  coord: [
+    () => { const o = ['receptor', 'sensory neurone', 'relay neurone', 'motor neurone', 'effector'], k = rint(0, 3);
+      return choiceItem(`In a reflex arc, what comes straight after the ${o[k]}?`, o[k + 1], o.filter((x, i) => i !== k + 1 && i !== k).slice(0, 3), [['Order', 'stimulus → receptor → sensory → relay → motor → effector']]); },
+    () => { const it = pick([['carries impulses to the CNS', 'sensory neurone'], ['carries impulses to a muscle', 'motor neurone'], ['connects neurones inside the spinal cord', 'relay neurone']]);
+      return choiceItem(`Which type of neurone ${it[0]}?`, it[1], ['sensory neurone', 'motor neurone', 'relay neurone'].filter(x => x !== it[1]), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['is carried in the blood', 'hormone'], ['is an electrical impulse', 'nerve'], ['is very fast', 'nerve'], ['lasts longer', 'hormone']]);
+      return choiceItem(`Which coordination system ${it[0]}?`, it[1], [it[1] === 'hormone' ? 'nerve' : 'hormone'], [['Compare', 'nerves: impulses, fast, short; hormones: blood, slower, long']]); },
+    () => { const it = pick([['bright light', 'smaller'], ['dim light', 'larger']]);
+      return choiceItem(`In ${it[0]}, the pupil becomes…`, it[1], ['smaller', 'larger'].filter(x => x !== it[1]), [['Rule', 'bright: smaller (protect retina); dim: larger']]); },
+    () => { const it = pick([['A shoot grows towards light', 'positive phototropism'], ['A root grows downwards', 'positive gravitropism'], ['A shoot grows upwards, away from gravity', 'negative gravitropism']]);
+      return choiceItem(`${it[0]}. This is…`, it[1], ['positive phototropism', 'positive gravitropism', 'negative gravitropism', 'negative phototropism'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['The body is too hot', 'sweating and vasodilation'], ['The body is too cold', 'shivering and vasoconstriction']]);
+      return choiceItem(`${it[0]}. Which responses occur?`, it[1], ['sweating and vasodilation', 'shivering and vasoconstriction', 'sweating and vasoconstriction'].filter(x => x !== it[1]).slice(0, 2), [['Rule', 'hot: sweat, vasodilation; cold: shiver, vasoconstriction']]); }
+  ],
+  drugs: [
+    () => { const s = rint(5, 30) * 10, k = pick([2, 3, 4, 5]), t = 1000, a = s * k;
+      return { kind:'num', q:`In ${t} non-smokers, ${s} developed lung disease. In ${t} smokers the figure was ${a}. How many times more likely are smokers to get the disease?`, ans:k, tol:0, s:[['Divide', `${a} ÷ ${s} = ${k}`]] }; },
+    () => { const n = pick([200, 400, 500, 800]), k = pick([5, 10, 15, 20, 25]), c = n * k / 100;
+      return { kind:'num', q:`In a group of ${n} smokers, ${c} had a smoker’s cough. What percentage is this?`, ans:k, tol:0, s:[['Formula', 'part ÷ whole × 100'], ['Substitute', `${c} ÷ ${n} × 100 = ${k} %`]] }; },
+    () => { const it = pick([['is addictive', 'nicotine'], ['causes cancer', 'tar'], ['reduces oxygen carried by the blood', 'carbon monoxide'], ['damages the cilia', 'tar']]);
+      return choiceItem(`Which substance in tobacco smoke ${it[0]}?`, it[1], ['nicotine', 'tar', 'carbon monoxide'].filter(x => x !== it[1]).concat(['oxygen']).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['alcohol', 'depressant'], ['heroin', 'depressant'], ['caffeine', 'stimulant'], ['nicotine', 'stimulant']]);
+      return choiceItem(`Is ${it[0]} a stimulant or a depressant?`, it[1], ['stimulant', 'depressant'].filter(x => x !== it[1]), [['Rule', 'alcohol and heroin slow the nervous system']]); },
+    () => { const it = pick([['a bacterial infection', 'antibiotic'], ['a viral infection such as influenza', 'an antibiotic does not work']]);
+      return choiceItem(`Which is correct for ${it[0]}?`, it[1] === 'antibiotic' ? 'an antibiotic can be used' : 'an antibiotic does not work', it[1] === 'antibiotic' ? ['an antibiotic does not work', 'it is cured by tar'] : ['an antibiotic can be used', 'it is cured by tar'], [['Rule', 'antibiotics kill bacteria, not viruses']]); },
+    () => { const it = pick([['long-term heavy alcohol use', 'liver damage'], ['smoking during pregnancy', 'low birth mass'], ['injecting heroin with shared needles', 'risk of HIV']]);
+      return choiceItem(`Which is a risk of ${it[0]}?`, it[1], ['liver damage', 'low birth mass', 'risk of HIV', 'better memory'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
+  ]
 
 };
-let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1],['nutr',0],['nutr',1],['transp',0],['transp',1],['blood',0],['blood',1],['disease',0],['disease',1]];
+let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1],['nutr',0],['nutr',1],['transp',0],['transp',1],['blood',0],['blood',1],['disease',0],['disease',1],['resp',0],['resp',1],['excr',0],['excr',1],['coord',0],['coord',1],['drugs',0],['drugs',1]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -924,7 +1221,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['resp','Humans','Gas exchange'],['excr','Humans','Excretion'],['coord','Humans','Coordination'],['drugs','Humans','Drugs'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -941,13 +1238,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease'];
+const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease','resp','excr','coord','drugs'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Biology 0610</span><h2>Biology full-year pack</h2>
-  <p class="lede">Ten topics so far, in Cambridge syllabus order: living things, cells, movement into and out of cells, biological molecules, enzymes and plant nutrition, human nutrition, transport in plants and animals, and disease and immunity. More topics are added chapter by chapter. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Fourteen topics so far, in Cambridge syllabus order: living things, cells, movement into and out of cells, biological molecules, enzymes and plant nutrition, human nutrition, transport in plants and animals, disease and immunity, gas exchange and respiration, excretion, coordination and drugs. More topics are added chapter by chapter. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
