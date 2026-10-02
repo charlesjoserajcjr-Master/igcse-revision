@@ -179,6 +179,8 @@ a{color:var(--accent)}
 .tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
+.mat{display:inline-grid;vertical-align:middle;margin:0 4px;padding:2px 10px;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:6px;gap:2px 16px;font-family:var(--mono);text-align:center}
+.mat i{font-style:normal}
 </style>
 </head>
 <body>
@@ -541,6 +543,43 @@ function svgTree2(){
   ${T(224, 66, 'R', 'lbl')}${T(224, 206, 'B', 'lbl')}
   ${T(430, 34, 'RR: 5/8 × 4/7 = 20/56', 'mono')}${T(430, 114, 'RB: 5/8 × 3/7 = 15/56', 'mono')}${T(430, 174, 'BR: 3/8 × 5/7 = 15/56', 'mono')}${T(430, 254, 'BB: 3/8 × 2/7 = 6/56', 'mono')}
   ${T(8, 150, 'start', 'mut')}${T(30, 18, 'Without replacement the second fractions change (one fewer counter).', 'mut')}</svg>`;
+}
+const M = (...rows) => `<span class="mat" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.map(r => r.map(v => `<i>${v}</i>`).join('')).join('')}</span>`;
+function svgRegion(){
+  const X = x => 60 + 42 * x, Y = y => 250 - 42 * y;
+  return `<svg viewBox="0 0 860 290" role="img" aria-label="A region defined by three inequalities">
+  <polygon points="${X(1)},${Y(1)} ${X(1)},${Y(4)} ${X(4)},${Y(4)}" class="accf" style="fill-opacity:.28"/>
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(6)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(5.5)}" class="ln"/>
+  ${[1, 2, 3, 4, 5].map(v => `${T(X(v), Y(0) + 16, v, 'mid mono mut')}${T(X(0) - 8, Y(v) + 4, v, 'end mono mut')}`).join('')}
+  <line x1="${X(1)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(5.2)}" class="hotl"/><line x1="${X(0)}" y1="${Y(4)}" x2="${X(5.8)}" y2="${Y(4)}" class="hotl"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(5.2)}" y2="${Y(5.2)}" class="acc"/>
+  ${T(X(1) + 6, Y(5.2) + 6, 'x = 1', 'hott')}${T(X(5.8) - 4, Y(4) - 8, 'y = 4', 'end hott')}${T(X(5.2) + 6, Y(5.2) + 6, 'y = x', 'acct')}${T(X(2.3), Y(3), 'R', 'mid lbl')}
+  ${T(470, 50, 'Region R is defined by:', 'lbl')}${T(470, 82, 'x ≥ 1      (right of the line x = 1)', 'mono acct')}${T(470, 108, 'y ≤ 4      (below the line y = 4)', 'mono acct')}${T(470, 134, 'y ≥ x      (above the line y = x)', 'mono acct')}
+  ${T(470, 178, '≤ and ≥: the line is SOLID (included).', 'mut')}${T(470, 200, '< and >: the line is DASHED (not included).', 'mut')}${T(470, 232, 'Test a point such as (2, 3):', 'mut')}${T(470, 254, '2 ≥ 1, 3 ≤ 4, 3 ≥ 2 all true, so it is in R.', 'hott')}</svg>`;
+}
+function svgLoci(){
+  const arc = (cx, cy, r, a1, a2, sweep) => { const p = a => `${(cx + r * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(cy - r * Math.sin(a * Math.PI / 180)).toFixed(1)}`; return `<path d="M${p(a1)} A${r} ${r} 0 0 ${sweep} ${p(a2)}" class="hotl" fill="none" style="stroke-width:1.6"/>`; };
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="Constructing a perpendicular bisector and an angle bisector">
+  <line x1="100" y1="160" x2="260" y2="160" class="ln"/><circle cx="100" cy="160" r="4" class="inkf"/><circle cx="260" cy="160" r="4" class="inkf"/>${T(86, 182, 'A', 'lbl')}${T(268, 182, 'B', 'lbl')}
+  ${arc(100, 160, 110, 55, -55, 1)}${arc(260, 160, 110, 125, 235, 0)}
+  <line x1="180" y1="50" x2="180" y2="270" class="acc" style="stroke-width:2.2"/>${T(190, 56, 'locus: points equidistant from A and B', 'lbl')}
+  ${T(100, 290, 'Perpendicular bisector of AB', 'lbl')}
+  <line x1="520" y1="230" x2="810" y2="230" class="ln"/><line x1="520" y1="230" x2="${(520 + 290 * Math.cos(50 * Math.PI / 180)).toFixed(1)}" y2="${(230 - 290 * Math.sin(50 * Math.PI / 180)).toFixed(1)}" class="ln"/>
+  ${arc(520, 230, 90, 0, 50, 0)}${arc(610, 230, 70, 70, 40, 1)}${arc(577.9, 161.1, 70, 15, -15, 1)}
+  <line x1="520" y1="230" x2="${(520 + 300 * Math.cos(25 * Math.PI / 180)).toFixed(1)}" y2="${(230 - 300 * Math.sin(25 * Math.PI / 180)).toFixed(1)}" class="acc" style="stroke-width:2.2"/>${T(830, 50, 'angle bisector:', 'end lbl')}${T(830, 70, 'points equidistant', 'end lbl')}${T(830, 90, 'from the two lines', 'end lbl')}
+  ${T(560, 290, 'Bisector of an angle', 'mid lbl')}</svg>`;
+}
+function svgMatMul(){
+  const br = (x, y1, y2, w) => `<path d="M${x + 8} ${y1} L${x} ${y1} L${x} ${y2} L${x + 8} ${y2}" class="ln" fill="none"/><path d="M${x + w - 8} ${y1} L${x + w} ${y1} L${x + w} ${y2} L${x + w - 8} ${y2}" class="ln" fill="none"/>`;
+  return `<svg viewBox="0 0 860 260" role="img" aria-label="Multiplying matrices row by column">
+  ${T(30, 34, 'Multiply ROW by COLUMN, then add:', 'lbl')}
+  ${br(40, 56, 130, 90)}${T(62, 88, '2', 'mid mono hott')}${T(98, 88, '3', 'mid mono hott')}${T(62, 118, '1', 'mid mono')}${T(98, 118, '4', 'mid mono')}
+  ${T(160, 106, '×', 'mid lbl')}
+  ${br(190, 56, 130, 50)}${T(215, 88, '5', 'mid mono hott')}${T(215, 118, '4', 'mid mono hott')}
+  ${T(278, 106, '=', 'mid lbl')}
+  ${br(305, 56, 130, 145)}${T(440, 88, '2×5 + 3×4', 'end mono hott')}${T(440, 118, '1×5 + 4×4', 'end mono')}
+  ${T(480, 106, '=', 'mid lbl')}${br(505, 56, 130, 70)}${T(540, 88, '22', 'mid mono acct')}${T(540, 118, '21', 'mid mono acct')}
+  ${T(30, 176, 'Order (2 × 2) × (2 × 1) gives (2 × 1): the inner numbers must match.', 'acct')}
+  ${T(30, 202, 'Top answer: row 1 of the left matrix × the column.', 'mut')}${T(30, 224, 'AB is not usually the same as BA.', 'hott')}</svg>`;
 }
 const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
 const CH = {
@@ -1803,6 +1842,132 @@ tree: {
     { q: 'A spinner lands on blue with probability 0.25. It is spun 3 times. Find the probability that it lands on blue at least once.', m: 3,
       p: ['P(not blue) = ==0.75==', 'P(not blue three times) = 0.75³ = ==0.421875==', '1 − 0.421875 = ==0.578 (3 s.f.)=='] }
   ]
+},
+ineq: {
+  code: 'Graphs', name: 'Regions and inequalities on graphs',
+  lede: 'Show inequalities as shaded regions on a coordinate grid, and write inequalities for a region you can see.',
+  learn: [
+    { h: 'Drawing the boundary', list: ['Treat the inequality as an ==equation== and draw the ==boundary line==: x = 1 is ==vertical==, y = 4 is ==horizontal==, y = x + 2 is a ==sloping line== (use a table of two or three points).', 'Use a ==solid line== for ==≤ or ≥== (points on the line are included).', 'Use a ==dashed line== for ==< or >== (points on the line are not included).'] },
+    { h: 'Choosing the side', list: ['==Test a point== that is ==not on the line==. (0, 0) is easiest, unless the line goes through the origin.', 'If the test point makes the inequality ==true==, that side is the one you want. If ==false==, the other side.', 'Read the question: it may ask you to ==shade the wanted region== or to ==shade the unwanted regions== and leave R clear.', 'For ==several inequalities==, the region R must satisfy ==all of them== at once.'], table: [['Inequality', 'Line', 'Region'], ['x ≥ 2', 'vertical, solid', 'to the ==right== of the line'], ['x < 2', 'vertical, dashed', 'to the ==left== of the line'], ['y ≤ 3', 'horizontal, solid', '==below== the line'], ['y > 3', 'horizontal, dashed', '==above== the line'], ['y ≥ x + 1', 'sloping, solid', '==above== the line']] },
+    { h: 'Writing inequalities and counting points', list: ['To write an inequality for a region: find the ==equation of each boundary line==, decide ==solid or dashed==, then ==test a point== inside to choose the sign.', 'A point is in the region if its coordinates ==make every inequality true==.', 'To count ==integer points== (whole-number coordinates), list them ==column by column== and check ==solid boundaries are included==.'] }
+  ],
+  mistakes: ['Using a ==solid line for < or >== (it must be dashed).', 'Shading the ==wrong side== because you did not test a point.', 'Testing a point ==on the line==.', 'Forgetting that ==y ≥ x means above the line== y = x.', 'Missing ==boundary points== when counting (for ≤ and ≥ they count).'],
+  diagrams: [{ svg: svgRegion, cap: 'A region from ==three inequalities==. Solid lines because of ==≤ and ≥==.' }],
+  worked: [
+    W('Show whether the point (2, 3) satisfies y ≥ x + 1.', '==Substitute== the coordinates and see if the statement is true.', 'x is the first number, y is the second.', 'x = 2, y = 3',
+      [['Substitute', 'y = 3 and x + 1 = 2 + 1 = 3', ''], ['Compare', '3 ≥ 3 is true (equal counts for ≥)', 'The point is on the boundary.'], ['Answer', 'Yes, (2, 3) satisfies it', 'It would not for y > x + 1.']],
+      [['x, y', '2 and 3', -1], ['x + 1', '3', 0], ['Is 3 ≥ 3?', 'true', 1], ['Answer', 'yes', 2]]),
+    W('Draw and shade the region y < 2x + 1 for 0 ≤ x ≤ 3. State which side is wanted.', 'Draw the ==line== y = 2x + 1, then ==test (0, 0)==.', 'The line is dashed because the sign is <.', 'Dashed line, then test (0, 0)',
+      [['Table of values', 'x = 0 gives y = 1; x = 3 gives y = 7', 'Two points are enough.'], ['Line type', 'Dashed, because of <', ''], ['Test (0, 0)', '0 < 2(0) + 1 means 0 < 1: true', 'The origin is not on the line.'], ['Region', 'Shade the side containing the origin: below the line', '']],
+      [['Points', '(0, 1) and (3, 7)', 0], ['Line', 'dashed', 1], ['Test', '0 < 1 true', 2], ['Region', 'below the line', 3]], true),
+    W('Write down the inequalities that define the triangle with boundaries x = 1 (solid), y = 4 (solid) and y = x (solid), where the region is right of x = 1, below y = 4 and above y = x.', 'Take each boundary ==in turn== and choose the sign.', 'Solid lines mean ≤ or ≥.', 'one inequality per line',
+      [['Line x = 1', 'Region is to the right: x ≥ 1', ''], ['Line y = 4', 'Region is below: y ≤ 4', ''], ['Line y = x', 'Region is above: y ≥ x', 'Test (2, 3): 3 ≥ 2 ✓.'], ['Answer', 'x ≥ 1,  y ≤ 4,  y ≥ x', '']],
+      [['x = 1', 'x ≥ 1', 0], ['y = 4', 'y ≤ 4', 1], ['y = x', 'y ≥ x', 2]], true),
+    W('Find how many points with whole-number coordinates satisfy 2x + y ≤ 8, x ≥ 0 and y ≥ 0.', 'List by ==column== (each value of x). Count the ==allowed y-values==.', 'The boundary lines are included.', '2x + y ≤ 8 gives y ≤ 8 − 2x',
+      [['x = 0', 'y from 0 to 8: 9 points', ''], ['x = 1', 'y ≤ 6: 7 points', ''], ['x = 2', 'y ≤ 4: 5 points', ''], ['x = 3', 'y ≤ 2: 3 points', ''], ['x = 4', 'y ≤ 0: 1 point', ''], ['Total', '9 + 7 + 5 + 3 + 1 = 25', '']],
+      [['x = 0', '9', 0], ['x = 1', '7', 1], ['x = 2', '5', 2], ['x = 3', '3', 3], ['x = 4', '1', 4], ['Total', '25', 5]])
+  ],
+  drill: 'ineq',
+  quiz: [
+    { q: 'For y > 3, the boundary line is…', o: ['solid', 'dashed', 'curved', 'vertical'], a: 1, w: '==Dashed== because of >.' },
+    { q: 'x ≤ 2 is the region…', o: ['right of x = 2', 'left of x = 2 (including the line)', 'above y = 2', 'below y = 2'], a: 1, w: '==Left== of x = 2, including the line.' },
+    { q: 'Which point satisfies y ≥ x?', o: ['(3, 1)', '(1, 3)', '(4, 0)', '(2, 1)'], a: 1, w: '3 ≥ 1: ==(1, 3)==.' },
+    { q: 'To choose the side, you…', o: ['guess', 'test a point not on the line', 'use the gradient', 'shade both sides'], a: 1, w: '==Test a point== not on the line.' },
+    { q: 'How many integer points satisfy 1 ≤ x ≤ 3 and 2 ≤ y ≤ 4?', o: ['6', '9', '12', '3'], a: 1, w: '3 × 3 = ==9==.' },
+    { q: 'y ≥ x + 1 is the region…', o: ['above the line y = x + 1', 'below the line y = x + 1', 'left of it', 'right of it'], a: 0, w: '==Above== the line.' }
+  ],
+  exam: [
+    { q: 'On a grid, draw the lines x = 2, y = 5 and y = x + 1. Shade the region where x ≥ 2, y ≤ 5 and y ≥ x + 1.', m: 4,
+      p: ['==x = 2== drawn correctly (solid)', '==y = 5== drawn correctly (solid)', '==y = x + 1== drawn correctly (solid)', 'correct triangle ==(2, 3), (2, 5), (4, 5)== identified'] },
+    { q: 'Write down the integer coordinates of all points that satisfy 1 ≤ x ≤ 2 and 3 ≤ y ≤ 4.', m: 2,
+      p: ['at least ==three== correct points', 'all four: ==(1, 3), (1, 4), (2, 3), (2, 4)=='] },
+    { q: 'The point (3, 5) lies in the region y > 2x − 2. Show this.', m: 2,
+      p: ['2 × 3 − 2 = ==4==', '5 > 4 so ==true==, the point is in the region'] }
+  ]
+},
+loci: {
+  code: 'Geometry', name: 'Loci and constructions',
+  lede: 'A locus is a path of points that follow a rule. Learn the four standard loci and how to construct them with a pair of compasses.',
+  learn: [
+    { h: 'The four standard loci', table: [['Rule', 'Locus', 'Shape'], ['a ==fixed distance from a point==', '==circle==', 'centre at the point'], ['a ==fixed distance from a line== (segment)', 'two ==parallel lines== joined by ==semicircles==', 'a “racetrack”'], ['==equidistant from two points== A and B', '==perpendicular bisector== of AB', 'a straight line'], ['==equidistant from two lines== that meet', '==angle bisector==', 'a straight line']], list: ['“==Within== 3 cm” means the ==region inside== the boundary. “==Exactly== 3 cm” is the boundary.', 'In ==scale drawings==, convert real lengths first: 1 cm = 2 m means 8 m is 4 cm.'] },
+    { h: 'Constructions (compasses, no protractor)', list: ['==Perpendicular bisector== of AB: open the compasses ==more than half of AB==, draw arcs from ==A and B== above and below, join the two crossing points.', '==Angle bisector==: draw an arc to cut both arms, then arcs from those two points that ==cross inside the angle==. Join the vertex to the crossing.', '==Equilateral triangle / 60°==: arcs of the ==same radius== from both ends of a line.', '==Perpendicular from a point to a line==: arcs on the line from the point, then arcs from those marks.', '==Never rub out== your construction arcs: they earn the marks.'] },
+    { h: 'Using loci to solve problems', list: ['Draw each rule as its own ==locus==, then find where they ==overlap==.', 'The answer is the ==region== or ==point== that meets ==all== the rules.', 'Use a ==sharp pencil== and measure accurately: marks are lost for sloppy arcs.', 'Areas: circle = ==πr²==; “goat on a rope” problems use ==fractions of a circle==.'] }
+  ],
+  mistakes: ['Drawing the bisector ==by eye== instead of with arcs.', 'Using a ==different radius== for the two arcs from A and B.', 'Setting the compasses ==less than half== of AB.', 'Rubbing out ==construction arcs==.', 'Shading the ==wrong side== of a boundary (inside vs outside).'],
+  diagrams: [{ svg: svgLoci, cap: 'The ==perpendicular bisector== (left) and the ==angle bisector== (right) with their construction arcs.' }],
+  worked: [
+    W('A dog is tied by a 4 m lead to a post in an open field. Describe the locus of the farthest point it can reach, and find the area it can cover.', 'A ==fixed distance from a point== is a ==circle==.', 'Area of a circle is π r².', 'circle, radius 4 m',
+      [['Locus', 'A circle with centre at the post and radius 4 m', ''], ['Area formula', 'A = π r²', ''], ['Substitute', 'A = π × 4² = 16π', ''], ['Answer', 'A = 50.3 m² (3 s.f.)', 'Using π = 3.142.']],
+      [['Radius', '4 m', -1], ['Formula', 'π r²', 1], ['Area', '16π', 2], ['Answer', '50.3 m²', 3]]),
+    W('A goat is tied by a 3 m rope to the corner of a rectangular shed. The shed is large. Find the area it can graze.', 'At a ==corner==, the goat can swing round ==270°==, which is ==3/4 of a circle==.', 'Draw the shed first.', '3/4 of a circle',
+      [['Shape', 'The shed blocks 90°, so the goat covers 360° − 90° = 270°', '270/360 = 3/4.'], ['Full circle', 'π × 3² = 9π', ''], ['3/4 of it', '3/4 × 9π = 6.75π', ''], ['Answer', '21.2 m² (3 s.f.)', '']],
+      [['Angle', '270°', 0], ['Circle', '9π', 1], ['Fraction', '3/4', 2], ['Area', '21.2 m²', 3]]),
+    W('Describe how to construct the perpendicular bisector of a line AB.', 'Use ==compasses only==. Keep ==the same radius== for both arcs.', 'Write the steps in order.', 'Arcs from A and B',
+      [['Set the compasses', 'Open them to more than half the length of AB', ''], ['Arc from A', 'Draw arcs above and below the line', ''], ['Arc from B', 'With the same radius, draw arcs that cross the first ones', 'Two crossing points.'], ['Join', 'Draw a straight line through the two crossing points', 'This line is the perpendicular bisector.']],
+      [['Radius', 'more than half AB', 0], ['A', 'arcs', 1], ['B', 'same radius', 2], ['Line', 'through crossings', 3]], true),
+    W('Points A and B are 6 cm apart. Shade the region of points that are within 2 cm of the line segment AB, and calculate its area.', 'The boundary is a ==racetrack==: two lines and two semicircles.', 'The two semicircles make one whole circle.', 'rectangle + circle',
+      [['Rectangle', '6 × (2 + 2) = 24 cm²', 'Length 6, width 4 (2 on each side).'], ['Two semicircles', 'together one circle: π × 2² = 4π = 12.57 cm²', ''], ['Total area', '24 + 12.57 = 36.6 cm² (3 s.f.)', '']],
+      [['Rectangle', '24 cm²', 0], ['Circle', '12.57 cm²', 1], ['Total', '36.6 cm²', 2]])
+  ],
+  drill: 'loci',
+  quiz: [
+    { q: 'The locus of points equidistant from two fixed points A and B is…', o: ['a circle', 'the perpendicular bisector of AB', 'the angle bisector', 'a parallel line'], a: 1, w: 'The ==perpendicular bisector== of AB.' },
+    { q: 'The locus of points 5 cm from a point is…', o: ['a circle of radius 5 cm', 'two parallel lines', 'a straight line', 'a square'], a: 0, w: 'A ==circle==, radius 5 cm.' },
+    { q: 'Which locus is a bisector of an angle?', o: ['equidistant from two points', 'equidistant from two lines', 'fixed distance from a point', 'fixed distance from a line'], a: 1, w: '==Equidistant from two lines==.' },
+    { q: 'When constructing a perpendicular bisector, the compass radius must be…', o: ['less than half AB', 'exactly AB', 'more than half AB', 'any size'], a: 2, w: '==More than half== of AB.' },
+    { q: 'You should…', o: ['rub out construction arcs', 'keep construction arcs', 'use a protractor', 'draw by eye'], a: 1, w: '==Keep== them.' },
+    { q: 'A goat on a 2 m rope tied to a corner of a large shed covers 3/4 of a circle. Its area is…', o: ['3π', '4π', '1.5π', '2π'], a: 0, w: '3/4 × π × 4 = ==3π==.' }
+  ],
+  exam: [
+    { q: 'A, B and C are points on a plan. Describe the locus of points that are equidistant from A and B.', m: 2,
+      p: ['the ==perpendicular bisector== of AB', '(a straight line at ==right angles== through the midpoint of AB)'] },
+    { q: 'A horse is tied by a rope of length 6 m to the corner of a shed. Calculate the area of grass it can reach when it moves through 270°.', m: 3,
+      p: ['area of full circle = π × 6² = ==113.1==', '270/360 = ==3/4==', '==84.8 m²== (3 s.f.)'] },
+    { q: 'Using a ruler and compasses only, construct the bisector of angle PQR. Show your construction arcs.', m: 3,
+      p: ['arc from Q cutting ==both arms==', 'two ==equal arcs== from those points crossing inside the angle', 'line from Q through the ==crossing point=='] }
+  ]
+},
+matx: {
+  code: 'Number', name: 'Matrices',
+  lede: 'A matrix is a rectangular block of numbers. Learn to add, multiply and find the determinant and inverse of a 2 × 2 matrix.',
+  learn: [
+    { h: 'Matrices and their order', list: [`A ==matrix== is an array of numbers in ==rows== and ==columns==. Example: ${M([2, 3], [1, 4])}.`, 'The ==order== is ==rows × columns==. This matrix is ==2 × 2==. A matrix with 2 rows and 1 column is ==2 × 1==.', 'To ==add or subtract== matrices they must have the ==same order==: add ==matching entries==.', 'A ==scalar multiple== multiplies ==every entry==: 3 times a matrix.'] },
+    { h: 'Multiplying matrices', list: ['Multiply ==row by column==: ==multiply matching entries, then add==.', 'Orders: (a × b) times (b × c) gives (a × c). The ==inner numbers must match==.', 'The entry in ==row 1, column 2== of the answer comes from ==row 1== of the left matrix and ==column 2== of the right.', 'Order matters: ==AB is not usually BA==.', `The ==identity matrix== ${M([1, 0], [0, 1])} leaves a matrix unchanged: AI = IA = A.`] },
+    { h: 'Determinant and inverse (2 × 2)', list: [`For ${M(['a', 'b'], ['c', 'd'])}, the ==determinant== is ==ad − bc==.`, `The ==inverse== is ${M(['d', '−b'], ['−c', 'a'])} divided by the determinant (multiply by ==1 ÷ det==).`, 'If the determinant is ==0==, the matrix has ==no inverse== (it is ==singular==).', 'Check: a matrix times its inverse gives the ==identity==.'] }
+  ],
+  mistakes: ['Adding matrices of ==different orders==.', '==Multiplying entry by entry== instead of row by column.', 'Forgetting that ==AB ≠ BA==.', 'Swapping the ==wrong entries== in the inverse: swap a and d, ==change the signs of b and c==.', 'Forgetting to ==divide by the determinant==.'],
+  diagrams: [{ svg: svgMatMul, cap: 'Multiply ==row by column==, then add.' }],
+  worked: [
+    W(`A = ${M([2, 3], [1, 4])} and B = ${M([5, 1], [0, 2])}. Find A + B and 3A.`, 'Same order: add ==matching entries==. For a scalar, multiply ==every entry==.', 'Check the orders first.', 'matching entries',
+      [['A + B', `${M(['2 + 5', '3 + 1'], ['1 + 0', '4 + 2'])} = ${M([7, 4], [1, 6])}`, 'Add entry by entry.'], ['3A', `${M(['3×2', '3×3'], ['3×1', '3×4'])} = ${M([6, 9], [3, 12])}`, 'Multiply every entry by 3.']],
+      [['A + B', '[7 4; 1 6]', 0], ['3A', '[6 9; 3 12]', 1]], true),
+    W(`Work out ${M([2, 3], [1, 4])} × ${M([5], [4])}.`, '==Row by column==. The answer is a 2 × 1 matrix.', 'Top entry uses row 1; bottom uses row 2.', 'row × column',
+      [['Order', '(2 × 2) × (2 × 1) gives 2 × 1', 'Inner numbers match.'], ['Top entry', '2 × 5 + 3 × 4 = 10 + 12 = 22', 'Row 1.'], ['Bottom entry', '1 × 5 + 4 × 4 = 5 + 16 = 21', 'Row 2.'], ['Answer', M([22], [21]), '']],
+      [['Order', '2 × 1', 0], ['Top', '22', 1], ['Bottom', '21', 2]]),
+    W(`A = ${M([2, 3], [1, 4])} and B = ${M([1, 2], [3, 0])}. Find AB and BA.`, 'Four entries each. ==Row × column== every time.', 'AB and BA are different.', 'AB ≠ BA',
+      [['AB: top row', '2×1 + 3×3 = 11,   2×2 + 3×0 = 4', ''], ['AB: bottom row', '1×1 + 4×3 = 13,   1×2 + 4×0 = 2', ''], ['AB', M([11, 4], [13, 2]), ''], ['BA', `${M(['1×2 + 2×1', '1×3 + 2×4'], ['3×2 + 0×1', '3×3 + 0×4'])} = ${M([4, 11], [6, 9])}`, 'Different from AB.']],
+      [['AB', '[11 4; 13 2]', 2], ['BA', '[4 11; 6 9]', 3]], true),
+    W(`Find the determinant and the inverse of ${M([2, 1], [5, 3])}.`, 'det = ==ad − bc==. Then swap a and d, change the signs of b and c, and divide by det.', 'Check by multiplying back.', 'det = ad − bc',
+      [['Determinant', 'ad − bc = 2 × 3 − 1 × 5 = 6 − 5 = 1', 'Not zero, so an inverse exists.'], ['Swap and change signs', M([3, '−1'], ['−5', 2]), 'a and d swap; b and c change sign.'], ['Divide by 1', `Inverse = ${M([3, '−1'], ['−5', 2])}`, 'Dividing by 1 changes nothing.'], ['Check', `${M([2, 1], [5, 3])} × ${M([3, '−1'], ['−5', 2])} = ${M([1, 0], [0, 1])}`, '6 − 5 = 1, −2 + 2 = 0, 15 − 15 = 0, −5 + 6 = 1.']],
+      [['det', '1', 0], ['Swap', '[3 −1; −5 2]', 1], ['Inverse', '[3 −1; −5 2]', 2], ['Check', 'identity', 3]], true)
+  ],
+  drill: 'matx',
+  quiz: [
+    { q: 'A matrix with 3 rows and 2 columns has order…', o: ['2 × 3', '3 × 2', '6', '5'], a: 1, w: 'Rows first: ==3 × 2==.' },
+    { q: `The determinant of ${M([3, 2], [1, 4])} is…`, o: ['10', '14', '12', '1'], a: 0, w: '3 × 4 − 2 × 1 = ==10==.' },
+    { q: 'To multiply two matrices you multiply…', o: ['entry by entry', 'row by column', 'column by column', 'row by row'], a: 1, w: '==Row by column==.' },
+    { q: 'If the determinant is 0, the matrix…', o: ['is the identity', 'has no inverse', 'is symmetric', 'has order 0'], a: 1, w: 'It has ==no inverse==.' },
+    { q: 'Can a 2 × 3 matrix be multiplied by a 2 × 3 matrix?', o: ['yes', 'no', 'only if equal', 'only for square'], a: 1, w: 'Inner numbers 3 and 2 do not match: ==no==.' },
+    { q: `${M([1, 0], [0, 1])} is called the…`, o: ['zero matrix', 'identity matrix', 'inverse', 'determinant'], a: 1, w: 'The ==identity matrix==.' }
+  ],
+  exam: [
+    { q: `P = ${M([3, 1], [2, 5])} and Q = ${M([1, 2], [0, 4])}. Work out (a) P + Q [2] (b) 2P [2].`, m: 4,
+      p: [`P + Q = ${M([4, 3], [2, 9])}  (==matching entries added==)`, 'at least ==three== entries correct', `2P = ${M([6, 2], [4, 10])}`, '==every entry doubled=='] },
+    { q: `Work out ${M([1, 2], [3, 4])} × ${M([2], [1])}.`, m: 2,
+      p: ['==1 × 2 + 2 × 1== or 3 × 2 + 4 × 1', `${M([4], [10])}`] },
+    { q: `Find the inverse of ${M([4, 3], [1, 1])}.`, m: 3,
+      p: ['determinant = 4 × 1 − 3 × 1 = ==1==', 'swap a and d, change signs of b and c', `${M([1, '−3'], ['−1', 4])}`] }
+  ]
 }
 
 };
@@ -2195,10 +2360,52 @@ const DRILLS = {
       return { kind:'num', q:`The probability of a success each time is ${p}. Two independent trials are made. Find P(at least one success).`, ans, tol:0.005, s:[['None', `${num(1 - p)} × ${num(1 - p)} = ${num((1 - p) * (1 - p))}`], ['1 −', `${ans}`]] }; },
     () => { const p = pick([0.1, 0.2, 0.25, 0.4, 0.5]), n = pick([40, 100, 200, 500]), ans = p * n;
       return { kind:'num', q:`The probability that a seed grows is ${p}. How many of ${n} seeds are expected to grow?`, ans, tol:0, s:[['Expected number', `${p} × ${n} = ${ans}`]] }; }
+  ],
+  ineq: [
+    () => { const m = pick([1, 2, 3, -1]), c = rint(-3, 4), sgnI = pick(['≥', '≤', '>', '<']), px = rint(-3, 4), py = rint(-4, 8), rhs = m * px + c;
+      const ok = sgnI === '≥' ? py >= rhs : sgnI === '≤' ? py <= rhs : sgnI === '>' ? py > rhs : py < rhs; const line = m === 1 ? 'x' : m === -1 ? '−x' : m + 'x';
+      return choiceItem(`Does the point (${px}, ${py}) satisfy y ${sgnI} ${line} ${c < 0 ? '− ' + (-c) : '+ ' + c}?`, ok ? 'yes' : 'no', [ok ? 'no' : 'yes'], [['Substitute', `y = ${py}; ${line.replace('x', '(' + px + ')')} ${sgn(c)} = ${rhs}`], ['Compare', `${py} ${sgnI} ${rhs} is ${ok ? 'true' : 'false'}`]]); },
+    () => { const x1 = rint(0, 3), x2 = x1 + rint(1, 4), y1 = rint(0, 3), y2 = y1 + rint(1, 4), ans = (x2 - x1 + 1) * (y2 - y1 + 1);
+      return { kind:'num', q:`How many points with whole-number coordinates satisfy ${x1} ≤ x ≤ ${x2} and ${y1} ≤ y ≤ ${y2}?`, ans, tol:0, s:[['x-values', `${x2 - x1 + 1}`], ['y-values', `${y2 - y1 + 1}`], ['Multiply', `${ans}`]] }; },
+    () => { const a = rint(1, 3), k = a + rint(2, 4), ans = (k - a + 1) * (k - a + 2) / 2;
+      return { kind:'num', q:`How many integer points satisfy x ≥ ${a}, y ≤ ${k} and y ≥ x?`, ans, tol:0, s:[['Column by column', `x = ${a} gives ${k - a + 1} points, then one fewer each time`], ['Total', `${ans}`]] }; },
+    () => { const it = pick([['<', 'dashed'], ['>', 'dashed'], ['≤', 'solid'], ['≥', 'solid']]);
+      return choiceItem(`The boundary line for y ${it[0]} 2x + 1 is…`, it[1], ['solid', 'dashed'].filter(x => x !== it[1]), [['Rule', '≤ ≥ solid; < > dashed']]); },
+    () => { const it = pick([['x ≥ 3', 'right of the line x = 3, including the line'], ['x < 3', 'left of the line x = 3, not including the line'], ['y ≤ 3', 'below the line y = 3, including the line'], ['y > 3', 'above the line y = 3, not including the line']]);
+      return choiceItem(`Where is the region ${it[0]}?`, it[1], ['right of the line x = 3, including the line', 'left of the line x = 3, not including the line', 'below the line y = 3, including the line', 'above the line y = 3, not including the line'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
+  ],
+  loci: [
+    () => { const r = rint(2, 9), ans = Math.PI * r * r;
+      return { kind:'num', q:`A dog is tied by a ${r} m lead to a post in open ground. Find the area it can reach (m², 1 d.p.).`, ans:Math.round(ans * 100) / 100, tol:0.1, s:[['Circle', `π × ${r}² = ${num(ans)} m²`]] }; },
+    () => { const r = rint(2, 8), f = pick([['3/4', 0.75], ['1/2', 0.5], ['1/4', 0.25]]), ans = f[1] * Math.PI * r * r;
+      return { kind:'num', q:`A goat is tied by a ${r} m rope so that it can cover ${f[0]} of a circle. Find its grazing area (m², 1 d.p.).`, ans:Math.round(ans * 100) / 100, tol:0.1, s:[['Full circle', `π × ${r}² = ${num(Math.PI * r * r)}`], ['Fraction', `${f[0]} × ${num(Math.PI * r * r)} = ${num(ans)} m²`]] }; },
+    () => { const L = rint(4, 10), r = rint(1, 4), ans = 2 * r * L + Math.PI * r * r;
+      return { kind:'num', q:`Find the area of the region within ${r} cm of a line segment ${L} cm long (cm², 1 d.p.).`, ans:Math.round(ans * 100) / 100, tol:0.1, s:[['Rectangle', `${L} × ${2 * r} = ${2 * r * L}`], ['Circle (two semicircles)', `π × ${r}² = ${num(Math.PI * r * r)}`], ['Total', `${num(ans)} cm²`]] }; },
+    () => { const it = pick([['a fixed distance from a point', 'a circle'], ['equidistant from two points', 'the perpendicular bisector'], ['equidistant from two intersecting lines', 'the angle bisector'], ['a fixed distance from a straight line', 'two parallel lines with semicircular ends']]);
+      return choiceItem(`The locus of points ${it[0]} is…`, it[1], ['a circle', 'the perpendicular bisector', 'the angle bisector', 'two parallel lines with semicircular ends'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const sc = pick([2, 5, 10, 20]), L = rint(2, 8), ans = L * sc;
+      return { kind:'num', q:`A scale drawing uses 1 cm to represent ${sc} m. A path is ${L} cm on the drawing. How long is it in real life (m)?`, ans, tol:0, s:[['Multiply', `${L} × ${sc} = ${ans} m`]] }; }
+  ],
+  matx: [
+    () => { const a = [rint(-3, 6), rint(-3, 6), rint(-3, 6), rint(-3, 6)], b = [rint(-3, 6), rint(-3, 6), rint(-3, 6), rint(-3, 6)], k = rint(0, 3), pos = ['top-left', 'top-right', 'bottom-left', 'bottom-right'][k], ans = a[k] + b[k];
+      return { kind:'num', q:`A = ${M([a[0], a[1]], [a[2], a[3]])}, B = ${M([b[0], b[1]], [b[2], b[3]])}. Find the ${pos} entry of A + B.`, ans, tol:0, s:[['Add matching entries', `${a[k]} + (${b[k]}) = ${ans}`]] }; },
+    () => { const a = [rint(1, 6), rint(1, 6), rint(1, 6), rint(1, 6)], s = rint(2, 4), k = rint(0, 3), pos = ['top-left', 'top-right', 'bottom-left', 'bottom-right'][k];
+      return { kind:'num', q:`A = ${M([a[0], a[1]], [a[2], a[3]])}. Find the ${pos} entry of ${s}A.`, ans:s * a[k], tol:0, s:[['Multiply every entry', `${s} × ${a[k]} = ${s * a[k]}`]] }; },
+    () => { const a = [rint(1, 5), rint(1, 5), rint(1, 5), rint(1, 5)], v = [rint(1, 5), rint(1, 5)], k = rint(0, 1), pos = k ? 'bottom' : 'top', ans = a[2 * k] * v[0] + a[2 * k + 1] * v[1];
+      return { kind:'num', q:`Work out ${M([a[0], a[1]], [a[2], a[3]])} × ${M([v[0]], [v[1]])}. Find the ${pos} entry.`, ans, tol:0, s:[['Row by column', `${a[2 * k]} × ${v[0]} + ${a[2 * k + 1]} × ${v[1]} = ${ans}`]] }; },
+    () => { const a = [rint(1, 4), rint(1, 4), rint(1, 4), rint(1, 4)], b = [rint(1, 4), rint(1, 4), rint(1, 4), rint(1, 4)], ans = a[0] * b[0] + a[1] * b[2];
+      return { kind:'num', q:`A = ${M([a[0], a[1]], [a[2], a[3]])}, B = ${M([b[0], b[1]], [b[2], b[3]])}. Find the top-left entry of AB.`, ans, tol:0, s:[['Row 1 × column 1', `${a[0]} × ${b[0]} + ${a[1]} × ${b[2]} = ${ans}`]] }; },
+    () => { const a = rint(-3, 7), b = rint(-3, 7), c = rint(-3, 7), d = rint(-3, 7), ans = a * d - b * c;
+      return { kind:'num', q:`Find the determinant of ${M([a, b], [c, d])}.`, ans, tol:0, s:[['ad − bc', `${a} × ${d} − (${b}) × (${c}) = ${ans}`]] }; },
+    () => { let a, b, c, d, det; do { a = rint(1, 6); b = rint(1, 5); c = rint(1, 5); d = rint(1, 6); det = a * d - b * c; } while (det === 0 || Math.abs(det) > 4);
+      const n = d, sg = det < 0 ? -1 : 1, ans = fr(n * sg, Math.abs(det));
+      return { kind:'frac', q:`The inverse of ${M([a, b], [c, d])} is (1 ÷ det) × ${M(['d', '−b'], ['−c', 'a'])}. Find the TOP-LEFT entry of the inverse (as a fraction, like 3/2 or −2).`, ans, s:[['Determinant', `${a} × ${d} − ${b} × ${c} = ${det}`], ['Top-left', `${d} ÷ ${det} = ${ans}`]] }; },
+    () => { const it = pick([['2 × 3', '3 × 1', 'yes, giving a 2 × 1 matrix'], ['2 × 2', '2 × 2', 'yes, giving a 2 × 2 matrix'], ['2 × 3', '2 × 3', 'no'], ['1 × 2', '2 × 2', 'yes, giving a 1 × 2 matrix']]);
+      return choiceItem(`Can a ${it[0]} matrix be multiplied by a ${it[1]} matrix (in that order)?`, it[2], ['yes, giving a 2 × 1 matrix', 'yes, giving a 2 × 2 matrix', 'no', 'yes, giving a 1 × 2 matrix'].filter(x => x !== it[2]).slice(0, 3), [['Rule', 'inner numbers must match; outer numbers give the order']]); }
   ]
 };
 
-let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0]];
+let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0],['ineq',0],['loci',0],['matx',0]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -2214,7 +2421,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['ineq','Graphs','Inequality regions'],['loci','Geometry','Loci'],['matx','Number','Matrices'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2231,13 +2438,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func','bear','graph','tree'];
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func','bear','graph','tree','ineq','loci','matx'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
-  <p class="lede">Twenty-six topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Twenty-nine topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
