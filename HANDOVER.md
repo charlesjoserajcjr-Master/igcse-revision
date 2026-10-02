@@ -42,7 +42,7 @@ Term 1 packs (`physics.html`, `chemistry.html`, `cs.html`) are frozen and labell
 5. Optional: a shared progress view for the parent (would need a backend or a hosted store; currently progress is per-device `localStorage`).
 
 ## Full-year Physics progress
-`physics-year.html` now has Term 1 chapters (Density, Thermal, Sound) plus Motion, Forces, Energy/work/power, Pressure, Particles/states of matter (topics 1 and 2), Waves, Light, EM spectrum (topic 3), Electric circuits and Magnetism/electromagnetism (topic 4). Still to add: measurement and momentum, thermal properties (specific heat, expansion), nuclear physics, space.
+`physics-year.html` now covers the whole 0625 course in 18 chapters: Term 1 (Density, Thermal energy transfer, Sound) plus Motion, Forces, Energy/work/power, Pressure, Particles, Waves, Light, EM spectrum, Electric circuits, Magnetism, Measurement, Momentum, Thermal properties, Atoms and radioactivity, Space. Possible additions later: more exam-style questions per chapter, Extended-only topics (e.g. lenses calculations), and the school's Term 2/3 chapter order.
 
 ## Known limitations
 - Progress is saved only in the browser on that device.

@@ -500,6 +500,61 @@ function svgTransformer(){
   ${T(120, 130, 'primary', 'end acct')}${T(120, 150, 'Np turns, Vp', 'end acct')}${T(450, 130, 'secondary', 'hott')}${T(450, 150, 'Ns turns, Vs', 'hott')}${T(290, 40, 'iron core', 'mid mut')}
   ${T(540, 60, 'Vp ÷ Vs = Np ÷ Ns', 'mono acct')}${T(540, 92, 'Step-up: more turns on secondary.', 'mut')}${T(540, 114, 'Step-down: fewer turns.', 'mut')}${T(540, 148, 'Works only with a.c.', 'lbl')}${T(540, 182, '100%: Vp × Ip = Vs × Is', 'mono')}</svg>`;
 }
+const sci = x => { const e = Math.floor(Math.log10(x)); const m = x / 10 ** e; return m.toFixed(2).replace(/\.?0+$/, '') + ' × 10' + String(e).split('').map(c => '⁰¹²³⁴⁵⁶⁷⁸⁹'[c] || '⁻').join(''); };
+function svgPendulum(){
+  return `<svg viewBox="0 0 800 260" role="img" aria-label="Timing a pendulum">
+  <line x1="120" y1="30" x2="260" y2="30" class="ln"/><line x1="190" y1="30" x2="190" y2="190" class="thin" stroke-dasharray="5 4"/>
+  <line x1="190" y1="30" x2="120" y2="170" class="ln"/><circle cx="120" cy="178" r="14" class="accf" style="fill-opacity:.6;stroke:var(--accent);stroke-width:2"/><circle cx="260" cy="178" r="14" class="cardf" style="stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 3"/>
+  ${T(190, 222, 'one oscillation: there and back', 'mid mut')}
+  ${T(340, 56, 'Timing a pendulum', 'lbl')}${T(340, 84, '1. Time 20 oscillations, not 1.', 'mono')}${T(340, 108, '2. Repeat and take an average.', 'mono')}${T(340, 132, '3. T = total time ÷ number of swings', 'mono acct')}${T(340, 168, 'Timing many swings reduces the', 'mut')}${T(340, 188, 'effect of your reaction time.', 'mut')}</svg>`;
+}
+function svgCollision(){
+  const cart = (x, y, m, col) => `<rect x="${x}" y="${y}" width="${40 + m * 20}" height="34" rx="5" class="${col}" style="fill-opacity:.35;stroke:var(--ink);stroke-width:2"/>${T(x + 20 + m * 10, y + 22, m + ' kg', 'mid mono lbl')}<circle cx="${x + 10}" cy="${y + 40}" r="6" class="inkf"/><circle cx="${x + 30 + m * 20}" cy="${y + 40}" r="6" class="inkf"/>`;
+  return `<svg viewBox="0 0 800 260" role="img" aria-label="Collision where two trolleys stick together">${arrowDefs('c')}
+  ${T(30, 24, 'BEFORE', 'lbl')}${cart(50, 70, 2, 'accf')}${cart(250, 70, 1, 'hotf')}<line x1="50" y1="62" x2="110" y2="62" class="acc" marker-end="url(#b-c)"/>${T(80, 54, '3 m/s', 'mid mono acct')}${T(270, 58, 'at rest', 'mono mut')}
+  ${T(30, 150, 'AFTER', 'lbl')}${cart(120, 190, 2, 'accf')}${cart(200, 190, 1, 'hotf')}<line x1="120" y1="182" x2="190" y2="182" class="acc" marker-end="url(#b-c)"/>${T(150, 174, '? m/s', 'mid mono acct')}
+  ${T(420, 56, 'Momentum before = momentum after', 'lbl')}${T(420, 86, 'before: 2 × 3 + 1 × 0 = 6 kg m/s', 'mono')}${T(420, 112, 'after:  (2 + 1) × v = 6', 'mono')}${T(420, 138, 'v = 6 ÷ 3 = 2 m/s', 'mono acct')}${T(420, 176, 'p = m × v   (vector: has direction)', 'mono hott')}</svg>`;
+}
+function svgHeatCurve(){
+  const X = t => 70 + 9 * t, Y = c => 200 - 1.4 * (c + 20);
+  return `<svg viewBox="0 0 800 260" role="img" aria-label="Heating curve">
+  <line x1="${X(0)}" y1="${Y(-20)}" x2="${X(50)}" y2="${Y(-20)}" class="ln"/><line x1="${X(0)}" y1="${Y(-20)}" x2="${X(0)}" y2="${Y(125)}" class="ln"/>
+  <polyline points="${X(0)},${Y(-15)} ${X(8)},${Y(0)} ${X(20)},${Y(0)} ${X(30)},${Y(100)} ${X(42)},${Y(100)} ${X(48)},${Y(120)}" class="acc" fill="none"/>
+  ${T(X(4) - 12, Y(-8) - 20, 'solid', 'mid')}${T(X(14), Y(0) - 8, 'melting', 'mid hott')}${T(X(24) - 14, Y(50), 'liquid', 'mid')}${T(X(36), Y(100) - 8, 'boiling', 'mid hott')}${T(X(46) + 6, Y(120) + 20, 'gas', 'mid')}
+  ${T(X(25), Y(-20) + 22, 'time (heating at a steady rate)', 'mid lbl')}${T(24, 16, 'temperature (°C)', 'lbl')}${T(X(0) - 8, Y(0) + 4, '0', 'end mut')}${T(X(0) - 8, Y(100) + 4, '100', 'end mut')}
+  ${T(540, 60, 'Flat parts: temperature constant.', 'lbl')}${T(540, 84, 'Energy breaks bonds (latent heat).', 'mut')}${T(540, 120, 'Sloping parts: E = m × c × Δθ', 'mono acct')}${T(540, 148, 'Flat parts:     E = m × L', 'mono hott')}</svg>`;
+}
+function svgDecay(){
+  const X = t => 70 + 100 * t, Y = n => 200 - 1.7 * n; const pts = []; for (let t = 0; t <= 4.001; t += 0.25) pts.push(`${X(t)},${Y(100 * Math.pow(0.5, t))}`);
+  return `<svg viewBox="0 0 800 260" role="img" aria-label="Radioactive decay curve and half-life">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(4.2)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(108)}" class="ln"/>
+  <polyline points="${pts.join(' ')}" class="acc" fill="none"/>
+  ${[[1, 50], [2, 25], [3, 12.5]].map(([t, n]) => `<polyline points="${X(0)},${Y(n)} ${X(t)},${Y(n)} ${X(t)},${Y(0)}" class="hotl" fill="none" stroke-dasharray="5 4"/>${T(X(t), Y(0) + 18, t, 'mid mono hott')}${T(X(0) - 8, Y(n) + 4, n, 'end mono mut')}`).join('')}${T(X(0) - 8, Y(100) + 4, '100', 'end mono mut')}
+  ${T(560, 56, 'Half-life:', 'lbl')}${T(560, 78, 'time for half the nuclei', 'mut')}${T(560, 98, '(or the count rate) to halve.', 'mut')}${T(560, 134, 'After n half-lives:', 'mono')}${T(560, 158, 'fraction left = (½)ⁿ', 'mono acct')}${T(X(2), Y(0) + 40, 'time (half-lives)', 'mid lbl')}${T(24, 16, 'nuclei or count rate', 'lbl')}</svg>`;
+}
+function svgAtomNuc(){
+  const dots = [[0, 0, 1], [10, 6, 0], [-8, 8, 1], [4, -10, 0], [-6, -6, 0], [10, -4, 1]].map(([x, y, p]) => `<circle cx="${180 + x}" cy="${120 + y}" r="7" class="${p ? 'hotf' : 'accf'}" style="fill-opacity:.55;stroke:var(--ink);stroke-width:1"/>`).join('');
+  return `<svg viewBox="0 0 800 250" role="img" aria-label="Nuclear model of the atom">
+  <circle cx="180" cy="120" r="90" class="thin" fill="none"/><circle cx="180" cy="120" r="55" class="thin" fill="none"/>${dots}
+  <circle cx="180" cy="30" r="5" class="inkf"/><circle cx="235" cy="120" r="5" class="inkf"/><circle cx="125" cy="120" r="5" class="inkf"/>
+  ${T(180, 232, 'protons (red), neutrons (blue), electrons (black)', 'mid mut')}
+  ${T(380, 50, 'Particle   charge   mass', 'mono lbl')}${T(380, 78, 'proton      +1       1', 'mono')}${T(380, 102, 'neutron      0       1', 'mono')}${T(380, 126, 'electron    −1     1/1840', 'mono')}
+  ${T(380, 164, 'nucleon number A = protons + neutrons', 'mono acct')}${T(380, 188, 'proton number Z = protons', 'mono acct')}${T(380, 212, 'neutrons = A − Z', 'mono hott')}</svg>`;
+}
+function svgSolar(){
+  const planets = [['Mercury', 40], ['Venus', 62], ['Earth', 86], ['Mars', 108], ['Jupiter', 140], ['Saturn', 168], ['Uranus', 194], ['Neptune', 218]];
+  return `<svg viewBox="0 0 800 260" role="img" aria-label="Order of the planets from the Sun">
+  <circle cx="40" cy="130" r="22" class="hotf" style="fill-opacity:.55;stroke:var(--hot);stroke-width:2"/>${T(40, 168, 'Sun', 'mid lbl')}
+  ${planets.map(([n, r], i) => `<circle cx="${100 + i * 86}" cy="${130 - (i % 2 ? 30 : -30)}" r="${i === 4 || i === 5 ? 18 : i > 5 ? 12 : 8}" class="${n === 'Earth' ? 'accf' : 'cardf'}" style="stroke:var(--ink);stroke-width:1.5;${n === 'Earth' ? 'fill-opacity:.6;' : ''}"/>${T(100 + i * 86, 130 - (i % 2 ? 30 : -30) + (i % 2 ? -26 : 34), n, 'mid' + (n === 'Earth' ? ' acct' : ''))}`).join('')}
+  ${T(400, 238, 'Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune', 'mid lbl')}${T(400, 20, 'My Very Educated Mother Just Served Us Nachos   (not to scale)', 'mid mut')}</svg>`;
+}
+function svgStarLife(){
+  const box = (x, y, t, s) => `<rect x="${x}" y="${y}" width="120" height="50" rx="8" class="scr" style="stroke:var(--accent);stroke-width:1.6"/>${T(x + 60, y + 22, t, 'mid lbl')}${T(x + 60, y + 40, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 880 260" role="img" aria-label="Life cycle of stars">${arrowDefs('l')}
+  ${box(20, 100, 'nebula', 'gas and dust')}<line x1="142" y1="125" x2="196" y2="125" class="ln" marker-end="url(#a-l)"/>${box(200, 100, 'protostar', 'gravity pulls in')}<line x1="322" y1="125" x2="376" y2="125" class="ln" marker-end="url(#a-l)"/>${box(380, 100, 'main sequence', 'stable, fusion')}
+  <line x1="502" y1="110" x2="556" y2="60" class="ln" marker-end="url(#a-l)"/>${box(560, 20, 'red giant', 'Sun-like stars')}<line x1="682" y1="45" x2="722" y2="45" class="ln" marker-end="url(#a-l)"/>${T(732, 44, 'white', '')}${T(732, 60, 'dwarf', '')}
+  <line x1="502" y1="140" x2="556" y2="190" class="ln" marker-end="url(#a-l)"/>${box(560, 170, 'supergiant', 'much bigger stars')}<line x1="682" y1="195" x2="722" y2="195" class="ln" marker-end="url(#a-l)"/>${T(732, 192, 'supernova,', '')}${T(732, 208, 'neutron star', '')}${T(732, 224, 'or black hole', '')}</svg>`;
+}
 
 const CH = {
 density: {
@@ -1160,6 +1215,251 @@ magnet: {
     { q: 'Describe how a voltage is induced in a coil of wire using a magnet.', m: 3,
       p: ['Move the ==magnet== in and out of the coil (or move the coil)', 'The ==field lines are cut== by the coil', 'A ==voltage is induced== (it is bigger if the movement is faster)'] }
   ]
+},
+meas: {
+  code: 'Topic 1', name: 'Measurement',
+  lede: 'Units, prefixes and instruments, and how to measure small quantities accurately.',
+  learn: [
+    { h: 'Units and prefixes', list: ['SI units: length ==metre (m)==, mass ==kilogram (kg)==, time ==second (s)==, temperature ==kelvin (K)==, current ==ampere (A)==.', 'Prefixes: ==kilo (k) = 1000==, ==centi (c) = 1/100==, ==milli (m) = 1/1000==, ==micro (μ) = one millionth==, ==mega (M) = one million==.', '1 m = 100 cm = 1000 mm.   1 litre = 1000 cm³.   1 hour = 3600 s.', 'To change ==km/h to m/s==, multiply by 1000 and divide by 3600 (or ÷ 3.6).'] },
+    { h: 'Instruments and technique', list: ['==Metre rule== or ==tape==: length. ==Micrometer screw gauge== (0.01 mm) for small thicknesses. ==Vernier calipers== for diameters.', '==Measuring cylinder==: volume of a liquid. Read at ==eye level== at the ==bottom of the meniscus== to avoid ==parallax error==.', '==Balance==: mass. ==Stopwatch==: time. ==Thermometer==: temperature.', 'To measure ==something small== (the thickness of a sheet of paper), measure ==a stack== and ==divide by the number==.', 'To time a ==pendulum==, time ==many oscillations== (20) and divide: ==T = total time ÷ number of oscillations==. ==Repeat and average==.'] },
+    { h: 'Scalars and vectors', list: ['A ==scalar== has ==size only==: distance, speed, mass, time, energy, temperature.', 'A ==vector== has ==size and direction==: displacement, velocity, acceleration, force, weight, momentum.', 'Vectors can be shown by ==arrows==: length = size, direction = direction.'] }
+  ],
+  mistakes: ['Reading the ==top== of the meniscus.', 'Timing ==one swing== of a pendulum (reaction time error is huge).', 'Forgetting to ==convert== units before calculating.', 'Dividing by ==3.6== the wrong way: km/h to m/s is ÷ 3.6.', 'Calling ==velocity== a scalar.'],
+  diagrams: [{ svg: svgPendulum, cap: 'Time ==many oscillations== and divide to find the period.' }],
+  worked: [
+    W('Convert (a) 3.5 km to m (b) 250 mm to m (c) 0.4 litres to cm³.', 'Use the ==prefix==: kilo = ×1000, milli = ÷1000, 1 litre = 1000 cm³.', 'Larger unit to smaller unit: multiply.', 'Prefix conversions',
+      [['km to m', '3.5 × 1000 = 3500 m', 'Kilo means 1000.'], ['mm to m', '250 ÷ 1000 = 0.25 m', 'Milli means one thousandth.'], ['litres to cm³', '0.4 × 1000 = 400 cm³', '1 litre = 1000 cm³.']],
+      [['3.5 km', '3500 m', 0], ['250 mm', '0.25 m', 1], ['0.4 litre', '400 cm³', 2]]),
+    W('Convert 72 km/h to m/s.', 'Change km to m (×1000) and hours to seconds (÷3600).', 'Shortcut: divide km/h by 3.6.', '× 1000 ÷ 3600',
+      [['Kilometres to metres', '72 × 1000 = 72 000 m', ''], ['Hours to seconds', '1 hour = 3600 s', ''], ['Divide', '72 000 ÷ 3600 = 20', ''], ['Answer with unit', '20 m/s', 'Check: 72 ÷ 3.6 = 20 ✓.']],
+      [['Distance', '72 000 m', 0], ['Time', '3600 s', 1], ['Speed', '20 m/s', 3]]),
+    W('A pendulum completes 20 oscillations in 24 s. Find its period.', 'The period is the time for ==one oscillation==. Divide the total time by the number.', 'Timing many swings reduces the error from your reaction time.', 'T = total time ÷ oscillations',
+      [['Write the formula', 'T = total time ÷ number of oscillations', ''], ['Substitute', 'T = 24 ÷ 20', ''], ['Answer with unit', 'T = 1.2 s', '']],
+      [['Time', '24 s', -1], ['Oscillations', '20', -1], ['T', '1.2 s', 2]]),
+    W('A stack of 200 sheets of paper is 20 mm thick. Find the thickness of one sheet.', 'For a ==small quantity==, measure ==many== and divide.', 'This is more accurate than measuring one sheet.', 'thickness = total ÷ number',
+      [['Write the formula', 'thickness of one = total thickness ÷ number', ''], ['Substitute', '20 ÷ 200', ''], ['Answer with unit', '0.1 mm', 'Check: 0.1 × 200 = 20 ✓.']],
+      [['Total', '20 mm', -1], ['Sheets', '200', -1], ['One sheet', '0.1 mm', 2]]),
+    W('Water in a measuring cylinder is at 50 cm³. A stone is added and the level reads 72 cm³. How should you read the scale, and what is the volume of the stone?', 'Read at ==eye level== at the ==bottom of the meniscus==. Volume = ==final − initial==.', 'Reading from above or below gives a parallax error.', 'Eye level, bottom of the meniscus',
+      [['How to read', 'At eye level, at the bottom of the meniscus', 'This avoids a parallax error.'], ['Subtract', '72 − 50', 'Final reading minus initial reading.'], ['Volume of the stone', '22 cm³', '']],
+      [['Initial', '50 cm³', -1], ['Final', '72 cm³', -1], ['Volume', '22 cm³', 2]], true),
+    W('Classify each as a scalar or a vector: speed, velocity, mass, force, energy, acceleration.', '==Vectors have direction==. Ask: “does it make sense to say which way?”', 'Speed is the scalar; velocity is the vector.', 'Size only v size and direction',
+      [['Scalars', 'speed, mass, energy', 'Size only.'], ['Vectors', 'velocity, force, acceleration', 'Size and direction.'], ['Check', 'Speed has no direction, velocity has', 'The same idea for distance and displacement.']],
+      [['Scalars', 'speed, mass, energy', 0], ['Vectors', 'velocity, force, acceleration', 1]], true)
+  ],
+  drill: 'meas',
+  quiz: [
+    { q: 'The SI unit of mass is the…', o: ['gram', 'kilogram', 'newton', 'tonne'], a: 1, w: '==Kilogram (kg)==.' },
+    { q: '1 litre equals…', o: ['10 cm³', '100 cm³', '1000 cm³', '10 000 cm³'], a: 2, w: '==1000 cm³==.' },
+    { q: 'To reduce error when timing a pendulum you should…', o: ['time one swing', 'time many swings and divide', 'use a ruler', 'swing it harder'], a: 1, w: 'Time ==many oscillations== and divide.' },
+    { q: 'A measuring cylinder should be read…', o: ['from above', 'at eye level at the bottom of the meniscus', 'from below', 'at the top of the meniscus'], a: 1, w: '==Eye level, bottom of the meniscus==.' },
+    { q: 'Which is a vector?', o: ['speed', 'mass', 'force', 'energy'], a: 2, w: '==Force== has size and direction.' },
+    { q: '36 km/h in m/s is…', o: ['10 m/s', '36 m/s', '129.6 m/s', '3.6 m/s'], a: 0, w: '36 ÷ 3.6 = ==10 m/s==.' }
+  ],
+  exam: [
+    { q: 'A student times 30 swings of a pendulum and records 42 s. Calculate the period of the pendulum and explain why timing 30 swings is better than timing one.', m: 3,
+      p: ['T = 42 ÷ 30 = ==1.4 s==', 'The error from ==reaction time== is the same size whatever the total time', 'so it is a ==smaller percentage== of a longer time'] },
+    { q: 'State the difference between a scalar and a vector. Give one example of each.', m: 2,
+      p: ['A scalar has ==size only==; a vector has ==size and direction==', 'Example: scalar = speed (or mass, energy); vector = velocity (or force, acceleration)'] },
+    { q: 'Describe how to find the volume of an irregular stone using a measuring cylinder.', m: 3,
+      p: ['Part-fill with water and record the ==initial volume== (eye level, bottom of the meniscus)', 'Lower the stone in carefully and record the ==final volume==', 'Volume = ==final − initial=='] }
+  ]
+},
+momentum: {
+  code: 'Topic 1', name: 'Momentum',
+  lede: 'Momentum is mass × velocity. In any collision the total momentum stays the same.',
+  learn: [
+    { h: 'Momentum and its conservation', list: ['==Momentum = mass × velocity== (p = m × v). Unit: ==kg m/s==.', 'Momentum is a ==vector==: it has a direction. Give directions a sign (right = +, left = −).', '==Conservation of momentum==: when objects interact and no external force acts, the ==total momentum before = total momentum after==.', 'Collision where objects ==stick together==: m₁u₁ + m₂u₂ = (m₁ + m₂)v.', '==Explosion / recoil==: total momentum starts at zero, so the pieces move in opposite directions with equal and opposite momentum.'], f: 'p = m × v     F = (mv − mu) ÷ t' },
+    { h: 'Force and impulse', list: ['==Force = change in momentum ÷ time taken==.', '==Impulse== = force × time = ==change in momentum==.', 'Increasing the ==time== of an impact ==reduces the force==: crumple zones, airbags, cushioned floors, bending your knees when landing.'] }
+  ],
+  mistakes: ['Ignoring the ==direction== (sign) of velocities.', 'Using the ==wrong total mass== after objects stick together.', 'Mixing up ==momentum== (kg m/s) and ==kinetic energy== (J).', 'Saying momentum is ==not conserved== in a collision. It is, kinetic energy may not be.', 'Writing the unit as ==kg/m/s==.'],
+  diagrams: [{ svg: svgCollision, cap: '==Momentum before = momentum after==. Here the trolleys stick together.' }],
+  worked: [
+    W('Calculate the momentum of a 1200 kg car travelling at 20 m/s.', '==Momentum = mass × velocity==.', 'The unit is kg m/s.', 'p = m × v',
+      [['Write the formula', 'p = m × v', ''], ['Substitute', 'p = 1200 × 20', ''], ['Answer with unit', 'p = 24 000 kg m/s', '']],
+      [['m, v', '1200 kg, 20 m/s', -1], ['p', '24 000 kg m/s', 2]]),
+    W('A 2 kg trolley moving at 3 m/s hits a stationary 1 kg trolley. They stick together. Find their speed after the collision.', '==Total momentum before = total momentum after==.', 'After sticking, the combined mass is 3 kg.', 'm₁u₁ + m₂u₂ = (m₁ + m₂)v',
+      [['Momentum before', '2 × 3 + 1 × 0 = 6 kg m/s', 'The stationary trolley has zero momentum.'], ['Momentum after', '(2 + 1) × v = 3v', 'They move together with mass 3 kg.'], ['Equate them', '3v = 6', 'Conservation of momentum.'], ['Answer with unit', 'v = 2 m/s', '']],
+      [['Before', '6 kg m/s', 0], ['After', '3 × v', 1], ['v', '2 m/s', 3]]),
+    W('A 2 kg gun fires a 0.01 kg bullet at 400 m/s. Find the recoil speed of the gun.', 'Before firing the total momentum is ==zero==, so afterwards the two momenta are ==equal and opposite==.', 'The gun moves backwards.', 'm₁v₁ = m₂v₂ (opposite directions)',
+      [['Momentum of the bullet', '0.01 × 400 = 4 kg m/s forwards', ''], ['Gun momentum', '4 kg m/s backwards', 'Total momentum must stay zero.'], ['Gun speed', 'v = 4 ÷ 2', 'p = mv.'], ['Answer', '2 m/s backwards', '']],
+      [['Bullet', '4 kg m/s', 0], ['Gun', '4 kg m/s opposite', 1], ['Recoil speed', '2 m/s', 3]]),
+    W('A force of 500 N acts on a trolley for 0.2 s. Find the impulse and the change in momentum.', '==Impulse = force × time== and equals the ==change in momentum==.', 'Both have the unit kg m/s (or N s).', 'impulse = F × t',
+      [['Write the formula', 'impulse = F × t', ''], ['Substitute', '500 × 0.2', ''], ['Answer with unit', '100 N s = 100 kg m/s', 'The change in momentum is 100 kg m/s.']],
+      [['F, t', '500 N, 0.2 s', -1], ['Impulse', '100 N s', 2], ['Δp', '100 kg m/s', 2]]),
+    W('A 0.4 kg ball moving at 10 m/s is stopped by a goalkeeper in 0.05 s. Find the average force.', '==Force = change in momentum ÷ time==.', 'Change in momentum = final − initial.', 'F = Δp ÷ t',
+      [['Initial momentum', '0.4 × 10 = 4 kg m/s', ''], ['Final momentum', '0 kg m/s', 'The ball stops.'], ['Change in momentum', '0 − 4 = −4 kg m/s', 'The negative sign shows it is against the motion.'], ['Force', 'F = 4 ÷ 0.05 = 80 N', 'Magnitude of the force.']],
+      [['Initial p', '4 kg m/s', 0], ['Final p', '0', 1], ['Change', '−4 kg m/s', 2], ['Force', '80 N', 3]]),
+    W('Explain why a crumple zone reduces injury in a car crash.', 'Link ==change in momentum==, ==time== and ==force==.', 'F = Δp ÷ t: bigger time, smaller force.', 'Longer time, smaller force',
+      [['The change in momentum', 'It is the same with or without a crumple zone', 'The car must still stop.'], ['The crumple zone', 'It collapses and increases the time of the collision', ''], ['The force', 'F = change in momentum ÷ time, so a longer time means a smaller force on the passengers', 'Less force means less injury.']],
+      [['Δp', 'same', 0], ['Time', 'increases', 1], ['Force', 'decreases', 2]], true)
+  ],
+  drill: 'momentum',
+  quiz: [
+    { q: 'The unit of momentum is…', o: ['N', 'kg m/s', 'J', 'm/s²'], a: 1, w: '==kg m/s==.' },
+    { q: 'A 5 kg object moves at 4 m/s. Its momentum is…', o: ['1.25 kg m/s', '9 kg m/s', '20 kg m/s', '80 kg m/s'], a: 2, w: '5 × 4 = ==20 kg m/s==.' },
+    { q: 'In a collision with no external force, total momentum…', o: ['increases', 'decreases', 'stays the same', 'is zero'], a: 2, w: '==Stays the same== (is conserved).' },
+    { q: 'Momentum is…', o: ['a scalar', 'a vector', 'a force', 'energy'], a: 1, w: 'A ==vector==.' },
+    { q: 'Impulse equals…', o: ['force × distance', 'force × time', 'mass × g', 'power × time'], a: 1, w: '==Force × time== = change in momentum.' },
+    { q: 'An airbag reduces force by…', o: ['increasing the time of impact', 'reducing the mass', 'increasing the speed', 'reducing the area'], a: 0, w: 'It ==increases the time== of the impact.' }
+  ],
+  exam: [
+    { q: 'A 3 kg trolley moving at 4 m/s collides with a stationary 1 kg trolley. They stick together. Calculate their speed after the collision.', m: 3,
+      p: ['Momentum before = 3 × 4 = ==12 kg m/s==', '(3 + 1) × v = 12', '==3 m/s=='] },
+    { q: 'A 0.5 kg ball moving at 8 m/s is stopped in 0.1 s. Calculate the average force on the ball.', m: 3,
+      p: ['Change in momentum = 0.5 × 8 = ==4 kg m/s==', 'F = change in momentum ÷ time = 4 ÷ 0.1', '==40 N=='] },
+    { q: 'Explain why bending your knees when you land from a jump reduces the force on your body.', m: 2,
+      p: ['Bending the knees ==increases the time== it takes to stop (the same change in momentum)', 'Force = change in momentum ÷ time, so the ==force is smaller=='] }
+  ]
+},
+thermprop: {
+  code: 'Topic 2', name: 'Thermal properties',
+  lede: 'Expansion, specific heat capacity and latent heat. Know E = mcΔθ and E = mL.',
+  learn: [
+    { h: 'Thermal expansion', list: ['==Solids, liquids and gases expand== when heated. ==Gases expand most==, solids least.', 'The particles ==vibrate or move faster and further apart==. They do not get bigger.', 'Uses and problems: ==gaps in railway tracks== and bridges, ==bimetallic strips== in thermostats, liquid-in-glass thermometers.', 'A ==bimetallic strip== bends because two metals expand by ==different amounts==.'] },
+    { h: 'Specific heat capacity', list: ['The ==specific heat capacity (c)== of a substance is the ==energy needed to raise 1 kg by 1 °C==. Unit: ==J/(kg °C)==.', '==E = m × c × Δθ== (Δθ = temperature change).', 'Water: ==c = 4200 J/(kg °C)==. A large value means it ==heats and cools slowly==.', 'If a heater of power P runs for time t: ==E = P × t==.'], f: 'E = m × c × Δθ     E = P × t' },
+    { h: 'Melting, boiling and latent heat', list: ['During ==melting== and ==boiling== the temperature ==stays constant== while the energy changes the ==state==.', '==Specific latent heat (L)== is the energy needed to change the state of ==1 kg== without changing its temperature. ==E = m × L==.', '==Evaporation== takes energy from the liquid left behind, so it ==cools== it.', 'Fixed points on the Celsius scale: ==0 °C== (melting ice) and ==100 °C== (boiling water).'] }
+  ],
+  mistakes: ['Using ==temperature== (Δθ) as the final temperature instead of the ==change==.', 'Using ==grams== instead of ==kg==.', 'Saying ==particles expand==. The substance expands because the particles move further apart.', 'Saying the temperature ==rises== during melting.', 'Mixing up ==c== (heating) and ==L== (changing state).'],
+  diagrams: [{ svg: svgHeatCurve, cap: 'A heating curve. ==Flat parts== are changes of state (==E = mL==); ==sloping parts== use ==E = mcΔθ==.' }],
+  worked: [
+    W('Calculate the energy needed to heat 2 kg of water from 20 °C to 50 °C. (c = 4200 J/(kg °C))', '==E = m × c × Δθ==. First find the ==temperature change==.', 'Δθ = 50 − 20 = 30 °C, not 50 °C.', 'E = mcΔθ',
+      [['Temperature change', 'Δθ = 50 − 20 = 30 °C', 'Final minus start.'], ['Write the formula', 'E = m × c × Δθ', ''], ['Substitute', 'E = 2 × 4200 × 30', ''], ['Answer with unit', 'E = 252 000 J', '2 × 4200 = 8400, then × 30.']],
+      [['m, c', '2 kg, 4200', -1], ['Δθ', '30 °C', 0], ['E', '252 000 J', 3]]),
+    W('7800 J is supplied to 0.5 kg of copper. The specific heat capacity of copper is 390 J/(kg °C). Find the temperature rise.', 'Rearrange: ==Δθ = E ÷ (m × c)==.', 'Put the bottom line in brackets on your calculator.', 'Δθ = E ÷ (mc)',
+      [['Rearrange', 'Δθ = E ÷ (m × c)', ''], ['Substitute', 'Δθ = 7800 ÷ (0.5 × 390)', ''], ['Work out the bottom', '0.5 × 390 = 195', ''], ['Answer with unit', 'Δθ = 7800 ÷ 195 = 40 °C', '']],
+      [['E, m, c', '7800 J, 0.5 kg, 390', -1], ['m × c', '195', 2], ['Δθ', '40 °C', 3]]),
+    W('A 2 kW heater is on for 100 s and heats 1 kg of water. Find the temperature rise. (c = 4200 J/(kg °C))', 'First find the ==energy supplied== from power × time, then use ==E = mcΔθ==.', 'Convert kW to W: 2 kW = 2000 W.', 'E = Pt, then Δθ = E ÷ mc',
+      [['Energy supplied', 'E = P × t = 2000 × 100', ''], ['Answer', 'E = 200 000 J', ''], ['Rearrange', 'Δθ = E ÷ (m × c) = 200 000 ÷ (1 × 4200)', ''], ['Answer with unit', 'Δθ = 47.6 °C', 'About 48 °C (assuming no energy is lost).']],
+      [['E', '200 000 J', 1], ['m × c', '4200', 2], ['Δθ', '47.6 °C', 3]]),
+    W('Calculate the energy needed to melt 0.5 kg of ice at 0 °C. (L = 330 000 J/kg)', 'Melting uses ==E = m × L==. The ice is already at its melting point.', 'No temperature change, so no Δθ in this one.', 'E = mL',
+      [['Write the formula', 'E = m × L', ''], ['Substitute', 'E = 0.5 × 330 000', ''], ['Answer with unit', 'E = 165 000 J', '']],
+      [['m, L', '0.5 kg, 330 000 J/kg', -1], ['E', '165 000 J', 2]]),
+    W('Explain why the temperature stays constant while ice melts, even though it is being heated.', 'Link ==energy== to ==bonds between particles==.', 'Use the words “constant”, “bonds”, “state”.', 'Energy goes into the state change',
+      [['What happens', 'The temperature stays constant at 0 °C', 'Shown by the flat part of the heating curve.'], ['Where the energy goes', 'It is used to break the bonds between the particles', 'It does not make them move faster.'], ['Result', 'The solid changes to a liquid. Once all the ice has melted, the temperature rises again', '']],
+      [['Temperature', 'constant', 0], ['Energy', 'breaks bonds', 1], ['After melting', 'temperature rises', 2]], true),
+    W('Explain why gaps are left between sections of a railway track.', 'The metal ==expands== in hot weather.', 'Link the cause (heat) to the effect (expansion) to the design.', 'Expansion needs space',
+      [['In hot weather', 'The steel gets hot and expands', 'Its particles vibrate more and move slightly further apart.'], ['Without gaps', 'The track would push against itself and buckle', ''], ['The gaps', 'Leave room for the expansion', 'So the track stays straight.']],
+      [['Hot weather', 'steel expands', 0], ['No gaps', 'track buckles', 1], ['Gaps', 'room to expand', 2]], true)
+  ],
+  drill: 'thermprop',
+  quiz: [
+    { q: 'Which state of matter expands the most when heated?', o: ['solid', 'liquid', 'gas', 'all the same'], a: 2, w: '==Gases==.' },
+    { q: 'The specific heat capacity of water is about…', o: ['42 J/(kg °C)', '420 J/(kg °C)', '4200 J/(kg °C)', '42 000 J/(kg °C)'], a: 2, w: '==4200 J/(kg °C)==.' },
+    { q: 'During boiling, the temperature…', o: ['rises steadily', 'stays constant', 'falls', 'is zero'], a: 1, w: '==Stays constant==.' },
+    { q: 'The energy to melt 2 kg of a solid with L = 300 000 J/kg is…', o: ['150 000 J', '300 000 J', '600 000 J', '1 200 000 J'], a: 2, w: '2 × 300 000 = ==600 000 J==.' },
+    { q: 'A bimetallic strip bends because…', o: ['the metals expand by different amounts', 'it gets heavier', 'it melts', 'electrons flow'], a: 0, w: 'The two metals ==expand by different amounts==.' },
+    { q: 'Evaporation causes the liquid left behind to…', o: ['warm up', 'cool down', 'stay the same', 'boil'], a: 1, w: 'The fastest particles escape, so it ==cools==.' }
+  ],
+  exam: [
+    { q: 'Calculate the energy needed to raise the temperature of 3 kg of water from 15 °C to 65 °C. (c = 4200 J/(kg °C))', m: 3,
+      p: ['Δθ = 65 − 15 = ==50 °C==', 'E = m × c × Δθ = 3 × 4200 × 50', '==630 000 J=='] },
+    { q: 'Describe what happens to the particles and to the temperature when a solid melts.', m: 3,
+      p: ['The ==temperature stays constant== (at the melting point)', 'The energy supplied ==breaks the bonds== (forces) between particles', 'The particles move apart and the solid becomes a ==liquid=='] },
+    { q: 'Explain how a bimetallic strip in a thermostat works.', m: 3,
+      p: ['It is made of ==two different metals== joined together', 'When heated they ==expand by different amounts==', 'The strip ==bends== and breaks (or makes) the circuit'] }
+  ]
+},
+nuclear: {
+  code: 'Topic 5', name: 'Atoms and radioactivity',
+  lede: 'The structure of the atom, the three types of radiation and half-life.',
+  learn: [
+    { h: 'The nuclear atom', list: ['The atom has a tiny, dense, positively charged ==nucleus== containing ==protons== and ==neutrons==, with ==electrons== orbiting it.', '==Proton: +1, mass 1. Neutron: 0, mass 1. Electron: −1, mass about 1/1840.==', '==Proton number (Z)== = number of protons. ==Nucleon number (A)== = protons + neutrons. ==Neutrons = A − Z==.', '==Isotopes== are atoms of the ==same element== (same Z) with ==different numbers of neutrons==.', 'In a neutral atom, ==electrons = protons==.'] },
+    { h: 'Radiation', table: [['Radiation', 'What it is', 'Stopped by', 'Ionising?'], ['Alpha (α)', '2 protons + 2 neutrons (helium nucleus)', 'paper, a few cm of air', 'strongly'], ['Beta (β)', 'fast electron from the nucleus', 'a few mm of aluminium', 'weakly'], ['Gamma (γ)', 'electromagnetic wave', 'thick lead or concrete reduce it', 'very weakly']] },
+    { h: 'Half-life, uses and safety', list: ['Radioactive decay is ==random== and ==spontaneous==. It is not affected by temperature.', '==Half-life== = the time for ==half the radioactive nuclei== (or the count rate) to ==decay==.', 'Alpha decay: A ==falls by 4==, Z ==falls by 2==. Beta decay: A ==stays the same==, Z ==rises by 1==.', 'Uses: ==smoke alarms== (alpha), ==thickness gauges== (beta), ==sterilising== and ==cancer treatment== (gamma), ==tracers== in medicine, ==carbon dating==.', 'Dangers: radiation ==ionises== and damages cells. Safety: ==short exposure==, ==distance==, ==shielding== (lead), store in lead-lined boxes, handle with tongs.'], f: 'neutrons = A − Z' }
+  ],
+  mistakes: ['Saying ==electrons are in the nucleus==.', 'Mixing up ==proton number== and ==nucleon number==.', 'Saying half-life means the ==radioactivity disappears== after two half-lives. Half is left after each.', 'Saying ==gamma is a particle==. It is an electromagnetic wave.', 'Forgetting that decay is ==random==, so we use a statistical idea (half-life).'],
+  diagrams: [
+    { svg: svgAtomNuc, cap: 'The nuclear atom: ==neutrons = A − Z==.' },
+    { svg: svgDecay, cap: 'Half-life: the amount halves each ==half-life==.' }
+  ],
+  worked: [
+    W('Carbon-14 has a nucleon number of 14 and a proton number of 6. How many protons, neutrons and electrons does a neutral atom have?', 'Neutrons = ==nucleon number − proton number==.', 'A neutral atom has equal protons and electrons.', 'neutrons = A − Z',
+      [['Protons', '6', 'The proton number.'], ['Neutrons', '14 − 6 = 8', 'Nucleon number minus proton number.'], ['Electrons', '6', 'Equal to the number of protons.']],
+      [['A, Z', '14, 6', -1], ['Protons', '6', 0], ['Neutrons', '8', 1], ['Electrons', '6', 2]]),
+    W('A radioactive sample of 80 g has a half-life of 3 days. How much is left after 9 days?', 'Work out the ==number of half-lives==, then ==halve each time==.', 'Draw a quick table: day 0, 3, 6, 9.', 'Number of half-lives = time ÷ half-life',
+      [['Number of half-lives', '9 ÷ 3 = 3', ''], ['After 1 half-life (3 days)', '80 ÷ 2 = 40 g', ''], ['After 2 half-lives (6 days)', '40 ÷ 2 = 20 g', ''], ['After 3 half-lives (9 days)', '20 ÷ 2 = 10 g', 'The answer: 10 g.']],
+      [['Half-lives', '3', 0], ['After 1', '40 g', 1], ['After 2', '20 g', 2], ['After 3', '10 g', 3]]),
+    W('The count rate from a source is 800 counts/min. Its half-life is 5 hours. What is the count rate after 15 hours?', 'Same method: the ==count rate halves== each half-life.', 'Ignore background radiation unless told to subtract it.', 'Count rate halves each half-life',
+      [['Number of half-lives', '15 ÷ 5 = 3', ''], ['Halve three times', '800 → 400 → 200 → 100', ''], ['Answer', '100 counts/min', '']],
+      [['Half-lives', '3', 0], ['After 1, 2, 3', '400, 200, 100', 1], ['Count rate', '100 counts/min', 2]]),
+    W('Uranium-238 (proton number 92) decays by alpha emission. Find the nucleon number and proton number of the new nucleus.', 'An alpha particle has ==2 protons and 2 neutrons==, so A falls by 4 and Z falls by 2.', 'Check that the numbers on each side balance.', 'Alpha: A − 4, Z − 2',
+      [['Alpha decay rule', 'A decreases by 4, Z decreases by 2', ''], ['New nucleon number', '238 − 4 = 234', ''], ['New proton number', '92 − 2 = 90', 'This is thorium.'], ['Check', '234 + 4 = 238 and 90 + 2 = 92 ✓', 'Both sides balance.']],
+      [['A', '238 − 4 = 234', 1], ['Z', '92 − 2 = 90', 2], ['Check', 'balances ✓', 3]]),
+    W('The count rate of a source falls from 400 counts/min to 100 counts/min in 12 days. Find the half-life.', 'Count how many ==halvings== it took.', '400 → 200 → 100 is two halvings.', 'Time ÷ number of half-lives',
+      [['How many halvings?', '400 → 200 → 100, so 2 half-lives', ''], ['Divide the time', '12 ÷ 2', ''], ['Answer with unit', '6 days', '']],
+      [['Halvings', '2', 0], ['Time', '12 days', -1], ['Half-life', '6 days', 2]]),
+    W('Describe two safety precautions when handling a radioactive source in a school laboratory.', 'Think: ==time==, ==distance==, ==shielding==.', 'Give a precaution AND a reason.', 'Time, distance, shielding',
+      [['Precaution 1', 'Handle the source with tongs (keep it at a distance)', 'Radiation is weaker further away.'], ['Precaution 2', 'Store it in a lead-lined box and use it for a short time', 'Lead absorbs radiation; short exposure reduces the dose.'], ['Why', 'Ionising radiation damages cells and can cause cancer', '']],
+      [['1', 'tongs, distance', 0], ['2', 'lead box, short time', 1], ['Reason', 'ionising radiation', 2]], true)
+  ],
+  drill: 'nuclear',
+  quiz: [
+    { q: 'The nucleus contains…', o: ['protons and electrons', 'protons and neutrons', 'neutrons and electrons', 'electrons only'], a: 1, w: '==Protons and neutrons==.' },
+    { q: 'An atom has A = 23 and Z = 11. It has ___ neutrons.', o: ['11', '12', '23', '34'], a: 1, w: '23 − 11 = ==12==.' },
+    { q: 'Which radiation is stopped by paper?', o: ['alpha', 'beta', 'gamma', 'all of them'], a: 0, w: '==Alpha==.' },
+    { q: 'Which radiation is an electromagnetic wave?', o: ['alpha', 'beta', 'gamma', 'none'], a: 2, w: '==Gamma==.' },
+    { q: 'After two half-lives, the fraction of nuclei left is…', o: ['1/2', '1/4', '1/8', 'none'], a: 1, w: '(½)² = ==1/4==.' },
+    { q: 'Isotopes have the same number of…', o: ['neutrons', 'protons', 'nucleons', 'half-lives'], a: 1, w: 'The same ==protons==, different neutrons.' }
+  ],
+  exam: [
+    { q: 'An atom of sodium has a nucleon number of 23 and a proton number of 11. State the number of (a) protons (b) neutrons (c) electrons in the neutral atom.', m: 3,
+      p: ['Protons = ==11==', 'Neutrons = 23 − 11 = ==12==', 'Electrons = ==11=='] },
+    { q: 'A radioactive isotope has a half-life of 4 hours. A sample has a count rate of 640 counts/min. Calculate the count rate after 12 hours.', m: 3,
+      p: ['12 ÷ 4 = ==3 half-lives==', '640 → 320 → 160 → 80', '==80 counts/min=='] },
+    { q: 'State two differences between alpha and gamma radiation.', m: 2,
+      p: ['Alpha is a ==helium nucleus== (2 protons + 2 neutrons); gamma is an ==electromagnetic wave==', 'Alpha is ==stopped by paper== and is strongly ionising; gamma is ==very penetrating== and weakly ionising'] }
+  ]
+},
+space: {
+  code: 'Topic 6', name: 'Space physics',
+  lede: 'The Earth, the Solar System, stars and the Universe.',
+  learn: [
+    { h: 'Earth, Moon and Sun', list: ['The Earth ==spins on its axis== once every ==24 hours== (day and night) and ==orbits the Sun== once every ==365¼ days== (a year).', 'The Earth’s axis is ==tilted at 23.5°==. This causes the ==seasons== and the different length of day.', 'The Moon orbits the Earth in about ==27.3 days== (phases repeat every ==29.5 days==). It reflects sunlight.', '==Orbital speed = 2πr ÷ T== (circumference ÷ time for one orbit).'], f: 'v = 2πr ÷ T' },
+    { h: 'The Solar System', list: ['The planets in order from the Sun: ==Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune==.', 'The Sun is a ==star==. The planets, dwarf planets, moons, asteroids and comets all ==orbit the Sun==.', '==Gravity== provides the force that keeps planets in orbit. The ==closer== the planet, the ==faster== it orbits and the ==shorter== its year.', 'Planets are seen because they ==reflect sunlight==. Stars ==emit light==.'] },
+    { h: 'Stars and the Universe', list: ['Stars form from a ==nebula== (gas and dust) pulled together by ==gravity==. ==Nuclear fusion== of hydrogen into helium releases energy.', 'A star like the Sun becomes a ==red giant==, then a ==white dwarf==. A much bigger star becomes a ==red supergiant==, explodes as a ==supernova== and leaves a ==neutron star== or ==black hole==.', 'A ==galaxy== is a huge group of stars. Our galaxy is the ==Milky Way==. A ==light-year== is the ==distance light travels in one year==.', '==Red-shift==: light from distant galaxies has a ==longer wavelength==. This shows they are ==moving away==, so the Universe is ==expanding==. The ==Big Bang== theory says the Universe began about 13.8 billion years ago.'] }
+  ],
+  mistakes: ['Saying the ==Sun is a planet==. It is a star.', 'Saying the ==Moon makes its own light==.', 'Saying seasons are caused by the Earth’s ==distance from the Sun==. It is the ==tilt== of the axis.', 'Saying a light-year is a ==unit of time==. It is a distance.', 'Using ==km== and ==seconds== together in v = 2πr/T. Convert to metres.'],
+  diagrams: [
+    { svg: svgSolar, cap: 'The ==planets in order== from the Sun (not to scale).' },
+    { svg: svgStarLife, cap: 'The ==life cycle of stars== depends on their mass.' }
+  ],
+  worked: [
+    W('The Earth orbits the Sun at an average radius of 1.5 × 10¹¹ m. One orbit takes 3.15 × 10⁷ s. Calculate its orbital speed.', '==Speed = distance ÷ time==, and the distance is the ==circumference== 2πr.', 'Keep it in standard form to avoid mistakes with big numbers.', 'v = 2πr ÷ T',
+      [['Write the formula', 'v = 2πr ÷ T', ''], ['Distance in one orbit', '2 × π × 1.5 × 10¹¹ = 9.42 × 10¹¹ m', 'The circumference of the orbit.'], ['Divide by the time', '9.42 × 10¹¹ ÷ 3.15 × 10⁷', ''], ['Answer with unit', 'v = 3.0 × 10⁴ m/s', 'About 30 km/s.']],
+      [['r, T', '1.5 × 10¹¹ m, 3.15 × 10⁷ s', -1], ['2πr', '9.42 × 10¹¹ m', 1], ['v', '3.0 × 10⁴ m/s', 3]]),
+    W('Light takes how long to travel from the Sun to the Earth (1.5 × 10¹¹ m)? The speed of light is 3 × 10⁸ m/s.', '==time = distance ÷ speed==.', 'Convert to minutes by ÷ 60.', 't = d ÷ v',
+      [['Write the formula', 't = d ÷ v', ''], ['Substitute', 't = 1.5 × 10¹¹ ÷ 3 × 10⁸', ''], ['Work out', 't = 500 s', '1.5 ÷ 3 = 0.5, and 10¹¹ ÷ 10⁸ = 10³.'], ['In minutes', '500 ÷ 60 = 8.3 minutes', '']],
+      [['d, v', '1.5 × 10¹¹ m, 3 × 10⁸ m/s', -1], ['t', '500 s', 2], ['In minutes', '8.3 min', 3]]),
+    W('Explain why we have seasons.', 'The cause is the ==tilt of the Earth’s axis== (23.5°), not the distance from the Sun.', 'Give both hemispheres, or one clearly.', 'Tilt of the axis',
+      [['The axis is tilted', 'The Earth’s axis is tilted at 23.5° and always points the same way', ''], ['Summer in one hemisphere', 'It is tilted towards the Sun: the Sun is higher in the sky, days are longer and the energy is more concentrated', ''], ['Winter in the other', 'It is tilted away: the Sun is lower, days are shorter and the energy is spread out', 'Six months later the seasons swap.']],
+      [['Cause', 'tilted axis', 0], ['Summer', 'tilted towards the Sun', 1], ['Winter', 'tilted away', 2]], true),
+    W('Describe how a star like the Sun forms and what it becomes.', 'Use the keywords: ==nebula==, ==gravity==, ==fusion==, ==red giant==, ==white dwarf==.', 'Put the stages in order.', 'Nebula to white dwarf',
+      [['Formation', 'Gravity pulls a cloud of gas and dust (a nebula) together to form a protostar', ''], ['Main sequence', 'The core gets hot enough for nuclear fusion of hydrogen into helium. The star is stable for billions of years', 'The inward gravity is balanced by the outward pressure.'], ['Later stages', 'It swells into a red giant', 'The hydrogen fuel is running out.'], ['End', 'It sheds its outer layers and becomes a white dwarf', '']],
+      [['1', 'nebula pulled together', 0], ['2', 'main sequence: fusion', 1], ['3', 'red giant', 2], ['4', 'white dwarf', 3]], true),
+    W('Explain how red-shift provides evidence for the Big Bang.', 'Link ==longer wavelength== to ==moving away== to ==expanding==.', 'Name the observation and the conclusion.', 'Red-shift: galaxies move away',
+      [['The observation', 'Light from distant galaxies is red-shifted: its wavelength is longer', ''], ['What it means', 'The galaxies are moving away from us', 'More distant galaxies show a bigger red-shift.'], ['Conclusion', 'The Universe is expanding, so it must have started from a very small, hot point: the Big Bang', '']],
+      [['Observation', 'light has longer λ', 0], ['Meaning', 'galaxies move away', 1], ['Conclusion', 'Big Bang', 2]], true),
+    W('Why does a planet that is closer to the Sun have a shorter year?', 'Compare the ==orbit length== and the ==orbital speed==.', 'Use the words “smaller orbit” and “faster”.', 'Closer means smaller and faster',
+      [['Orbit length', 'A planet closer to the Sun has a smaller orbit, so a shorter distance to travel', ''], ['Orbital speed', 'The Sun’s gravity is stronger there, so the planet moves faster', ''], ['Result', 'It completes an orbit in less time: a shorter year', 'Mercury’s year is 88 days; Neptune’s is about 165 years.']],
+      [['Orbit', 'smaller', 0], ['Speed', 'faster', 1], ['Year', 'shorter', 2]], true)
+  ],
+  drill: 'space',
+  quiz: [
+    { q: 'The Earth takes ___ to spin once on its axis.', o: ['24 hours', '27 days', '365 days', '12 hours'], a: 0, w: '==24 hours==.' },
+    { q: 'Which planet is nearest the Sun?', o: ['Venus', 'Mercury', 'Mars', 'Earth'], a: 1, w: '==Mercury==.' },
+    { q: 'Seasons are caused by…', o: ['the Earth’s distance from the Sun', 'the tilt of the Earth’s axis', 'the Moon', 'the Sun’s temperature changing'], a: 1, w: 'The ==tilt of the axis== (23.5°).' },
+    { q: 'The Sun is a…', o: ['planet', 'moon', 'star', 'galaxy'], a: 2, w: 'A ==star==.' },
+    { q: 'Red-shift shows that galaxies are…', o: ['moving towards us', 'moving away from us', 'standing still', 'getting smaller'], a: 1, w: '==Moving away==, so the Universe is expanding.' },
+    { q: 'A light-year is a unit of…', o: ['time', 'speed', 'distance', 'brightness'], a: 2, w: '==Distance==.' }
+  ],
+  exam: [
+    { q: 'List the eight planets in order from the Sun.', m: 2,
+      p: ['==Mercury, Venus, Earth, Mars== (inner four correct and in order)', '==Jupiter, Saturn, Uranus, Neptune== (outer four correct and in order)'] },
+    { q: 'Mars orbits the Sun at an average radius of 2.3 × 10¹¹ m. One orbit takes 5.9 × 10⁷ s. Calculate its orbital speed.', m: 3,
+      p: ['v = ==2πr ÷ T==', '2π × 2.3 × 10¹¹ ÷ 5.9 × 10⁷', '≈ ==2.4 × 10⁴ m/s=='] },
+    { q: 'State what is meant by a light-year and by red-shift.', m: 2,
+      p: ['A light-year is the ==distance light travels in one year==', 'Red-shift is the ==increase in the wavelength== of light from a source moving away'] }
+  ]
 }
 };
 
@@ -1303,6 +1603,57 @@ const DRILLS = {
       return { q: `A transformer is 100% efficient. The primary is ${Vp} V with a current of ${Ip} A. The secondary voltage is ${Vs} V. Calculate the secondary current.`, ans, unit: 'A', s: [['Power in', `${Vp} × ${Ip} = ${num(Vp * Ip)} W`],['Power out = power in', `${Vs} × Is = ${num(Vp * Ip)}`],['Answer', `${num(ans)} A`]] }; },
     () => { let Vp, Vs, Np, ans; do { Vp = pick([12, 24, 120, 240]); Vs = pick([6, 12, 48, 60, 240, 480]); Np = pick([100, 200, 500, 1000]); ans = Np * Vs / Vp; } while (!Number.isInteger(ans) || Vs === Vp);
       return { q: `A transformer has ${Np} turns on the primary. The primary voltage is ${Vp} V and the secondary voltage is ${Vs} V. How many turns are on the secondary?`, ans, unit: 'turns', s: [['Formula', 'Ns = Np × Vs ÷ Vp'],['Substitute', `${Np} × ${Vs} ÷ ${Vp}`],['Answer', `${num(ans)} turns`]] }; }
+  ],
+  meas: [
+    () => { const v = pick([18, 36, 54, 72, 90, 108, 144]), w = rint(0, 1);
+      return w ? { q: `Convert ${v} km/h to m/s.`, ans: v / 3.6, unit: 'm/s', s: [['× 1000 ÷ 3600', `${v} ÷ 3.6`],['Answer', `${num(v / 3.6)} m/s`]] }
+        : { q: `Convert ${num(v / 3.6)} m/s to km/h.`, ans: v, unit: 'km/h', s: [['× 3.6', `${num(v / 3.6)} × 3.6`],['Answer', `${v} km/h`]] }; },
+    () => { const n = pick([10, 20, 25, 30, 50]), T = pick([0.8, 1, 1.2, 1.5, 2, 2.4]), t = Math.round(n * T * 10) / 10;
+      return { q: `A pendulum completes ${n} oscillations in ${t} s. Calculate its period.`, ans: T, unit: 's', s: [['T = time ÷ oscillations', `${t} ÷ ${n}`],['Answer', `${T} s`]] }; },
+    () => { const n = pick([50, 100, 200, 500]), th = pick([0.05, 0.1, 0.2, 0.5]), tot = n * th;
+      return { q: `${n} identical sheets of paper make a stack ${num(tot)} mm thick. Find the thickness of one sheet.`, ans: th, unit: 'mm', s: [['Divide', `${num(tot)} ÷ ${n}`],['Answer', `${th} mm`]] }; },
+    () => { const a = rint(1, 9) * 5, b = a + rint(2, 9) * 5;
+      return { q: `A stone is lowered into a measuring cylinder. The level rises from ${a} cm³ to ${b} cm³. Find the volume of the stone.`, ans: b - a, unit: 'cm³', s: [['Final − initial', `${b} − ${a}`],['Answer', `${b - a} cm³`]] }; }
+  ],
+  momentum: [
+    () => { const m = rint(1, 50) * 2, v = rint(2, 30), w = rint(0, 2), p = m * v;
+      if (w === 0) return { q: `Calculate the momentum of a ${m} kg object moving at ${v} m/s.`, ans: p, unit: 'kg m/s', s: [['Formula', 'p = m × v'],['Substitute', `${m} × ${v}`],['Answer', `${p} kg m/s`]] };
+      if (w === 1) return { q: `An object has a momentum of ${p} kg m/s and a mass of ${m} kg. Calculate its velocity.`, ans: v, unit: 'm/s', s: [['Formula', 'v = p ÷ m'],['Substitute', `${p} ÷ ${m}`],['Answer', `${v} m/s`]] };
+      return { q: `An object moving at ${v} m/s has a momentum of ${p} kg m/s. Calculate its mass.`, ans: m, unit: 'kg', s: [['Formula', 'm = p ÷ v'],['Substitute', `${p} ÷ ${v}`],['Answer', `${m} kg`]] }; },
+    () => { const m1 = rint(1, 6), m2 = rint(1, 6), v = rint(1, 5), u = v * (m1 + m2) / m1; if (!Number.isInteger(u)) return { q: 'A 3 kg trolley moving at 4 m/s hits a stationary 1 kg trolley and they stick together. Calculate their common speed.', ans: 3, unit: 'm/s', s: [['Before', '3 × 4 = 12 kg m/s'],['After', '(3 + 1) × v = 12'],['Answer', 'v = 3 m/s']] };
+      return { q: `A ${m1} kg trolley moving at ${u} m/s hits a stationary ${m2} kg trolley and they stick together. Calculate their common speed.`, ans: v, unit: 'm/s', s: [['Momentum before', `${m1} × ${u} = ${m1 * u} kg m/s`],['After', `(${m1} + ${m2}) × v = ${m1 * u}`],['Answer', `v = ${v} m/s`]] }; },
+    () => { const m = pick([0.1, 0.2, 0.4, 0.5, 1, 2]), v = rint(2, 20), t = pick([0.01, 0.02, 0.05, 0.1, 0.2]), F = m * v / t;
+      return { q: `A ${m} kg ball moving at ${v} m/s is brought to rest in ${t} s. Calculate the average force.`, ans: F, unit: 'N', s: [['Change in momentum', `${m} × ${v} = ${num(m * v)} kg m/s`],['F = Δp ÷ t', `${num(m * v)} ÷ ${t}`],['Answer', `${num(F)} N`]] }; },
+    () => { const mg = pick([1, 2, 4, 5]), mb = pick([0.01, 0.02, 0.05]), vb = pick([200, 300, 400, 500]), vg = mb * vb / mg;
+      return { q: `A ${mg} kg gun fires a ${mb} kg bullet at ${vb} m/s. Calculate the recoil speed of the gun.`, ans: vg, unit: 'm/s', s: [['Bullet momentum', `${mb} × ${vb} = ${num(mb * vb)} kg m/s`],['Gun speed', `${num(mb * vb)} ÷ ${mg}`],['Answer', `${num(vg)} m/s`]] }; }
+  ],
+  thermprop: [
+    () => { const m = pick([0.5, 1, 2, 3, 5]), c = pick([[4200, 'water'], [390, 'copper'], [900, 'aluminium'], [450, 'iron']]), d = rint(2, 12) * 5, w = rint(0, 2), E = m * c[0] * d;
+      if (w === 0) return { q: `Calculate the energy needed to raise the temperature of ${m} kg of ${c[1]} (c = ${c[0]} J/(kg °C)) by ${d} °C.`, ans: E, unit: 'J', s: [['Formula', 'E = m × c × Δθ'],['Substitute', `${m} × ${c[0]} × ${d}`],['Answer', `${num(E)} J`]] };
+      if (w === 1) return { q: `${num(E)} J heats ${m} kg of ${c[1]} (c = ${c[0]} J/(kg °C)). Calculate the temperature rise.`, ans: d, unit: '°C', s: [['Formula', 'Δθ = E ÷ (m × c)'],['Substitute', `${num(E)} ÷ (${m} × ${c[0]})`],['Answer', `${d} °C`]] };
+      return { q: `${num(E)} J raises the temperature of ${c[1]} (c = ${c[0]} J/(kg °C)) by ${d} °C. Calculate the mass.`, ans: m, unit: 'kg', s: [['Formula', 'm = E ÷ (c × Δθ)'],['Substitute', `${num(E)} ÷ (${c[0]} × ${d})`],['Answer', `${m} kg`]] }; },
+    () => { const m = pick([0.1, 0.2, 0.5, 1, 2]), L = pick([[330000, 'melt ice'], [2260000, 'boil water (change to steam)'], [200000, 'melt a solid']]), E = m * L[0];
+      return { q: `Calculate the energy needed to ${L[1]} of mass ${m} kg. The specific latent heat is ${L[0]} J/kg.`, ans: E, unit: 'J', s: [['Formula', 'E = m × L'],['Substitute', `${m} × ${L[0]}`],['Answer', `${num(E)} J`]] }; },
+    () => { const P = pick([500, 1000, 2000, 3000]), t = rint(2, 20) * 10, m = pick([1, 2, 5]), d = Math.round(P * t / (m * 4200) * 10) / 10;
+      return { q: `A ${P} W heater runs for ${t} s in ${m} kg of water (c = 4200 J/(kg °C)). Calculate the temperature rise, assuming no energy is lost.`, ans: d, unit: '°C', s: [['Energy', `${P} × ${t} = ${P * t} J`],['Δθ = E ÷ (mc)', `${P * t} ÷ (${m} × 4200)`],['Answer', `${d} °C`]] }; }
+  ],
+  nuclear: [
+    () => { const Z = rint(3, 40), n = rint(Z, Z + 25), A = Z + n, w = rint(0, 1);
+      return w ? { q: `An atom has nucleon number ${A} and proton number ${Z}. How many neutrons does it have?`, ans: n, unit: '', s: [['neutrons = A − Z', `${A} − ${Z}`],['Answer', String(n)]] }
+        : { q: `An atom has ${Z} protons and ${n} neutrons. What is its nucleon number?`, ans: A, unit: '', s: [['A = protons + neutrons', `${Z} + ${n}`],['Answer', String(A)]] }; },
+    () => { const N0 = pick([40, 80, 160, 320, 640, 800, 1000]), n = rint(1, 4), hl = pick([2, 3, 5, 6, 10]), left = N0 / 2 ** n;
+      return { q: `A radioactive source has a count rate of ${N0} counts/min. Its half-life is ${hl} hours. What is the count rate after ${hl * n} hours?`, ans: left, unit: 'counts/min', s: [['Number of half-lives', `${hl * n} ÷ ${hl} = ${n}`],['Halve that many times', `${N0} ÷ ${2 ** n}`],['Answer', `${num(left)} counts/min`]] }; },
+    () => { const N0 = pick([100, 200, 400, 800]), n = rint(1, 3), hl = pick([2, 4, 5, 10, 12]), t = hl * n;
+      return { q: `The count rate of a source falls from ${N0} to ${N0 / 2 ** n} counts/min in ${t} days. Calculate the half-life.`, ans: hl, unit: 'days', s: [['Number of halvings', String(n)],['Divide the time', `${t} ÷ ${n}`],['Answer', `${hl} days`]] }; },
+    () => { const A = rint(60, 240), Z = rint(30, 90), a = rint(0, 1);
+      return a ? { q: `A nucleus with nucleon number ${A} and proton number ${Z} emits an alpha particle. What is the new nucleon number?`, ans: A - 4, unit: '', s: [['Alpha: A falls by 4', `${A} − 4`],['Answer', String(A - 4)]] }
+        : { q: `A nucleus with nucleon number ${A} and proton number ${Z} emits an alpha particle. What is the new proton number?`, ans: Z - 2, unit: '', s: [['Alpha: Z falls by 2', `${Z} − 2`],['Answer', String(Z - 2)]] }; }
+  ],
+  space: [
+    () => { const r = pick([[5.8e10, 7.6e6], [1.08e11, 1.94e7], [1.5e11, 3.15e7], [2.3e11, 5.9e7]]), v = 2 * Math.PI * r[0] / r[1];
+      return { q: `A planet orbits the Sun at a radius of ${sci(r[0])} m. One orbit takes ${sci(r[1])} s. Calculate its orbital speed in m/s. (Type the number, e.g. 3e4 for 3 × 10⁴.)`, ans: v, unit: 'm/s', s: [['v = 2πr ÷ T', `2 × π × ${r[0]} ÷ ${r[1]}`],['Answer', `${sci(v)} m/s`]] }; },
+    () => { const d = pick([[1.5e11, 'the Earth'], [7.8e11, 'Jupiter'], [5.8e10, 'Mercury'], [2.3e11, 'Mars']]), t = d[0] / 3e8;
+      return { q: `The Sun is ${sci(d[0])} m from ${d[1]}. The speed of light is 3 × 10⁸ m/s. How many seconds does sunlight take to reach it?`, ans: t, unit: 's', s: [['t = d ÷ v', `${d[0]} ÷ 3 × 10⁸`],['Answer', `${num(t)} s`]] }; }
   ]
 };
 
@@ -1317,7 +1668,7 @@ function drawMock(){
 if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state ---------- */
-const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['waves','Topic 3','Waves'],['light','Topic 3','Light'],['emspec','Topic 3','EM spectrum'],['circuits','Topic 4','Circuits'],['magnet','Topic 4','Magnetism'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['waves','Topic 3','Waves'],['light','Topic 3','Light'],['emspec','Topic 3','EM spectrum'],['circuits','Topic 4','Circuits'],['magnet','Topic 4','Magnetism'],['meas','Topic 1','Measurement'],['momentum','Topic 1','Momentum'],['thermprop','Topic 2','Thermal props'],['nuclear','Topic 5','Radioactivity'],['space','Topic 6','Space'],['mock','','Mini mock']];
 let cur = 'start'; let sub = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1345,7 +1696,7 @@ function render(){
 }
 
 function renderStart(){
-  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles','waves','light','emspec','circuits','magnet'].map(k => {
+  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles','waves','light','emspec','circuits','magnet','meas','momentum','thermprop','nuclear','space'].map(k => {
     const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz best ${qb}/${qt}</span></div>
       <div class="bar"><i style="width:${Math.round(100*qb/qt)}%"></i></div>
