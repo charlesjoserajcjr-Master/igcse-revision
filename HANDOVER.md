@@ -41,6 +41,9 @@ Term 1 packs (`physics.html`, `chemistry.html`, `cs.html`) are frozen and labell
 4. Optional: a short diagnostic test per subject to find weak topics.
 5. Optional: a shared progress view for the parent (would need a backend or a hosted store; currently progress is per-device `localStorage`).
 
+## Full-year Physics progress
+`physics-year.html` now has Term 1 chapters (Density, Thermal, Sound) plus Motion, Forces, Energy/work/power, Pressure and Particles/states of matter (Cambridge 0625 topics 1 and 2). Still to add: measurement, momentum, waves and light (reflection, refraction, lenses), electromagnetic spectrum, electricity, magnetism, nuclear physics, space.
+
 ## Known limitations
 - Progress is saved only in the browser on that device.
 - GitHub Pages must stay enabled (Settings → Pages → Deploy from branch `main` / root).

@@ -20,6 +20,11 @@
 .wb td.fill{background:var(--good-soft);color:var(--good);font-weight:700}
 .wb tr.cur th,.wb tr.cur td{outline:2px solid var(--hot);outline-offset:-2px}
 .bnote{font-size:.9rem;margin:0}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse;font-size:.95rem;min-width:100%}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 12px 7px 0;text-align:left;vertical-align:top}
+.tbl th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+svg .mono{font-family:var(--mono)}
 </style>
 <title>Physics Full-Year Pack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -362,6 +367,70 @@ function svgSpeed(){
 }
 
 /* ---------- content ---------- */
+/* ---------- new chapters: helpers and diagrams ---------- */
+const T = (x, y, s, cls = '') => `<text x="${x}" y="${y}" class="${cls}">${s}</text>`;
+const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
+function svgDT(){
+  const X = t => 70 + 12 * t, Y = d => 190 - 3 * d;
+  return `<svg viewBox="0 0 700 250" role="img" aria-label="Distance-time graph">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(32)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(64)}" class="ln"/>
+  <polyline points="${X(0)},${Y(0)} ${X(10)},${Y(20)} ${X(20)},${Y(20)} ${X(30)},${Y(60)}" class="acc" fill="none"/>
+  ${[0,10,20,30].map(t => T(X(t), Y(0) + 18, t, 'mid mut')).join('')}${[0,20,40,60].map(d => T(X(0) - 8, Y(d) + 4, d, 'end mut')).join('')}
+  ${T(X(16), Y(0) + 38, 'time (s)', 'mid lbl')}${T(24, 40, 'distance (m)', 'lbl')}
+  ${T(X(3), Y(14) - 16, 'A', 'hott')}${T(X(15), Y(20) - 10, 'B', 'hott')}${T(X(26), Y(36) - 14, 'C', 'hott')}
+  ${T(470, 50, 'Gradient = speed', 'lbl')}${T(470, 78, 'A: 20 m in 10 s, speed 2 m/s', 'mut')}${T(470, 102, 'B: flat line, stationary', 'mut')}${T(470, 126, 'C: 40 m in 10 s, speed 4 m/s', 'mut')}${T(470, 160, 'Steeper = faster.', 'acct')}${T(470, 184, 'Curve = speed changing.', 'acct')}</svg>`;
+}
+function svgST(){
+  const X = t => 70 + 7.5 * t, Y = v => 190 - 7 * v;
+  return `<svg viewBox="0 0 780 250" role="img" aria-label="Speed-time graph with area">
+  <polygon points="${X(0)},${Y(0)} ${X(10)},${Y(20)} ${X(40)},${Y(20)} ${X(60)},${Y(0)}" class="scr" style="stroke:var(--accent);stroke-width:2.5"/>
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(64)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(24)}" class="ln"/>
+  ${[0,10,40,60].map(t => T(X(t), Y(0) + 18, t, 'mid mut')).join('')}${[0,20].map(v => T(X(0) - 8, Y(v) + 4, v, 'end mut')).join('')}
+  ${T(X(30), Y(0) + 38, 'time (s)', 'mid lbl')}${T(24, 40, 'speed (m/s)', 'lbl')}
+  ${T(X(5), Y(7), '100', 'mid hott')}${T(X(25), Y(10), '600', 'mid hott')}${T(X(50), Y(7), '200', 'mid hott')}
+  ${T(560, 56, 'Gradient = acceleration', 'lbl')}${T(560, 84, 'Area = distance', 'lbl')}${T(560, 112, '100 + 600 + 200', 'mut')}${T(560, 134, '= 900 m', 'hott')}${T(560, 170, 'Slope down = slowing.', 'acct')}</svg>`;
+}
+function svgForces(){
+  const arrow = (x1, y1, x2, y2, cls, id) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${cls}" marker-end="url(#${id})"/>`;
+  return `<svg viewBox="0 0 780 260" role="img" aria-label="Forces on a box">${arrowDefs('f')}
+  <rect x="190" y="110" width="120" height="70" rx="6" class="scr" style="stroke:var(--ink);stroke-width:2"/><line x1="100" y1="180" x2="400" y2="180" class="ln"/>
+  ${arrow(250, 110, 250, 40, 'acc', 'b-f')}${T(262, 54, 'normal reaction', 'acct')}${arrow(250, 180, 250, 240, 'hotl', 'h-f')}${T(262, 236, 'weight = mg', 'hott')}
+  ${arrow(190, 145, 110, 145, 'ln', 'a-f')}${T(106, 138, 'friction', 'end')}${arrow(310, 145, 410, 145, 'acc', 'b-f')}${T(414, 138, 'push', 'acct')}
+  ${T(470, 56, 'Resultant = push − friction', 'lbl')}${T(470, 84, 'Vertical: weight = normal reaction', 'mut')}${T(470, 106, '(balanced, no vertical motion)', 'mut')}${T(470, 140, 'Weight (N) = mass (kg) × g', 'mono acct')}${T(470, 168, 'g = 10 N/kg on Earth', 'mut')}${T(470, 204, 'F = m × a', 'mono hott')}</svg>`;
+}
+function svgHooke(){
+  const X = e => 80 + 10 * e, Y = f => 200 - 12 * f;
+  return `<svg viewBox="0 0 800 250" role="img" aria-label="Force-extension graph for a spring">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(40)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(14)}" class="ln"/>
+  <polyline points="${X(0)},${Y(0)} ${X(20)},${Y(8)} ${X(26)},${Y(9.2)} ${X(34)},${Y(10.2)}" class="acc" fill="none"/><circle cx="${X(20)}" cy="${Y(8)}" r="5" class="hotf"/>
+  ${T(X(20) + 10, Y(8) + 28, 'limit of proportionality', 'hott')}${T(X(17), Y(0) + 34, 'extension', 'mid lbl')}${T(24, 40, 'force (N)', 'lbl')}
+  ${T(500, 56, 'Hooke’s law: F = k × x', 'mono acct')}${T(500, 84, 'Straight line through the origin:', 'mut')}${T(500, 106, 'force ∝ extension.', 'mut')}${T(500, 140, 'k = force ÷ extension', 'mono')}${T(500, 168, '(spring constant, N/cm or N/m)', 'mut')}${T(500, 200, 'Past the limit: stretched for good.', 'mut')}</svg>`;
+}
+function svgEnergy(){
+  return `<svg viewBox="0 0 780 250" role="img" aria-label="Energy flow (Sankey) for a lamp">${arrowDefs('e')}
+  <rect x="60" y="80" width="200" height="90" class="scr" style="stroke:var(--accent);stroke-width:2"/><polygon points="260,80 420,80 460,95 460,135 420,135 260,135" class="scr" style="stroke:var(--accent);stroke-width:2"/>
+  <polygon points="260,135 420,135 420,170 330,170 330,210 260,210" class="part" style="stroke:var(--hot);stroke-width:2"/>
+  ${T(160, 128, '100 J in', 'mid mono lbl')}${T(380, 115, '40 J useful', 'mid mono acct')}${T(350, 200, '60 J wasted (heat)', 'mono hott')}
+  ${T(500, 70, 'Energy is never lost:', 'lbl')}${T(500, 94, 'it is transferred.', 'lbl')}${T(500, 130, 'efficiency =', 'mono acct')}${T(500, 150, 'useful ÷ total × 100%', 'mono acct')}${T(500, 174, '= 40 ÷ 100 × 100 = 40%', 'mono')}${T(500, 206, 'Wasted energy spreads out', 'mut')}${T(500, 226, 'as thermal energy.', 'mut')}</svg>`;
+}
+function svgPressure(){
+  const arr = (y, len) => `<line x1="120" y1="${y}" x2="${120 + len}" y2="${y}" class="hotl" marker-end="url(#h-p)"/><line x1="320" y1="${y}" x2="${320 - len}" y2="${y}" class="hotl" marker-end="url(#h-p)"/>`;
+  return `<svg viewBox="0 0 700 260" role="img" aria-label="Liquid pressure increases with depth">${arrowDefs('p')}
+  <rect x="120" y="30" width="200" height="190" class="scr" style="stroke:var(--ink);stroke-width:2"/>${arr(70, 28)}${arr(120, 52)}${arr(170, 76)}
+  ${T(220, 20, 'surface', 'mid mut')}${T(220, 246, 'deeper: more pressure', 'mid acct')}
+  ${T(380, 60, 'Pressure = force ÷ area', 'mono lbl')}${T(380, 86, 'p = F ÷ A     (Pa = N/m²)', 'mono acct')}${T(380, 122, 'Liquid pressure:', 'lbl')}${T(380, 148, 'p = ρ × g × h', 'mono acct')}${T(380, 176, 'ρ density, g = 10 N/kg, h depth', 'mut')}${T(380, 206, 'Small area = large pressure.', 'mut')}</svg>`;
+}
+function svgStates(){
+  const box = (x, title) => `<rect x="${x}" y="40" width="190" height="150" rx="6" class="part"/>${T(x + 95, 28, title, 'mid lbl')}`;
+  const solid = Array.from({length:20}, (_, i) => `<circle cx="${50 + (i % 5) * 28 + 10}" cy="${70 + Math.floor(i / 5) * 28}" r="10" class="accf" style="fill-opacity:.5;stroke:var(--accent)"/>`).join('');
+  const liq = [[270,70],[298,80],[326,66],[354,84],[276,100],[306,112],[336,98],[362,116],[280,132],[310,142],[340,130],[366,150],[288,166],[318,172],[348,166]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="10" class="accf" style="fill-opacity:.5;stroke:var(--accent)"/>`).join('');
+  const gas = [[498,70],[560,90],[610,64],[520,130],[590,150],[640,120],[540,172],[624,178]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="10" class="accf" style="fill-opacity:.5;stroke:var(--accent)"/>`).join('');
+  return `<svg viewBox="0 0 700 290" role="img" aria-label="Particles in a solid, liquid and gas">
+  ${box(40, 'Solid')}${box(260, 'Liquid')}${box(480, 'Gas')}${solid}${liq}${gas}
+  ${T(135, 214, 'regular, touching', 'mid')}${T(135, 232, 'vibrate on the spot', 'mid mut')}${T(355, 214, 'irregular, touching', 'mid')}${T(355, 232, 'slide past each other', 'mid mut')}${T(575, 214, 'far apart', 'mid')}${T(575, 232, 'move fast and randomly', 'mid mut')}
+  ${T(350, 272, 'Heating adds energy: solid → liquid (melting) → gas (boiling).', 'mid acct')}</svg>`;
+}
+
 const CH = {
 density: {
   code: 'Ch 9', name: 'Density',
@@ -529,6 +598,249 @@ sound: {
     { q: 'During a storm, lightning is seen before the thunder is heard. Explain why.', m: 2,
       p: ['==Light travels much faster== than sound.', 'Light ≈ 3 × 10⁸ m/s; sound ≈ 340 m/s.'] }
   ]
+},
+motion: {
+  code: 'Topic 1', name: 'Motion',
+  lede: 'Speed, acceleration and the two graphs. Learn what the gradient and the area mean on each graph.',
+  learn: [
+    { h: 'Speed, velocity and acceleration', list: ['==Speed== = ==distance ÷ time==. ==Average speed== = ==total distance ÷ total time==.', '==Velocity== is speed ==in a given direction==.', '==Acceleration== = ==change in velocity ÷ time taken== = (v − u) ÷ t. Unit: ==m/s²==.', 'A negative acceleration means the object is ==slowing down== (deceleration).'], f: 'a = (v − u) ÷ t     speed = distance ÷ time' },
+    { h: 'Distance–time graphs', list: ['The ==gradient== is the ==speed==.', 'A ==horizontal== line means ==stationary==.', 'A ==straight sloping== line means ==constant speed==. ==Steeper== means ==faster==.', 'A ==curve== means the speed is ==changing==.'] },
+    { h: 'Speed–time graphs', list: ['The ==gradient== is the ==acceleration==.', 'A ==horizontal== line means ==constant speed== (zero acceleration).', 'A line sloping ==down== means ==deceleration==.', 'The ==area under the graph== is the ==distance travelled==. Split it into rectangles and triangles.'] },
+    { h: 'Free fall', list: ['Near the Earth’s surface all falling objects accelerate at about ==10 m/s²== (g = 10 N/kg).', 'Air resistance increases with speed. When it equals the weight, the resultant force is ==zero== and the object falls at a ==constant (terminal) velocity==.'] }
+  ],
+  mistakes: ['Mixing up the ==two graphs==: a flat line is ==stationary== on a distance–time graph but ==constant speed== on a speed–time graph.', 'Using the ==wrong units== (km/h with seconds). Convert first.', 'Forgetting the ==½== when finding the area of a triangle.', 'Reading the ==gradient== as the area.', 'Writing deceleration as a ==positive== number in v = u + at.'],
+  diagrams: [
+    { svg: svgDT, cap: 'Distance–time graph: ==gradient = speed==. Flat = ==stationary==.' },
+    { svg: svgST, cap: 'Speed–time graph: ==gradient = acceleration==, ==area = distance==.' }
+  ],
+  worked: [
+    W('A cyclist travels 600 m in 40 s. Calculate her average speed.', '==Speed = distance ÷ time==. Keep the units matched: metres and seconds give m/s.', 'Always write the unit.', 'speed = distance ÷ time',
+      [['Write the formula', 'speed = distance ÷ time', ''], ['Substitute', 'speed = 600 ÷ 40', 'Distance in metres, time in seconds.'], ['Answer with unit', 'speed = 15 m/s', '600 ÷ 40 = 15.']],
+      [['Distance', '600 m', -1], ['Time', '40 s', -1], ['Speed', '15 m/s', 2]]),
+    W('A car accelerates from 5 m/s to 25 m/s in 8 s. Calculate its acceleration.', '==Acceleration = change in speed ÷ time==. The change is the final speed minus the starting speed.', 'The unit is m/s², metres per second per second.', 'a = (v − u) ÷ t',
+      [['Write the formula', 'a = (v − u) ÷ t', 'v is the final speed and u the starting speed.'], ['Find the change in speed', 'v − u = 25 − 5 = 20 m/s', ''], ['Substitute', 'a = 20 ÷ 8', ''], ['Answer with unit', 'a = 2.5 m/s²', '']],
+      [['u, v, t', '5, 25, 8 s', -1], ['Change', '20 m/s', 1], ['a', '2.5 m/s²', 3]]),
+    W('A distance–time graph shows: 0–10 s the object moves 20 m; 10–20 s it does not move; 20–30 s it moves a further 40 m. Find its speed in each part and its average speed.', 'On a ==distance–time== graph the ==gradient is the speed==. A flat line means stationary.', 'Average speed uses the ==whole== distance and ==whole== time.', 'speed = gradient',
+      [['First 10 s', '20 ÷ 10 = 2 m/s', 'Distance moved ÷ time taken.'], ['Next 10 s', 'stationary, speed 0', 'Flat line: the distance does not change.'], ['Last 10 s', '40 ÷ 10 = 4 m/s', 'A steeper line, so faster.'], ['Average speed', 'total distance 60 m ÷ total time 30 s = 2 m/s', 'Include the time when it was stationary.']],
+      [['Part 1', '2 m/s', 0], ['Part 2', '0 (stationary)', 1], ['Part 3', '4 m/s', 2], ['Average', '60 ÷ 30 = 2 m/s', 3]]),
+    W('A train’s speed rises steadily from 0 to 20 m/s in 10 s, stays at 20 m/s for 30 s, then falls steadily to 0 in 20 s. Find the total distance.', 'On a ==speed–time== graph, ==distance = area under the graph==. Split it into a triangle, a rectangle and a triangle.', 'Triangles need the ==½==.', 'distance = area',
+      [['First triangle', '½ × 10 × 20 = 100 m', 'Speeding up.'], ['Rectangle', '30 × 20 = 600 m', 'Constant speed.'], ['Second triangle', '½ × 20 × 20 = 200 m', 'Slowing down.'], ['Total distance', '100 + 600 + 200 = 900 m', 'Total time is 60 s, so average speed = 15 m/s.']],
+      [['Triangle 1', '100 m', 0], ['Rectangle', '600 m', 1], ['Triangle 2', '200 m', 2], ['Total', '900 m', 3]]),
+    W('A stone is dropped from rest. Taking g = 10 m/s², find its speed after 3 s and the distance it falls.', 'Free fall is ==acceleration of 10 m/s²==. Start from rest, so u = 0.', 'Use the graph area for the distance: a triangle.', 'v = u + at',
+      [['Write the formula', 'v = u + at', ''], ['Substitute', 'v = 0 + 10 × 3', 'u = 0 because it starts from rest.'], ['Speed', 'v = 30 m/s', ''], ['Distance = area of the triangle', '½ × 3 × 30 = 45 m', 'Speed–time graph: a straight line from 0 to 30 m/s over 3 s.']],
+      [['Speed after 3 s', '30 m/s', 2], ['Area', '½ × 3 × 30', 3], ['Distance', '45 m', 3]]),
+    W('A cyclist slows from 12 m/s to rest in 4 s. Find the acceleration.', 'Slowing down gives a ==negative acceleration== (deceleration).', 'The negative sign is the direction of the change.', 'a = (v − u) ÷ t',
+      [['Write the formula', 'a = (v − u) ÷ t', ''], ['Substitute', 'a = (0 − 12) ÷ 4', 'It ends at rest, so v = 0.'], ['Answer with unit', 'a = −3 m/s²', 'The deceleration is 3 m/s².']],
+      [['u, v, t', '12, 0, 4 s', -1], ['v − u', '−12', 1], ['a', '−3 m/s²', 2]])
+  ],
+  drill: 'motion',
+  quiz: [
+    { q: 'The gradient of a distance–time graph gives…', o: ['acceleration', 'speed', 'distance', 'time'], a: 1, w: '==Speed==.' },
+    { q: 'A horizontal line on a distance–time graph means the object is…', o: ['accelerating', 'moving at constant speed', 'stationary', 'slowing down'], a: 2, w: '==Stationary==. The distance is not changing.' },
+    { q: 'The area under a speed–time graph gives…', o: ['acceleration', 'speed', 'distance travelled', 'time'], a: 2, w: '==Distance travelled==.' },
+    { q: 'A car goes from 0 to 20 m/s in 5 s. Its acceleration is…', o: ['100 m/s²', '4 m/s²', '25 m/s²', '0.25 m/s²'], a: 1, w: '20 ÷ 5 = ==4 m/s²==.' },
+    { q: 'On a speed–time graph a horizontal line means…', o: ['stationary', 'constant speed', 'acceleration', 'deceleration'], a: 1, w: '==Constant speed==.' },
+    { q: 'A skydiver reaches terminal velocity when…', o: ['weight is zero', 'air resistance equals weight', 'air resistance is zero', 'she stops'], a: 1, w: 'The forces are balanced: ==air resistance = weight==.' }
+  ],
+  exam: [
+    { q: 'A distance–time graph has three straight sections: OA slopes upwards, AB is horizontal, BC slopes upwards more steeply than OA. Describe the motion in each section.', m: 3,
+      p: ['OA: moving at ==constant speed==', 'AB: ==stationary==', 'BC: moving at a ==greater constant speed== (steeper gradient)'] },
+    { q: 'A car accelerates uniformly from rest to 24 m/s in 6 s. Calculate (a) the acceleration [2] (b) the distance travelled in this time [2].', m: 4,
+      p: ['a = (v − u) ÷ t = (24 − 0) ÷ 6', '==4 m/s²==', 'Distance = ==area under the graph== = ½ × 6 × 24', '==72 m=='] },
+    { q: 'Explain why a skydiver reaches a terminal velocity.', m: 3,
+      p: ['At first the ==weight is greater than air resistance==, so she accelerates', '==Air resistance increases== as speed increases', 'When ==air resistance = weight==, the resultant force is zero, so the speed is constant'] }
+  ]
+},
+forces: {
+  code: 'Topic 1', name: 'Forces',
+  lede: 'Resultant force, weight, F = ma and springs. Always find the resultant force first.',
+  learn: [
+    { h: 'Forces and Newton’s laws', list: ['A ==force== is measured in ==newtons (N)==.', 'The ==resultant force== is the ==single force== that has the same effect as all the forces. Same direction: add. Opposite directions: subtract.', '==Balanced forces== (resultant zero): the object stays still or moves at ==constant speed in a straight line==.', 'An ==unbalanced== force changes the speed or direction: the object ==accelerates==.', '==F = m × a== (force = mass × acceleration).'], f: 'F = m × a     W = m × g' },
+    { h: 'Mass and weight', list: ['==Mass== is the ==amount of matter== (kg). It is the ==same everywhere==.', '==Weight== is the ==force of gravity== on the object (N). It ==changes== with the gravitational field strength.', '==Weight = mass × g==. On Earth g = ==10 N/kg==. On the Moon g is about 1.6 N/kg.'] },
+    { h: 'Friction, springs and stopping', list: ['==Friction== is a force that ==opposes motion== between surfaces. It makes surfaces warm.', '==Hooke’s law==: for a spring, ==force is proportional to extension== (F = kx) up to the ==limit of proportionality==.', '==Extension== = new length − original length.', '==Stopping distance== = ==thinking distance + braking distance==. Tiredness, speed and distractions increase thinking distance. Wet roads and worn tyres increase braking distance.'] }
+  ],
+  mistakes: ['Using ==mass== (kg) where you need ==weight== (N).', 'Adding forces that act in ==opposite directions==.', 'Using the ==total length== of a spring instead of the ==extension==.', 'Saying “weight is measured in kg”. It is ==newtons==.', 'Forgetting the ==resultant force== must be found before F = ma.'],
+  diagrams: [
+    { svg: svgForces, cap: 'Forces on a box. The ==resultant== = push − friction. F = ma.' },
+    { svg: svgHooke, cap: 'A spring obeys ==Hooke’s law== up to the ==limit of proportionality==.' }
+  ],
+  worked: [
+    W('A box is pushed to the right with a force of 50 N. Friction of 20 N acts to the left. The mass of the box is 6 kg. Find the resultant force and the acceleration.', 'The forces act in ==opposite directions==, so ==subtract== them to get the resultant. Then use ==F = ma==.', 'Draw the forces with arrows first.', 'resultant = 50 − 20',
+      [['Resultant force', '50 − 20 = 30 N to the right', 'Opposite directions, so subtract.'], ['Write F = ma', 'a = F ÷ m', 'Rearrange to find a.'], ['Substitute', 'a = 30 ÷ 6', 'Use the resultant, not the push.'], ['Answer with unit', 'a = 5 m/s²', '']],
+      [['Push', '50 N', -1], ['Friction', '20 N', -1], ['Resultant', '30 N', 0], ['a', '30 ÷ 6 = 5 m/s²', 3]]),
+    W('A person has a mass of 60 kg. Find their weight on Earth (g = 10 N/kg) and on the Moon (g = 1.6 N/kg).', '==Weight = mass × g==. The mass stays at 60 kg; only the weight changes.', 'Mass in kg, weight in N.', 'W = m × g',
+      [['Write the formula', 'W = m × g', ''], ['On Earth', 'W = 60 × 10 = 600 N', ''], ['On the Moon', 'W = 60 × 1.6 = 96 N', 'The Moon’s gravity is weaker.'], ['Mass on the Moon', 'Still 60 kg', 'Mass does not change.']],
+      [['Mass', '60 kg', -1], ['Weight on Earth', '600 N', 1], ['Weight on Moon', '96 N', 2], ['Mass on Moon', '60 kg', 3]]),
+    W('A resultant force of 12 N acts on a 3 kg trolley. Find its acceleration.', 'Use ==F = m × a== and rearrange for a.', 'Unit of acceleration: m/s².', 'a = F ÷ m',
+      [['Rearrange', 'a = F ÷ m', 'Divide both sides by m.'], ['Substitute', 'a = 12 ÷ 3', ''], ['Answer with unit', 'a = 4 m/s²', '']],
+      [['F, m', '12 N, 3 kg', -1], ['a', '12 ÷ 3 = 4 m/s²', 2]]),
+    W('A spring is 10 cm long. A 4 N load makes it 14 cm long. Find the extension, the spring constant, and the length with an 8 N load (within the limit).', '==Extension = new length − original length==. Then use ==Hooke’s law==: F = k × x.', 'Double the force gives double the extension.', 'k = F ÷ x',
+      [['Extension for 4 N', '14 − 10 = 4 cm', 'New length minus original length.'], ['Spring constant', 'k = 4 N ÷ 4 cm = 1 N/cm', ''], ['Extension for 8 N', '8 ÷ 1 = 8 cm', 'Double the force, double the extension.'], ['Length with 8 N', '10 + 8 = 18 cm', 'Add the extension to the original length.']],
+      [['Extension (4 N)', '4 cm', 0], ['k', '1 N/cm', 1], ['Extension (8 N)', '8 cm', 2], ['Length', '18 cm', 3]]),
+    W('A parachutist of weight 800 N falls at a steady speed. What is the air resistance on her? Explain.', '==Steady speed== means ==balanced forces==: the resultant is zero.', 'Give the reason as well as the number.', 'Constant speed = zero resultant',
+      [['Steady speed', 'The resultant force is 0 N', 'Constant speed in a straight line means no acceleration.'], ['Balanced forces', 'Air resistance = weight', 'The two forces are equal and opposite.'], ['Answer', 'Air resistance = 800 N, upwards', 'Weight is 800 N downwards.']],
+      [['Resultant', '0 N', 0], ['Air resistance', 'equals weight', 1], ['Value', '800 N upwards', 2]], true),
+    W('A car travelling fast has a thinking distance of 12 m and a braking distance of 24 m. Find the stopping distance. Give one reason it would increase on a wet road.', '==Stopping distance = thinking distance + braking distance==.', 'Wet roads affect the BRAKING distance, tiredness affects the THINKING distance.', 'stopping = thinking + braking',
+      [['Add the two distances', '12 + 24 = 36 m', ''], ['Wet road', 'Less friction between tyres and road', 'The tyres grip less.'], ['Effect', 'The braking distance increases', 'The car takes longer to stop.']],
+      [['Thinking', '12 m', -1], ['Braking', '24 m', -1], ['Stopping', '36 m', 0], ['Wet road', 'braking distance ↑', 2]], true)
+  ],
+  drill: 'forces',
+  quiz: [
+    { q: 'Weight is measured in…', o: ['kilograms', 'newtons', 'metres', 'joules'], a: 1, w: '==Newtons (N)==.' },
+    { q: 'A 5 kg mass on Earth (g = 10 N/kg) has a weight of…', o: ['0.5 N', '2 N', '50 N', '5 N'], a: 2, w: '5 × 10 = ==50 N==.' },
+    { q: 'The resultant of 8 N to the right and 3 N to the left is…', o: ['11 N right', '5 N right', '5 N left', '24 N'], a: 1, w: '8 − 3 = ==5 N to the right==.' },
+    { q: 'A 2 kg object has a resultant force of 10 N. Its acceleration is…', o: ['5 m/s²', '20 m/s²', '0.2 m/s²', '12 m/s²'], a: 0, w: '10 ÷ 2 = ==5 m/s²==.' },
+    { q: 'Balanced forces on a moving object mean it…', o: ['speeds up', 'slows down', 'moves at constant speed', 'stops at once'], a: 2, w: '==Constant speed== in a straight line.' },
+    { q: 'A spring’s extension is…', o: ['its total length', 'new length − original length', 'its original length', 'the force on it'], a: 1, w: '==New length − original length==.' }
+  ],
+  exam: [
+    { q: 'State two differences between mass and weight.', m: 2,
+      p: ['Mass is the ==amount of matter== (kg); weight is the ==force of gravity== on it (N)', 'Mass is the ==same everywhere==; weight ==changes== with gravitational field strength'] },
+    { q: 'A car of mass 1200 kg has a driving force of 3000 N and a resistive force of 600 N. Calculate (a) the resultant force [1] (b) the acceleration [2].', m: 3,
+      p: ['3000 − 600 = ==2400 N==', 'a = F ÷ m = 2400 ÷ 1200', '==2 m/s²=='] },
+    { q: 'A spring has an original length of 10 cm. A load of 4 N gives a length of 14 cm and a load of 8 N gives a length of 18 cm. (a) State the extension for 4 N. [1] (b) Show the extension is proportional to the load. [1] (c) Predict the length for 10 N. [2]', m: 4,
+      p: ['Extension = 14 − 10 = ==4 cm==', '8 N gives 8 cm: ==double the load gives double the extension==', 'Extension for 10 N = 10 cm', 'Length = ==20 cm=='] }
+  ]
+},
+energy: {
+  code: 'Topic 1', name: 'Energy, work and power',
+  lede: 'Energy is transferred, never used up. Know the four formulae and the units.',
+  learn: [
+    { h: 'Energy stores and conservation', list: ['Energy is measured in ==joules (J)==.', 'Stores: ==kinetic==, ==gravitational potential==, ==chemical==, ==elastic (strain)==, ==thermal==, ==nuclear==, ==electrical==.', '==Conservation of energy==: energy is ==never created or destroyed==, only ==transferred==.', 'Wasted energy usually ends up as ==thermal energy== in the surroundings.'] },
+    { h: 'The formulae', list: ['==Kinetic energy== = ½ × m × v².', '==Gravitational potential energy== = m × g × h.', '==Work done== = force × distance moved in the direction of the force.', '==Power== = work done ÷ time (or energy ÷ time). Unit: ==watt (W)== = 1 J/s.', '==Efficiency== = useful energy output ÷ total energy input × 100%.'], f: 'KE = ½mv²   GPE = mgh   W = Fd   P = W ÷ t' },
+    { h: 'Energy resources', list: ['==Renewable==: solar, wind, hydroelectric, geothermal, tidal, biofuel. They ==do not run out==.', '==Non-renewable==: coal, oil, natural gas, nuclear fuel. They ==will run out==.', 'Fossil fuels release ==carbon dioxide== (global warming).'] }
+  ],
+  mistakes: ['Forgetting to ==square the speed== in KE (v², not v).', 'Forgetting the ==½== in kinetic energy.', 'Using ==grams== instead of ==kilograms==.', 'Writing ==energy is used up==. Say it is ==transferred==.', 'Giving efficiency ==greater than 100%==.'],
+  diagrams: [{ svg: svgEnergy, cap: 'An energy flow diagram. ==Efficiency = useful ÷ total × 100%==.' }],
+  worked: [
+    W('Calculate the kinetic energy of a 2 kg ball moving at 5 m/s.', '==KE = ½ × m × v²==. Square the speed first.', 'Square the speed BEFORE multiplying.', 'KE = ½ m v²',
+      [['Write the formula', 'KE = ½ × m × v²', ''], ['Substitute', 'KE = ½ × 2 × 5²', 'm = 2 kg, v = 5 m/s.'], ['Square the speed', 'KE = ½ × 2 × 25', '5² = 25.'], ['Answer with unit', 'KE = 25 J', '½ × 2 = 1, then × 25.']],
+      [['m, v', '2 kg, 5 m/s', -1], ['v²', '25', 2], ['KE', '25 J', 3]]),
+    W('Calculate the gravitational potential energy gained by a 3 kg book lifted 4 m. (g = 10 N/kg)', '==GPE = m × g × h==.', 'Height is in metres.', 'GPE = mgh',
+      [['Write the formula', 'GPE = m × g × h', ''], ['Substitute', 'GPE = 3 × 10 × 4', ''], ['Answer with unit', 'GPE = 120 J', '3 × 10 = 30, then × 4.']],
+      [['m, g, h', '3 kg, 10, 4 m', -1], ['GPE', '120 J', 2]]),
+    W('A force of 40 N pushes a box 5 m. It takes 10 s. Calculate the work done and the power.', '==Work done = force × distance==. ==Power = work ÷ time==.', 'Power is in watts, work is in joules.', 'W = Fd,  P = W ÷ t',
+      [['Work done', 'W = F × d = 40 × 5', ''], ['Answer', 'W = 200 J', ''], ['Power', 'P = W ÷ t = 200 ÷ 10', ''], ['Answer with unit', 'P = 20 W', 'Watts = joules per second.']],
+      [['Work', '200 J', 1], ['Power', '200 ÷ 10 = 20 W', 3]]),
+    W('A machine takes in 500 J of energy and gives out 150 J of useful energy. Calculate its efficiency.', '==Efficiency = useful output ÷ total input × 100%==.', 'Efficiency can never be above 100%.', 'efficiency = useful ÷ total × 100',
+      [['Write the formula', 'efficiency = useful ÷ total × 100%', ''], ['Substitute', '150 ÷ 500 × 100', ''], ['Answer', '30%', ''], ['Where does the rest go?', '350 J is wasted as thermal energy', '500 − 150 = 350 J.']],
+      [['Useful', '150 J', -1], ['Total', '500 J', -1], ['Efficiency', '30%', 2], ['Wasted', '350 J', 3]]),
+    W('A 0.2 kg ball is dropped from a height of 5 m. Ignoring air resistance, find its kinetic energy and speed just before it hits the ground. (g = 10 N/kg)', '==Conservation of energy==: all the GPE becomes KE.', 'Check: v = 10 m/s from a 5 m drop.', 'GPE lost = KE gained',
+      [['GPE at the top', 'm × g × h = 0.2 × 10 × 5 = 10 J', ''], ['KE at the bottom', 'KE = 10 J', 'All the GPE has been transferred to KE.'], ['Use KE = ½mv²', '10 = ½ × 0.2 × v², so v² = 10 ÷ 0.1 = 100', ''], ['Speed', 'v = √100 = 10 m/s', '']],
+      [['GPE', '10 J', 0], ['KE', '10 J', 1], ['v²', '100', 2], ['v', '10 m/s', 3]]),
+    W('A motor lifts a 20 kg load through 3 m in 6 s. Find the power. (g = 10 N/kg)', 'The work done is the ==energy gained== (GPE). Then ==P = work ÷ time==.', 'The force needed is the weight: 20 × 10 = 200 N.', 'P = W ÷ t',
+      [['Work done = GPE gained', '20 × 10 × 3 = 600 J', ''], ['Power', 'P = W ÷ t = 600 ÷ 6', ''], ['Answer with unit', 'P = 100 W', '']],
+      [['Work', '600 J', 0], ['Time', '6 s', -1], ['Power', '100 W', 2]])
+  ],
+  drill: 'energy',
+  quiz: [
+    { q: 'The unit of energy is the…', o: ['newton', 'watt', 'joule', 'pascal'], a: 2, w: '==Joule (J)==.' },
+    { q: 'Kinetic energy depends on…', o: ['mass only', 'mass and speed', 'height only', 'time'], a: 1, w: 'KE = ½mv²: ==mass and speed==.' },
+    { q: 'A 2 kg mass is lifted 3 m (g = 10 N/kg). GPE gained is…', o: ['6 J', '60 J', '5 J', '600 J'], a: 1, w: '2 × 10 × 3 = ==60 J==.' },
+    { q: 'Power is…', o: ['force × distance', 'work done ÷ time', 'energy × time', 'mass × g'], a: 1, w: '==Work done ÷ time==.' },
+    { q: 'Which is a renewable energy resource?', o: ['coal', 'oil', 'wind', 'natural gas'], a: 2, w: '==Wind== will not run out.' },
+    { q: 'A lamp uses 100 J and gives out 20 J of light. Its efficiency is…', o: ['5%', '20%', '80%', '120%'], a: 1, w: '20 ÷ 100 × 100 = ==20%==.' }
+  ],
+  exam: [
+    { q: 'Calculate the kinetic energy of a car of mass 1500 kg travelling at 20 m/s.', m: 3,
+      p: ['KE = ==½ × m × v²==', '½ × 1500 × 20²', '==300 000 J== (300 kJ)'] },
+    { q: 'A lamp takes in 60 J of electrical energy and gives out 6 J of light energy. (a) Calculate its efficiency. [2] (b) State where the rest of the energy goes. [1]', m: 3,
+      p: ['6 ÷ 60 × 100', '==10%==', 'The rest is ==wasted as thermal energy== (heat) to the surroundings'] },
+    { q: 'State two advantages of using renewable energy resources instead of fossil fuels.', m: 2,
+      p: ['Renewable resources ==do not run out==', 'They ==do not release carbon dioxide== (less global warming) while generating electricity'] }
+  ]
+},
+pressure: {
+  code: 'Topic 1', name: 'Pressure',
+  lede: 'Pressure is force spread over an area. Check your area is in m².',
+  learn: [
+    { h: 'Pressure', list: ['==Pressure = force ÷ area== (p = F ÷ A).', 'Unit: ==pascal (Pa)== = 1 N/m². Also kPa = 1000 Pa.', 'The ==same force== on a ==smaller area== gives a ==larger pressure== (a nail, a knife, stiletto heels).', 'A ==larger area== gives a ==smaller pressure== (snow shoes, wide tractor tyres).', '==Convert areas to m²==: 1 m² = 10 000 cm².'], f: 'p = F ÷ A     F = p × A     A = F ÷ p' },
+    { h: 'Pressure in liquids and gases', list: ['Pressure in a liquid ==increases with depth==.', '==p = ρ × g × h== (density × g × depth).', 'Pressure acts in ==all directions==.', 'A ==gas== exerts pressure because its particles ==collide with the walls==.', '==Atmospheric pressure== is about ==100 000 Pa== (100 kPa) at sea level.'] }
+  ],
+  mistakes: ['Using ==cm²== when the answer must be in ==Pa== (N/m²).', 'Dividing the ==wrong way round== (A ÷ F).', 'Mixing up ==force== and ==pressure==.', 'Forgetting that liquid pressure depends on ==depth==, not the shape of the container.', 'Using the ==total length== of a container instead of the ==depth== h.'],
+  diagrams: [{ svg: svgPressure, cap: 'Liquid pressure ==increases with depth==. Pressure = force ÷ area.' }],
+  worked: [
+    W('A person of weight 600 N stands on an area of 0.03 m². Calculate the pressure on the ground.', '==Pressure = force ÷ area==. Here the force is the weight.', 'The unit is the pascal (Pa).', 'p = F ÷ A',
+      [['Write the formula', 'p = F ÷ A', ''], ['Substitute', 'p = 600 ÷ 0.03', 'Area is already in m².'], ['Answer with unit', 'p = 20 000 Pa', '']],
+      [['F, A', '600 N, 0.03 m²', -1], ['p', '20 000 Pa', 2]]),
+    W('The pressure on a floor is 50 000 Pa. The area is 0.4 m². Find the force.', 'Rearrange: ==F = p × A==.', 'Cover F in the formula triangle: p × A is left.', 'F = p × A',
+      [['Rearrange', 'F = p × A', ''], ['Substitute', 'F = 50 000 × 0.4', ''], ['Answer with unit', 'F = 20 000 N', '']],
+      [['p, A', '50 000 Pa, 0.4 m²', -1], ['F', '20 000 N', 2]]),
+    W('A diver is 20 m below the surface of water of density 1000 kg/m³. Find the pressure due to the water. (g = 10 N/kg)', 'Liquid pressure: ==p = ρ × g × h==.', 'Total pressure would also include the atmosphere.', 'p = ρgh',
+      [['Write the formula', 'p = ρ × g × h', ''], ['Substitute', 'p = 1000 × 10 × 20', 'ρ = 1000 kg/m³, h = 20 m.'], ['Answer with unit', 'p = 200 000 Pa (200 kPa)', '']],
+      [['ρ, g, h', '1000, 10, 20 m', -1], ['p', '200 000 Pa', 2]]),
+    W('A 600 N person wears (a) stiletto heels with a total area of 0.0002 m² touching the floor, or (b) flat shoes with area 0.02 m². Compare the pressures.', 'Same force, ==different areas==. The smaller area gives the larger pressure.', 'Explain: pressure is inversely proportional to area.', 'p = F ÷ A each time',
+      [['Heels', 'p = 600 ÷ 0.0002 = 3 000 000 Pa', ''], ['Flat shoes', 'p = 600 ÷ 0.02 = 30 000 Pa', ''], ['Compare', '3 000 000 ÷ 30 000 = 100', 'The heels give 100 times the pressure.'], ['Explain', 'The same force acts on a much smaller area', 'That is why heels dent floors.']],
+      [['Heels', '3 000 000 Pa', 0], ['Flat', '30 000 Pa', 1], ['Ratio', '100 ×', 2]], true),
+    W('A force of 100 N acts on an area of 25 cm². Calculate the pressure in Pa.', 'Convert the area to ==m² first==. 1 m² = 10 000 cm².', 'Always convert before you divide.', '25 cm² = 0.0025 m²',
+      [['Convert the area', '25 ÷ 10 000 = 0.0025 m²', '1 m² = 10 000 cm².'], ['Substitute', 'p = 100 ÷ 0.0025', ''], ['Answer with unit', 'p = 40 000 Pa', '']],
+      [['Area', '0.0025 m²', 0], ['p', '40 000 Pa', 2]])
+  ],
+  drill: 'pressure',
+  quiz: [
+    { q: 'The unit of pressure is the…', o: ['newton', 'joule', 'pascal', 'watt'], a: 2, w: '==Pascal (Pa)==, which is N/m².' },
+    { q: 'To increase pressure with the same force you…', o: ['increase the area', 'decrease the area', 'decrease the mass', 'increase the time'], a: 1, w: 'Use a ==smaller area==.' },
+    { q: 'A force of 200 N acts on 0.5 m². The pressure is…', o: ['100 Pa', '400 Pa', '0.0025 Pa', '200.5 Pa'], a: 1, w: '200 ÷ 0.5 = ==400 Pa==.' },
+    { q: 'Pressure in a liquid ___ with depth.', o: ['decreases', 'increases', 'stays the same', 'is zero'], a: 1, w: '==Increases==.' },
+    { q: 'Why do skis stop you sinking in snow?', o: ['they are light', 'they spread the weight over a larger area', 'they are slippery', 'they are long'], a: 1, w: 'A ==larger area== gives a ==smaller pressure==.' },
+    { q: 'A gas exerts pressure because its particles…', o: ['are heavy', 'collide with the walls', 'attract each other', 'do not move'], a: 1, w: 'They ==collide with the walls== of the container.' }
+  ],
+  exam: [
+    { q: 'Explain why a nail goes into wood more easily when it is sharp.', m: 2,
+      p: ['The sharp point has a ==small area==', 'The same force gives a ==larger pressure== (p = F ÷ A)'] },
+    { q: 'A block has weight 150 N and rests on a face of area 0.05 m². Calculate the pressure on the table.', m: 3,
+      p: ['p = ==F ÷ A==', '150 ÷ 0.05', '==3000 Pa=='] },
+    { q: 'A submarine is 50 m below the sea surface. The density of sea water is 1030 kg/m³ and g = 10 N/kg. Calculate the pressure due to the water.', m: 3,
+      p: ['p = ==ρ × g × h==', '1030 × 10 × 50', '==515 000 Pa=='] }
+  ]
+},
+particles: {
+  code: 'Topic 2', name: 'Particles and states of matter',
+  lede: 'The particle model explains the states of matter, gas pressure and changes of state.',
+  learn: [
+    { h: 'Solids, liquids and gases', table: [['', 'Solid', 'Liquid', 'Gas'], ['Arrangement', 'regular, touching', 'irregular, touching', 'far apart, random'], ['Movement', 'vibrate about fixed positions', 'slide past each other', 'move fast in all directions'], ['Forces between particles', 'strong', 'weaker', 'almost none'], ['Shape and volume', 'fixed shape, fixed volume', 'takes shape of container, fixed volume', 'fills the container, no fixed volume'], ['Compressible?', 'no', 'no', 'yes']] },
+    { h: 'Changes of state and gas pressure', list: ['==Melting== (solid to liquid), ==boiling== (liquid to gas), ==condensing== (gas to liquid), ==freezing== (liquid to solid).', 'During a change of state the ==temperature stays constant== while energy is used to ==break or form the forces between particles==.', '==Evaporation== happens at the ==surface== at ==any temperature==. ==Boiling== happens ==throughout== the liquid at the ==boiling point==.', 'A gas ==exerts pressure== because its particles ==collide with the walls==.', 'Heating a sealed gas: the particles move ==faster==, collide ==harder and more often==, so the ==pressure rises==.'] },
+    { h: 'Brownian motion, Boyle’s law and temperature', list: ['==Brownian motion==: small particles (smoke, pollen) in air or water move in ==random zigzags== because they are hit by ==fast, invisible molecules==.', '==Boyle’s law==: at constant temperature, ==p × V = constant==, so p₁V₁ = p₂V₂.', '==Kelvin temperature== = ==°C + 273==. The lowest temperature is ==0 K (absolute zero)== = −273 °C.'], f: 'p₁V₁ = p₂V₂     K = °C + 273' }
+  ],
+  mistakes: ['Saying “particles ==expand== when heated”. They ==move faster== or vibrate more.', 'Saying the ==temperature rises== during melting or boiling (it stays constant).', 'Saying ==solids have no movement==. Their particles vibrate.', 'Confusing ==evaporation== (surface, any temperature) with ==boiling==.', 'Using ==°C== in a gas-law calculation that needs kelvin.'],
+  diagrams: [{ svg: svgStates, cap: 'Particles in a ==solid==, ==liquid== and ==gas==.' }],
+  worked: [
+    W('Describe the differences between the particles in a solid and in a gas.', 'Compare ==arrangement==, ==movement== and ==forces==. Use the keywords.', 'Give a comparison for each, not just a description of one.', 'Arrangement, movement, forces',
+      [['Arrangement', 'Solid: particles are close together in a regular pattern. Gas: particles are far apart and random.', 'Examiners look for “regular” and “far apart”.'], ['Movement', 'Solid: particles only vibrate about fixed positions. Gas: they move quickly in all directions.', ''], ['Forces', 'Solid: strong forces hold particles in place. Gas: almost no forces between them.', '']],
+      [['Arrangement', 'regular v far apart', 0], ['Movement', 'vibrate v move fast', 1], ['Forces', 'strong v almost none', 2]], true),
+    W('Explain Brownian motion: why smoke particles seen through a microscope move in random zigzags.', 'Link the ==visible== smoke particles to the ==invisible== air molecules.', 'Use the words “random” and “collide”.', 'Visible particles are hit by invisible molecules',
+      [['Air molecules move', 'Fast and randomly in all directions', ''], ['They collide with smoke', 'They hit the smoke particles from all sides', ''], ['Unequal hits', 'At any moment more molecules hit one side than the other', 'This gives a small push in a random direction.'], ['Result', 'The smoke particles move in a random zigzag path', '']],
+      [['Air molecules', 'fast, random', 0], ['Collisions', 'with smoke from all sides', 1], ['Unequal', 'push in a random direction', 2], ['Result', 'zigzag motion', 3]], true),
+    W('Explain why the pressure of a gas in a sealed container increases when it is heated.', 'Use the ==particle model==: speed, collisions and force.', 'The volume stays the same (sealed container).', 'Faster, harder, more often',
+      [['Heating increases energy', 'The particles move faster', 'Their kinetic energy increases.'], ['Collisions with the walls', 'They hit the walls harder and more often', 'More collisions each second, each with more force.'], ['Result', 'The force on each unit area is greater, so the pressure rises', 'Pressure = force ÷ area.']],
+      [['Particles', 'move faster', 0], ['Collisions', 'harder and more often', 1], ['Pressure', 'increases', 2]], true),
+    W('A gas has a pressure of 100 kPa and a volume of 6 cm³. It is compressed to 2 cm³ at constant temperature. Find the new pressure.', '==Boyle’s law==: p₁ × V₁ = p₂ × V₂ at constant temperature.', 'Less volume means more pressure.', 'p₁V₁ = p₂V₂',
+      [['Write Boyle’s law', 'p₁ × V₁ = p₂ × V₂', ''], ['Substitute', '100 × 6 = p₂ × 2', ''], ['Work out the left side', '600 = p₂ × 2', ''], ['Answer', 'p₂ = 600 ÷ 2 = 300 kPa', 'The volume is 3 times smaller, so the pressure is 3 times bigger.']],
+      [['p₁, V₁', '100 kPa, 6 cm³', -1], ['V₂', '2 cm³', -1], ['p₁V₁', '600', 2], ['p₂', '300 kPa', 3]]),
+    W('Convert 27 °C to kelvin, and 350 K to °C.', '==K = °C + 273==. Add to go to kelvin, subtract to come back.', 'Kelvin has no degree sign.', 'K = °C + 273',
+      [['°C to K', '27 + 273 = 300 K', ''], ['K to °C', '350 − 273 = 77 °C', ''], ['Absolute zero', '0 K = −273 °C', 'The lowest possible temperature.']],
+      [['27 °C', '300 K', 0], ['350 K', '77 °C', 1], ['0 K', '−273 °C', 2]]),
+    W('Explain the difference between evaporation and boiling.', 'Give ==where==, ==temperature== and ==speed== for each.', 'Compare the two, do not describe them separately.', 'Surface v throughout',
+      [['Evaporation: where', 'Only at the surface of the liquid', ''], ['Evaporation: temperature', 'Happens at any temperature below the boiling point', 'The fastest particles escape from the surface.'], ['Boiling: where', 'Bubbles form throughout the liquid', ''], ['Boiling: temperature', 'Only at the boiling point', 'It is faster than evaporation.']],
+      [['Evaporation', 'surface, any temperature', 1], ['Boiling', 'throughout, at boiling point', 3]], true)
+  ],
+  drill: 'particles',
+  quiz: [
+    { q: 'In a solid the particles…', o: ['move freely', 'vibrate about fixed positions', 'are far apart', 'have no forces between them'], a: 1, w: '==Vibrate about fixed positions==.' },
+    { q: 'Which state has particles far apart and moving randomly?', o: ['solid', 'liquid', 'gas', 'all three'], a: 2, w: 'A ==gas==.' },
+    { q: 'During melting the temperature…', o: ['rises', 'stays constant', 'falls', 'is zero'], a: 1, w: 'It ==stays constant==. The energy breaks the forces between particles.' },
+    { q: 'Brownian motion is evidence that…', o: ['atoms are charged', 'air molecules move randomly', 'liquids expand', 'gases are heavy'], a: 1, w: 'Fast, random ==molecules collide== with the visible particles.' },
+    { q: '27 °C in kelvin is…', o: ['−246 K', '27 K', '246 K', '300 K'], a: 3, w: '27 + 273 = ==300 K==.' },
+    { q: 'The pressure of a gas is 200 kPa at 4 cm³. At 8 cm³ (same temperature) it is…', o: ['400 kPa', '100 kPa', '200 kPa', '50 kPa'], a: 1, w: 'Volume doubles, so pressure halves: ==100 kPa==.' }
+  ],
+  exam: [
+    { q: 'Describe the arrangement and movement of the particles in a liquid.', m: 3,
+      p: ['Particles are ==close together== / touching', 'In an ==irregular== arrangement', 'They ==slide past each other== (move around)'] },
+    { q: 'Explain, using the particle model, why the pressure of a gas in a sealed syringe increases when the plunger is pushed in at constant temperature.', m: 3,
+      p: ['The volume decreases so the particles are ==closer together==', 'They ==hit the walls more often==', 'More force per unit area, so the ==pressure increases=='] },
+    { q: 'A gas of volume 12 cm³ has a pressure of 100 kPa. The volume is reduced to 4 cm³ at constant temperature. Calculate the new pressure.', m: 3,
+      p: ['==p₁V₁ = p₂V₂==', '100 × 12 = p₂ × 4', '==300 kPa=='] }
+  ]
 }
 };
 
@@ -567,6 +879,62 @@ const DRILLS = {
     () => { const f = pick([200,250,400,500,800,1000]); const lam = pick([0.33,0.34,0.66,0.68,1.7]); const ans = f*lam;
       return { q: `A sound wave has a frequency of ${f} Hz and a wavelength of ${lam} m. Calculate its speed.`, ans, unit: 'm/s',
         s: [['Formula','v = f × λ'],['Substitute',`v = ${f} × ${lam}`],['Answer',`v = ${num(ans)} m/s`]] }; }
+  ],
+  motion: [
+    () => { const s = rint(2, 30), t = rint(2, 20), d = s * t; const w = rint(0, 2);
+      if (w === 0) return { q: `A runner covers ${d} m in ${t} s. Calculate the average speed.`, ans: s, unit: 'm/s', s: [['Formula', 'speed = distance ÷ time'],['Substitute', `${d} ÷ ${t}`],['Answer', `${s} m/s`]] };
+      if (w === 1) return { q: `A car travels at ${s} m/s for ${t} s. How far does it go?`, ans: d, unit: 'm', s: [['Formula', 'distance = speed × time'],['Substitute', `${s} × ${t}`],['Answer', `${d} m`]] };
+      return { q: `A bus travels ${d} m at a steady ${s} m/s. How long does it take?`, ans: t, unit: 's', s: [['Formula', 'time = distance ÷ speed'],['Substitute', `${d} ÷ ${s}`],['Answer', `${t} s`]] }; },
+    () => { const u = rint(0, 10), a = rint(2, 8), t = rint(2, 10), v = u + a * t;
+      return { q: `A car’s speed increases from ${u} m/s to ${v} m/s in ${t} s. Calculate its acceleration.`, ans: a, unit: 'm/s²', s: [['Formula', 'a = (v − u) ÷ t'],['Change in speed', `${v} − ${u} = ${v - u}`],['Answer', `${v - u} ÷ ${t} = ${a} m/s²`]] }; },
+    () => { const v = rint(2, 10) * 5, t = rint(2, 12) * 2, w = rint(0, 1);
+      return w ? { q: `A cyclist accelerates uniformly from rest to ${v} m/s in ${t} s. How far does she travel? (Area under the speed–time graph.)`, ans: v * t / 2, unit: 'm', s: [['Shape', 'a triangle'],['Area', `½ × ${t} × ${v}`],['Answer', `${v * t / 2} m`]] }
+        : { q: `A train travels at a constant ${v} m/s for ${t} s. Find the distance from the speed–time graph.`, ans: v * t, unit: 'm', s: [['Shape', 'a rectangle'],['Area', `${v} × ${t}`],['Answer', `${v * t} m`]] }; },
+    () => { const t = rint(2, 8), g = 10;
+      return { q: `A stone is dropped from rest. How fast is it moving after ${t} s? (g = 10 m/s², ignore air resistance.)`, ans: g * t, unit: 'm/s', s: [['Formula', 'v = u + at, u = 0'],['Substitute', `10 × ${t}`],['Answer', `${g * t} m/s`]] }; }
+  ],
+  forces: [
+    () => { const m = rint(2, 90), g = pick([[10, 'Earth'], [1.6, 'the Moon'], [3.7, 'Mars']]); const ans = Math.round(m * g[0] * 10) / 10;
+      return { q: `An object has a mass of ${m} kg. Calculate its weight on ${g[1]} where g = ${g[0]} N/kg.`, ans, unit: 'N', s: [['Formula', 'W = m × g'],['Substitute', `${m} × ${g[0]}`],['Answer', `${num(ans)} N`]] }; },
+    () => { const m = rint(2, 20), a = rint(2, 9), F = m * a, w = rint(0, 2);
+      if (w === 0) return { q: `A resultant force of ${F} N acts on a ${m} kg object. Calculate its acceleration.`, ans: a, unit: 'm/s²', s: [['Formula', 'a = F ÷ m'],['Substitute', `${F} ÷ ${m}`],['Answer', `${a} m/s²`]] };
+      if (w === 1) return { q: `A ${m} kg object accelerates at ${a} m/s². Calculate the resultant force.`, ans: F, unit: 'N', s: [['Formula', 'F = m × a'],['Substitute', `${m} × ${a}`],['Answer', `${F} N`]] };
+      return { q: `A resultant force of ${F} N gives an object an acceleration of ${a} m/s². Calculate its mass.`, ans: m, unit: 'kg', s: [['Formula', 'm = F ÷ a'],['Substitute', `${F} ÷ ${a}`],['Answer', `${m} kg`]] }; },
+    () => { const m = rint(2, 20), a = rint(1, 6), R = rint(1, 15), F = m * a + R;
+      return { q: `A ${m} kg trolley is pulled with a force of ${F} N. Friction is ${R} N. Calculate the acceleration.`, ans: a, unit: 'm/s²', s: [['Resultant force', `${F} − ${R} = ${F - R} N`],['Formula', 'a = F ÷ m'],['Answer', `${F - R} ÷ ${m} = ${a} m/s²`]] }; },
+    () => { const L = rint(8, 20), k = pick([0.5, 1, 2, 2.5]), F = rint(2, 10) * 2, x = F / k, w = rint(0, 1);
+      return w ? { q: `A spring of original length ${L} cm stretches ${num(x)} cm under a load. A spring constant of ${k} N/cm. What is the load?`, ans: F, unit: 'N', s: [['Hooke’s law', 'F = k × x'],['Substitute', `${k} × ${num(x)}`],['Answer', `${F} N`]] }
+        : { q: `A spring has a spring constant of ${k} N/cm. A load of ${F} N is added to a spring of original length ${L} cm. Find the new length.`, ans: L + x, unit: 'cm', s: [['Extension', `${F} ÷ ${k} = ${num(x)} cm`],['New length', `${L} + ${num(x)}`],['Answer', `${num(L + x)} cm`]] }; }
+  ],
+  energy: [
+    () => { const m = rint(1, 20), v = rint(2, 12), ans = 0.5 * m * v * v;
+      return { q: `Calculate the kinetic energy of a ${m} kg object moving at ${v} m/s.`, ans, unit: 'J', s: [['Formula', 'KE = ½ × m × v²'],['Substitute', `½ × ${m} × ${v}² = ½ × ${m} × ${v * v}`],['Answer', `${num(ans)} J`]] }; },
+    () => { const m = rint(1, 30), h = rint(2, 40), ans = m * 10 * h;
+      return { q: `Calculate the gravitational potential energy gained by a ${m} kg mass lifted ${h} m. (g = 10 N/kg)`, ans, unit: 'J', s: [['Formula', 'GPE = m × g × h'],['Substitute', `${m} × 10 × ${h}`],['Answer', `${ans} J`]] }; },
+    () => { const F = rint(2, 40) * 5, d = rint(2, 20), t = rint(2, 10), w = rint(0, 1);
+      return w ? { q: `A force of ${F} N moves an object ${d} m in ${t} s. Calculate the power.`, ans: F * d / t, unit: 'W', s: [['Work done', `${F} × ${d} = ${F * d} J`],['Power', `${F * d} ÷ ${t}`],['Answer', `${num(F * d / t)} W`]] }
+        : { q: `A force of ${F} N moves an object ${d} m. Calculate the work done.`, ans: F * d, unit: 'J', s: [['Formula', 'work = force × distance'],['Substitute', `${F} × ${d}`],['Answer', `${F * d} J`]] }; },
+    () => { const tot = rint(2, 20) * 50, eff = pick([10, 20, 25, 30, 40, 50, 60, 75]), use = tot * eff / 100;
+      return { q: `A machine takes in ${tot} J and gives out ${use} J of useful energy. Calculate its efficiency as a percentage.`, ans: eff, unit: '%', s: [['Formula', 'efficiency = useful ÷ total × 100'],['Substitute', `${use} ÷ ${tot} × 100`],['Answer', `${eff}%`]] }; }
+  ],
+  pressure: [
+    () => { const A = pick([0.01, 0.02, 0.05, 0.1, 0.2, 0.5]), F = rint(2, 40) * 50, ans = F / A;
+      return { q: `A force of ${F} N acts on an area of ${A} m². Calculate the pressure.`, ans, unit: 'Pa', s: [['Formula', 'p = F ÷ A'],['Substitute', `${F} ÷ ${A}`],['Answer', `${num(ans)} Pa`]] }; },
+    () => { const A = pick([0.01, 0.02, 0.05, 0.1, 0.25, 0.5]), p = rint(2, 40) * 500, ans = p * A;
+      return { q: `The pressure on a surface is ${p} Pa and its area is ${A} m². Calculate the force.`, ans, unit: 'N', s: [['Formula', 'F = p × A'],['Substitute', `${p} × ${A}`],['Answer', `${num(ans)} N`]] }; },
+    () => { const rho = pick([[1000, 'water'], [1030, 'sea water'], [800, 'oil'], [13600, 'mercury']]), h = rint(2, 30), ans = rho[0] * 10 * h;
+      return { q: `Calculate the pressure due to ${h} m depth of ${rho[1]} (density ${rho[0]} kg/m³). g = 10 N/kg.`, ans, unit: 'Pa', s: [['Formula', 'p = ρ × g × h'],['Substitute', `${rho[0]} × 10 × ${h}`],['Answer', `${ans} Pa`]] }; },
+    () => { const cm = rint(2, 20) * 5, F = rint(2, 10) * 10, ans = F / (cm / 10000);
+      return { q: `A force of ${F} N acts on an area of ${cm} cm². Calculate the pressure in Pa.`, ans, unit: 'Pa', s: [['Convert the area', `${cm} ÷ 10 000 = ${cm / 10000} m²`],['Formula', 'p = F ÷ A'],['Answer', `${F} ÷ ${cm / 10000} = ${num(ans)} Pa`]] }; }
+  ],
+  particles: [
+    () => { const p1 = rint(2, 10) * 50, V1 = rint(2, 10) * 2, V2 = pick([1, 2, 4, 5]) * (V1 % 4 === 0 ? 1 : 1); const v2 = V1 / 2, ans = p1 * V1 / v2;
+      return { q: `A gas has a pressure of ${p1} kPa at a volume of ${V1} cm³. The volume is reduced to ${v2} cm³ at constant temperature. Calculate the new pressure.`, ans, unit: 'kPa', s: [['Boyle’s law', 'p₁V₁ = p₂V₂'],['Substitute', `${p1} × ${V1} = p₂ × ${v2}`],['Answer', `p₂ = ${ans} kPa`]] }; },
+    () => { const c = rint(-20, 150), w = rint(0, 1);
+      return w ? { q: `Convert ${c} °C to kelvin.`, ans: c + 273, unit: 'K', s: [['Formula', 'K = °C + 273'],['Answer', `${c} + 273 = ${c + 273} K`]] }
+        : { q: `Convert ${c + 273} K to °C.`, ans: c, unit: '°C', s: [['Formula', '°C = K − 273'],['Answer', `${c + 273} − 273 = ${c} °C`]] }; },
+    () => { const p1 = rint(1, 8) * 100, V1 = rint(2, 6) * 6, V2 = V1 * 2, ans = p1 * V1 / V2;
+      return { q: `A gas of volume ${V1} cm³ is at ${p1} kPa. It expands to ${V2} cm³ at constant temperature. Calculate the new pressure.`, ans, unit: 'kPa', s: [['Boyle’s law', 'p₁V₁ = p₂V₂'],['Substitute', `${p1} × ${V1} = p₂ × ${V2}`],['Answer', `p₂ = ${ans} kPa`]] }; }
   ]
 };
 
@@ -581,7 +949,7 @@ function drawMock(){
 if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state ---------- */
-const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['mock','','Mini mock']];
 let cur = 'start'; let sub = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -609,7 +977,7 @@ function render(){
 }
 
 function renderStart(){
-  const rows = ['density','thermal','sound'].map(k => {
+  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles'].map(k => {
     const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz best ${qb}/${qt}</span></div>
       <div class="bar"><i style="width:${Math.round(100*qb/qt)}%"></i></div>
@@ -738,12 +1106,14 @@ sound: [
 ]
 });
 
+for (const key in CH) CH[key].worked.forEach(w => { if (w.r && !w.board0) { w.board0 = () => wkBoard(w, -1); w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); }); } });
+
 function renderChapter(k){
   const c = CH[k];
   const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],...(c.drill?[['drill','Drill']]:[]),['quiz','Quiz'],['exam','Exam Qs']];
   if (!subs.some(s => s[0] === sub)) sub = 'learn';
   let body = '';
-  if (sub === 'learn') body = c.learn.map(card => `<div class="card"><h3>${card.h}</h3>${(card.p||[]).map(p=>`<p>${fmt(p)}</p>`).join('')}${card.list?`<ul>${card.list.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul>`:''}${card.f?`<div class="formula">${card.f}</div>`:''}</div>`).join('')
+  if (sub === 'learn') body = c.learn.map(card => `<div class="card"><h3>${card.h}</h3>${(card.p||[]).map(p=>`<p>${fmt(p)}</p>`).join('')}${card.list?`<ul>${card.list.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul>`:''}${card.f?`<div class="formula">${card.f}</div>`:''}${card.table?`<div class="tbl"><table><thead><tr>${card.table[0].map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${card.table.slice(1).map(r => `<tr>${r.map(c => `<td>${fmt(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:''}</div>`).join('')
       + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
   if (sub === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
   if (sub === 'worked') body = `<div class="card"><h3>How to use these</h3><p class="note">Read the question and try it on paper. Then tap <b>Next step</b>. Each step shows the working, and the line underneath explains <b>why</b>. The table beside it fills in as you go. The exam tip appears at the end.</p></div>` + c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>${w.intro ? `<p class="intro"><b>Key idea:</b> ${fmt(w.intro)}</p>` : ''}
