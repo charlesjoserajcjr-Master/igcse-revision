@@ -387,6 +387,57 @@ function svgIndex(){
   ${T(30, 190, '(2 × 10⁴) × (3 × 10⁵) = 6 × 10⁹:  multiply a’s, add n’s', 'mono')}${T(30, 214, 'If a ≥ 10 afterwards, adjust: 12 × 10⁸ = 1.2 × 10⁹', 'mono hott')}</svg>`;
 }
 
+function svgCoord(){
+  const X = x => 60 + 28 * x, Y = y => 200 - 28 * y;
+  return `<svg viewBox="0 0 640 240" role="img" aria-label="Points A and B with gradient, midpoint and distance">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(7)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(6.5)}" class="ln"/>
+  ${[1,2,3,4,5,6].map(v => `${T(X(v), Y(0) + 16, v, 'mid mono mut')}${T(X(0) - 12, Y(v) + 4, v, 'end mono mut')}`).join('')}
+  <polyline points="${X(1)},${Y(1)} ${X(5)},${Y(1)} ${X(5)},${Y(4)}" class="hotl" fill="none" stroke-dasharray="5 4"/>
+  <line x1="${X(1)}" y1="${Y(1)}" x2="${X(5)}" y2="${Y(4)}" class="acc"/>
+  <circle cx="${X(1)}" cy="${Y(1)}" r="5" class="accf"/><circle cx="${X(5)}" cy="${Y(4)}" r="5" class="accf"/><circle cx="${X(3)}" cy="${Y(2.5)}" r="5" class="hotf"/>
+  ${T(X(1) + 8, Y(1) - 10, 'A(1, 1)', 'lbl')}${T(X(5) + 8, Y(4) - 6, 'B(5, 4)', 'lbl')}${T(X(3), Y(1) + 16, '4 across', 'mid hott')}${T(X(5) + 8, Y(2.5), '3 up', 'hott')}${T(X(3) - 10, Y(2.5) - 12, 'M', 'end hott')}
+  ${T(340, 60, 'gradient = up ÷ across = 3 ÷ 4', 'mono acct')}${T(340, 92, 'midpoint M = (3, 2.5)', 'mono hott')}${T(340, 124, 'AB² = 4² + 3² = 25, so AB = 5', 'mono')}
+  ${T(340, 164, 'midpoint: average the x’s and the y’s', 'mut')}${T(340, 186, 'distance: Pythagoras on the dashed triangle', 'mut')}</svg>`;
+}
+function svgTransform(){
+  const g1 = (x, y) => `${130 + 20 * x},${120 - 20 * y}`, g2 = (x, y) => `${360 + 22 * x},${205 - 22 * y}`;
+  const poly = (f, pts, cls) => `<polygon points="${pts.map(p => f(...p)).join(' ')}" class="${cls}"/>`;
+  return `<svg viewBox="0 0 640 250" role="img" aria-label="Reflection in the y-axis and enlargement scale factor 2">
+  <line x1="30" y1="120" x2="230" y2="120" class="thin"/><line x1="130" y1="20" x2="130" y2="220" class="ln"/>
+  ${poly(g1, [[1,1],[3,1],[1,2]], 'accf" style="fill-opacity:.35;stroke:var(--accent);stroke-width:2')}${poly(g1, [[-1,1],[-3,1],[-1,2]], 'hotf" style="fill-opacity:.35;stroke:var(--hot);stroke-width:2')}
+  ${T(130, 14, 'Reflection in the y-axis', 'mid lbl')}${T(180, 160, 'T', 'mid acct')}${T(80, 160, 'T′', 'mid hott')}${T(130, 238, 'mirror line: x = 0', 'mid mut')}
+  <line x1="${360}" y1="205" x2="${360 + 22 * 6}" y2="205" class="ln"/><line x1="360" y1="205" x2="360" y2="${205 - 22 * 5}" class="ln"/>
+  <line x1="360" y1="205" x2="${360 + 22 * 4}" y2="${205 - 22 * 4}" class="thin" stroke-dasharray="4 3"/><line x1="360" y1="205" x2="${360 + 22 * 2}" y2="${205 - 22 * 4}" class="thin" stroke-dasharray="4 3"/>
+  ${poly(g2, [[1,1],[2,1],[1,2]], 'accf" style="fill-opacity:.35;stroke:var(--accent);stroke-width:2')}${poly(g2, [[2,2],[4,2],[2,4]], 'hotf" style="fill-opacity:.35;stroke:var(--hot);stroke-width:2')}
+  ${T(440, 14, 'Enlargement, scale factor 2, centre (0, 0)', 'mid lbl')}${T(440, 238, 'every point is 2 times as far from the centre', 'mid mut')}</svg>`;
+}
+function svgSimilar(){
+  return `<svg viewBox="0 0 640 220" role="img" aria-label="Two similar triangles with scale factor 2">
+  <polygon points="40,180 120,180 40,120" class="metal" style="stroke:var(--ink);stroke-width:2"/><polygon points="170,180 330,180 170,60" class="metal" style="stroke:var(--ink);stroke-width:2"/>
+  ${T(80, 198, '4', 'mid mono lbl')}${T(30, 154, '3', 'end mono lbl')}${T(90, 142, '5', 'mono mut')}${T(250, 198, '8', 'mid mono lbl')}${T(160, 124, '6', 'end mono lbl')}${T(262, 112, '10', 'mono mut')}
+  ${T(380, 60, 'Scale factor k = 2', 'lbl')}${T(380, 92, 'lengths × 2', 'mono acct')}${T(380, 118, 'areas   × 2² = × 4', 'mono hott')}${T(380, 144, 'volumes × 2³ = × 8', 'mono hott')}${T(380, 184, 'Angles stay the same.', 'mut')}</svg>`;
+}
+function svgSimul(){
+  const X = x => 60 + 50 * x, Y = y => 200 - 40 * y;
+  return `<svg viewBox="0 0 640 240" role="img" aria-label="Two lines crossing at (2, 1)">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(5)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(4)}" class="ln"/>
+  ${[1,2,3,4].map(v => T(X(v), Y(0) + 16, v, 'mid mono mut')).join('')}${[1,2,3].map(v => T(X(0) - 12, Y(v) + 4, v, 'end mono mut')).join('')}
+  <line x1="${X(0)}" y1="${Y(3)}" x2="${X(3.6)}" y2="${Y(-0.6)}" class="acc"/><line x1="${X(0.6)}" y1="${Y(-0.4)}" x2="${X(4.4)}" y2="${Y(3.4)}" class="hotl"/>
+  <circle cx="${X(2)}" cy="${Y(1)}" r="6" class="inkf"/>${T(X(2) + 12, Y(1) - 8, '(2, 1)', 'lbl')}
+  ${T(X(0.2), Y(3) - 8, 'x + y = 3', 'acct')}${T(X(3.4), Y(3.4) - 8, 'x − y = 1', 'hott')}
+  ${T(380, 60, 'The solution is where', 'lbl')}${T(380, 82, 'the two lines cross.', 'lbl')}${T(380, 118, 'x + y = 3  and  x − y = 1', 'mono')}${T(380, 144, 'add: 2x = 4, so x = 2', 'mono acct')}${T(380, 170, 'then y = 3 − 2 = 1', 'mono acct')}</svg>`;
+}
+function svgParabola(){
+  const X = x => 80 + 40 * x, Y = y => 180 - 20 * y; const pts = []; for (let x = -0.5; x <= 4.5001; x += 0.25) pts.push(`${X(x).toFixed(1)},${Y(x * x - 4 * x + 3).toFixed(1)}`);
+  return `<svg viewBox="0 0 640 250" role="img" aria-label="Graph of y = x squared minus 4x plus 3">
+  <line x1="${X(-1)}" y1="${Y(0)}" x2="${X(5)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(-2)}" x2="${X(0)}" y2="${Y(8)}" class="ln"/>
+  ${[-1,1,2,3,4,5].map(v => T(X(v), Y(0) + 16, v, 'mid mono mut')).join('')}<line x1="${X(2)}" y1="${Y(8)}" x2="${X(2)}" y2="${Y(-2)}" class="thin" stroke-dasharray="4 3"/>
+  <polyline points="${pts.join(' ')}" class="acc" fill="none"/>
+  ${[[1,0],[3,0],[0,3]].map(([a, b]) => `<circle cx="${X(a)}" cy="${Y(b)}" r="5" class="hotf"/>`).join('')}<circle cx="${X(2)}" cy="${Y(-1)}" r="5" class="inkf"/>
+  ${T(X(2) + 8, Y(-1) + 18, 'minimum (2, −1)', 'lbl')}${T(X(1) - 6, Y(0) - 8, 'x = 1', 'end hott')}${T(X(3) + 6, Y(0) - 8, 'x = 3', 'hott')}${T(X(0) + 8, Y(3) - 4, 'y-intercept 3', 'hott')}
+  ${T(360, 50, 'y = x² − 4x + 3', 'mono acct')}${T(360, 82, 'roots: graph crosses the x-axis', 'mono')}${T(360, 108, 'x² − 4x + 3 = (x − 1)(x − 3) = 0', 'mono')}${T(360, 134, 'line of symmetry x = 2', 'mono')}${T(360, 170, 'x² positive: U-shaped (minimum)', 'mut')}${T(360, 192, 'x² negative: ∩-shaped (maximum)', 'mut')}</svg>`;
+}
+
 /* ---------- content ---------- */
 const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
 const CH = {
@@ -1039,6 +1090,248 @@ pyth: {
     { q: 'A ramp rises 1.5 m over a horizontal distance of 6 m. Calculate the angle the ramp makes with the horizontal.', m: 3,
       p: ['tan θ = ==opposite ÷ adjacent== = 1.5 ÷ 6', 'θ = tan⁻¹(0.25)', '==14.0°== (1 d.p.)'] }
   ]
+},
+coord: {
+  code: 'Graphs', name: 'Coordinates and straight lines',
+  lede: 'Midpoints, gradients, lengths and equations of lines. Almost every step is a short formula.',
+  learn: [
+    { h: 'Midpoint and length of a line', list: ['==Midpoint== of (x₁, y₁) and (x₂, y₂): ==average the x’s and average the y’s==.', '==Length== of the line: draw a right-angled triangle and use ==Pythagoras==: d² = (x₂ − x₁)² + (y₂ − y₁)².'], f: ['A(2, 3), B(8, 7)', 'midpoint = (5, 5)'] },
+    { h: 'Gradient', list: ['==Gradient = change in y ÷ change in x== = (y₂ − y₁) ÷ (x₂ − x₁).', 'Going ==up to the right==: positive gradient. ==Down to the right==: negative.', '==Parallel lines== have the ==same gradient==.', '==Perpendicular lines==: gradients multiply to ==−1==. Flip the fraction and change the sign.'] },
+    { h: 'Equation of a straight line', list: ['==y = mx + c==: m is the ==gradient==, c is the ==y-intercept==.', 'To find an equation: find ==m==, put in a ==point== to find ==c==.', 'A point is ==on the line== if its coordinates make the equation true.'] }
+  ],
+  mistakes: ['Subtracting the coordinates in a ==different order== on top and bottom of the gradient.', 'Forgetting ==y ÷ x==, not x ÷ y.', 'Writing the ==midpoint== as the difference instead of the average.', 'Losing the ==negative sign== of the gradient.', 'Stopping at y = mx with no ==c==.'],
+  diagrams: [{ svg: svgCoord, cap: 'A(1, 1) and B(5, 4): ==gradient 3/4==, ==midpoint (3, 2.5)==, ==length 5==.' }],
+  worked: [
+    W('Find the midpoint of A(2, 3) and B(8, 7).', 'The midpoint is halfway: ==average the x’s and average the y’s==.', 'Check: the midpoint lies between the two points.', 'midpoint = ((x₁ + x₂) ÷ 2, (y₁ + y₂) ÷ 2)',
+      [['Average the x-coordinates', '(2 + 8) ÷ 2 = 5', 'Add, then halve.'], ['Average the y-coordinates', '(3 + 7) ÷ 2 = 5', ''], ['Write as a point', '(5, 5)', 'x first, then y.']],
+      [['A', '(2, 3)', -1], ['B', '(8, 7)', -1], ['x', '5', 0], ['y', '5', 1], ['Midpoint', '(5, 5)', 2]]),
+    W('Find the gradient of the line through (1, 1) and (5, 4). Then through (2, 7) and (6, 3).', 'Gradient = ==change in y ÷ change in x==. Keep the ==same order== top and bottom.', 'A line sloping down to the right has a negative gradient.', 'm = (y₂ − y₁) ÷ (x₂ − x₁)',
+      [['First line: change in y', '4 − 1 = 3', 'Second point minus first point.'], ['First line: change in x', '5 − 1 = 4', 'Same order: second minus first.'], ['First gradient', '3 ÷ 4 = 3/4', ''], ['Second line', '(3 − 7) ÷ (6 − 2) = −4 ÷ 4 = −1', 'The line slopes down, so the gradient is negative.']],
+      [['Line 1: Δy', '3', 0], ['Line 1: Δx', '4', 1], ['Gradient 1', '3/4', 2], ['Gradient 2', '−4 ÷ 4 = −1', 3]]),
+    W('Find the distance between (1, 1) and (5, 4).', 'Make a ==right-angled triangle== between the points and use ==Pythagoras==.', 'The answer should be longer than either side of the triangle.', 'd² = Δx² + Δy²',
+      [['Across and up', 'Δx = 5 − 1 = 4,  Δy = 4 − 1 = 3', 'These are the two shorter sides of the triangle.'], ['Pythagoras', 'd² = 4² + 3² = 16 + 9 = 25', ''], ['Square root', 'd = √25 = 5', '3, 4, 5 triangle.']],
+      [['Δx, Δy', '4 and 3', 0], ['d²', '16 + 9 = 25', 1], ['Distance', '5', 2]]),
+    W('A line has gradient 2 and passes through (1, 5). Find its equation.', 'Start with ==y = mx + c==, put in the ==gradient== and ==a point== to find c.', 'Check by substituting the point back in.', 'y = mx + c',
+      [['Put in the gradient', 'y = 2x + c', 'm = 2.'], ['Put in the point (1, 5)', '5 = 2 × 1 + c', 'x = 1 and y = 5.'], ['Solve for c', 'c = 5 − 2 = 3', ''], ['Equation', 'y = 2x + 3', 'Check: x = 1 gives 2 + 3 = 5 ✓.']],
+      [['m', '2', -1], ['Point', '(1, 5)', -1], ['c', '5 − 2 = 3', 2], ['Equation', 'y = 2x + 3', 3]]),
+    W('Find the equation of the line through (2, 3) and (4, 7).', 'Two points: find the ==gradient== first, then ==c==.', 'Check both points in your final equation.', 'Gradient first, then c',
+      [['Gradient', 'm = (7 − 3) ÷ (4 − 2) = 4 ÷ 2 = 2', ''], ['Put in a point (2, 3)', '3 = 2 × 2 + c', ''], ['Solve for c', 'c = 3 − 4 = −1', ''], ['Equation', 'y = 2x − 1', 'Check (4, 7): 2 × 4 − 1 = 7 ✓.']],
+      [['Gradient', '2', 0], ['c', '3 − 4 = −1', 2], ['Equation', 'y = 2x − 1', 3], ['Check (4, 7)', '8 − 1 = 7 ✓', 3]]),
+    W('A line L has equation y = 3x − 2. Find the equation of the parallel line through (0, 5), and the gradient of a line perpendicular to L.', '==Parallel== means the ==same gradient==. ==Perpendicular== means the gradient is ==flipped and the sign changed==.', 'm₁ × m₂ = −1 for perpendicular lines.', 'Parallel: same m. Perpendicular: m₁ × m₂ = −1',
+      [['Gradient of L', '3', 'Read it from y = mx + c.'], ['Parallel line', 'y = 3x + c, and (0, 5) gives c = 5', 'It crosses the y-axis at 5.'], ['Equation', 'y = 3x + 5', ''], ['Perpendicular gradient', '−1 ÷ 3 = −1/3', 'Check: 3 × (−1/3) = −1 ✓.']],
+      [['m of L', '3', 0], ['Parallel', 'y = 3x + 5', 2], ['Perpendicular m', '−1/3', 3]])
+  ],
+  drill: 'coord',
+  quiz: [
+    { q: 'The gradient of the line through (0, 0) and (2, 6) is…', o: ['1/3', '3', '6', '12'], a: 1, w: '6 ÷ 2 = ==3==.' },
+    { q: 'The midpoint of (2, 4) and (6, 8) is…', o: ['(4, 6)', '(8, 12)', '(2, 2)', '(4, 12)'], a: 0, w: '(2 + 6) ÷ 2 = 4 and (4 + 8) ÷ 2 = 6: ==(4, 6)==.' },
+    { q: 'What is the y-intercept of y = 3x − 5?', o: ['3', '5', '−5', '−3'], a: 2, w: 'In y = mx + c, c is ==−5==.' },
+    { q: 'Parallel lines have…', o: ['the same gradient', 'gradients that multiply to −1', 'the same y-intercept', 'no gradient'], a: 0, w: 'Parallel = ==same gradient==.' },
+    { q: 'The distance from (0, 0) to (6, 8) is…', o: ['14', '10', '48', '2'], a: 1, w: '√(36 + 64) = √100 = ==10==.' },
+    { q: 'A line has gradient 2. A perpendicular line has gradient…', o: ['2', '−2', '1/2', '−1/2'], a: 3, w: 'm₁ × m₂ = −1, so ==−1/2==.' }
+  ],
+  exam: [
+    { q: 'A is (1, 2) and B is (7, 10). Find (a) the midpoint of AB [2] (b) the gradient of AB [2] (c) the length of AB [2].', m: 6,
+      p: ['(1 + 7) ÷ 2 = 4', '(2 + 10) ÷ 2 = 6, so ==(4, 6)==', 'Change in y = 8, change in x = 6', 'Gradient = ==4/3==', 'AB² = 6² + 8² = 100', 'AB = ==10=='] },
+    { q: 'Find the equation of the straight line through (2, 3) and (4, 7).', m: 3,
+      p: ['Gradient = (7 − 3) ÷ (4 − 2) = ==2==', 'y = 2x + c and 3 = 4 + c, so ==c = −1==', '==y = 2x − 1=='] },
+    { q: 'A line has equation y = 3x − 2. (a) Write down its gradient and y-intercept. [2] (b) Find y when x = 4. [1] (c) Write down the equation of the line parallel to it through (0, 5). [1]', m: 4,
+      p: ['Gradient ==3==', 'y-intercept ==−2==', '3 × 4 − 2 = ==10==', '==y = 3x + 5=='] }
+  ]
+},
+trans: {
+  code: 'Geometry', name: 'Transformations',
+  lede: 'Four transformations. To describe one fully, name the type and give all the details.',
+  learn: [
+    { h: 'The four transformations', table: [['Type', 'Give these details', 'Result'], ['Translation', 'a vector: right/left, up/down', 'same size, same way up'], ['Reflection', 'the mirror line', 'same size, flipped'], ['Rotation', 'centre, angle, direction', 'same size, turned'], ['Enlargement', 'centre and scale factor', 'different size (similar)']] },
+    { h: 'Coordinate rules (centre or mirror at the origin)', list: ['Reflect in the ==x-axis==: (x, y) → ==(x, −y)==.', 'Reflect in the ==y-axis==: (x, y) → ==(−x, y)==.', 'Reflect in ==y = x==: (x, y) → ==(y, x)==.', 'Rotate ==180°==: (x, y) → ==(−x, −y)==.', 'Rotate ==90° anticlockwise==: (x, y) → ==(−y, x)==.   ==90° clockwise==: (x, y) → ==(y, −x)==.', 'Enlarge ==scale factor k==, centre origin: (x, y) → ==(kx, ky)==.'] },
+    { h: 'Enlargement facts', list: ['Scale factor ==k== multiplies ==lengths by k==, ==areas by k²== and ==volumes by k³==.', 'A scale factor ==between 0 and 1== makes the shape ==smaller==.', 'Angles stay the ==same==.', 'Translation, reflection and rotation give ==congruent== shapes. Enlargement gives ==similar== shapes.'] }
+  ],
+  mistakes: ['Describing a transformation with ==only its name== (say “reflection in the y-axis”).', 'Forgetting the ==centre== for a rotation or enlargement.', 'Mixing up ==clockwise== and ==anticlockwise==.', 'Multiplying the ==area by k== instead of k².', 'Moving a translation the ==wrong way== for negative numbers.'],
+  diagrams: [{ svg: svgTransform, cap: '==Reflection== in the y-axis (left) and ==enlargement== scale factor 2 from the origin (right).' }],
+  worked: [
+    W('Triangle T has vertices (1, 1), (3, 1) and (1, 2). Reflect it in the y-axis. Give the new vertices.', 'Reflecting in the ==y-axis== changes the ==sign of x==. The y-values stay the same.', 'Each point is the same distance from the mirror line on the other side.', '(x, y) → (−x, y)',
+      [['Write the rule', '(x, y) → (−x, y)', 'The y-axis is the mirror, so x changes sign.'], ['Apply to (1, 1) and (3, 1)', '(−1, 1) and (−3, 1)', ''], ['Apply to (1, 2)', '(−1, 2)', ''], ['Image', '(−1, 1), (−3, 1), (−1, 2)', 'Check each point is the same distance from the y-axis as before.']],
+      [['T', '(1,1) (3,1) (1,2)', -1], ['Rule', '(−x, y)', 0], ['Image', '(−1,1) (−3,1) (−1,2)', 3]]),
+    W('Translate the point (2, 3) by 4 to the right and 5 down.', 'A translation ==adds== to the coordinates. ==Right/up are positive==, ==left/down are negative==.', 'Write the vector as 4 right, −5 (down).', 'x + right, y + up',
+      [['Move right 4', 'x: 2 + 4 = 6', 'Right adds to x.'], ['Move down 5', 'y: 3 − 5 = −2', 'Down subtracts from y.'], ['New point', '(6, −2)', '']],
+      [['Point', '(2, 3)', -1], ['x', '6', 0], ['y', '−2', 1], ['New point', '(6, −2)', 2]]),
+    W('Rotate the point (2, 1) through 90° anticlockwise about the origin.', 'Use the rule ==(x, y) → (−y, x)== for ==90° anticlockwise==.', 'Check by sketching: (2, 1) is to the right; after 90° anticlockwise it points up.', '90° anticlockwise: (x, y) → (−y, x)',
+      [['State the rule', '(x, y) → (−y, x)', 'For 90° anticlockwise about the origin.'], ['Substitute x = 2 and y = 1', '(−1, 2)', '−y = −1 and x = 2.'], ['Check with a sketch', '(2, 1) is right of the origin, (−1, 2) is above it', 'A quarter turn anticlockwise moves right to up.']],
+      [['Point', '(2, 1)', -1], ['Rule', '(−y, x)', 0], ['Image', '(−1, 2)', 1]]),
+    W('P(1, 1), Q(3, 1) and R(1, 2) are enlarged by scale factor 3 with centre the origin. Find the new points. What happens to the area?', 'Multiply ==both coordinates== by the scale factor. Areas are multiplied by ==k²==.', 'Original area = ½ × 2 × 1 = 1. New area = 9.', '(x, y) → (kx, ky)',
+      [['Multiply by 3', 'P′ = (3, 3)', '1 × 3 and 1 × 3.'], ['Q and R', 'Q′ = (9, 3) and R′ = (3, 6)', ''], ['Length factor', 'Lengths are 3 times bigger', 'PQ was 2, P′Q′ is 6.'], ['Area factor', 'Area × 3² = × 9', 'Original area 1, new area 9.']],
+      [['P′', '(3, 3)', 0], ['Q′', '(9, 3)', 1], ['R′', '(3, 6)', 1], ['Area', '× 9', 3]]),
+    W('Triangle A has vertices (1, 1), (2, 1) and (1, 3). Triangle B has vertices (−1, 1), (−2, 1) and (−1, 3). Describe fully the transformation that maps A onto B.', 'Compare the ==coordinates==: x changed sign, y stayed the same. That is a ==reflection== in the ==y-axis==.', 'Always give the type AND the details.', 'Look for the pattern',
+      [['Compare the points', '(1, 1) → (−1, 1)  and  (1, 3) → (−1, 3)', 'x changes sign, y stays the same.'], ['Same size, flipped', 'It is a reflection', 'The size has not changed.'], ['Find the mirror line', 'The y-axis (the line x = 0)', 'The points are the same distance each side of x = 0.'], ['Full description', 'Reflection in the y-axis (x = 0)', '']],
+      [['Pattern', 'x → −x, y same', 0], ['Type', 'reflection', 1], ['Mirror line', 'x = 0', 2], ['Answer', 'Reflection in x = 0', 3]]),
+    W('A shape with a side of 4 cm is enlarged. The matching side of the image is 10 cm and the centre is (0, 0). Describe the enlargement and find the area factor.', 'Scale factor = ==new length ÷ old length==.', 'Give both the scale factor AND the centre.', 'k = new ÷ old',
+      [['Find the scale factor', 'k = 10 ÷ 4 = 2.5', 'New length divided by old length.'], ['Describe fully', 'Enlargement, scale factor 2.5, centre (0, 0)', 'Always give the centre.'], ['Area factor', 'k² = 2.5² = 6.25', 'Area is multiplied by k².']],
+      [['k', '10 ÷ 4 = 2.5', 0], ['Description', 'enlargement, SF 2.5, centre (0,0)', 1], ['Area factor', '6.25', 2]])
+  ],
+  drill: 'trans',
+  quiz: [
+    { q: 'Which transformation flips a shape over a mirror line?', o: ['translation', 'reflection', 'rotation', 'enlargement'], a: 1, w: '==Reflection==.' },
+    { q: 'Reflect (3, 2) in the x-axis.', o: ['(−3, 2)', '(3, −2)', '(−3, −2)', '(2, 3)'], a: 1, w: 'The x-axis mirror changes the sign of y: ==(3, −2)==.' },
+    { q: 'A length of 4 cm is enlarged by scale factor 3. The new length is…', o: ['7 cm', '12 cm', '1.3 cm', '36 cm'], a: 1, w: '4 × 3 = ==12 cm==.' },
+    { q: 'Which transformation changes the SIZE of a shape?', o: ['translation', 'reflection', 'rotation', 'enlargement'], a: 3, w: 'Only ==enlargement== changes size.' },
+    { q: 'To describe a rotation fully you must give…', o: ['only the angle', 'the centre, angle and direction', 'a mirror line', 'a scale factor'], a: 1, w: '==Centre, angle and direction==.' },
+    { q: 'Translate (1, 1) by 2 right and 3 up.', o: ['(3, 4)', '(−1, −2)', '(2, 3)', '(4, 3)'], a: 0, w: '(1 + 2, 1 + 3) = ==(3, 4)==.' }
+  ],
+  exam: [
+    { q: 'Triangle T has vertices (1, 1), (3, 1) and (1, 2). (a) Reflect T in the y-axis and write down the new vertices. [2] (b) Enlarge T with scale factor 2, centre the origin, and write down the new vertices. [2]', m: 4,
+      p: ['(−1, 1), (−3, 1)', '==(−1, 2)==', '(2, 2), (6, 2)', '==(2, 4)=='] },
+    { q: 'Triangle A has a vertex at (2, 1) which maps to (−2, 1), and another at (4, 3) which maps to (−4, 3). Describe fully the single transformation.', m: 2,
+      p: ['==Reflection==', 'in the ==y-axis== (x = 0)'] },
+    { q: 'A rectangle 3 cm by 5 cm is enlarged by scale factor 4. (a) Write down the new dimensions. [1] (b) Find the area of each rectangle. [2] (c) Write down the area scale factor. [1]', m: 4,
+      p: ['==12 cm by 20 cm==', 'Original area = ==15 cm²==', 'Enlarged area = 12 × 20 = ==240 cm²==', 'Area scale factor = 4² = ==16=='] }
+  ]
+},
+simil: {
+  code: 'Geometry', name: 'Similar shapes',
+  lede: 'Same shape, different size. Find the scale factor first, then use it for lengths, areas and volumes.',
+  learn: [
+    { h: 'Similar shapes', list: ['==Similar== shapes have the ==same angles== and ==sides in the same ratio==.', '==Congruent== shapes are the ==same size and shape==.', '==Scale factor k== = new length ÷ old length. Always compare ==corresponding== sides.', 'To find a missing length: ==multiply or divide by k==.'] },
+    { h: 'Areas and volumes', list: ['Lengths are multiplied by ==k==.', 'Areas are multiplied by ==k²==.', 'Volumes are multiplied by ==k³==.', 'If you are given the ==area ratio== a : b, the ==length ratio== is ==√a : √b==.', 'Maps: a scale 1 : 50 000 means 1 cm on the map is ==50 000 cm== (0.5 km) in real life.'] }
+  ],
+  mistakes: ['Using ==non-matching sides== to find the scale factor.', 'Multiplying the ==area by k== instead of k².', 'Forgetting to ==square root== an area ratio to get the length ratio.', 'Mixing up ==big ÷ small== and ==small ÷ big== for the scale factor.', 'Forgetting to ==convert units== on map questions (cm to km).'],
+  diagrams: [{ svg: svgSimilar, cap: 'Scale factor 2: ==lengths × 2==, ==areas × 4==, ==volumes × 8==.' }],
+  worked: [
+    W('Triangles ABC and DEF are similar. AB = 4 cm, BC = 6 cm and DE = 10 cm. Find EF.', 'First find the ==scale factor== from the matching sides AB → DE.', 'Check: EF must be bigger than BC, since DEF is the bigger triangle.', 'k = new ÷ old',
+      [['Match the sides', 'AB matches DE, BC matches EF', 'Corresponding sides are in the same positions.'], ['Scale factor', 'k = 10 ÷ 4 = 2.5', 'Big triangle ÷ small triangle.'], ['Multiply BC by k', 'EF = 6 × 2.5', ''], ['Answer', 'EF = 15 cm', 'It is bigger than 6 cm, as it should be.']],
+      [['k', '10 ÷ 4 = 2.5', 1], ['BC', '6 cm', -1], ['EF', '6 × 2.5 = 15 cm', 3]]),
+    W('A rectangle 3 cm by 5 cm is similar to a larger rectangle with width 12 cm. Find the length of the larger rectangle.', 'Find the ==scale factor== from the widths, then apply it to the length.', 'Make sure you match width to width, length to length.', 'k = 12 ÷ 3',
+      [['Scale factor', 'k = 12 ÷ 3 = 4', 'Matching widths.'], ['Apply to the length', '5 × 4', ''], ['Answer', '20 cm', '']],
+      [['Width', '3 → 12', -1], ['k', '4', 0], ['Length', '5 × 4 = 20 cm', 2]]),
+    W('Two similar shapes have lengths in the ratio 2 : 3. The smaller has area 20 cm². Find the area of the larger.', 'Areas are in the ratio ==k²==. The length scale factor is 3 ÷ 2 = 1.5.', 'Area factor = (length factor)².', 'area factor = k²',
+      [['Length scale factor', 'k = 3 ÷ 2 = 1.5', 'Larger ÷ smaller.'], ['Area scale factor', 'k² = 1.5² = 2.25', 'Square the length factor.'], ['New area', '20 × 2.25', ''], ['Answer', '45 cm²', '']],
+      [['k', '1.5', 0], ['k²', '2.25', 1], ['Area', '20 × 2.25 = 45 cm²', 3]]),
+    W('Two similar cylinders have heights in the ratio 1 : 2. The smaller has volume 50 cm³. Find the volume of the larger.', 'Volumes are in the ratio ==k³==.', 'Volume factor = (length factor)³.', 'volume factor = k³',
+      [['Length scale factor', 'k = 2', 'Heights 1 : 2.'], ['Volume scale factor', 'k³ = 2³ = 8', 'Cube the length factor.'], ['New volume', '50 × 8 = 400 cm³', '']],
+      [['k', '2', 0], ['k³', '8', 1], ['Volume', '400 cm³', 2]]),
+    W('A map has a scale of 1 : 50 000. Two towns are 4 cm apart on the map. Find the real distance in km.', 'Real distance = ==map distance × the scale number==. Then ==convert units==.', '100 000 cm = 1 km.', 'real = map × 50 000',
+      [['Multiply by the scale', '4 × 50 000 = 200 000 cm', '1 cm on the map is 50 000 cm in real life.'], ['Convert cm to m', '200 000 ÷ 100 = 2000 m', '100 cm = 1 m.'], ['Convert m to km', '2000 ÷ 1000 = 2 km', '1000 m = 1 km.']],
+      [['Map distance', '4 cm', -1], ['In cm', '200 000', 0], ['In m', '2000', 1], ['In km', '2', 2]]),
+    W('The areas of two similar shapes are in the ratio 16 : 25. Find the ratio of their lengths.', 'The area ratio is ==k²==, so the length ratio is the ==square root==.', 'Square root BOTH numbers of the ratio.', 'length ratio = √ of area ratio',
+      [['Square root each part', '√16 = 4 and √25 = 5', 'Areas go with squares, lengths with square roots.'], ['Length ratio', '4 : 5', '']],
+      [['Area ratio', '16 : 25', -1], ['Roots', '4 and 5', 0], ['Length ratio', '4 : 5', 1]])
+  ],
+  drill: 'simil',
+  quiz: [
+    { q: 'Similar shapes have…', o: ['equal angles and sides in the same ratio', 'the same area', 'the same perimeter', 'different angles'], a: 0, w: '==Equal angles== and ==sides in the same ratio==.' },
+    { q: 'A shape is enlarged by scale factor 3. Its area is multiplied by…', o: ['3', '6', '9', '27'], a: 2, w: '3² = ==9==.' },
+    { q: 'A solid is enlarged by scale factor 2. Its volume is multiplied by…', o: ['2', '4', '6', '8'], a: 3, w: '2³ = ==8==.' },
+    { q: 'The areas of two similar shapes are in the ratio 4 : 9. The lengths are in the ratio…', o: ['2 : 3', '4 : 9', '16 : 81', '8 : 18'], a: 0, w: '√4 : √9 = ==2 : 3==.' },
+    { q: 'Congruent shapes are…', o: ['the same shape and size', 'the same shape only', 'the same area only', 'enlargements'], a: 0, w: '==Same shape and same size==.' },
+    { q: 'Map scale 1 : 100 000. 3 cm on the map is…', o: ['30 m', '300 m', '3 km', '30 km'], a: 2, w: '3 × 100 000 = 300 000 cm = 3000 m = ==3 km==.' }
+  ],
+  exam: [
+    { q: 'Triangles ABC and PQR are similar. AB = 6 cm, BC = 8 cm and PQ = 9 cm. Find the length of QR.', m: 3,
+      p: ['Scale factor = 9 ÷ 6 = ==1.5==', 'QR = 8 × 1.5', '==12 cm=='] },
+    { q: 'Two similar bottles have heights 10 cm and 15 cm. The smaller bottle holds 200 mL. How much does the larger bottle hold?', m: 3,
+      p: ['Length scale factor = 15 ÷ 10 = ==1.5==', 'Volume factor = 1.5³ = ==3.375==', '200 × 3.375 = ==675 mL=='] },
+    { q: 'Two similar shapes have areas 18 cm² and 50 cm². The smaller shape has perimeter 12 cm. Find the perimeter of the larger shape.', m: 3,
+      p: ['Area ratio 18 : 50 = 9 : 25', 'Length ratio = ==3 : 5==', '12 × 5 ÷ 3 = ==20 cm=='] }
+  ]
+},
+simul: {
+  code: 'Algebra', name: 'Simultaneous equations',
+  lede: 'Two equations, two unknowns. Eliminate one letter, solve, then find the other and check.',
+  learn: [
+    { h: 'Elimination', list: ['Make the ==coefficients== (numbers in front) of one letter the ==same== in both equations. ==Multiply== an equation if you need to.', 'If the signs are the ==same==, ==subtract== the equations. If the signs are ==different==, ==add== them.', 'Solve for the first letter, then ==substitute== to find the second.', '==Check== in the ==other== equation.'], f: ['x + y = 7', 'x − y = 3', 'add: 2x = 10, so x = 5, y = 2'] },
+    { h: 'Substitution', list: ['Use when one equation already says ==y = …== (or x = …).', '==Replace== the letter in the other equation with that expression.', 'Solve the one-letter equation, then find the other letter.'] },
+    { h: 'Graphs and word problems', list: ['The ==solution== is the ==point where the two lines cross==.', 'For a word problem, ==define letters== (p = price of a pen), write two equations, solve.', 'Give the answers with ==units== and in words.'] }
+  ],
+  mistakes: ['==Adding== when the signs are the same (you should subtract), or the other way round.', 'Multiplying only ==one term== when scaling an equation.', 'Forgetting to find ==both== letters.', 'Not ==checking== in the second equation.', 'Not ==defining== the letters in a word problem.'],
+  diagrams: [{ svg: svgSimul, cap: 'The ==solution== is where the two lines cross: x = 2, y = 1.' }],
+  worked: [
+    W('Solve x + y = 7 and x − y = 3.', 'The y terms have ==opposite signs== (+y and −y), so ==add== the equations to eliminate y.', 'Check the answer in the second equation.', 'Different signs: add',
+      [['Add the equations', '(x + y) + (x − y) = 7 + 3', 'The +y and −y cancel.'], ['Simplify', '2x = 10', ''], ['Solve for x', 'x = 5', ''], ['Find y', '5 + y = 7, so y = 2', 'Substitute x = 5 into the first equation.'], ['Check', '5 − 2 = 3 ✓', 'Use the other equation.']],
+      [['Add', '2x = 10', 0], ['x', '5', 2], ['y', '7 − 5 = 2', 3], ['Check', '5 − 2 = 3 ✓', 4]]),
+    W('Solve 2x + y = 11 and x + y = 7.', 'The y terms have the ==same sign==, so ==subtract== the equations.', 'Subtract the SECOND from the FIRST, every term.', 'Same signs: subtract',
+      [['Subtract the equations', '(2x + y) − (x + y) = 11 − 7', 'The y terms cancel.'], ['Simplify', 'x = 4', '2x − x = x.'], ['Find y', '4 + y = 7, so y = 3', ''], ['Check', '2 × 4 + 3 = 11 ✓', '']],
+      [['Subtract', 'x = 4', 1], ['y', '7 − 4 = 3', 2], ['Check', '8 + 3 = 11 ✓', 3]]),
+    W('Solve 2x + 3y = 13 and 4x − y = 5.', 'No letter matches yet. ==Multiply== one equation so the y coefficients match.', 'Multiply EVERY term, including the right-hand side.', 'Multiply, then add or subtract',
+      [['Make the y terms match', '×3 on the second: 12x − 3y = 15', '−y × 3 = −3y, and 5 × 3 = 15.'], ['Add to the first', '2x + 3y + 12x − 3y = 13 + 15', 'The +3y and −3y cancel.'], ['Simplify and solve', '14x = 28, so x = 2', ''], ['Find y', '4 × 2 − y = 5, so y = 3', ''], ['Check', '2 × 2 + 3 × 3 = 13 ✓', 'Use the first equation.']],
+      [['Scaled', '12x − 3y = 15', 0], ['x', '2', 2], ['y', '3', 3], ['Check', '4 + 9 = 13 ✓', 4]]),
+    W('Solve y = 2x − 1 and 3x + y = 14.', 'One equation says ==y = …==. ==Substitute== that into the other.', 'Use brackets when you substitute.', 'Substitution',
+      [['Substitute y', '3x + (2x − 1) = 14', 'Replace y with 2x − 1.'], ['Simplify', '5x − 1 = 14', ''], ['Solve for x', '5x = 15, so x = 3', ''], ['Find y', 'y = 2 × 3 − 1 = 5', ''], ['Check', '3 × 3 + 5 = 14 ✓', '']],
+      [['Substituted', '5x − 1 = 14', 1], ['x', '3', 2], ['y', '5', 3], ['Check', '9 + 5 = 14 ✓', 4]]),
+    W('Three pens and two pencils cost Rs 32. One pen and two pencils cost Rs 16. Find the cost of a pen and of a pencil.', 'Let ==p== be the price of a pen and ==q== the price of a pencil. Write ==two equations==.', 'Say what your letters stand for.', 'Define letters, write equations',
+      [['Write two equations', '3p + 2q = 32 and p + 2q = 16', 'One for each purchase.'], ['Subtract', '2p = 16', 'The 2q terms cancel (same sign, so subtract).'], ['Pen', 'p = Rs 8', ''], ['Pencil', '8 + 2q = 16, so q = Rs 4', ''], ['Check', '3 × 8 + 2 × 4 = 32 ✓', '']],
+      [['Equation 1', '3p + 2q = 32', -1], ['Equation 2', 'p + 2q = 16', -1], ['Pen p', 'Rs 8', 2], ['Pencil q', 'Rs 4', 3], ['Check', '24 + 8 = 32 ✓', 4]]),
+    W('Solve x + 2y = 8 and 3x − 2y = 4.', 'The y terms are +2y and −2y: ==different signs==, so ==add==.', 'Answers do not have to be whole numbers.', 'Add the equations',
+      [['Add', '(x + 2y) + (3x − 2y) = 8 + 4', ''], ['Simplify', '4x = 12, so x = 3', ''], ['Find y', '3 + 2y = 8, so 2y = 5', ''], ['Solve', 'y = 2.5', ''], ['Check', '3 × 3 − 2 × 2.5 = 9 − 5 = 4 ✓', '']],
+      [['x', '3', 1], ['2y', '5', 2], ['y', '2.5', 3], ['Check', '9 − 5 = 4 ✓', 4]])
+  ],
+  drill: 'simul',
+  quiz: [
+    { q: 'x + y = 10 and x − y = 2. Find x.', o: ['4', '6', '8', '12'], a: 1, w: 'Add: 2x = 12, so x = ==6==.' },
+    { q: 'The coefficients of y are +3 and +3. To eliminate y you…', o: ['add the equations', 'subtract the equations', 'multiply them', 'divide them'], a: 1, w: 'Same signs: ==subtract==.' },
+    { q: 'On a graph, the solution of two simultaneous equations is…', o: ['where the lines cross', 'the y-intercept', 'the gradient', 'the origin'], a: 0, w: 'The ==point where the lines cross==.' },
+    { q: 'x + y = 5 and y = 2. Find x.', o: ['7', '3', '2.5', '10'], a: 1, w: 'x + 2 = 5, so x = ==3==.' },
+    { q: 'If 2x + y = 9 and x = 3, then y =…', o: ['3', '6', '1', '12'], a: 0, w: '6 + y = 9, so y = ==3==.' },
+    { q: 'If x + 2y = 7 and x = 1, then y =…', o: ['2', '3', '4', '6'], a: 1, w: '1 + 2y = 7, so 2y = 6 and y = ==3==.' }
+  ],
+  exam: [
+    { q: 'Solve the simultaneous equations 3x + 2y = 16 and x − 2y = 0.', m: 4,
+      p: ['==Adds== the equations (the y terms cancel)', '4x = 16', '==x = 4==', '==y = 2=='] },
+    { q: 'Solve 2x + 3y = 13 and 4x − y = 5.', m: 4,
+      p: ['Multiplies to match a coefficient (for example 12x − 3y = 15)', 'Adds or subtracts to eliminate one letter', '==x = 2==', '==y = 3=='] },
+    { q: '2 teas and 3 coffees cost Rs 120. 1 tea and 2 coffees cost Rs 70. Find the price of a tea and a coffee.', m: 4,
+      p: ['2t + 3c = 120 and t + 2c = 70', 'Multiplies the second by 2: 2t + 4c = 140', '==c = Rs 20==', '==t = Rs 30=='] }
+  ]
+},
+quad: {
+  code: 'Algebra', name: 'Quadratic equations',
+  lede: 'Solve by factorising, by the formula, and read the graph. Always get the equation equal to zero first.',
+  learn: [
+    { h: 'Solving by factorising', list: ['A quadratic looks like ==ax² + bx + c = 0==.', 'Get everything on ONE side so the other side is ==0==.', '==Factorise==, then set ==each bracket to 0==.', 'Example: x² + 5x + 6 = 0 → (x + 2)(x + 3) = 0 → ==x = −2 or x = −3==.', 'For x² = 25: x = ==+5 or −5== (two answers).', '==Never divide by x==: x² = 5x → x(x − 5) = 0 → x = 0 or 5.'] },
+    { h: 'The quadratic formula', list: ['For ax² + bx + c = 0: ==x = (−b ± √(b² − 4ac)) ÷ 2a==.', '==b² − 4ac== is the ==discriminant==. ==Positive==: two solutions. ==Zero==: one solution. ==Negative==: no real solutions.', 'Use it when the quadratic will ==not factorise== neatly.', 'Work out the discriminant ==first==. Put brackets round negatives.'] },
+    { h: 'The graph', list: ['The graph of y = ax² + bx + c is a ==parabola==.', '==a > 0==: ==U-shaped== (minimum). ==a < 0==: ==∩-shaped== (maximum).', 'The ==roots== (solutions) are where the graph ==crosses the x-axis==.', 'The graph crosses the y-axis at ==c==.', 'The ==line of symmetry== is halfway between the roots.'] }
+  ],
+  mistakes: ['Solving without making one side ==zero==.', 'Giving only ==one== solution (the ± gives two).', 'Dividing both sides by ==x==, which loses the solution x = 0.', 'Sign errors in ==b² − 4ac== with negative numbers: use brackets.', 'Forgetting the ==whole numerator== is divided by 2a.'],
+  diagrams: [{ svg: svgParabola, cap: 'y = x² − 4x + 3: ==roots== at x = 1 and 3, ==minimum== at (2, −1).' }],
+  worked: [
+    W('Solve x² + 5x + 6 = 0.', 'The equation is already ==equal to zero==. Factorise, then set each bracket to zero.', 'Check by expanding the brackets.', 'Two numbers: multiply to 6, add to 5',
+      [['Find two numbers', 'multiply to 6, add to 5: 2 and 3', '1 × 6 and 2 × 3 are the pairs for 6. Only 2 + 3 = 5.'], ['Factorise', '(x + 2)(x + 3) = 0', ''], ['Each bracket is 0', 'x + 2 = 0 or x + 3 = 0', 'If two things multiply to 0, one of them is 0.'], ['Solutions', 'x = −2 or x = −3', 'Check: (−2)² + 5(−2) + 6 = 4 − 10 + 6 = 0 ✓.']],
+      [['Numbers', '2 and 3', 0], ['Factorised', '(x + 2)(x + 3) = 0', 1], ['Solutions', 'x = −2 or −3', 3]]),
+    W('Solve x² − 9 = 0.', '==x² = 9==, and a square root has ==two answers== (+ and −).', 'This is a difference of two squares: (x − 3)(x + 3).', 'x² = k gives x = ±√k',
+      [['Rearrange', 'x² = 9', 'Add 9 to both sides.'], ['Square root', 'x = √9', ''], ['Both answers', 'x = 3 or x = −3', '3 × 3 = 9 and (−3) × (−3) = 9.']],
+      [['x²', '9', 0], ['Solutions', 'x = 3 or −3', 2]]),
+    W('Solve x² − 7x + 12 = 0.', 'Two numbers that ==multiply to +12== and ==add to −7==. Both must be ==negative==.', 'Positive product, negative sum: both numbers negative.', 'Multiply to 12, add to −7',
+      [['Find the numbers', '−3 and −4', '(−3) × (−4) = 12 and (−3) + (−4) = −7.'], ['Factorise', '(x − 3)(x − 4) = 0', ''], ['Solutions', 'x = 3 or x = 4', 'Solve x − 3 = 0 and x − 4 = 0.']],
+      [['Numbers', '−3 and −4', 0], ['Factorised', '(x − 3)(x − 4) = 0', 1], ['Solutions', 'x = 3 or 4', 2]]),
+    W('Solve x² = 5x.', 'Do ==not divide by x==. Move everything to one side and factorise.', 'Dividing by x would lose the solution x = 0.', 'Take out the common factor x',
+      [['Make one side zero', 'x² − 5x = 0', 'Subtract 5x from both sides.'], ['Factorise: take out x', 'x(x − 5) = 0', 'x is a common factor.'], ['Each factor is 0', 'x = 0 or x − 5 = 0', ''], ['Solutions', 'x = 0 or x = 5', 'Check x = 5: 25 = 5 × 5 ✓.']],
+      [['Rearranged', 'x² − 5x = 0', 0], ['Factorised', 'x(x − 5) = 0', 1], ['Solutions', 'x = 0 or 5', 3]]),
+    W('Use the formula to solve x² + 2x − 8 = 0.', 'Write ==a, b and c== first, then work out the ==discriminant==.', 'If the discriminant is a perfect square, it would have factorised.', 'x = (−b ± √(b² − 4ac)) ÷ 2a',
+      [['Identify a, b, c', 'a = 1, b = 2, c = −8', ''], ['Discriminant', 'b² − 4ac = 4 − 4 × 1 × (−8) = 4 + 32 = 36', 'Minus times minus is plus.'], ['Substitute', 'x = (−2 ± √36) ÷ 2 = (−2 ± 6) ÷ 2', '√36 = 6.'], ['Two solutions', 'x = 4 ÷ 2 = 2   or   x = −8 ÷ 2 = −4', 'Check x = 2: 4 + 4 − 8 = 0 ✓.']],
+      [['a, b, c', '1, 2, −8', 0], ['b² − 4ac', '36', 1], ['x', '(−2 ± 6) ÷ 2', 2], ['Solutions', '2 or −4', 3]]),
+    W('Solve 2x² + 3x − 2 = 0 by factorising.', 'When the x² has a number in front, try the ==brackets (2x …)(x …)==.', 'Check by expanding: (2x − 1)(x + 2) = 2x² + 3x − 2 ✓.', 'Trial and improvement on the brackets',
+      [['Factorise', '(2x − 1)(x + 2) = 0', 'Expand to check: 2x² + 4x − x − 2 = 2x² + 3x − 2.'], ['Each bracket is 0', '2x − 1 = 0 or x + 2 = 0', ''], ['Solve', 'x = 1/2 or x = −2', 'Check x = 1/2: 0.5 + 1.5 − 2 = 0 ✓.']],
+      [['Factorised', '(2x − 1)(x + 2) = 0', 0], ['Solutions', 'x = 1/2 or −2', 2]]),
+    W('For y = x² − 4x + 3 find where the graph crosses the axes and its minimum point.', 'Roots: ==y = 0==. y-intercept: ==x = 0==. The minimum is on the ==line of symmetry==.', 'The line of symmetry is halfway between the roots.', 'Roots, intercept, symmetry',
+      [['Roots: set y = 0', 'x² − 4x + 3 = (x − 1)(x − 3) = 0', 'Factorise.'], ['x-intercepts', 'x = 1 and x = 3', ''], ['y-intercept', 'x = 0 gives y = 3', 'The number on its own.'], ['Line of symmetry', 'x = (1 + 3) ÷ 2 = 2', 'Halfway between the roots.'], ['Minimum point', 'y = 2² − 4 × 2 + 3 = −1, so (2, −1)', 'U-shaped, so this is a minimum.']],
+      [['Roots', 'x = 1 and 3', 1], ['y-intercept', '3', 2], ['Symmetry', 'x = 2', 3], ['Minimum', '(2, −1)', 4]])
+  ],
+  drill: 'quad',
+  quiz: [
+    { q: 'The solutions of x² = 49 are…', o: ['7 only', '−7 only', '7 and −7', '24.5'], a: 2, w: '==x = 7 or x = −7==.' },
+    { q: 'Solve x(x − 4) = 0.', o: ['x = 4 only', 'x = 0 or x = 4', 'x = 0 only', 'x = −4'], a: 1, w: 'Either x = 0 or x − 4 = 0: ==0 or 4==.' },
+    { q: 'The discriminant of ax² + bx + c is…', o: ['b² − 4ac', 'b² + 4ac', '−b ± √b', '2a'], a: 0, w: '==b² − 4ac==.' },
+    { q: 'The graph of y = x² + 2 is…', o: ['a straight line', 'U-shaped', '∩-shaped', 'a circle'], a: 1, w: 'Positive x²: ==U-shaped==.' },
+    { q: 'The roots of x² − 5x + 6 = 0 are…', o: ['1 and 6', '2 and 3', '−2 and −3', '5 and 6'], a: 1, w: '(x − 2)(x − 3) = 0: ==2 and 3==.' },
+    { q: 'If b² − 4ac is negative, the quadratic has…', o: ['two solutions', 'one solution', 'no real solutions', 'three solutions'], a: 2, w: 'You cannot take the square root of a negative: ==no real solutions==.' }
+  ],
+  exam: [
+    { q: 'Solve x² − 5x − 14 = 0.', m: 3,
+      p: ['(x − 7)(x + 2) = 0', '==x = 7==', '==x = −2=='] },
+    { q: 'Solve 2x² + 7x + 3 = 0. Give both solutions.', m: 3,
+      p: ['(2x + 1)(x + 3) = 0', '==x = −1/2==', '==x = −3=='] },
+    { q: 'Use the quadratic formula to solve x² − 6x + 2 = 0. Give your answers correct to 2 decimal places.', m: 4,
+      p: ['b² − 4ac = 36 − 8 = ==28==', 'x = (6 ± √28) ÷ 2', '==x = 5.65==', '==x = 0.35=='] }
+  ]
 }
 };
 /* ---------- drill generators ---------- */
@@ -1049,6 +1342,7 @@ const fr = (n, d) => { const g = gcd(n, d); n /= g; d /= g; return d === 1 ? Str
 const lin = (a, b) => (a === 1 ? 'x' : a + 'x') + (b === 0 ? '' : b < 0 ? ' − ' + (-b) : ' + ' + b);
 const sgn = n => n < 0 ? '− ' + (-n) : '+ ' + n;
 const nth = (d, c) => { const a = d === 1 ? 'n' : d === -1 ? '-n' : d + 'n'; return c === 0 ? a : a + (c < 0 ? c : '+' + c); };
+const quadStr = (a, b, c) => `${a === 1 ? '' : a}x²${b === 0 ? '' : ' ' + sgn(b).replace(/ 1$/, ' ') + 'x'}${c === 0 ? '' : ' ' + sgn(c)}`.replace(/([+−]) x/, '$1 x');
 const fmtFrac = (n, d) => n + '/' + d;
 
 const DRILLS = {
@@ -1260,10 +1554,72 @@ const DRILLS = {
     () => { const [o, h] = pick([[3, 5], [5, 13], [4, 5], [7, 25], [8, 17], [6, 10], [9, 15], [12, 13], [2, 4], [5, 8]]); const ans = Math.round(Math.asin(o / h) * 180 / Math.PI * 100) / 100;
       return { kind:'num', q:`In a right-angled triangle the side opposite angle θ is ${o} cm and the hypotenuse is ${h} cm. Find θ to 1 decimal place.`, ans, tol:0.06,
         s:[['SOH', `sin θ = ${o} ÷ ${h}`],['Inverse', `θ = sin⁻¹(${num(o / h)})`],['Answer', `${(Math.round(ans * 10) / 10).toFixed(1)}°`]] }; }
+  ],
+  coord: [
+    () => { let x1, y1, x2, y2; do { x1 = rint(-4, 8); x2 = rint(-4, 8); y1 = rint(-4, 8); y2 = rint(-4, 8); } while ((x1 + x2) % 2 || (y1 + y2) % 2);
+      return { kind:'pair', q:`Find the midpoint of (${x1}, ${y1}) and (${x2}, ${y2}). Type it like 3,5.`, ans:[(x1 + x2) / 2, (y1 + y2) / 2], s:[['Average the x’s', `(${x1} + ${x2}) ÷ 2 = ${(x1 + x2) / 2}`],['Average the y’s', `(${y1} + ${y2}) ÷ 2 = ${(y1 + y2) / 2}`]] }; },
+    () => { const m = pick([-4, -3, -2, -1, 1, 2, 3, 4, 5]), dx = rint(1, 5), x1 = rint(-3, 5), y1 = rint(-5, 8);
+      return { kind:'num', q:`Find the gradient of the line through (${x1}, ${y1}) and (${x1 + dx}, ${y1 + m * dx}).`, ans:m, tol:0, s:[['Change in y', `${y1 + m * dx} − ${y1} = ${m * dx}`],['Change in x', `${x1 + dx} − ${x1} = ${dx}`],['Gradient', `${m * dx} ÷ ${dx} = ${m}`]] }; },
+    () => { const [a, b, c] = pick([[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [9, 12, 15]]), x1 = rint(-3, 3), y1 = rint(-3, 3), sx = pick([-1, 1]), sy = pick([-1, 1]);
+      return { kind:'num', q:`Find the distance between (${x1}, ${y1}) and (${x1 + sx * a}, ${y1 + sy * b}).`, ans:c, tol:0, s:[['Δx and Δy', `${a} and ${b}`],['d² = Δx² + Δy²', `${a * a} + ${b * b} = ${c * c}`],['Distance', String(c)]] }; },
+    () => { const m = pick([-3, -2, -1, 1, 2, 3, 4]), c = rint(-6, 6) || 2, which = rint(0, 1);
+      return { kind:'num', q:`The line y = ${m === 1 ? '' : m === -1 ? '−' : m}x ${sgn(c)}. Find its ${which ? 'gradient' : 'y-intercept'}.`, ans:which ? m : c, tol:0, s:[['Compare with y = mx + c', `m = ${m}, c = ${c}`],['Answer', String(which ? m : c)]] }; },
+    () => { const m = pick([-3, -2, -1, 1, 2, 3, 4]), x = rint(1, 6), y = rint(-6, 10), c = y - m * x;
+      return { kind:'num', q:`A line with gradient ${m} passes through (${x}, ${y}). In y = mx + c, find c.`, ans:c, tol:0, s:[['Substitute', `${y} = ${m} × ${x} + c`],['Solve', `c = ${y} − ${m * x} = ${c}`]] }; }
+  ],
+  trans: [
+    () => { const x = rint(-6, 6) || 3, y = rint(-6, 6) || 2, k = pick(['x-axis', 'y-axis', 'y = x']); const a = k === 'x-axis' ? [x, -y] : k === 'y-axis' ? [-x, y] : [y, x];
+      return { kind:'pair', q:`Reflect the point (${x}, ${y}) in ${k === 'y = x' ? 'the line y = x' : 'the ' + k}. Type it like 3,5.`, ans:a, s:[['Rule', k === 'x-axis' ? '(x, y) → (x, −y)' : k === 'y-axis' ? '(x, y) → (−x, y)' : '(x, y) → (y, x)'],['Image', `(${a[0]}, ${a[1]})`]] }; },
+    () => { const x = rint(-5, 5), y = rint(-5, 5), r = rint(-6, 6), u = rint(-6, 6);
+      return { kind:'pair', q:`Translate (${x}, ${y}) by ${Math.abs(r)} ${r >= 0 ? 'right' : 'left'} and ${Math.abs(u)} ${u >= 0 ? 'up' : 'down'}. Type it like 3,5.`, ans:[x + r, y + u], s:[['x', `${x} ${sgn(r)} = ${x + r}`],['y', `${y} ${sgn(u)} = ${y + u}`]] }; },
+    () => { const x = rint(-6, 6) || 2, y = rint(-6, 6) || 3, t = pick(['90° anticlockwise', '90° clockwise', '180°']); const a = t === '180°' ? [-x, -y] : t === '90° anticlockwise' ? [-y, x] : [y, -x];
+      return { kind:'pair', q:`Rotate (${x}, ${y}) through ${t} about the origin. Type it like 3,5.`, ans:a, s:[['Rule', t === '180°' ? '(x, y) → (−x, −y)' : t === '90° anticlockwise' ? '(x, y) → (−y, x)' : '(x, y) → (y, −x)'],['Image', `(${a[0]}, ${a[1]})`]] }; },
+    () => { const x = rint(-5, 5) || 1, y = rint(-5, 5) || 2, k = pick([2, 3, 4, -1, -2]);
+      return { kind:'pair', q:`Enlarge (${x}, ${y}) by scale factor ${k}, centre the origin. Type it like 3,5.`, ans:[k * x, k * y], s:[['Multiply both coordinates by ' + k, `(${k} × ${x}, ${k} × ${y})`],['Image', `(${k * x}, ${k * y})`]] }; },
+    () => { const A = rint(2, 12), k = rint(2, 5);
+      return { kind:'num', q:`A shape of area ${A} cm² is enlarged by scale factor ${k}. Find the area of the image.`, ans:A * k * k, tol:0, s:[['Area factor = k²', `${k}² = ${k * k}`],['New area', `${A} × ${k * k} = ${A * k * k} cm²`]] }; }
+  ],
+  simil: [
+    () => { const a = rint(2, 9), b = rint(2, 9), k = rint(2, 6);
+      return { kind:'num', q:`Two similar shapes: a side of ${a} cm on the small shape matches ${a * k} cm on the large shape. A side of ${b} cm on the small shape matches what length on the large shape?`, ans:b * k, tol:0, s:[['Scale factor', `${a * k} ÷ ${a} = ${k}`],['Multiply', `${b} × ${k} = ${b * k} cm`]] }; },
+    () => { const A = rint(3, 20), k = rint(2, 5);
+      return { kind:'num', q:`Two similar shapes have a scale factor of ${k}. The smaller has area ${A} cm². Find the area of the larger.`, ans:A * k * k, tol:0, s:[['Area factor = k²', `${k}² = ${k * k}`],['Multiply', `${A} × ${k * k} = ${A * k * k} cm²`]] }; },
+    () => { const V = rint(2, 20), k = rint(2, 4);
+      return { kind:'num', q:`Two similar solids have a scale factor of ${k}. The smaller has volume ${V} cm³. Find the volume of the larger.`, ans:V * k ** 3, tol:0, s:[['Volume factor = k³', `${k}³ = ${k ** 3}`],['Multiply', `${V} × ${k ** 3} = ${V * k ** 3} cm³`]] }; },
+    () => { const p = rint(2, 7), k = rint(2, 4), A = p * p, B = A * k * k;
+      return { kind:'num', q:`Two similar shapes have areas ${A} cm² and ${B} cm². What is the length scale factor from the smaller to the larger?`, ans:k, tol:0, s:[['Area ratio', `${B} ÷ ${A} = ${k * k}`],['Square root', `√${k * k} = ${k}`]] }; },
+    () => { const n = pick([10000, 25000, 50000, 100000]), d = rint(2, 9), km = d * n / 100000;
+      return { kind:'num', q:`A map has scale 1 : ${n}. Two places are ${d} cm apart on the map. How many km apart are they in real life?`, ans:km, tol:0.001, s:[['Real distance in cm', `${d} × ${n} = ${d * n}`],['Convert to km (÷ 100 000)', `${d * n} ÷ 100 000 = ${km} km`]] }; }
+  ],
+  simul: [
+    () => { let a1, b1, a2, b2; const x = rint(1, 8), y = rint(1, 8); do { a1 = rint(1, 4); b1 = rint(1, 4); a2 = rint(1, 4); b2 = rint(-3, 4) || 1; } while (a1 * b2 - a2 * b1 === 0);
+      const t = (a, b) => `${a === 1 ? '' : a}x ${b < 0 ? '− ' + (b === -1 ? '' : -b) : '+ ' + (b === 1 ? '' : b)}y`; const ask = rint(0, 1);
+      return { kind:'num', q:`Solve ${t(a1, b1)} = ${a1 * x + b1 * y} and ${t(a2, b2)} = ${a2 * x + b2 * y}. Find ${ask ? 'y' : 'x'}.`, ans:ask ? y : x, tol:0,
+        s:[['Eliminate one letter', 'multiply, then add or subtract'],['Solve for the other letter and substitute', `x = ${x}, y = ${y}`],['Check', `${a1} × ${x} + ${b1} × ${y} = ${a1 * x + b1 * y} ✓`]] }; },
+    () => { const x = rint(1, 8), y = rint(1, 9), a = rint(1, 4), p = rint(1, 4), q = rint(1, 4), b = y - a * x;
+      return { kind:'num', q:`Solve y = ${a === 1 ? '' : a}x ${b < 0 ? '− ' + (-b) : '+ ' + b} and ${p === 1 ? '' : p}x + ${q === 1 ? '' : q}y = ${p * x + q * y}. Find x.`.replace('+ 0', ''), ans:x, tol:0,
+        s:[['Substitute y into the second equation', `${p}x + ${q}(${a}x ${sgn(b)}) = ${p * x + q * y}`],['Solve', `x = ${x}`],['Then y', `y = ${y}`]] }; },
+    () => { const pr = rint(3, 12), pc = rint(2, 9); const a = rint(2, 4), c = rint(1, 3);
+      return { kind:'num', q:`${a} pens and ${c} pencils cost Rs ${a * pr + c * pc}. 1 pen and ${c} pencil${c > 1 ? 's' : ''} cost Rs ${pr + c * pc}. Find the cost of one pen.`, ans:pr, tol:0,
+        s:[['Equations', `${a}p + ${c}q = ${a * pr + c * pc} and p + ${c}q = ${pr + c * pc}`],['Subtract', `${a - 1}p = ${(a - 1) * pr}`],['Pen', `Rs ${pr}`]] }; }
+  ],
+  quad: [
+    () => { let p, q; do { p = rint(-8, 8); q = rint(-8, 8); } while (!p || !q || p === q); const b = -(p + q), c = p * q, which = rint(0, 1);
+      const eq = `x²${b === 0 ? '' : ' ' + sgn(b) + 'x'} ${sgn(c)} = 0`;
+      return { kind:'num', q:`Solve ${eq}. Type the ${which ? 'larger' : 'smaller'} solution.`, ans:which ? Math.max(p, q) : Math.min(p, q), tol:0, s:[['Two numbers: multiply to ' + c + ', add to ' + b, `${-p} and ${-q}`],['Factorise', `(x ${sgn(-p)})(x ${sgn(-q)}) = 0`],['Solutions', `x = ${p} or x = ${q}`]] }; },
+    () => { const r = rint(2, 15);
+      return { kind:'num', q:`Solve x² = ${r * r}. Type the positive solution.`, ans:r, tol:0, s:[['Square root', `x = ±√${r * r}`],['Positive solution', String(r)]] }; },
+    () => { const k = rint(2, 12);
+      return { kind:'num', q:`Solve x² − ${k}x = 0. Type the non-zero solution.`, ans:k, tol:0, s:[['Factorise', `x(x − ${k}) = 0`],['Solutions', `x = 0 or x = ${k}`]] }; },
+    () => { const a = rint(1, 4), b = rint(-6, 6), c = rint(-5, 5), d = b * b - 4 * a * c;
+      return { kind:'num', q:`Find the discriminant b² − 4ac for ${quadStr(a, b, c)} = 0.`, ans:d, tol:0, s:[['a, b, c', `${a}, ${b}, ${c}`],['b²', String(b * b)],['4ac', String(4 * a * c)],['Discriminant', `${b * b} − (${4 * a * c}) = ${d}`]] }; },
+    () => { const a = rint(1, 3), b = rint(-6, 6), c = rint(-4, 5), d = b * b - 4 * a * c; const right = d > 0 ? 'two solutions' : d === 0 ? 'one solution' : 'no real solutions';
+      return choiceItem(`How many real solutions does ${quadStr(a, b, c)} = 0 have?`, right, ['two solutions', 'one solution', 'no real solutions'].filter(x => x !== right),
+        [['Discriminant', `${b}² − 4 × ${a} × ${c < 0 ? '(' + c + ')' : c} = ${d}`],['Meaning', d > 0 ? 'positive: two solutions' : d === 0 ? 'zero: one solution' : 'negative: no real solutions']]); }
   ]
 };
 
-let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0]];
+let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -1279,7 +1635,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1296,13 +1652,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth'];
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
-  <p class="lede">Thirteen topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Eighteen topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
@@ -1440,6 +1796,8 @@ function judge(raw){
   if (d.kind === 'pf') { const sp = x => x.replace(/²/g, '^2').replace(/³/g, '^3'); const out = []; let m; const re = /(\d+)(?:\^(\d+))?/g; const r = sp(Array.isArray(raw) ? raw.join('*') : String(raw));
     while ((m = re.exec(r))) { const e = m[2] ? +m[2] : 1; for (let i = 0; i < e; i++) out.push(+m[1]); } if (!out.length) return null;
     return { ok: out.slice().sort((a, b) => a - b).join(',') === d.ans.join(',') }; }
+  if (d.kind === 'pair') { const v = (Array.isArray(raw) ? raw.join(',') : String(raw)).replace(/−/g, '-').match(/-?\d+(?:\.\d+)?/g); if (!v) return null; if (v.length !== 2) return { ok:false, note:'Type two numbers like 3,5.' };
+    return { ok: Math.abs(+v[0] - d.ans[0]) < 1e-9 && Math.abs(+v[1] - d.ans[1]) < 1e-9 }; }
   if (d.kind === 'text') { const n = s => s.replace(/\s+/g, '').replace(/[−–]/g, '-').toLowerCase(); const r = n(raw); if (!r) return null; return { ok: r === n(d.ans) }; }
   if (d.kind === 'frac') { const P = s => { const m = s.replace(/\s+/g, '').match(/^(-?\d+)(?:\/(\d+))?$/); return m ? [+m[1], m[2] ? +m[2] : 1] : null; };
     const x = P(raw), y = P(d.ans); if (!x) return raw.trim() ? { ok:false, note:'Write it like 7/12.' } : null; if (!x[1]) return { ok:false };
@@ -1450,7 +1808,7 @@ function judge(raw){
     if (r === d.ans) return { ok:true }; if (r.toLowerCase() === d.ans.toLowerCase()) return { ok:true, note:`Watch the capital letters: ${sub(d.ans)}` }; return { ok:false }; }
   return null;
 }
-const answerText = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'num' ? num(d.ans) : d.kind === 'pf' ? d.ans.join(' × ') : d.ans;
+const answerText = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'num' ? num(d.ans) : d.kind === 'pf' ? d.ans.join(' × ') : d.kind === 'pair' ? '(' + d.ans.join(', ') + ')' : d.ans;
 function showResult(ok, note){
   streak = ok ? streak + 1 : 0;
   if (streak > (store.drill[cur] || 0)) { store.drill[cur] = streak; save(); }
@@ -1467,7 +1825,7 @@ function newDrill(){
   const d = drillCur;
   const input = d.kind === 'choice'
     ? `<div class="opts" id="dch">${d.choices.map((o,j) => `<button class="opt" type="button" data-dc="${j}">${o}</button>`).join('')}</div>`
-    : `<form class="answer" id="dform"><label for="dans" class="note">Your answer</label><input id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" ${d.kind==='num'?'inputmode="decimal"':''} placeholder="${d.kind==='pf'?'e.g. 2*2*3':d.kind==='text'?'type your answer':d.kind==='frac'?'e.g. 7/12':'number'}"><button class="btn primary" type="submit">Check</button></form>`;
+    : `<form class="answer" id="dform"><label for="dans" class="note">Your answer</label><input id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" ${d.kind==='num'?'inputmode="decimal"':''} placeholder="${d.kind==='pair'?'e.g. 3,5':d.kind==='pf'?'e.g. 2*2*3':d.kind==='text'?'type your answer':d.kind==='frac'?'e.g. 7/12':'number'}"><button class="btn primary" type="submit">Check</button></form>`;
   box.innerHTML = `<div class="scorebar"><span class="eyebrow">Practice drill</span><span class="stat">streak ${streak} · best ${store.drill[cur] || 0}</span></div>
     <p class="drillq">${d.q}</p>${input}<div id="dfb"></div>
     <div class="row"><button class="btn ghost" type="button" id="dskip">Skip to a new question</button></div>`;
