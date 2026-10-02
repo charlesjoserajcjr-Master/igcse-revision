@@ -286,6 +286,44 @@ function svgDNA(){
   ${T(640, 80, 'A pairs with T', 'acct')}${T(640, 110, 'C pairs with G', 'hott')}${T(640, 150, 'Bases: A, T, C, G', 'mut')}${T(640, 172, 'The order of bases is', 'mut')}${T(640, 194, 'the genetic code.', 'mut')}</svg>`;
 }
 
+function svgGut(){
+  const b = (x, y, w, t, sub, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="46" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + w / 2, y + 28, t, 'mid')}${sub.map((l, i) => T(x + w / 2, y + 66 + i * 18, l, 'mid mut')).join('')}`;
+  return `<svg viewBox="0 0 900 330" role="img" aria-label="The alimentary canal with the function of each part">${arrowDefs('g')}
+  ${b(10, 20, 120, 'mouth', ['teeth chew (physical)', 'amylase: starch', 'to maltose'])}${b(160, 20, 120, 'oesophagus', ['peristalsis', 'pushes food down'])}${b(310, 20, 120, 'stomach', ['acid kills bacteria', 'protease (pepsin)'], 'nonmetal')}${b(460, 20, 130, 'small intestine', ['final digestion', 'ABSORPTION', 'of digested food'], 'nonmetal')}${b(620, 20, 130, 'large intestine', ['absorbs water', 'forms faeces'])}${b(780, 20, 110, 'rectum', ['stores faeces', 'anus: egestion'])}
+  ${[130, 280, 430, 590, 750].map(x => `<line x1="${x}" y1="43" x2="${x + 30}" y2="43" class="ln" marker-end="url(#a-g)"/>`).join('')}
+  <rect x="250" y="190" width="170" height="40" rx="8" class="cardf" style="stroke:var(--hot);stroke-width:1.6"/>${T(335, 215, 'liver: makes BILE', 'mid hott')}
+  <rect x="450" y="190" width="170" height="40" rx="8" class="cardf" style="stroke:var(--hot);stroke-width:1.6"/>${T(535, 215, 'pancreas: enzymes', 'mid hott')}
+  ${T(335, 252, 'bile emulsifies fat and', 'mid mut')}${T(335, 270, 'neutralises stomach acid', 'mid mut')}${T(535, 252, 'amylase, protease, lipase', 'mid mut')}${T(535, 270, 'into the small intestine', 'mid mut')}
+  ${T(20, 140, 'Ingestion: taking food in', 'mut')}${T(20, 162, 'Egestion: removing faeces', 'mut')}${T(20, 184, '(not the same as excretion)', 'mut')}</svg>`;
+}
+function svgTranspire(){
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="Path of water through a plant: transpiration stream">${arrowDefs('t')}
+  <rect x="150" y="60" width="26" height="200" class="metal" style="stroke:var(--ink);stroke-width:1.5"/>${T(163, 285, 'xylem', 'mid acct')}
+  <path d="M60 280 q40 20 90 0 M60 300 q60 20 120 0" class="thin" fill="none"/><rect x="40" y="260" width="200" height="40" class="nonmetal" style="stroke:var(--muted);stroke-width:1"/>${T(140, 322, 'soil water', 'mid mut')}
+  <path d="M176 70 Q330 20 420 60 Q330 110 176 100 Z" class="accf" style="fill-opacity:.35;stroke:var(--accent);stroke-width:1.6"/>${T(300, 76, 'leaf', 'mid lbl')}
+  <line x1="163" y1="250" x2="163" y2="110" class="acc" marker-end="url(#b-t)"/>
+  <line x1="360" y1="90" x2="420" y2="130" class="hotl" marker-end="url(#h-t)"/><line x1="320" y1="95" x2="340" y2="150" class="hotl" marker-end="url(#h-t)"/>${T(420, 150, 'water vapour out of stomata', 'hott')}
+  ${T(470, 36, 'Transpiration: loss of water vapour', 'lbl')}${T(470, 56, 'from the leaves by evaporation', 'lbl')}
+  ${T(470, 200, 'Faster when: hot, windy, dry air,', 'mut')}${T(470, 220, 'bright light (stomata open).', 'mut')}${T(470, 250, 'Slower when: cool, still, humid, dark.', 'mut')}
+  ${T(470, 290, 'Roots take up water by osmosis;', 'mut')}${T(470, 310, 'ions by active transport.', 'mut')}</svg>`;
+}
+function svgHeart(){
+  return `<svg viewBox="0 0 860 350" role="img" aria-label="The double circulation and heart chambers">${arrowDefs('h')}
+  <rect x="330" y="100" width="200" height="180" rx="30" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="430" y1="100" x2="430" y2="280" class="ln"/><line x1="330" y1="180" x2="530" y2="180" class="thin"/>
+  ${T(380, 140, 'right atrium', 'mid mut')}${T(480, 140, 'left atrium', 'mid mut')}${T(380, 235, 'right', 'mid lbl')}${T(380, 253, 'ventricle', 'mid lbl')}${T(480, 235, 'left', 'mid lbl')}${T(480, 253, 'ventricle', 'mid lbl')}
+  <path d="M760 130 L760 20 L370 20 L370 100" class="acc" fill="none" marker-end="url(#b-h)"/>${T(565, 14, 'vena cava: deoxygenated blood from body', 'mid acct')}
+  <path d="M390 280 L390 325 L100 325 L100 215" class="acc" fill="none" marker-end="url(#b-h)"/>${T(245, 342, 'pulmonary artery: to lungs', 'mid acct')}
+  <path d="M100 130 L100 60 L470 60 L470 100" class="hotl" fill="none" marker-end="url(#h-h)"/>${T(285, 52, 'pulmonary vein: oxygenated blood from lungs', 'mid hott')}
+  <path d="M490 280 L490 325 L760 325 L760 215" class="hotl" fill="none" marker-end="url(#h-h)"/>${T(625, 342, 'aorta: oxygenated blood to body', 'mid hott')}
+  ${T(100, 178, 'LUNGS', 'mid lbl')}${T(760, 178, 'BODY', 'mid lbl')}</svg>`;
+}
+function svgVacc(){
+  const b = (x, t, s) => `<rect x="${x}" y="40" width="185" height="64" rx="8" class="metal" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + 92, 66, t, 'mid')}${T(x + 92, 88, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="How vaccination gives immunity">${arrowDefs('v')}
+  ${b(15, 'vaccine', 'weakened pathogen')}${b(230, 'lymphocytes', 'make antibodies')}${b(445, 'memory cells', 'stay in the blood')}${b(660, 'real infection', 'fast, big response')}
+  ${[200, 415, 630].map(x => `<line x1="${x}" y1="72" x2="${x + 28}" y2="72" class="ln" marker-end="url(#a-v)"/>`).join('')}
+  ${T(430, 150, 'Antigens on the pathogen are the markers the lymphocytes detect.', 'mid lbl')}${T(430, 176, 'Antibodies are specific: each one fits only one antigen.', 'mid lbl')}${T(430, 210, 'Herd immunity: when most people are immune, the pathogen cannot spread easily.', 'mid mut')}</svg>`;
+}
 /* ---------- content ---------- */
 const CH = {
 char: {
@@ -552,6 +590,184 @@ plantnut: {
       p: ['to make ==amino acids== / proteins', 'for ==growth== (lack causes stunted growth, yellow leaves)'] }
   ]
 }
+,
+nutr: {
+  code: 'Topic 7', name: 'Human nutrition',
+  lede: 'A balanced diet, what happens in each part of the alimentary canal, and how digested food is absorbed.',
+  learn: [
+    { h: 'A balanced diet', table: [['Nutrient', 'Source', 'Use', 'Lack causes'], ['==carbohydrate==', 'rice, bread, potato', 'energy', 'tiredness, weight loss'], ['==protein==', 'meat, fish, eggs, beans', 'growth and repair', '==kwashiorkor==, slow growth'], ['==fat==', 'butter, oil, nuts', 'energy store, insulation', 'weight loss'], ['==vitamin C==', 'citrus fruits', 'healthy skin and gums', '==scurvy== (bleeding gums)'], ['==vitamin D==', 'oily fish, sunlight', 'calcium absorption, strong bones', '==rickets=='], ['==calcium==', 'milk, cheese', 'bones and teeth', 'weak bones and teeth'], ['==iron==', 'red meat, spinach', 'makes haemoglobin', '==anaemia== (tired, pale)'], ['==fibre==', 'vegetables, wholegrain', 'helps ==peristalsis==', 'constipation'], ['water', 'drinks, food', 'solvent, transport', 'dehydration']] },
+    { h: 'Digestion', list: ['==Ingestion== is taking food in. ==Digestion== breaks large insoluble molecules into small soluble ones. ==Absorption== moves them into the blood. ==Egestion== removes undigested food (faeces).', '==Mechanical digestion== (teeth, churning of the stomach) breaks food into smaller pieces and increases ==surface area== for enzymes.', '==Chemical digestion== uses enzymes. Starch → ==maltose== (amylase) → glucose. Protein → ==amino acids== (protease). Fat → ==fatty acids and glycerol== (lipase).', '==Peristalsis== is waves of muscle contraction that push food along the gut.', 'The ==stomach== makes ==hydrochloric acid==: kills bacteria and gives the ==low pH== for protease (pepsin).', '==Bile== (made in the ==liver==, stored in the ==gall bladder==) ==neutralises acid== and ==emulsifies fat==, giving it a larger surface area for lipase.'] },
+    { h: 'Absorption and teeth', list: ['Most absorption happens in the ==small intestine==. Its lining has ==villi== with a large surface area, thin walls (one cell thick), a good blood supply and a ==lacteal== for fats.', 'The ==large intestine== absorbs ==water==.', 'Teeth: ==incisors== cut, ==canines== tear, ==premolars and molars== grind. Tooth structure: ==enamel== (hard), ==dentine==, ==pulp== (nerves and blood).', '==Tooth decay==: bacteria in plaque change sugar to acid, which dissolves enamel. Prevent by brushing, less sugar, fluoride.'] }
+  ],
+  mistakes: ['Saying ==bile is an enzyme==. It has no enzymes: it emulsifies fat.', 'Saying ==digestion and absorption are the same==. Digestion is breaking down; absorption is moving into the blood.', 'Saying ==egestion is excretion==. Egestion is undigested food; excretion is metabolic waste.', 'Saying the ==stomach absorbs food== (little is absorbed there).', 'Saying villi ==increase digestion==. They increase the surface area for ==absorption==.'],
+  diagrams: [{ svg: svgGut, cap: 'The ==alimentary canal==: ingestion to egestion.' }],
+  worked: [
+    W('Explain how the small intestine is adapted for absorption.', 'Link each ==feature== to a ==reason==.', 'Use villi, thin wall and blood supply.', 'Feature + because',
+      [['Villi', 'The lining has many villi. This gives a large surface area.', 'More area means more absorption.'], ['Thin wall', 'The wall is one cell thick. This gives a short diffusion distance.', ''], ['Blood supply', 'Each villus has a network of capillaries. The blood carries absorbed food away, keeping a steep concentration gradient.', ''], ['Length', 'The small intestine is long, so there is time to absorb.', '']],
+      [['Villi', 'large surface area', 0], ['Thin wall', 'short distance', 1], ['Capillaries', 'steep gradient', 2]], true),
+    W('Describe the roles of bile in digestion.', 'Bile has ==two jobs==.', 'Remember: it contains no enzymes.', 'Neutralise + emulsify',
+      [['Where', 'Made in the liver, stored in the gall bladder, released into the small intestine.', ''], ['Job 1', 'It neutralises stomach acid.', 'Enzymes in the small intestine need an alkaline pH.'], ['Job 2', 'It emulsifies fat into small droplets.', 'A larger surface area for lipase.']],
+      [['Where', 'liver, gall bladder', 0], ['Job 1', 'neutralises acid', 1], ['Job 2', 'emulsifies fat', 2]], true),
+    W('A child eats few vegetables or red meat and is often tired and pale. Suggest a deficiency and explain.', 'Link ==tired and pale== to ==iron==.', 'Name the nutrient, the condition and the reason.', 'Iron → haemoglobin',
+      [['Nutrient', 'Iron is missing.', ''], ['Condition', 'The child has anaemia.', ''], ['Reason', 'Iron is needed to make haemoglobin in red blood cells.', ''], ['Result', 'Less oxygen is carried, so the child feels tired and looks pale.', '']],
+      [['Missing', 'iron', 0], ['Condition', 'anaemia', 1], ['Iron makes', 'haemoglobin', 2], ['Effect', 'less oxygen carried', 3]], true),
+    W('Describe what happens to a piece of bread from the mouth to the small intestine.', 'Follow the ==order==: mouth, stomach, small intestine.', 'Name the enzyme and the product at each stage.', 'Mouth → stomach → small intestine',
+      [['Mouth', 'Teeth chew the bread (mechanical digestion). Amylase in saliva breaks starch into maltose.', ''], ['Oesophagus', 'Peristalsis pushes the food to the stomach.', ''], ['Stomach', 'It is churned. Acid kills bacteria. Protease works on any protein.', ''], ['Small intestine', 'Enzymes complete digestion: maltose to glucose. Glucose is absorbed into the blood.', '']],
+      [['Mouth', 'starch → maltose', 0], ['Gullet', 'peristalsis', 1], ['Stomach', 'churning, acid', 2], ['Intestine', 'glucose absorbed', 3]], true)
+  ],
+  drill: 'nutr',
+  quiz: [
+    { q: 'Which nutrient is needed to make haemoglobin?', o: ['calcium', 'iron', 'vitamin C', 'fibre'], a: 1, w: '==Iron==. Lack causes anaemia.' },
+    { q: 'What does bile do?', o: ['digests protein', 'emulsifies fat', 'makes acid', 'absorbs water'], a: 1, w: 'It ==emulsifies fat== and neutralises acid.' },
+    { q: 'Where is most food absorbed?', o: ['stomach', 'mouth', 'small intestine', 'large intestine'], a: 2, w: 'The ==small intestine==.' },
+    { q: 'Peristalsis is…', o: ['chewing', 'muscle waves moving food along', 'enzyme action', 'absorption'], a: 1, w: '==Waves of muscle contraction==.' },
+    { q: 'Lack of vitamin C causes…', o: ['rickets', 'scurvy', 'anaemia', 'kwashiorkor'], a: 1, w: '==Scurvy==.' },
+    { q: 'The large intestine absorbs mainly…', o: ['water', 'protein', 'fat', 'starch'], a: 0, w: '==Water==.' }
+  ],
+  exam: [
+    { q: 'Describe the function of the stomach in digestion.', m: 3,
+      p: ['muscles ==churn== the food (mechanical digestion)', '==hydrochloric acid== kills bacteria', 'provides the correct ==pH for protease== to digest protein'] },
+    { q: 'Explain why digestion is necessary.', m: 2,
+      p: ['food molecules are ==large and insoluble==', 'so they must be broken into ==small soluble molecules== that can be absorbed into the blood'] },
+    { q: 'State the meaning of (a) ingestion (b) egestion.', m: 2,
+      p: ['ingestion: ==taking in== food through the mouth', 'egestion: ==removal of undigested food== (faeces) from the anus'] },
+    { q: 'Describe how tooth decay is caused and how it can be prevented.', m: 3,
+      p: ['bacteria in ==plaque== feed on sugar and make ==acid==', 'the acid dissolves the ==enamel==', 'prevent by ==brushing==, less sugar, fluoride'] }
+  ]
+},
+transp: {
+  code: 'Topic 8', name: 'Transport in plants',
+  lede: 'How water and sugars move through a plant, and what makes a plant lose water faster or slower.',
+  learn: [
+    { h: 'Water uptake and the transpiration stream', list: ['==Root hair cells== take up water by ==osmosis== and mineral ions by ==active transport==.', '==Xylem== vessels are long, hollow tubes with ==lignin== walls. They carry water and mineral ions ==upwards== from roots to leaves, and give ==support==.', '==Transpiration== is the loss of ==water vapour== from leaves, by evaporation from the mesophyll cells and diffusion out through the ==stomata==.', 'Water evaporating from the leaf ==pulls== more water up the xylem: the ==transpiration stream==.', 'Transpiration brings ==water and ions==, supplies water for ==photosynthesis== and ==cools the leaf==.'] },
+    { h: 'Factors affecting transpiration', table: [['Factor', 'Effect on rate', 'Reason'], ['==temperature== up', 'faster', 'more evaporation, more kinetic energy'], ['==light intensity== up', 'faster', 'stomata open wider'], ['==wind== up', 'faster', 'removes humid air from the leaf, keeps the gradient steep'], ['==humidity== up', 'slower', 'smaller concentration gradient']], list: ['When transpiration is faster than uptake, cells lose ==turgor== and the plant ==wilts==.', 'A ==potometer== measures water uptake: the movement of an ==air bubble== in a capillary tube.'], f: ['rate = distance moved by bubble ÷ time', 'volume = π r² × distance'] },
+    { h: 'Translocation', list: ['==Phloem== carries ==sucrose== and ==amino acids== (made in leaves) to the rest of the plant: to growing parts and storage organs. This is ==translocation==.', 'It can go ==up and down== the plant, in both directions.', 'Phloem is made of living cells (==sieve tubes==); xylem is dead.', 'The ==source== is the part that makes the sugars (leaf). The ==sink== is where they are used or stored (root, fruit).'] }
+  ],
+  mistakes: ['Saying ==water moves up the phloem==. Water goes up the xylem.', 'Saying ==translocation only goes upwards==. Phloem moves sucrose in both directions.', 'Saying transpiration is ==water leaving the roots==. It is water vapour leaving the leaves.', 'Saying ==wind slows transpiration== because it cools the plant. Wind speeds it up.', 'Mixing up ==osmosis in roots== with ==active transport of ions==.'],
+  diagrams: [{ svg: svgTranspire, cap: '==Transpiration stream==: soil, xylem, leaf, stomata.' }],
+  worked: [
+    W('In a potometer an air bubble moves 36 mm in 12 minutes. Calculate the rate of water uptake in mm per minute.', '==Distance ÷ time==.', 'Include the unit mm/min.', 'rate = distance ÷ time',
+      [['Formula', 'rate = distance ÷ time', ''], ['Substitute', '36 ÷ 12', ''], ['Answer', '3 mm/min', 'The bubble moves 3 mm every minute.']],
+      [['Distance', '36 mm', -1], ['Time', '12 min', -1], ['Rate', '3 mm/min', 2]]),
+    W('Explain why a plant wilts on a hot, dry, windy day.', 'Say what ==speeds up transpiration== and what happens to the ==cells==.', 'Use the word turgid or turgor.', 'Fast transpiration → water loss → flaccid',
+      [['Conditions', 'High temperature, dry air and wind all increase the transpiration rate.', ''], ['Water loss', 'Water is lost from the leaves faster than the roots can replace it.', ''], ['Cells', 'The cells lose water and become flaccid (lose turgor).', ''], ['Result', 'The leaves and stem are no longer firm, so the plant wilts.', '']],
+      [['Weather', 'transpiration up', 0], ['Water', 'lost faster than gained', 1], ['Cells', 'flaccid', 2], ['Result', 'wilts', 3]], true),
+    W('Compare xylem and phloem.', 'Compare ==what they carry==, ==direction== and ==structure==.', 'Give a point for each, side by side.', 'Water up v sugar both ways',
+      [['Carries', 'Xylem: water and mineral ions. Phloem: sucrose and amino acids.', ''], ['Direction', 'Xylem: upwards only. Phloem: up and down.', ''], ['Structure', 'Xylem: dead, hollow, lignin walls. Phloem: living cells, sieve tubes.', '']],
+      [['Carries', 'water v sucrose', 0], ['Direction', 'up v both', 1], ['Structure', 'dead v living', 2]], true),
+    W('Describe how you would show that transpiration is faster in light than in the dark using a potometer.', 'Keep one ==variable== different, the rest the same.', 'Say what you measure and how.', 'Light v dark, measure the bubble',
+      [['Set up', 'Cut a shoot underwater and fit it to a potometer with no air bubbles.', ''], ['Light', 'Place it in bright light and time the bubble over 10 minutes.', ''], ['Dark', 'Repeat in the dark with the same shoot, temperature and air movement.', 'Control the other variables.'], ['Result', 'The bubble moves further in the light, so transpiration is faster.', 'Stomata open wider in the light.']],
+      [['Set up', 'potometer', 0], ['Measure', 'bubble distance ÷ time', 1], ['Control', 'same temperature, wind', 2]], true)
+  ],
+  drill: 'transp',
+  quiz: [
+    { q: 'Which tissue carries water up the plant?', o: ['phloem', 'xylem', 'palisade', 'epidermis'], a: 1, w: '==Xylem==.' },
+    { q: 'Which carries sucrose?', o: ['xylem', 'phloem', 'root hair', 'stomata'], a: 1, w: '==Phloem==.' },
+    { q: 'What speeds up transpiration?', o: ['humid air', 'darkness', 'wind', 'cold'], a: 2, w: '==Wind== removes humid air.' },
+    { q: 'Root hair cells take up mineral ions by…', o: ['osmosis', 'diffusion only', 'active transport', 'evaporation'], a: 2, w: '==Active transport==.' },
+    { q: 'Water leaves the leaf through the…', o: ['stomata', 'xylem', 'cuticle only', 'roots'], a: 0, w: 'Through the ==stomata==.' },
+    { q: 'Moving sucrose around the plant is…', o: ['transpiration', 'translocation', 'osmosis', 'respiration'], a: 1, w: '==Translocation==.' }
+  ],
+  exam: [
+    { q: 'Define transpiration.', m: 2,
+      p: ['loss of ==water vapour== from the plant', '==by evaporation== from the leaves (through the stomata)'] },
+    { q: 'State two ways that transpiration is useful to the plant.', m: 2,
+      p: ['==transports water and mineral ions== up the plant', '==cools the leaf== / supplies water for photosynthesis / keeps cells turgid'] },
+    { q: 'Explain why transpiration is faster on a windy day.', m: 3,
+      p: ['wind ==removes water vapour== from around the leaf', 'this keeps the ==concentration gradient steep==', 'so ==more diffusion== of water vapour out of the stomata'] },
+    { q: 'A bubble moves 45 mm in 15 minutes. Calculate the mean rate.', m: 2,
+      p: ['rate = ==distance ÷ time== = 45 ÷ 15', '==3 mm/min=='] }
+  ]
+},
+blood: {
+  code: 'Topic 9', name: 'Transport in animals',
+  lede: 'The heart, blood vessels and blood: how the circulatory system carries oxygen and food around the body.',
+  learn: [
+    { h: 'The heart and the double circulation', list: ['Humans have a ==double circulation==: blood passes through the heart ==twice== on each full circuit. One loop goes to the ==lungs== and one to the ==body==.', 'The ==right side== pumps ==deoxygenated== blood to the lungs. The ==left side== pumps ==oxygenated== blood to the body.', 'The ==left ventricle== has a ==thicker wall== because it pumps blood all around the body at high pressure.', '==Valves== stop blood flowing backwards. ==Atria== receive blood; ==ventricles== pump it out.', 'Heart rate: ==pulse rate== is the number of beats per minute. ==Exercise== raises it so muscles get more oxygen and glucose, and carbon dioxide is removed faster.'] },
+    { h: 'Blood vessels', table: [['Vessel', 'Carries', 'Structure'], ['==artery==', 'blood ==away from== the heart, high pressure', '==thick muscular wall==, narrow lumen, elastic'], ['==vein==', 'blood ==to== the heart, low pressure', 'thinner wall, ==wide lumen==, ==valves=='], ['==capillary==', 'blood between arteries and veins; exchange with cells', 'wall ==one cell thick==, very narrow']], list: ['Arteries carry oxygenated blood, except the ==pulmonary artery==.', 'The ==coronary arteries== supply the heart muscle. A ==blockage== causes a ==heart attack==.', 'Risk factors for ==coronary heart disease==: ==smoking==, ==high fat diet==, ==lack of exercise==, stress and genetic factors.'] },
+    { h: 'Blood', table: [['Part', 'Function'], ['==red blood cells==', 'carry oxygen using ==haemoglobin== (bi-concave, no nucleus)'], ['==white blood cells==', 'fight pathogens: ==phagocytes== engulf them; ==lymphocytes== make antibodies'], ['==platelets==', 'help the blood ==clot== at a wound (fragments of cells)'], ['==plasma==', 'carries ==dissolved substances==: CO₂, glucose, urea, hormones, heat']], list: ['Clotting ==seals wounds== and prevents ==entry of pathogens== and loss of blood.'], f: ['pulse rate = beats ÷ time in minutes', 'beats in 15 s × 4 = beats per minute'] }
+  ],
+  mistakes: ['Saying ==all arteries carry oxygenated blood==. The pulmonary artery carries deoxygenated blood.', 'Saying the ==heart is divided into top and bottom== but forgetting the ==left and right==.', 'Writing ==veins have thick walls==. Arteries do.', 'Saying ==red blood cells fight infection==. White blood cells do.', 'Saying ==the right side of the heart is thicker==. The left is.'],
+  diagrams: [{ svg: svgHeart, cap: 'The ==double circulation==. Blood passes through the heart twice per circuit.' }],
+  worked: [
+    W('A student counts 19 pulse beats in 15 seconds at rest and 33 beats in 15 seconds after exercise. Calculate both pulse rates.', 'Convert 15 s to ==1 minute== by multiplying by 4.', 'Include the unit beats per minute.', 'beats × 4',
+      [['At rest', '19 × 4 = 76 beats per minute', '15 s × 4 = 60 s.'], ['After exercise', '33 × 4 = 132 beats per minute', ''], ['Comment', 'Heart rate rose by 56 beats per minute.', '132 − 76 = 56.']],
+      [['Rest', '19 beats / 15 s', -1], ['Exercise', '33 beats / 15 s', -1], ['Rest rate', '76 per min', 0], ['Exercise rate', '132 per min', 1]]),
+    W('Explain why the heart rate increases during exercise.', 'Link ==muscles== to ==oxygen==.', 'Say what is delivered and what is removed.', 'More respiration → more blood needed',
+      [['Muscles', 'The muscles respire faster and need more energy.', ''], ['Needs', 'They need more oxygen and glucose.', ''], ['Heart rate', 'The heart beats faster to deliver them faster.', ''], ['Removal', 'It also removes carbon dioxide faster.', '']],
+      [['Muscles', 'more respiration', 0], ['Need', 'O₂ and glucose', 1], ['Heart', 'beats faster', 2]], true),
+    W('Compare the structure of an artery and a vein.', 'Compare ==wall==, ==lumen== and ==valves==.', 'Give each point as a pair.', 'Wall, lumen, valves',
+      [['Wall', 'Artery: thick and muscular. Vein: thin.', 'Arteries carry blood at high pressure.'], ['Lumen', 'Artery: narrow. Vein: wide.', ''], ['Valves', 'Artery: none. Vein: has valves.', 'They stop backflow at low pressure.']],
+      [['Wall', 'thick v thin', 0], ['Lumen', 'narrow v wide', 1], ['Valves', 'no v yes', 2]], true),
+    W('Describe the pathway of blood from the body, through the heart and to the lungs.', 'Use the ==order of the chambers==.', 'Name each vessel and chamber.', 'vena cava → RA → RV → pulmonary artery',
+      [['Body to heart', 'Deoxygenated blood returns in the vena cava.', ''], ['Right atrium', 'It enters the right atrium.', ''], ['Right ventricle', 'It passes through a valve into the right ventricle.', ''], ['To the lungs', 'The right ventricle pumps it out in the pulmonary artery.', 'Oxygen is added in the lungs.']],
+      [['Vessel in', 'vena cava', 0], ['Chamber 1', 'right atrium', 1], ['Chamber 2', 'right ventricle', 2], ['Vessel out', 'pulmonary artery', 3]], true)
+  ],
+  drill: 'blood',
+  quiz: [
+    { q: 'Which chamber pumps blood to the whole body?', o: ['right atrium', 'right ventricle', 'left atrium', 'left ventricle'], a: 3, w: 'The ==left ventricle==.' },
+    { q: 'Which vessel has valves?', o: ['artery', 'vein', 'capillary', 'aorta'], a: 1, w: '==Veins==.' },
+    { q: 'Which blood cells make antibodies?', o: ['red cells', 'platelets', 'lymphocytes', 'plasma'], a: 2, w: '==Lymphocytes==.' },
+    { q: 'Platelets help…', o: ['carry oxygen', 'clot blood', 'engulf bacteria', 'carry CO₂'], a: 1, w: 'They help the blood ==clot==.' },
+    { q: 'The pulmonary vein carries…', o: ['deoxygenated blood to the lungs', 'oxygenated blood from the lungs', 'blood to the body', 'blood to the kidney'], a: 1, w: '==Oxygenated blood from the lungs==.' },
+    { q: 'Which is a risk factor for coronary heart disease?', o: ['exercise', 'smoking', 'fibre', 'water'], a: 1, w: '==Smoking==.' }
+  ],
+  exam: [
+    { q: 'Describe the function of (a) red blood cells (b) platelets (c) plasma.', m: 3,
+      p: ['red cells: ==transport oxygen== (haemoglobin)', 'platelets: help the blood ==clot==', 'plasma: ==transports== dissolved substances, such as glucose, CO₂, urea'] },
+    { q: 'Explain why the wall of the left ventricle is thicker than the right.', m: 2,
+      p: ['the left ventricle pumps blood ==around the whole body== (further)', 'so it needs ==more force / higher pressure=='] },
+    { q: 'Describe two ways in which a capillary is adapted for exchange.', m: 2,
+      p: ['wall is ==one cell thick== so short diffusion distance', '==narrow / permeable / large surface area / slow flow== so more time to exchange'] },
+    { q: 'Describe how a heart attack happens and give two risk factors.', m: 3,
+      p: ['a ==coronary artery is blocked==', 'the heart muscle gets no oxygen / glucose and ==dies==', 'risk factors: ==smoking / high fat diet / lack of exercise== (any two)'] }
+  ]
+},
+disease: {
+  code: 'Topic 10', name: 'Diseases and immunity',
+  lede: 'What causes disease, how pathogens spread, how the body defends itself, and how vaccination protects us.',
+  learn: [
+    { h: 'Pathogens and transmission', list: ['A ==pathogen== is a ==disease-causing organism==. ==Bacteria==, ==viruses==, ==fungi== and ==protoctists== can all be pathogens.', 'A ==transmissible disease== is one that can be passed from one host to another.', 'Spread by ==direct contact== (touching, blood, sexual contact), ==indirect contact== (contaminated food or water, ==vectors== such as mosquitoes) and ==droplets== (coughs and sneezes).', 'Examples: ==cholera== (bacteria, dirty water), ==malaria== (protoctist, spread by the ==mosquito== vector), ==HIV/AIDS== (virus, attacks white blood cells).'], table: [['Control measure', 'How it helps'], ['==clean water and sewage treatment==', 'stops cholera spreading'], ['==hygiene==, handwashing', 'removes pathogens'], ['==vaccination==', 'gives immunity'], ['==mosquito nets and insecticide==', 'stop malaria vectors'], ['==antibiotics==', 'kill bacteria, but do not work on viruses']] },
+    { h: 'Body defences', list: ['==Skin== is a physical barrier. ==Mucus== and ==hairs== in the nose and trachea trap pathogens. ==Stomach acid== kills them.', '==Phagocytes== (white blood cells) ==engulf and digest== pathogens (phagocytosis).', '==Lymphocytes== make ==antibodies== that bind to ==antigens== on the pathogen and destroy it. Antibodies are ==specific==.', 'After infection, ==memory cells== remain. If the same pathogen returns, antibodies are made ==faster and in greater number==: ==immunity==.'] },
+    { h: 'Vaccination and antibiotics', list: ['A ==vaccine== contains ==weakened, killed or part of== a pathogen. It has ==antigens== but does not cause the disease.', 'It makes lymphocytes ==produce antibodies== and ==memory cells==, so you are protected later.', '==Herd immunity==: if most people are vaccinated, the pathogen is less likely to spread to those who are not.', '==Antibiotic resistance==: bacteria with a ==mutation== survive and reproduce when antibiotics are overused. Use antibiotics ==only when needed== and finish the course.'] }
+  ],
+  mistakes: ['Saying ==antibiotics kill viruses==. They do not.', 'Saying a ==vaccine gives you the disease==. It contains a weakened or dead pathogen.', 'Saying ==antibodies are the same for every pathogen==. Each is specific to one antigen.', 'Saying ==people become resistant to antibiotics==. The bacteria become resistant.', 'Saying ==the mosquito causes malaria==. The pathogen is a protoctist; the mosquito is the vector.'],
+  diagrams: [{ svg: svgVacc, cap: 'How a ==vaccine== leads to ==immunity==.' }],
+  worked: [
+    W('Explain how a vaccine protects against a disease.', 'Follow the order: ==antigen → antibodies → memory cells==.', 'Name the cells and the result.', 'Weakened pathogen → memory cells',
+      [['Vaccine', 'It contains a weakened or dead pathogen with its antigens.', 'It cannot cause the disease.'], ['Response', 'Lymphocytes recognise the antigens and make antibodies.', ''], ['Memory', 'Memory cells stay in the blood.', ''], ['Later infection', 'The same pathogen is quickly recognised, so many antibodies are made fast.', 'The person does not get ill.']],
+      [['Contains', 'weakened pathogen', 0], ['Lymphocytes', 'make antibodies', 1], ['Memory cells', 'remain', 2], ['Later', 'fast response', 3]], true),
+    W('Explain why antibiotics do not cure influenza.', 'Say what ==influenza is caused by==.', 'Link the cause to how antibiotics work.', 'Virus, not bacteria',
+      [['Cause', 'Influenza is caused by a virus.', ''], ['Antibiotics', 'They kill bacteria, for example by damaging their cell walls.', ''], ['Conclusion', 'Viruses are not cells, so antibiotics have no effect on them.', '']],
+      [['Cause', 'virus', 0], ['Antibiotics', 'act on bacteria', 1], ['Result', 'no effect', 2]], true),
+    W('In a town of 8000 people, 6800 are immune to a disease. Calculate the percentage immune.', 'Fraction × 100.', 'Always show the working.', '% = part ÷ whole × 100',
+      [['Formula', 'percentage = number immune ÷ total × 100', ''], ['Substitute', '6800 ÷ 8000 × 100', ''], ['Answer', '85 %', 'Most people are immune, so the pathogen finds it hard to spread.']],
+      [['Immune', '6800', -1], ['Total', '8000', -1], ['Percentage', '85 %', 2]]),
+    W('Explain how antibiotic resistance develops.', 'Use the words ==mutation== and ==survive==.', 'Tell it as a story in order.', 'Mutation → survive → reproduce',
+      [['Mutation', 'Some bacteria have a mutation that makes them resistant.', ''], ['Treatment', 'The antibiotic kills the non-resistant bacteria.', ''], ['Survival', 'The resistant bacteria survive and reproduce.', ''], ['Result', 'The population is now resistant, so the antibiotic no longer works.', 'Overuse makes this worse.']],
+      [['Mutation', 'resistant bacteria', 0], ['Antibiotic', 'kills others', 1], ['Survive', 'reproduce', 2], ['Result', 'population resistant', 3]], true)
+  ],
+  drill: 'disease',
+  quiz: [
+    { q: 'Which pathogen causes cholera?', o: ['virus', 'bacterium', 'fungus', 'protoctist'], a: 1, w: 'A ==bacterium==.' },
+    { q: 'The vector of malaria is the…', o: ['fly', 'rat', 'mosquito', 'tick'], a: 2, w: 'The ==mosquito==.' },
+    { q: 'Antibodies are made by…', o: ['phagocytes', 'lymphocytes', 'platelets', 'red cells'], a: 1, w: '==Lymphocytes==.' },
+    { q: 'A vaccine contains…', o: ['antibiotic', 'antibodies', 'weakened pathogen', 'plasma'], a: 2, w: 'A ==weakened or dead pathogen==.' },
+    { q: 'Antibiotics are effective against…', o: ['bacteria', 'viruses', 'both', 'neither'], a: 0, w: '==Bacteria== only.' },
+    { q: 'Phagocytes…', o: ['make antibodies', 'engulf pathogens', 'clot blood', 'carry oxygen'], a: 1, w: '==Engulf and digest== pathogens.' }
+  ],
+  exam: [
+    { q: 'State what is meant by a pathogen and a transmissible disease.', m: 2,
+      p: ['pathogen: a ==disease-causing organism==', 'transmissible disease: can be ==passed from one host to another=='] },
+    { q: 'Describe how the body defends itself against pathogens.', m: 4,
+      p: ['==skin== is a barrier / mucus traps pathogens', '==stomach acid== kills pathogens', '==phagocytes engulf== pathogens', '==lymphocytes== make ==antibodies=='] },
+    { q: 'Explain why a person vaccinated against measles does not get measles when later infected.', m: 3,
+      p: ['vaccine caused ==antibody production== and ==memory cells==', 'the memory cells make antibodies ==faster and in larger numbers==', 'the pathogen is destroyed before symptoms'] },
+    { q: 'Describe two ways that the spread of cholera can be controlled.', m: 2,
+      p: ['==treat sewage / clean drinking water==', '==hygiene== / boil water / vaccination'] }
+  ]
+}
+
 };
 
 /* ---------- drill generators ---------- */
@@ -641,8 +857,58 @@ const DRILLS = {
     () => { const it = pick([['boil the leaf', 'to kill it and soften it'], ['warm it in ethanol', 'to remove chlorophyll'], ['add iodine', 'to test for starch']]);
       return choiceItem(`In the starch test, why do you ${it[0]}?`, it[1], ['to kill it and soften it', 'to remove chlorophyll', 'to test for starch', 'to make glucose'].filter(x => x !== it[1]).slice(0, 3), [['Steps', 'boil, ethanol, rinse, iodine']]); }
   ]
+,
+  nutr: [
+    () => { const it = pick([['iron', 'anaemia'], ['vitamin C', 'scurvy'], ['vitamin D', 'rickets'], ['protein', 'kwashiorkor'], ['calcium', 'weak bones and teeth']]);
+      return choiceItem(`A lack of ${it[0]} causes…`, it[1], ['anaemia', 'scurvy', 'rickets', 'kwashiorkor', 'weak bones and teeth'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['starch', 'amylase', 'maltose'], ['protein', 'protease', 'amino acids'], ['fat', 'lipase', 'fatty acids and glycerol']]);
+      return choiceItem(`Which enzyme digests ${it[0]}?`, it[1], ['amylase', 'protease', 'lipase'].filter(x => x !== it[1]).concat(['bile']), [['Match', it[1] + ': ' + it[0] + ' → ' + it[2]]]); },
+    () => { const it = pick([['absorbs most digested food', 'small intestine'], ['absorbs water', 'large intestine'], ['makes hydrochloric acid', 'stomach'], ['makes bile', 'liver'], ['stores bile', 'gall bladder'], ['pushes food using peristalsis', 'oesophagus']]);
+      return choiceItem(`Which part of the alimentary canal ${it[0]}?`, it[1], ['small intestine', 'large intestine', 'stomach', 'liver', 'gall bladder', 'oesophagus'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['neutralises stomach acid', 'bile'], ['emulsifies fat', 'bile'], ['kills bacteria in the stomach', 'hydrochloric acid'], ['digests protein in the stomach', 'pepsin (protease)']]);
+      return choiceItem(`Which substance ${it[0]}?`, it[1], ['bile', 'hydrochloric acid', 'pepsin (protease)', 'amylase'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['cuts food', 'incisor'], ['tears food', 'canine'], ['grinds food', 'molar'], ['is the hard outer layer of a tooth', 'enamel']]);
+      return choiceItem(`Which tooth type or part ${it[0]}?`, it[1], ['incisor', 'canine', 'molar', 'enamel', 'pulp'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); }
+  ],
+  transp: [
+    () => { const t = pick([2, 4, 5, 8, 10, 20]), r = rint(2, 9), d = r * t;
+      return { kind:'num', q:`In a potometer an air bubble moves ${d} mm in ${t} minutes. Calculate the rate in mm per minute.`, ans:r, tol:0, s:[['Formula', 'rate = distance ÷ time'], ['Substitute', `${d} ÷ ${t} = ${r} mm/min`]] }; },
+    () => { const t = pick([2, 4, 5, 10]), r = rint(2, 8), d = r * t;
+      return { kind:'num', q:`A potometer bubble moves at ${r} mm per minute. How far (in mm) does it move in ${t} minutes?`, ans:d, tol:0, s:[['Rearrange', 'distance = rate × time'], ['Substitute', `${r} × ${t} = ${d} mm`]] }; },
+    () => { const it = pick([['a hot day', 'faster'], ['a windy day', 'faster'], ['very humid air', 'slower'], ['darkness', 'slower'], ['bright light', 'faster']]);
+      return choiceItem(`Compared with normal conditions, transpiration is ______ in ${it[0]}.`, it[1], [it[1] === 'faster' ? 'slower' : 'faster', 'unchanged'], [['Rule', 'heat, wind, light up; humidity up means slower']]); },
+    () => { const it = pick([['carries water and mineral ions upwards', 'xylem'], ['carries sucrose and amino acids', 'phloem'], ['has walls strengthened with lignin', 'xylem'], ['is made of living sieve tubes', 'phloem']]);
+      return choiceItem(`Which tissue ${it[0]}?`, it[1], [it[1] === 'xylem' ? 'phloem' : 'xylem', 'palisade mesophyll', 'epidermis'], [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['absorbs water', 'osmosis'], ['absorbs mineral ions', 'active transport'], ['loses water vapour from leaves', 'transpiration'], ['moves sucrose around the plant', 'translocation']]);
+      return choiceItem(`Which process describes how a plant ${it[0]}?`, it[1], ['osmosis', 'active transport', 'transpiration', 'translocation'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ': ' + it[0]]]); }
+  ],
+  blood: [
+    () => { const n = rint(12, 40), ans = n * 4;
+      return { kind:'num', q:`A student counts ${n} pulse beats in 15 seconds. Calculate the pulse rate in beats per minute.`, ans, tol:0, s:[['Convert', '15 s × 4 = 60 s'], ['Multiply', `${n} × 4 = ${ans}`]] }; },
+    () => { const n = rint(40, 130), ans = n * 2;
+      return { kind:'num', q:`A person has ${n} pulse beats in 30 seconds. What is the pulse rate in beats per minute?`, ans, tol:0, s:[['30 s × 2 = 60 s'], ['Multiply', `${n} × 2 = ${ans}`]] }; },
+    () => { const it = pick([['carries oxygen', 'red blood cells'], ['makes antibodies', 'lymphocytes'], ['engulfs pathogens', 'phagocytes'], ['helps blood to clot', 'platelets'], ['carries dissolved glucose and urea', 'plasma']]);
+      return choiceItem(`Which part of blood ${it[0]}?`, it[1], ['red blood cells', 'lymphocytes', 'phagocytes', 'platelets', 'plasma'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['has valves', 'vein'], ['has a thick muscular wall', 'artery'], ['has walls one cell thick', 'capillary'], ['carries blood at high pressure away from the heart', 'artery'], ['carries blood back to the heart', 'vein']]);
+      return choiceItem(`Which blood vessel ${it[0]}?`, it[1], ['artery', 'vein', 'capillary'].filter(x => x !== it[1]), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['vena cava', 'right atrium'], ['pulmonary vein', 'left atrium'], ['right ventricle', 'pulmonary artery'], ['left ventricle', 'aorta']]);
+      return choiceItem(`Blood from the ${it[0]} flows ${it[0].includes('ventricle') ? 'out into' : 'into'} the…`, it[1], ['right atrium', 'left atrium', 'pulmonary artery', 'aorta', 'right ventricle', 'left ventricle'].filter(x => x !== it[1] && x !== it[0]).slice(0, 3), [['Route', 'vena cava → RA → RV → pulmonary artery → lungs → pulmonary vein → LA → LV → aorta']]); }
+  ],
+  disease: [
+    () => { const it = pick([['cholera', 'bacterium'], ['malaria', 'protoctist'], ['HIV', 'virus'], ['influenza', 'virus'], ['tuberculosis', 'bacterium']]);
+      return choiceItem(`Which type of pathogen causes ${it[0]}?`, it[1], ['bacterium', 'virus', 'fungus', 'protoctist'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const t = pick([200, 400, 500, 800, 1000, 2000]), k = pick([0.5, 0.6, 0.7, 0.75, 0.8, 0.9]), n = Math.round(t * k);
+      return { kind:'num', q:`In a town of ${t} people, ${n} are immune to a disease. What percentage are immune?`, ans:Math.round(k * 100), tol:0, s:[['Formula', 'n ÷ total × 100'], ['Substitute', `${n} ÷ ${t} × 100 = ${Math.round(k * 100)} %`]] }; },
+    () => { const it = pick([['is a physical barrier', 'skin'], ['traps pathogens in the nose', 'mucus'], ['kills pathogens in the stomach', 'hydrochloric acid'], ['engulfs pathogens', 'phagocytes'], ['makes antibodies', 'lymphocytes']]);
+      return choiceItem(`Which body defence ${it[0]}?`, it[1], ['skin', 'mucus', 'hydrochloric acid', 'phagocytes', 'lymphocytes'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['a bacterial infection', 'antibiotic'], ['influenza (a virus)', 'vaccination'], ['cholera spread by dirty water', 'clean water and sewage treatment'], ['malaria spread by mosquitoes', 'mosquito nets']]);
+      return choiceItem(`Which is a suitable control for ${it[0]}?`, it[1], ['antibiotic', 'vaccination', 'clean water and sewage treatment', 'mosquito nets'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['antigen', 'a marker on the pathogen'], ['antibody', 'made by lymphocytes and specific to one antigen'], ['memory cell', 'allows a faster response to a second infection']]);
+      return choiceItem(`What is an ${it[0]}?`.replace('an memory', 'a memory'), it[1], ['a marker on the pathogen', 'made by lymphocytes and specific to one antigen', 'allows a faster response to a second infection', 'a drug that kills bacteria'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
+  ]
+
 };
-let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1]];
+let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1],['nutr',0],['nutr',1],['transp',0],['transp',1],['blood',0],['blood',1],['disease',0],['disease',1]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -658,7 +924,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -675,13 +941,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['char','cells','move','molecules','enzymes','plantnut'];
+const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Biology 0610</span><h2>Biology full-year pack</h2>
-  <p class="lede">Six topics so far, in Cambridge syllabus order: living things, cells, movement into and out of cells, biological molecules, enzymes and plant nutrition. More topics are added chapter by chapter. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Ten topics so far, in Cambridge syllabus order: living things, cells, movement into and out of cells, biological molecules, enzymes and plant nutrition, human nutrition, transport in plants and animals, and disease and immunity. More topics are added chapter by chapter. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
