@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biology Full-Year Pack</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: lab-notebook study app — sticky chapter bar, one column of working cards on a faint graph-paper ground (shared with the Physics pack) */
+:root{
+  --paper:#EEF3F6; --card:#FFFFFF; --ink:#132235; --muted:#56687C; --line:#D3DDE6; --grid:rgba(19,34,53,.045);
+  --accent:#0A6C96; --accent-soft:#E1F0F7; --hot:#D2470E; --hot-soft:#FCE9E0;
+  --kw-bg:#FFE45C; --kw-ink:#132235;
+  --good:#2B8A3E; --good-soft:#E3F4E6; --bad:#C92A2A; --bad-soft:#FBE4E4;
+  --water:#DCEEF6; --cu:#4A9BD8; --copper:#B4602B; --zinc:#A3ADB8; --ppt:#F2E6A0; --noble:#E6F2E0;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#0E1620; --card:#16212D; --ink:#E5EDF4; --muted:#93A4B6; --line:#2A3949; --grid:rgba(229,237,244,.035);
+  --accent:#5DB8E2; --accent-soft:#16344A; --hot:#FF8C55; --hot-soft:#3E2216;
+  --kw-bg:#6B5A00; --kw-ink:#FFF3B0;
+  --good:#69DB7C; --good-soft:#173322; --bad:#FF8787; --bad-soft:#3D1C1C;
+  --water:#1B3A4D; --cu:#2F7DBA; --copper:#D07A40; --zinc:#6C7884; --ppt:#6B6232; --noble:#1D3322; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:0 64px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.6rem;font-weight:800}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+mark.kw{background:var(--kw-bg);color:var(--kw-ink);padding:0 .2em;border-radius:3px;font-weight:700;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--line)}
+.top .wrap{padding-block:12px 10px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+.brand h1 span{color:var(--accent)}
+.examdate{font-family:var(--mono);font-size:.78rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;font-weight:700;font-size:.95rem}
+.tab small{font-family:var(--mono);font-weight:400;color:var(--muted);margin-right:6px;font-size:.75rem}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tab[aria-selected="true"] small{color:inherit;opacity:.7}
+.sub{display:flex;gap:4px;flex-wrap:wrap;margin-block:20px 18px;border-bottom:2px solid var(--line)}
+.subtab{border:0;background:none;padding:10px 12px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px}
+.subtab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.chhead{display:flex;flex-direction:column;gap:6px;margin-top:22px}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lede{color:var(--muted);max-width:62ch}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.formula{font-family:var(--mono);font-size:1.05rem;font-weight:600;background:var(--accent-soft);color:var(--ink);border-radius:8px;padding:10px 14px;align-self:flex-start;max-width:100%;overflow-x:auto;display:flex;flex-direction:column;gap:4px}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse;font-size:.95rem;min-width:100%}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 12px 7px 0;text-align:left;vertical-align:top}
+.tbl th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.mistakes{background:var(--hot-soft);border-color:transparent}
+.mistakes h3{color:var(--hot)}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+figure .svgbox{overflow-x:auto}
+figure svg{display:block;width:100%;min-width:440px;height:auto}
+figcaption{font-size:.95rem}
+svg .ln{stroke:var(--ink);stroke-width:2;fill:none}
+svg .thin{stroke:var(--muted);stroke-width:1;fill:none}
+svg .glass{stroke:var(--ink);stroke-width:2;fill:none}
+svg .acc{stroke:var(--accent);stroke-width:2.5;fill:none}
+svg .hotl{stroke:var(--hot);stroke-width:2.5;fill:none}
+svg .accf{fill:var(--accent)}
+svg .hotf{fill:var(--hot)}
+svg .inkf{fill:var(--ink)}
+svg .cardf{fill:var(--card)}
+svg .shell{fill:none;stroke:var(--muted);stroke-width:1.4}
+svg .atom{fill:var(--card);stroke:var(--ink);stroke-width:1.8}
+svg .nuc{fill:var(--accent-soft);stroke:var(--ink);stroke-width:1.4}
+svg .cross{stroke:var(--hot);stroke-width:2.4}
+svg .metal{fill:var(--accent-soft);stroke:var(--line)}
+svg .nonmetal{fill:var(--card);stroke:var(--line)}
+svg .noble{fill:var(--noble);stroke:var(--line)}
+svg .cuf{fill:var(--cu)}
+svg .waterf{fill:var(--water)}
+svg .copperf{fill:var(--copper)}
+svg .zincf{fill:var(--zinc);stroke:var(--ink);stroke-width:1.2}
+svg .pptf{fill:var(--ppt);stroke:var(--ink);stroke-width:1}
+svg text{fill:var(--ink);font-family:var(--body);font-size:13px}
+svg .lbl{font-weight:700}
+svg .sym{font-family:var(--display);font-weight:800;font-size:22px;text-anchor:middle}
+svg .mid{text-anchor:middle}
+svg .end{text-anchor:end}
+svg .mut{fill:var(--muted)}
+svg .acct{fill:var(--accent);font-weight:700}
+svg .hott{fill:var(--hot);font-weight:700}
+svg .mono{font-family:var(--mono)}
+.q{font-weight:700}
+.steps{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--mono);font-size:.8rem;font-weight:600;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;grid-row:span 2}
+.steps .sl{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.steps .st{font-family:var(--mono);font-size:1rem;min-width:0;overflow-wrap:anywhere}
+.steps li.final .st{font-weight:700;color:var(--good)}
+.steps .prose{font-family:var(--body)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:9px 16px;font-weight:700}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+.drillq{font-size:1.1rem}
+.answer{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.answer input{font:inherit;font-family:var(--mono);font-size:1.1rem;padding:9px 12px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:12ch}
+.unit{font-family:var(--mono);color:var(--muted)}
+.fb{border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.fb.ok{background:var(--good-soft)}
+.fb.no{background:var(--bad-soft)}
+.fb .verdict{font-weight:700}
+.fb.ok .verdict{color:var(--good)}
+.fb.no .verdict{color:var(--bad)}
+.stat{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 14px;font-weight:400}
+.opt.right{border-color:var(--good);background:var(--good-soft);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.why{font-size:.95rem;border-left:3px solid var(--accent);padding-left:12px}
+.scorebar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.big-score{font-family:var(--display);font-size:1.8rem;font-weight:800}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.marks{font-family:var(--mono);font-size:.85rem;color:var(--muted);white-space:nowrap}
+.ms{display:flex;flex-direction:column;gap:6px}
+.ms-intro{font-size:.9rem;color:var(--muted)}
+.point{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 12px;font-weight:400}
+.point .box{width:24px;height:24px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;font-weight:700;color:var(--card)}
+.point[aria-pressed="true"]{border-color:var(--good)}
+.point[aria-pressed="true"] .box{background:var(--good);border-color:var(--good)}
+.got{font-family:var(--mono);font-weight:600}
+.note{font-size:.9rem;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.prog{display:flex;flex-direction:column;gap:6px}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.pl{display:flex;justify-content:space-between;font-size:.9rem;gap:8px}
+.pl span:last-child{font-family:var(--mono);color:var(--muted);white-space:nowrap}
+.cw{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.cw dt{font-weight:700;color:var(--accent)}
+.cw dd{margin:0}
+.plan{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.plan div{position:relative;padding:0 0 12px 18px}
+.plan div::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--accent)}
+.plan b{font-family:var(--mono);font-size:.82rem;color:var(--muted);display:block;font-weight:600}
+.timer{font-family:var(--mono);font-size:2.2rem;font-weight:600;font-variant-numeric:tabular-nums}
+.timer.low{color:var(--hot)}
+a{color:var(--accent)}
+@media (prefers-reduced-motion: no-preference){.fadein{animation:fi .25s ease-out}@keyframes fi{from{transform:translateY(4px)}to{transform:none}}}
+.intro{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:.98rem;margin:0}
+.steps .why2{grid-column:2;font-family:var(--body);font-size:.93rem;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.steps li.now .st{color:var(--ink)}
+.tip{background:var(--kw-bg);color:var(--kw-ink);border-radius:8px;padding:10px 14px;font-size:.95rem;margin:0}
+.tip mark.kw{background:transparent;padding:0;text-decoration:underline}
+.wk-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,330px);grid-template-areas:"steps board";gap:18px;align-items:start}
+.wk-split .steps{grid-area:steps}
+.wk-split .board{grid-area:board;position:sticky;top:150px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;overflow-x:auto}
+@media (max-width:700px){.wk-split{grid-template-columns:minmax(0,1fr);grid-template-areas:"board" "steps"}.wk-split .board{top:118px;z-index:2}}
+.wb{border-collapse:collapse;font-size:.88rem;width:100%}
+.wb th,.wb td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;background:var(--card)}
+.wb th{color:var(--muted);font-weight:400;white-space:nowrap;width:1%}
+.wb td{font-family:var(--mono);overflow-wrap:anywhere}
+.wb td.q{color:var(--muted);font-weight:400}
+.wb td.fill{background:var(--good-soft);color:var(--good);font-weight:700}
+.wb tr.cur th,.wb tr.cur td{outline:2px solid var(--hot);outline-offset:-2px}
+.bnote{font-size:.9rem;margin:0}
+.tabwrap{display:flex;align-items:center;gap:6px;min-width:0}
+.tabwrap .tabs{flex:1;min-width:0;scroll-behavior:smooth}
+.tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
+.tabarrow:hover{border-color:var(--accent);color:var(--accent)}
+.tabarrow[hidden]{display:none}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>Biology <span>Full-Year</span> Pack</h1>
+      <a href="./" class="examdate">← All subjects</a>
+      <div class="examdate">Grade 8 · Whole syllabus</div>
+    </div>
+    <div class="tabwrap"><button class="tabarrow" id="tabL" type="button" aria-label="Scroll chapters left" hidden>&#8249;</button><nav class="tabs" role="tablist" id="tabs"></nav><button class="tabarrow" id="tabR" type="button" aria-label="Scroll chapters right">&#8250;</button></div>
+  </div>
+</header>
+<main class="wrap" id="view"></main>
+
+<script>
+/* ---------- helpers ---------- */
+const fmt = s => String(s).replace(/==(.+?)==/g,'<mark class="kw">$1</mark>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const rint = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const shuffle = a => { const b = a.slice(); for (let i = b.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]] = [b[j],b[i]]; } return b; };
+const num = x => String(Math.round(x*100)/100);
+let store = {};
+try { store = JSON.parse(localStorage.getItem('biopack-v1') || '{}') || {}; } catch(e) { store = {}; }
+store.ticks = store.ticks || {}; store.quiz = store.quiz || {}; store.drill = store.drill || {};
+const save = () => { try { localStorage.setItem('biopack-v1', JSON.stringify(store)); } catch(e) {} };
+/* ---------- diagrams ---------- */
+function arrowDefs(id){
+  return `<defs><marker id="a-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="inkf"/></marker>
+  <marker id="b-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="accf"/></marker>
+  <marker id="h-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="hotf"/></marker></defs>`;
+}
+const T = (x, y, s, cls = '') => `<text x="${x}" y="${y}" class="${cls}">${s}</text>`;
+const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
+function svgKey(){
+  const b = (x, y, w, t, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="40" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + w / 2, y + 25, t, 'mid')}`;
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="A dichotomous key as a branching diagram">${arrowDefs('k')}
+  ${b(300, 10, 260, 'Does it have a backbone?')}
+  <line x1="360" y1="50" x2="200" y2="90" class="ln" marker-end="url(#a-k)"/><line x1="500" y1="50" x2="660" y2="90" class="ln" marker-end="url(#a-k)"/>${T(260, 66, 'yes', 'mid acct')}${T(600, 66, 'no', 'mid hott')}
+  ${b(100, 92, 200, 'Has feathers?')}${b(560, 92, 200, 'Has six legs?')}
+  <line x1="150" y1="132" x2="80" y2="180" class="ln" marker-end="url(#a-k)"/><line x1="250" y1="132" x2="320" y2="180" class="ln" marker-end="url(#a-k)"/><line x1="610" y1="132" x2="540" y2="180" class="ln" marker-end="url(#a-k)"/><line x1="710" y1="132" x2="780" y2="180" class="ln" marker-end="url(#a-k)"/>
+  ${b(20, 182, 120, 'bird', 'nonmetal')}${b(260, 182, 120, 'other vertebrate', 'nonmetal')}${b(480, 182, 120, 'insect', 'nonmetal')}${b(720, 182, 120, 'other invertebrate', 'nonmetal')}
+  ${T(430, 258, 'A dichotomous key uses yes / no questions with TWO choices at every step.', 'mid lbl')}${T(430, 280, 'Binomial name = Genus (capital) + species (small): Homo sapiens.', 'mid mut')}</svg>`;
+}
+function svgCellsBio(){
+  const cell = (x, plant) => `${plant ? `<rect x="${x}" y="30" width="230" height="190" rx="10" class="metal" style="stroke:var(--ink);stroke-width:4"/><rect x="${x + 8}" y="38" width="214" height="174" rx="8" class="nonmetal" style="stroke:var(--accent);stroke-width:1.6"/>` : `<ellipse cx="${x + 115}" cy="125" rx="115" ry="95" class="nonmetal" style="stroke:var(--accent);stroke-width:2.5"/>`}
+  <circle cx="${x + 100}" cy="110" r="26" class="metal" style="stroke:var(--ink);stroke-width:1.6"/><circle cx="${x + 100}" cy="110" r="7" class="inkf"/>
+  <ellipse cx="${x + 170}" cy="160" rx="18" ry="9" class="hotf" style="fill-opacity:.35;stroke:var(--hot);stroke-width:1.6"/>
+  ${plant ? `<ellipse cx="${x + 70}" cy="170" rx="22" ry="11" class="accf" style="fill-opacity:.4;stroke:var(--accent);stroke-width:1.6"/><ellipse cx="${x + 160}" cy="75" rx="22" ry="11" class="accf" style="fill-opacity:.4;stroke:var(--accent);stroke-width:1.6"/><rect x="${x + 135}" y="95" width="62" height="48" rx="14" class="cardf" style="stroke:var(--muted);stroke-width:1.4"/>` : ''}`;
+  return `<svg viewBox="0 0 980 300" role="img" aria-label="Animal and plant cells">
+  ${cell(30, false)}${cell(330, true)}${T(145, 250, 'Animal cell', 'mid lbl')}${T(445, 250, 'Plant cell', 'mid lbl')}
+  ${T(145, 274, 'nucleus, mitochondria, ribosomes', 'mid mut')}
+  ${T(640, 50, 'Plant cells ALSO have:', 'lbl')}${T(640, 76, 'cell wall (cellulose)', 'acct')}${T(640, 98, 'chloroplasts (photosynthesis)', 'acct')}${T(640, 120, 'large permanent vacuole', 'acct')}${T(640, 142, '(cell sap)', 'mut')}
+  ${T(640, 184, 'Nucleus: controls the cell, holds DNA', 'mut')}${T(640, 206, 'Mitochondria: aerobic respiration', 'mut')}${T(640, 228, 'Ribosomes: make proteins', 'mut')}</svg>`;
+}
+function svgOsmosis(){
+  const cellp = (x, cls, label, sub) => `<ellipse cx="${x}" cy="110" rx="${cls}" ry="${cls}" class="metal" style="stroke:var(--ink);stroke-width:2"/>${T(x, 208, label, 'mid lbl')}${T(x, 228, sub, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Osmosis in animal cells in different solutions">${arrowDefs('o')}
+  ${cellp(140, 56, 'in pure water', 'water enters: cell swells and bursts')}${cellp(430, 44, 'in same concentration', 'no net movement: no change')}${cellp(720, 32, 'in concentrated solution', 'water leaves: cell shrinks')}
+  <line x1="60" y1="110" x2="86" y2="110" class="acc" marker-end="url(#b-o)"/><line x1="220" y1="110" x2="194" y2="110" class="acc" marker-end="url(#b-o)"/>
+  <line x1="780" y1="110" x2="806" y2="110" class="hotl" marker-end="url(#h-o)"/>
+  ${T(430, 40, 'Osmosis: net movement of water molecules', 'mid lbl')}${T(430, 60, 'from a dilute solution to a concentrated solution', 'mid lbl')}${T(430, 262, 'through a partially permeable membrane', 'mid mut')}</svg>`;
+}
+function svgEnzyme(){
+  const X = t => 520 + 5.5 * t, Y = r => 220 - 1.6 * r; const pts = []; for (let t = 0; t <= 60; t += 3) { const r = t <= 37 ? 100 * Math.pow(t / 37, 2.2) : Math.max(0, 100 - (t - 37) * 4.4); pts.push(`${X(t)},${Y(r)}`); }
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Lock and key model and effect of temperature on enzyme activity">
+  <path d="M60 80 L110 80 L110 120 L140 120 L140 80 L190 80 L190 160 L60 160 Z" class="metal" style="stroke:var(--ink);stroke-width:2"/>${T(125, 182, 'enzyme (active site)', 'mid lbl')}
+  <rect x="112" y="40" width="26" height="40" class="hotf" style="fill-opacity:.4;stroke:var(--hot);stroke-width:2"/>${T(125, 30, 'substrate', 'mid hott')}
+  ${T(30, 230, 'Only the substrate fits the active site: enzymes are SPECIFIC.', '')}${T(30, 252, 'A high temperature changes the shape: the enzyme is DENATURED.', 'mut')}
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(62)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(112)}" class="ln"/>
+  <polyline points="${pts.join(' ')}" class="acc" fill="none"/>
+  ${T(X(37), Y(0) + 18, '37 °C', 'mid mono mut')}${T(X(37) + 6, Y(108), 'optimum', 'hott')}${T(X(30), Y(0) + 40, 'temperature', 'mid lbl')}${T(X(0) + 4, Y(112) - 4, 'rate of reaction', 'lbl')}${T(X(52), Y(28), 'denatured', 'mid hott')}</svg>`;
+}
+function svgLeaf(){
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="Cross-section of a leaf">
+  <rect x="60" y="40" width="420" height="22" class="nonmetal" style="stroke:var(--ink);stroke-width:1.5"/>
+  ${Array.from({length:9}, (_, i) => `<rect x="${64 + i * 46}" y="66" width="38" height="50" rx="8" class="accf" style="fill-opacity:.35;stroke:var(--accent);stroke-width:1.2"/>`).join('')}
+  <rect x="60" y="116" width="420" height="70" class="metal" style="stroke:var(--line);stroke-width:1"/>${Array.from({length:6}, (_, i) => `<ellipse cx="${100 + i * 66}" cy="152" rx="22" ry="12" class="cardf" style="stroke:var(--accent);stroke-width:1"/>`).join('')}
+  <rect x="60" y="186" width="420" height="22" class="nonmetal" style="stroke:var(--ink);stroke-width:1.5"/><rect x="250" y="186" width="48" height="22" class="cardf"/><ellipse cx="274" cy="197" rx="20" ry="9" class="hotf" style="fill-opacity:.3;stroke:var(--hot);stroke-width:1.2"/>
+  ${T(500, 48, 'upper epidermis: thin, transparent, waxy cuticle', 'lbl')}${T(500, 100, 'palisade mesophyll: many chloroplasts,', 'lbl')}${T(500, 118, 'most photosynthesis', 'lbl')}${T(500, 156, 'spongy mesophyll: air spaces for gases', 'lbl')}${T(500, 200, 'lower epidermis with stomata and guard cells', 'lbl')}
+  ${T(60, 244, 'Leaf: broad and flat (large surface area), thin (short diffusion distance),', 'mut')}${T(60, 264, 'veins (xylem brings water, phloem carries sugars away).', 'mut')}</svg>`;
+}
+function svgDiffusion(){
+  const dots = (x0, n, s) => Array.from({length:n}, (_, i) => `<circle cx="${x0 + (i * 37 % 160) + 14}" cy="${60 + (i * 53 % 120)}" r="6" class="accf" style="fill-opacity:.6"/>`).join('');
+  return `<svg viewBox="0 0 860 260" role="img" aria-label="Diffusion down a concentration gradient">${arrowDefs('d')}
+  <rect x="40" y="40" width="360" height="160" class="nonmetal" style="stroke:var(--ink);stroke-width:2"/>${dots(44, 14)}${dots(220, 3)}
+  <line x1="200" y1="40" x2="200" y2="200" class="thin" stroke-dasharray="4 4"/>
+  <line x1="160" y1="226" x2="280" y2="226" class="acc" marker-end="url(#b-d)"/>${T(220, 246, 'net movement', 'mid acct')}${T(120, 28, 'high concentration', 'mid mut')}${T(310, 28, 'low concentration', 'mid mut')}
+  ${T(440, 62, 'Diffusion: net movement of particles', 'lbl')}${T(440, 84, 'from a region of higher concentration to', 'lbl')}${T(440, 106, 'a region of lower concentration, down a', 'lbl')}${T(440, 128, 'concentration gradient, because of their', 'lbl')}${T(440, 150, 'random movement. No energy needed.', 'lbl')}
+  ${T(440, 190, 'Faster if: steeper gradient, higher temperature,', 'mut')}${T(440, 210, 'larger surface area, shorter distance.', 'mut')}</svg>`;
+}
+
+function svgTests(){
+  const rows = [['Starch','iodine solution','orange-brown to blue-black'],['Reducing sugar','Benedict’s, heat','blue to green, yellow, brick-red'],['Protein','biuret reagent','blue to purple (lilac)'],['Fat / oil','ethanol, then water','cloudy white emulsion'],['Vitamin C','DCPIP','blue to colourless']];
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="Food tests and positive results">
+  ${T(20, 26, 'Nutrient', 'lbl')}${T(250, 26, 'Test reagent', 'lbl')}${T(520, 26, 'Positive result', 'lbl')}<line x1="14" y1="36" x2="846" y2="36" class="ln"/>
+  ${rows.map((r, i) => `${T(20, 70 + i * 48, r[0], 'acct')}${T(250, 70 + i * 48, r[1], '')}${T(520, 70 + i * 48, r[2], 'hott')}<line x1="14" y1="${84 + i * 48}" x2="846" y2="${84 + i * 48}" class="thin"/>`).join('')}</svg>`;
+}
+function svgDNA(){
+  const pair = (y, a, b) => `${T(300, y + 5, a, 'mid mono acct')}${T(560, y + 5, b, 'mid mono hott')}<line x1="322" y1="${y}" x2="538" y2="${y}" class="thin" stroke-dasharray="5 4"/>`;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="DNA base pairing">
+  <line x1="270" y1="30" x2="270" y2="250" class="ln"/><line x1="590" y1="30" x2="590" y2="250" class="ln"/>
+  ${pair(60, 'A', 'T')}${pair(110, 'C', 'G')}${pair(160, 'T', 'A')}${pair(210, 'G', 'C')}
+  ${T(60, 90, 'DNA: two strands', 'lbl')}${T(60, 112, 'twisted into a', 'lbl')}${T(60, 134, 'double helix.', 'lbl')}
+  ${T(640, 80, 'A pairs with T', 'acct')}${T(640, 110, 'C pairs with G', 'hott')}${T(640, 150, 'Bases: A, T, C, G', 'mut')}${T(640, 172, 'The order of bases is', 'mut')}${T(640, 194, 'the genetic code.', 'mut')}</svg>`;
+}
+
+/* ---------- content ---------- */
+const CH = {
+char: {
+  code: 'Topic 1', name: 'Living organisms and classification',
+  lede: 'What makes something alive, how scientists sort living things into groups, and how to use a key to name an organism.',
+  learn: [
+    { h: 'The seven characteristics of life', p: ['All living things carry out the ==seven life processes==. Remember them as ==MRS GREN==.'], table: [['Letter', 'Process', 'Meaning'], ['M', '==movement==', 'an action by an organism or part of it that changes its position or place'], ['R', '==respiration==', 'chemical reactions in cells that break down nutrient molecules and ==release energy=='], ['S', '==sensitivity==', 'detecting and responding to changes in the environment'], ['G', '==growth==', 'a permanent increase in size'], ['R', '==reproduction==', 'making more of the same kind of organism'], ['E', '==excretion==', 'removal of ==toxic waste== made by the organism'], ['N', '==nutrition==', 'taking in materials for energy, growth and development']] },
+    { h: 'Kingdoms and groups', list: ['Living things are sorted into ==kingdoms==: ==animals==, ==plants==, ==fungi==, ==prokaryotes== (bacteria) and ==protoctists==.', '==Vertebrates== have a ==backbone==: ==mammals==, ==birds==, ==reptiles==, ==amphibians==, ==fish==.', '==Arthropods== have jointed legs and an exoskeleton: ==insects==, ==arachnids==, ==crustaceans==, ==myriapods==.', 'A ==virus== is not in any kingdom. It is not made of cells.'], table: [['Group', 'Key features'], ['mammals', '==hair or fur==, ==mammary glands==, give birth to live young (most)'], ['birds', '==feathers==, wings, ==beak==, lay eggs with hard shells'], ['reptiles', 'dry ==scaly skin==, lay soft-shelled eggs on land'], ['amphibians', '==moist skin==, lay eggs in water, young live in water'], ['fish', '==scales==, ==gills==, fins'], ['insects', '==three body parts==, ==six legs==, usually two pairs of wings, antennae'], ['arachnids', 'two body parts, ==eight legs==, no antennae']] },
+    { h: 'Naming and keys', list: ['The ==binomial system== gives each species a two-part Latin name: ==genus== (capital letter) then ==species== (small letter). Example: ==Homo sapiens==.', 'Write it in ==italics== or underline it when handwritten.', 'A ==dichotomous key== is a series of ==yes/no questions== with two choices at every step. It ends at the name of the organism.', 'A ==species== is a group of organisms that can ==reproduce to produce fertile offspring==.'] }
+  ],
+  mistakes: ['Saying ==excretion is getting rid of food== (that is egestion). Excretion removes ==toxic waste== made by cells.', 'Saying ==respiration is breathing==. Respiration is the ==chemical reaction releasing energy== in cells.', 'Writing a binomial name with a ==small letter for the genus== or without underlining.', 'Saying ==growth== is any change. It is a ==permanent increase in size==.', 'Putting a ==spider== in the insects. It has eight legs: arachnid.'],
+  diagrams: [{ svg: svgKey, cap: 'A ==dichotomous key==: two choices at every step.' }],
+  worked: [
+    W('Name the seven characteristics of life and give an example of each for a dog.', 'Use ==MRS GREN==. Give a ==dog example== for each.', 'Write all seven. Each correct one earns a mark.', 'M R S G R E N',
+      [['Movement', 'The dog runs across the field.', 'An action that changes position.'], ['Respiration', 'Its cells release energy from glucose.', 'Not the same as breathing.'], ['Sensitivity', 'It turns its head when it hears a noise.', 'Detects and responds to the environment.'], ['Growth', 'A puppy becomes a larger dog.', 'A permanent increase in size.'], ['Reproduction', 'It has puppies.', 'Makes more of the same kind.'], ['Excretion', 'It removes carbon dioxide and urea.', 'Toxic waste from cells.'], ['Nutrition', 'It eats meat and biscuits.', 'Takes in materials for energy and growth.']],
+      [['M', 'runs', 0], ['R', 'releases energy', 1], ['S', 'hears, turns', 2], ['G', 'puppy to dog', 3], ['R', 'has puppies', 4], ['E', 'CO₂, urea', 5], ['N', 'eats', 6]], true),
+    W('A bat has fur and feeds its young on milk. A student says it is a bird because it can fly. Explain whether the student is correct.', 'Use the ==features of the group==, not just how it moves.', 'Name the group, then give two features that match.', 'Fur + milk = mammal',
+      [['Check the features', 'The bat has fur and mammary glands (milk).', 'These are mammal features.'], ['Compare with birds', 'Birds have feathers and lay eggs.', 'The bat has neither.'], ['Conclusion', 'The student is wrong. A bat is a mammal.', 'Flying does not decide the group.']],
+      [['Hair / fur', 'yes', 0], ['Milk', 'yes', 0], ['Feathers', 'no', 1], ['Group', 'mammal', 2]], true),
+    W('Use the key to name the organism: it has a backbone, no feathers, and moist skin.', 'Follow the key ==one question at a time==.', 'Write the route you took, such as: backbone, no feathers, moist skin.', 'Backbone → feathers? → skin',
+      [['Q1: backbone?', 'Yes, so a vertebrate.', 'No backbone would give an invertebrate.'], ['Q2: feathers?', 'No, so not a bird.', 'Go to the next question.'], ['Q3: moist skin?', 'Yes.', 'Dry scaly skin would be a reptile.'], ['Answer', 'An amphibian (for example a frog).', 'Amphibians have moist skin.']],
+      [['Backbone', 'yes', 0], ['Feathers', 'no', 1], ['Moist skin', 'yes', 2], ['Group', 'amphibian', 3]], true),
+    W('The wolf is called Canis lupus. Write the genus and the species and say how the name should be written.', 'A binomial name is ==genus then species==.', 'Capital letter for the genus only.', 'Genus + species',
+      [['First word', 'Canis is the genus.', 'It starts with a capital letter.'], ['Second word', 'lupus is the species.', 'It starts with a small letter.'], ['Writing it', 'Italics when typed, underlined when handwritten: Canis lupus.', '']],
+      [['Genus', 'Canis (capital)', 0], ['Species', 'lupus (small)', 1], ['Style', 'underline', 2]], true)
+  ],
+  drill: 'char',
+  quiz: [
+    { q: 'MRS GREN: what does the first R stand for?', o: ['reproduction', 'respiration', 'reaction', 'removal'], a: 1, w: 'In MRS GREN the first R is ==respiration==.' },
+    { q: 'Which group has feathers and a beak?', o: ['reptiles', 'mammals', 'birds', 'amphibians'], a: 2, w: '==Birds==.' },
+    { q: 'How many legs does an insect have?', o: ['four', 'six', 'eight', 'ten'], a: 1, w: '==Six== legs and three body parts.' },
+    { q: 'In Homo sapiens, which word is the genus?', o: ['Homo', 'sapiens', 'both', 'neither'], a: 0, w: 'The genus comes first with a capital: ==Homo==.' },
+    { q: 'Excretion is the removal of…', o: ['undigested food', 'toxic waste from cells', 'all gases', 'sweat only'], a: 1, w: '==Toxic waste== made by the organism.' },
+    { q: 'A virus is…', o: ['an animal', 'a plant', 'not made of cells', 'a fungus'], a: 2, w: 'A virus is ==not made of cells== and is in no kingdom.' }
+  ],
+  exam: [
+    { q: 'State the meaning of the terms (a) excretion [2] (b) respiration [2].', m: 4,
+      p: ['excretion: removal of ==toxic waste== from the body', '...made by the organism’s metabolism (cells)', 'respiration: ==chemical reactions== that break down nutrient molecules', '...in cells to ==release energy=='] },
+    { q: 'Describe two features of mammals that are not found in birds.', m: 2,
+      p: ['mammals have ==hair or fur==', 'mammals have ==mammary glands== (feed young on milk)'] },
+    { q: 'Explain what is meant by the binomial system and give an example.', m: 3,
+      p: ['each species is given a ==two-part== name', 'the ==genus== (capital letter) followed by the ==species== (small letter)', 'a correct example, such as ==Homo sapiens=='] },
+    { q: 'A student found a small animal with eight legs and two body parts. Name its group and give one feature of an insect that it does not have.', m: 2,
+      p: ['==arachnid==', 'insects have ==six legs== / three body parts / antennae / wings (any one that the arachnid lacks)'] }
+  ]
+},
+cells: {
+  code: 'Topic 2', name: 'Cells',
+  lede: 'The structures inside animal and plant cells, what each one does, how to calculate magnification, and how cells are organised.',
+  learn: [
+    { h: 'Parts of animal and plant cells', table: [['Structure', 'Function', 'In'], ['==cell membrane==', 'controls what enters and leaves the cell', 'all cells'], ['==cytoplasm==', 'where most chemical reactions happen', 'all cells'], ['==nucleus==', 'contains DNA, controls the activities of the cell', 'all except prokaryotes'], ['==mitochondria==', 'site of ==aerobic respiration==, release energy', 'all'], ['==ribosomes==', 'make ==proteins==', 'all'], ['==cell wall==', 'made of ==cellulose==, strengthens the cell', 'plants (not animals)'], ['==chloroplasts==', 'contain chlorophyll, absorb light for ==photosynthesis==', 'plants'], ['==vacuole==', 'large, permanent, full of ==cell sap==, keeps the cell firm', 'plants']] },
+    { h: 'Magnification', p: ['Microscope questions use one formula. Make sure ==both lengths have the same unit== first.'], f: ['magnification = image size ÷ actual size', '1 mm = 1000 µm'], list: ['Rearrange: ==actual size = image size ÷ magnification==.', 'Measure the image in ==mm== with a ruler, then convert to µm if needed.', 'A drawing larger than the real object has magnification above 1.'] },
+    { h: 'Specialised cells and organisation', table: [['Cell', 'Adaptation', 'Function'], ['==root hair cell==', 'long thin extension, large surface area', 'absorbs water and mineral ions'], ['==red blood cell==', 'no nucleus, biconcave disc, contains haemoglobin', 'carries oxygen'], ['==nerve cell==', 'long axon, branches (dendrites)', 'carries electrical impulses'], ['==sperm cell==', 'tail, many mitochondria, enzymes in head', 'swims to and fertilises the egg'], ['==palisade cell==', 'many chloroplasts', 'photosynthesis']], list: ['Cells make ==tissues==, tissues make ==organs==, organs make ==organ systems==, systems make an ==organism==.', 'A ==tissue== is a group of similar cells doing one job (muscle). An ==organ== is made of different tissues (stomach).'] }
+  ],
+  mistakes: ['Saying ==the nucleus makes energy==. Mitochondria release energy.', 'Saying ==the cell wall controls what enters==. The membrane does that; the wall is cellulose and only strengthens.', 'Writing ==chlorophyll== when the question asks for the organelle (chloroplast).', 'Not ==converting units== before dividing (mm and µm).', 'Writing ==magnification with a unit== (it is just a number, for example ×200).'],
+  diagrams: [{ svg: svgCellsBio, cap: '==Animal and plant cells==. Plant cells have a wall, chloroplasts and a vacuole as well.' }],
+  worked: [
+    W('A drawing of a cell is 45 mm long. The real cell is 0.15 mm long. Calculate the magnification.', 'Write the ==formula==, check the ==units match==, then divide.', 'Always show formula, substitution, answer.', 'magnification = image ÷ actual',
+      [['Formula', 'magnification = image size ÷ actual size', 'This is the only formula you need.'], ['Units', 'image = 45 mm, actual = 0.15 mm', 'Both are in mm, so no conversion.'], ['Substitute', '45 ÷ 0.15', ''], ['Answer', '× 300', 'Magnification has no unit.']],
+      [['Image', '45 mm', -1], ['Actual', '0.15 mm', -1], ['Formula', 'image ÷ actual', 0], ['Answer', '× 300', 3]]),
+    W('A photograph of a red blood cell has a diameter of 40 mm. The magnification is × 5000. Calculate the real diameter in µm.', 'Rearrange the formula, then ==convert to µm==.', 'Convert mm to µm by multiplying by 1000.', 'actual = image ÷ magnification',
+      [['Rearrange', 'actual = image ÷ magnification', ''], ['Substitute', '40 ÷ 5000', ''], ['Calculate', '0.008 mm', ''], ['Convert', '0.008 × 1000 = 8 µm', '1 mm = 1000 µm.']],
+      [['Image', '40 mm', -1], ['Magnification', '× 5000', -1], ['Actual (mm)', '0.008 mm', 2], ['Actual (µm)', '8 µm', 3]]),
+    W('Explain two ways a root hair cell is adapted for its function.', 'Say the ==feature== and the ==reason==.', 'Use because to link feature and function.', 'Feature + because',
+      [['Function', 'It absorbs water and mineral ions from the soil.', ''], ['Adaptation 1', 'A long, thin extension gives a large surface area.', 'More area means faster absorption.'], ['Adaptation 2', 'A thin cell wall (and many mitochondria) allows fast uptake.', 'Mitochondria give energy for active transport.']],
+      [['Job', 'absorbs water, ions', 0], ['Feature 1', 'large surface area', 1], ['Feature 2', 'thin wall, mitochondria', 2]], true),
+    W('State which structures are found in a plant cell but not in an animal cell, and give the function of each.', 'There are ==three==. Think ==wall, green, store==.', 'Name and function for three marks.', 'Wall, chloroplast, vacuole',
+      [['Cell wall', 'Made of cellulose. It strengthens the cell.', ''], ['Chloroplasts', 'Contain chlorophyll. They absorb light for photosynthesis.', ''], ['Permanent vacuole', 'Filled with cell sap. It keeps the cell firm.', '']],
+      [['Wall', 'cellulose, strength', 0], ['Chloroplast', 'photosynthesis', 1], ['Vacuole', 'cell sap, firm', 2]], true)
+  ],
+  drill: 'cells',
+  quiz: [
+    { q: 'Where does aerobic respiration happen?', o: ['nucleus', 'ribosome', 'mitochondria', 'vacuole'], a: 2, w: '==Mitochondria== release energy.' },
+    { q: 'What is the plant cell wall made of?', o: ['protein', 'cellulose', 'starch', 'fat'], a: 1, w: '==Cellulose==.' },
+    { q: 'Which cell has no nucleus?', o: ['nerve cell', 'sperm cell', 'red blood cell', 'root hair cell'], a: 2, w: 'The ==red blood cell== has no nucleus, so it can hold more haemoglobin.' },
+    { q: 'Ribosomes make…', o: ['starch', 'protein', 'DNA', 'sugar'], a: 1, w: '==Proteins==.' },
+    { q: 'An organ is…', o: ['a group of similar cells', 'a group of tissues working together', 'a group of organisms', 'one cell'], a: 1, w: 'An ==organ== is made of different ==tissues==.' },
+    { q: 'Image 20 mm, actual 0.1 mm. Magnification = ?', o: ['×2', '×20', '×200', '×2000'], a: 2, w: '20 ÷ 0.1 = ==200==.' }
+  ],
+  exam: [
+    { q: 'Name two structures found in plant cells but not in animal cells and state the function of one.', m: 3,
+      p: ['==cell wall==', '==chloroplasts== / large vacuole', 'function: cell wall strengthens / chloroplast does photosynthesis'] },
+    { q: 'A cell measures 0.05 mm. A student draws it 60 mm long. Calculate the magnification. Show your working.', m: 2,
+      p: ['magnification = ==image ÷ actual==  = 60 ÷ 0.05', '==× 1200=='] },
+    { q: 'Describe how a red blood cell is adapted to carry oxygen.', m: 3,
+      p: ['contains ==haemoglobin== which binds to oxygen', '==biconcave disc shape== gives a large surface area', '==no nucleus== so more room for haemoglobin'] },
+    { q: 'Explain the difference between a tissue and an organ. Give one example of each.', m: 3,
+      p: ['a tissue is a group of ==similar cells== doing the same job', 'an organ is made of ==different tissues== working together', 'examples: muscle (tissue), stomach / heart / leaf (organ)'] }
+  ]
+},
+move: {
+  code: 'Topic 3', name: 'Movement into and out of cells',
+  lede: 'Diffusion, osmosis and active transport: how substances cross the cell membrane, and the calculations examiners like.',
+  learn: [
+    { h: 'Diffusion', p: ['==Diffusion== is the net movement of particles from a region of ==higher concentration== to a region of ==lower concentration==, down a ==concentration gradient==, as a result of their ==random movement==.'], list: ['It needs ==no energy== (passive).', 'It is faster with a ==steeper gradient==, ==higher temperature==, ==larger surface area== and ==shorter distance==.', 'Examples: oxygen into blood in the lungs, carbon dioxide into a leaf, smell spreading through a room.'] },
+    { h: 'Osmosis', p: ['==Osmosis== is the net movement of ==water molecules== from a region of ==higher water potential== (dilute solution) to a region of ==lower water potential== (concentrated solution), through a ==partially permeable membrane==.'], list: ['Animal cells in ==pure water== gain water and may ==burst==.', 'Animal cells in a ==concentrated solution== lose water and ==shrink==.', 'Plant cells in water become ==turgid== (firm). The wall stops them bursting.', 'Plant cells in a concentrated solution lose water and become ==flaccid==, then ==plasmolysed==.'] },
+    { h: 'Active transport and surface area', list: ['==Active transport== is the movement of particles ==against a concentration gradient== (from low to high) using ==energy from respiration==.', 'Example: ==root hair cells== take up mineral ions; glucose absorbed in the intestine.', 'Cells with many ==mitochondria== are often doing active transport.', 'Small organisms have a ==large surface area to volume ratio==, so diffusion is enough. Large organisms need exchange surfaces.'], f: ['SA:V ratio = surface area ÷ volume', 'cube of side L: SA = 6L², V = L³, ratio = 6 ÷ L', '% change in mass = (final − initial) ÷ initial × 100'] }
+  ],
+  mistakes: ['Saying ==osmosis is movement of water through any membrane==. It must be ==partially permeable== and down a water potential gradient.', 'Saying ==diffusion needs energy==. It does not. Active transport does.', 'Saying water moves from ==concentrated to dilute== solution. Water moves from dilute to concentrated.', 'Forgetting that ==active transport goes against== the gradient.', 'Dividing by the ==final mass== instead of the ==initial mass== in % change.'],
+  diagrams: [{ svg: svgDiffusion, cap: '==Diffusion== down a concentration gradient.' }, { svg: svgOsmosis, cap: '==Osmosis== in animal cells.' }],
+  worked: [
+    W('A potato cylinder has mass 5.0 g. After 1 hour in sugar solution its mass is 4.2 g. Calculate the percentage change in mass.', 'Find the ==change== first, then divide by the ==starting mass==.', 'A decrease gives a negative answer.', '% change = change ÷ initial × 100',
+      [['Formula', '% change = (final − initial) ÷ initial × 100', ''], ['Change', '4.2 − 5.0 = −0.8 g', 'Final minus initial.'], ['Divide', '−0.8 ÷ 5.0 = −0.16', 'Divide by the starting mass.'], ['Answer', '−16 %', 'The potato lost water.']],
+      [['Initial', '5.0 g', -1], ['Final', '4.2 g', -1], ['Change', '−0.8 g', 1], ['% change', '−16 %', 3]]),
+    W('Explain why the potato cylinder in the question above lost mass.', 'Use the word ==osmosis== and talk about ==water potential==.', 'Say which solution is more concentrated and the direction of water.', 'Water moves dilute → concentrated',
+      [['Compare', 'The sugar solution is more concentrated than the potato cells (lower water potential).', ''], ['Movement', 'Water moved out of the potato by osmosis.', 'Down the water potential gradient.'], ['Membrane', 'Through the partially permeable cell membrane.', 'Do not leave this out.'], ['Result', 'So the mass decreased.', '']],
+      [['Outside', 'more concentrated', 0], ['Water', 'leaves potato', 1], ['Process', 'osmosis', 2], ['Mass', 'decreases', 3]], true),
+    W('Compare the surface area to volume ratio of a cube of side 2 cm and a cube of side 4 cm. Which loses heat faster?', 'Work out ==SA and V== for each cube.', 'A smaller object has a larger ratio.', 'SA = 6L², V = L³',
+      [['2 cm cube', 'SA = 6 × 2² = 24 cm², V = 2³ = 8 cm³', ''], ['Ratio', '24 ÷ 8 = 3', ''], ['4 cm cube', 'SA = 6 × 4² = 96 cm², V = 4³ = 64 cm³', ''], ['Ratio', '96 ÷ 64 = 1.5', ''], ['Conclusion', 'The smaller cube has the larger ratio, so exchanges faster.', 'Small organisms can rely on diffusion.']],
+      [['2 cm', 'ratio 3', 1], ['4 cm', 'ratio 1.5', 3], ['Larger ratio', 'the 2 cm cube', 4]]),
+    W('Describe how active transport differs from diffusion.', 'Compare ==direction==, ==energy== and ==carrier proteins==.', 'Always use a pair of statements.', 'Against v down the gradient',
+      [['Direction', 'Active transport moves particles against the concentration gradient. Diffusion moves them down it.', ''], ['Energy', 'Active transport needs energy from respiration. Diffusion does not.', ''], ['Example', 'Root hair cells take up nitrate ions by active transport.', 'Many mitochondria help.']],
+      [['Gradient', 'against v down', 0], ['Energy', 'needed v not', 1], ['Example', 'root hair cell', 2]], true)
+  ],
+  drill: 'move',
+  quiz: [
+    { q: 'Osmosis is the movement of…', o: ['solute', 'water', 'oxygen', 'energy'], a: 1, w: '==Water== molecules.' },
+    { q: 'Which process needs energy?', o: ['diffusion', 'osmosis', 'active transport', 'evaporation'], a: 2, w: '==Active transport== uses energy from respiration.' },
+    { q: 'A plant cell in pure water becomes…', o: ['flaccid', 'turgid', 'plasmolysed', 'burst'], a: 1, w: '==Turgid==. The wall stops it bursting.' },
+    { q: 'Which makes diffusion faster?', o: ['lower temperature', 'longer distance', 'steeper gradient', 'smaller area'], a: 2, w: 'A ==steeper concentration gradient==.' },
+    { q: 'SA:V of a cube of side 3 cm is…', o: ['1', '2', '3', '6'], a: 1, w: '6 ÷ 3 = ==2==.' },
+    { q: 'Animal cells placed in pure water…', o: ['shrink', 'stay the same', 'swell and may burst', 'make energy'], a: 2, w: 'Water enters by osmosis: ==swell and may burst==.' }
+  ],
+  exam: [
+    { q: 'Define osmosis.', m: 3,
+      p: ['net movement of ==water molecules==', 'from a ==dilute to a more concentrated== solution (higher to lower water potential)', 'through a ==partially permeable membrane=='] },
+    { q: 'Explain why a plant that is not watered wilts.', m: 3,
+      p: ['water is ==lost== from cells (by evaporation) and not replaced', 'cells become ==flaccid== (lose turgor)', 'so the plant is no longer firm / support is lost'] },
+    { q: 'Give two differences between diffusion and active transport.', m: 2,
+      p: ['diffusion is ==down== the gradient, active transport is ==against== it', 'active transport needs ==energy== (from respiration), diffusion does not'] },
+    { q: 'A cube of side 5 cm has a surface area of 150 cm² and volume of 125 cm³. Calculate its surface area to volume ratio.', m: 2,
+      p: ['ratio = ==SA ÷ V== = 150 ÷ 125', '==1.2=='] }
+  ]
+},
+molecules: {
+  code: 'Topic 4', name: 'Biological molecules',
+  lede: 'Carbohydrates, fats, proteins and water. The food tests and their colour results, and the structure of DNA.',
+  learn: [
+    { h: 'The main nutrients', table: [['Nutrient', 'Elements', 'Made of', 'Use in the body'], ['==carbohydrates==', 'C, H, O', 'simple sugars (glucose); starch and glycogen are long chains of glucose', 'energy; starch stores energy in plants, glycogen in animals'], ['==fats / lipids==', 'C, H, O', '3 fatty acids + 1 glycerol', 'energy store, insulation, protects organs'], ['==proteins==', 'C, H, O, N (S)', 'long chains of ==amino acids==', 'growth and repair, enzymes, hormones'], ['water', 'H, O', '', 'solvent, transport, chemical reactions']] },
+    { h: 'Food tests', table: [['Test for', 'Method', 'Positive result'], ['==starch==', 'add ==iodine solution==', 'orange-brown to ==blue-black=='], ['==reducing sugar==', 'add ==Benedict’s solution==, heat in a water bath', 'blue to ==green, yellow or brick-red=='], ['==protein==', 'add ==biuret reagent==', 'blue to ==purple (lilac)=='], ['==fat / oil==', 'mix with ==ethanol==, then pour into water', '==cloudy white emulsion=='], ['==vitamin C==', 'add ==DCPIP==', 'blue DCPIP turns ==colourless==']], list: ['If the test is negative, the original ==blue colour stays== (Benedict’s, biuret).', 'More colour change (brick-red) means ==more sugar==.'] },
+    { h: 'DNA and water', list: ['==DNA== is a long molecule made of ==two strands== twisted into a ==double helix==.', 'The strands are joined by ==base pairs==: ==A with T== and ==C with G==.', 'The ==order of the bases== is the genetic code. A section of DNA that codes for a protein is a ==gene==.', 'Water is the ==solvent== in cells and in blood: it dissolves and transports substances.'] }
+  ],
+  mistakes: ['Saying ==biuret tests for sugar== (it is protein; Benedict’s is sugar).', 'Saying the iodine result is ==clear== (it goes blue-black).', 'Writing ==Benedict’s turns red== without mentioning that you must ==heat== it.', 'Mixing the pairs: ==A with T, C with G== (not A with C).', 'Forgetting that ==fat test is not a colour change== but a cloudy emulsion.'],
+  diagrams: [{ svg: svgTests, cap: 'The ==food tests== and their ==positive results==.' }, { svg: svgDNA, cap: 'DNA ==base pairing==: A with T, C with G.' }],
+  worked: [
+    W('A student adds iodine solution to a food sample and it turns blue-black. Benedict’s solution stays blue after heating. What does the food contain?', 'Match each ==result== to a ==nutrient==.', 'A negative result is also information.', 'Iodine: starch, Benedict’s: sugar',
+      [['Iodine test', 'Blue-black means starch is present.', ''], ['Benedict’s test', 'Stays blue means no reducing sugar.', 'A negative result.'], ['Conclusion', 'The food contains starch but no reducing sugar.', 'Give both parts.']],
+      [['Iodine', 'blue-black = starch', 0], ['Benedict’s', 'blue = no sugar', 1], ['Food', 'starch only', 2]], true),
+    W('Describe how to test a food for reducing sugars.', 'Give the ==method in order== and the ==result==.', 'Mention heating and the colour change.', 'Reagent → heat → colour',
+      [['Prepare', 'Place a little of the food solution in a test tube.', 'Grind and dissolve solid foods first.'], ['Add reagent', 'Add Benedict’s solution (blue).', ''], ['Heat', 'Heat in a water bath at about 80 °C for a few minutes.', 'Heating is needed for the reaction.'], ['Result', 'Blue turns green, yellow or brick-red if reducing sugar is present.', 'Red means a lot of sugar.']],
+      [['Reagent', 'Benedict’s', 1], ['Heat', 'water bath', 2], ['Positive', 'green to brick-red', 3]], true),
+    W('One strand of DNA has the base sequence A T C G G A. Write the sequence of the strand paired with it.', 'Apply ==A–T and C–G== to each base.', 'Check every pair twice.', 'A–T, C–G',
+      [['Rule', 'A pairs with T. C pairs with G.', ''], ['Pair the bases', 'A→T, T→A, C→G, G→C, G→C, A→T', 'One base at a time.'], ['Answer', 'T A G C C T', '']],
+      [['Rule', 'A–T, C–G', 0], ['Pairs', 'T A G C C T', 2]]),
+    W('Explain why proteins are needed in the diet.', 'Say what ==proteins are made of== and what they are used for.', 'Link the use to growth and repair.', 'Amino acids → growth, repair, enzymes',
+      [['What', 'Proteins are long chains of amino acids.', ''], ['Use 1', 'They are needed for growth and repair of tissues.', ''], ['Use 2', 'They make enzymes and hormones.', ''], ['Source', 'Meat, fish, eggs, beans.', 'Not required for the mark.']],
+      [['Made of', 'amino acids', 0], ['Use 1', 'growth, repair', 1], ['Use 2', 'enzymes, hormones', 2]], true)
+  ],
+  drill: 'molecules',
+  quiz: [
+    { q: 'Iodine solution turns blue-black with…', o: ['protein', 'starch', 'fat', 'glucose'], a: 1, w: '==Starch==.' },
+    { q: 'Which reagent is used to test for protein?', o: ['biuret', 'Benedict’s', 'iodine', 'ethanol'], a: 0, w: '==Biuret== turns purple.' },
+    { q: 'Proteins are made of…', o: ['glucose', 'fatty acids', 'amino acids', 'glycerol'], a: 2, w: '==Amino acids==.' },
+    { q: 'In DNA, A pairs with…', o: ['C', 'G', 'T', 'A'], a: 2, w: '==A with T==.' },
+    { q: 'The fat test result is…', o: ['blue-black', 'purple', 'brick-red', 'cloudy white emulsion'], a: 3, w: 'A ==cloudy white emulsion==.' },
+    { q: 'Starch is a chain of…', o: ['amino acids', 'glucose', 'glycerol', 'fatty acids'], a: 1, w: 'Many ==glucose== molecules.' }
+  ],
+  exam: [
+    { q: 'Describe how to test a food sample for protein.', m: 3,
+      p: ['add ==biuret reagent== (or sodium hydroxide then copper sulfate)', 'positive result: ==purple / lilac==', 'negative: stays ==blue=='] },
+    { q: 'State the two elements, besides carbon, hydrogen and oxygen, found in proteins but not in carbohydrates.', m: 1,
+      p: ['==nitrogen== (and sulfur sometimes)'] },
+    { q: 'Describe the structure of DNA.', m: 3,
+      p: ['==two strands== twisted into a ==double helix==', 'joined by ==base pairs==', '==A with T== and ==C with G=='] },
+    { q: 'Name the nutrients broken down to make (a) glucose (b) amino acids (c) fatty acids and glycerol.', m: 3,
+      p: ['(a) ==carbohydrate== (starch)', '(b) ==protein==', '(c) ==fat / lipid=='] }
+  ]
+},
+enzymes: {
+  code: 'Topic 5', name: 'Enzymes',
+  lede: 'Biological catalysts that speed up reactions: how they work, why temperature and pH matter, and how to calculate a rate.',
+  learn: [
+    { h: 'What enzymes do', list: ['Enzymes are ==proteins== that act as ==biological catalysts==. They ==speed up chemical reactions== and are ==not used up==.', 'Each enzyme has an ==active site== of a particular shape. Only its ==substrate== fits. This is why enzymes are ==specific==.', 'Substrate binds to the active site, reacts, and the ==products== leave. This is the ==lock and key model==.'] },
+    { h: 'Temperature and pH', list: ['Rate ==increases with temperature== up to the ==optimum== (about 37 °C in humans) because particles have more ==kinetic energy== and collide more often.', 'Above the optimum the enzyme is ==denatured==: the ==active site changes shape== and the substrate no longer fits. This is ==permanent==.', 'Each enzyme has an ==optimum pH==. Too acid or alkaline also denatures it. Pepsin works at ==pH 2== (stomach), amylase at about pH 7.', 'At ==low temperature== enzymes are slow but not denatured.'] },
+    { h: 'Digestive enzymes', table: [['Enzyme', 'Substrate', 'Products'], ['==amylase==', 'starch', 'maltose (then glucose)'], ['==protease==', 'protein', 'amino acids'], ['==lipase==', 'fats / lipids', 'fatty acids and glycerol'], ['==catalase==', 'hydrogen peroxide', 'water and oxygen']], f: ['rate = volume of product ÷ time', 'or rate = 1 ÷ time'] }
+  ],
+  mistakes: ['Saying enzymes are ==killed== at high temperatures. They are not alive: they are ==denatured==.', 'Saying the ==enzyme changes shape== when the substrate binds. The shape of the ==active site== is fixed.', 'Saying ==substrate and enzyme are the same shape==. The substrate fits the active site.', 'Saying ==low temperature denatures== enzymes. It only slows them.', 'Forgetting the ==unit== for rate (cm³/s).'],
+  diagrams: [{ svg: svgEnzyme, cap: '==Lock and key== and the effect of ==temperature== on enzyme rate.' }],
+  worked: [
+    W('A student collects 24 cm³ of oxygen in 30 s from catalase breaking down hydrogen peroxide. Calculate the rate of reaction.', 'Rate is ==how much== per ==unit time==.', 'Include the unit.', 'rate = volume ÷ time',
+      [['Formula', 'rate = volume ÷ time', ''], ['Substitute', '24 ÷ 30', ''], ['Answer', '0.8 cm³/s', 'Volume per second.']],
+      [['Volume', '24 cm³', -1], ['Time', '30 s', -1], ['Rate', '0.8 cm³/s', 2]]),
+    W('Explain why the rate of an enzyme reaction falls sharply above 50 °C.', 'Use the words ==active site== and ==denatured==.', 'Say the change is permanent.', 'Active site changes shape',
+      [['High temperature', 'The enzyme molecule vibrates strongly.', 'It has too much energy.'], ['Shape changes', 'The shape of the active site changes.', ''], ['Denatured', 'The substrate no longer fits, so the enzyme is denatured.', 'This is permanent.'], ['Result', 'The rate of reaction falls.', '']],
+      [['Heat', 'enzyme vibrates', 0], ['Active site', 'shape changes', 1], ['Substrate', 'no longer fits', 2], ['Rate', 'falls', 3]], true),
+    W('Starch is digested in the mouth. Name the enzyme, the substrate and the product, and say where the product is absorbed.', 'Use the ==digestive enzymes table==.', 'Product of amylase is maltose.', 'Amylase: starch → maltose',
+      [['Enzyme', 'Amylase', 'Made in the salivary glands.'], ['Substrate', 'Starch', ''], ['Product', 'Maltose (then glucose)', 'Maltase finishes the job.'], ['Absorbed', 'In the small intestine', 'Glucose is absorbed into the blood.']],
+      [['Enzyme', 'amylase', 0], ['Substrate', 'starch', 1], ['Product', 'maltose', 2]], true),
+    W('Plan an investigation into the effect of temperature on the rate of amylase digesting starch.', 'Name the ==independent==, ==dependent== and ==control== variables.', 'Say how you measure the rate.', 'Change one thing, measure one thing',
+      [['Independent variable', 'Temperature, for example 10, 20, 30, 40 and 50 °C in water baths.', 'The one thing you change.'], ['Dependent variable', 'Time for the iodine to stop turning blue-black.', 'Shorter time means a faster rate.'], ['Control variables', 'Same volume and concentration of starch and amylase, same pH.', 'Keeps the test fair.'], ['Repeat', 'Repeat and calculate the mean.', 'Improves reliability.']],
+      [['Change', 'temperature', 0], ['Measure', 'time for starch to disappear', 1], ['Keep same', 'volume, concentration, pH', 2]], true)
+  ],
+  drill: 'enzymes',
+  quiz: [
+    { q: 'Enzymes are made of…', o: ['carbohydrate', 'fat', 'protein', 'DNA'], a: 2, w: '==Protein==.' },
+    { q: 'Which enzyme digests protein?', o: ['amylase', 'lipase', 'protease', 'catalase'], a: 2, w: '==Protease== gives amino acids.' },
+    { q: 'A denatured enzyme has…', o: ['a new substrate', 'a changed active site', 'more energy', 'a lower pH'], a: 1, w: 'The ==active site shape changes==.' },
+    { q: 'Optimum temperature for human enzymes is about…', o: ['10 °C', '37 °C', '60 °C', '100 °C'], a: 1, w: '==37 °C==.' },
+    { q: 'Lipase breaks fats into…', o: ['glucose', 'amino acids', 'fatty acids and glycerol', 'maltose'], a: 2, w: '==Fatty acids and glycerol==.' },
+    { q: 'Enzymes are specific because…', o: ['they are proteins', 'only one substrate fits the active site', 'they work at 37 °C', 'they are used up'], a: 1, w: 'Only the matching ==substrate fits the active site==.' }
+  ],
+  exam: [
+    { q: 'Explain, using the lock and key model, why an enzyme only works on one substrate.', m: 3,
+      p: ['the enzyme has an ==active site== of a particular ==shape==', 'only the ==substrate with the complementary shape== fits', 'forming an ==enzyme–substrate complex=='] },
+    { q: 'Describe and explain the effect of temperature on the rate of an enzyme-controlled reaction.', m: 4,
+      p: ['rate ==increases== as temperature rises to the ==optimum==', 'more ==kinetic energy==, more collisions between enzyme and substrate', 'above the optimum the enzyme is ==denatured==', 'the ==active site changes shape== so the substrate cannot fit'] },
+    { q: 'A reaction produces 36 cm³ of gas in 90 s. Calculate the mean rate.', m: 2,
+      p: ['rate = ==volume ÷ time== = 36 ÷ 90', '==0.4 cm³/s=='] },
+    { q: 'State the substrate and the products of lipase.', m: 2,
+      p: ['substrate: ==fats / lipids==', 'products: ==fatty acids and glycerol=='] }
+  ]
+},
+plantnut: {
+  code: 'Topic 6', name: 'Plant nutrition and the leaf',
+  lede: 'How plants make their own food by photosynthesis, what limits the rate, and how the leaf is built for the job.',
+  learn: [
+    { h: 'Photosynthesis', p: ['==Photosynthesis== is the process by which plants make ==glucose== from ==carbon dioxide== and ==water==, using ==light energy== absorbed by ==chlorophyll==.'], f: ['carbon dioxide + water → glucose + oxygen', '6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂ (light, chlorophyll)'], list: ['It happens in the ==chloroplasts==. Light energy is converted to ==chemical energy== in glucose.', 'Glucose is used for ==respiration==, turned into ==starch== (storage), ==cellulose== (walls), ==fats and oils==, and ==amino acids== (with nitrate).', 'Test a leaf for starch: boil in water (kills the leaf), warm in ==ethanol== (removes chlorophyll), rinse, add ==iodine==. ==Blue-black== means starch.'] },
+    { h: 'Limiting factors', list: ['A ==limiting factor== is the one in shortest supply that stops the rate going any higher.', 'The factors are ==light intensity==, ==carbon dioxide concentration== and ==temperature==.', 'On a graph, the rate ==rises== then ==levels off== (plateau). A different factor is limiting at the plateau.', 'Temperature is limiting because photosynthesis uses ==enzymes==. Too hot and they ==denature==.'] },
+    { h: 'The leaf and mineral ions', list: ['The leaf is ==thin== (short diffusion distance) and ==broad== (large surface area to catch light).', '==Palisade mesophyll== has lots of chloroplasts. ==Spongy mesophyll== has air spaces. ==Stomata== let CO₂ in; ==guard cells== open and close them.', '==Xylem== brings water and mineral ions up. ==Phloem== carries sugars away.', '==Nitrate== ions make ==amino acids== and proteins: lack gives ==stunted growth== and yellow older leaves.', '==Magnesium== ions make ==chlorophyll==: lack gives ==yellow leaves== (chlorosis).'] }
+  ],
+  mistakes: ['Saying ==plants make food from soil==. Their mass comes from CO₂ and water.', 'Saying plants ==only photosynthesise in the day and only respire at night==. They respire all the time.', 'Writing the equation ==the wrong way round== (that is respiration).', 'Saying the ==limiting factor is the one in greatest supply==. It is the one in ==shortest supply==.', 'Saying ==chlorophyll gives energy==. It ==absorbs light== energy.'],
+  diagrams: [{ svg: svgLeaf, cap: 'A ==leaf in cross-section== adapted for photosynthesis.' }],
+  worked: [
+    W('Write the word equation and balanced symbol equation for photosynthesis.', 'Reactants on the ==left==: CO₂ and water.', 'Put light and chlorophyll above the arrow.', '6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂',
+      [['Word equation', 'carbon dioxide + water → glucose + oxygen', 'Light and chlorophyll are needed.'], ['Formulae', 'CO₂ + H₂O → C₆H₁₂O₆ + O₂', ''], ['Balance C', '6CO₂ on the left (6 C = 6 C in glucose)', ''], ['Balance H', '6H₂O gives 12 H', 'Glucose has 12 H.'], ['Balance O', '12 + 6 = 18 on the left, 6 + 12 = 18 on the right. 6O₂', 'Check: both sides have 18 O.']],
+      [['Word', 'CO₂ + water → glucose + oxygen', 0], ['Balanced', '6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂', 4]]),
+    W('A graph shows the rate of photosynthesis rising with light intensity then levelling off. Explain the plateau.', 'Think about what ==else== could be limiting.', 'Name a specific factor.', 'Another factor is now limiting',
+      [['At low light', 'Light is the limiting factor, so the rate rises with more light.', ''], ['At the plateau', 'More light no longer increases the rate.', ''], ['Reason', 'Another factor is now limiting, such as carbon dioxide concentration or temperature.', 'Name one.']],
+      [['Low light', 'light limits', 0], ['Plateau', 'rate stops rising', 1], ['Cause', 'CO₂ or temperature', 2]], true),
+    W('Describe how to test a leaf for starch and explain why the leaf is placed in ethanol.', 'Give the ==method in order==.', 'Explain each step, not just list it.', 'Boil → ethanol → iodine',
+      [['Boil', 'Dip the leaf in boiling water for about a minute.', 'Kills the cells and softens the leaf.'], ['Ethanol', 'Warm it in ethanol in a water bath (not a flame).', 'Removes the chlorophyll so the colour is easy to see.'], ['Rinse', 'Rinse the leaf in water.', 'Softens the brittle leaf.'], ['Iodine', 'Add iodine solution.', 'Blue-black means starch is present.']],
+      [['Boil', 'kills leaf', 0], ['Ethanol', 'removes chlorophyll', 1], ['Iodine', 'blue-black = starch', 3]], true),
+    W('A plant is grown without magnesium ions. Describe and explain the symptoms.', 'Magnesium is part of ==chlorophyll==.', 'Link the cause to the symptom.', 'No Mg → no chlorophyll → yellow leaves',
+      [['Role', 'Magnesium ions are needed to make chlorophyll.', ''], ['Symptom', 'The leaves turn yellow (chlorosis).', 'Not enough green pigment.'], ['Consequence', 'Less light is absorbed, so photosynthesis is slower.', 'Less glucose, poor growth.']],
+      [['Mg needed for', 'chlorophyll', 0], ['Symptom', 'yellow leaves', 1], ['Effect', 'less photosynthesis', 2]], true)
+  ],
+  drill: 'plantnut',
+  quiz: [
+    { q: 'Which gas is a reactant in photosynthesis?', o: ['oxygen', 'carbon dioxide', 'nitrogen', 'hydrogen'], a: 1, w: '==Carbon dioxide==.' },
+    { q: 'Where does photosynthesis happen?', o: ['nucleus', 'mitochondria', 'chloroplasts', 'vacuole'], a: 2, w: 'In the ==chloroplasts==.' },
+    { q: 'What does chlorophyll do?', o: ['makes glucose', 'absorbs light energy', 'stores starch', 'carries water'], a: 1, w: 'It ==absorbs light energy==.' },
+    { q: 'Lack of magnesium causes…', o: ['stunted growth', 'yellow leaves', 'no roots', 'wilting'], a: 1, w: '==Yellow leaves== (chlorosis).' },
+    { q: 'Which tissue carries sugars away from the leaf?', o: ['xylem', 'phloem', 'palisade', 'epidermis'], a: 1, w: '==Phloem==.' },
+    { q: 'A limiting factor is…', o: ['the one in greatest supply', 'the one in shortest supply', 'the temperature only', 'the light only'], a: 1, w: 'The factor in ==shortest supply==.' }
+  ],
+  exam: [
+    { q: 'Write the balanced equation for photosynthesis.', m: 2,
+      p: ['==6CO₂ + 6H₂O== on the left', '==C₆H₁₂O₆ + 6O₂== on the right'] },
+    { q: 'Explain how the structure of a leaf is adapted for photosynthesis.', m: 4,
+      p: ['==broad / flat== so a large surface area to absorb light', '==thin== so a short diffusion distance for CO₂', '==many chloroplasts in the palisade layer==', '==stomata== for gas exchange / veins bring water'] },
+    { q: 'State three factors that can limit the rate of photosynthesis.', m: 3,
+      p: ['==light intensity==', '==carbon dioxide concentration==', '==temperature=='] },
+    { q: 'Explain why nitrate ions are needed by plants.', m: 2,
+      p: ['to make ==amino acids== / proteins', 'for ==growth== (lack causes stunted growth, yellow leaves)'] }
+  ]
+}
+};
+
+/* ---------- drill generators ---------- */
+const sup = n => String(n).split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+const choiceItem = (q, correct, wrongs, s) => { const o = shuffle([correct, ...wrongs]); return { kind:'choice', q, choices:o, ans:o.indexOf(correct), s }; };
+const fr = (n, d) => { const g = gcd(n, d); n /= g; d /= g; return d === 1 ? String(n) : n + '/' + d; };
+const lin = (a, b) => (a === 1 ? 'x' : a + 'x') + (b === 0 ? '' : b < 0 ? ' − ' + (-b) : ' + ' + b);
+const sgn = n => n < 0 ? '− ' + (-n) : '+ ' + n;
+const nth = (d, c) => { const a = d === 1 ? 'n' : d === -1 ? '-n' : d + 'n'; return c === 0 ? a : a + (c < 0 ? c : '+' + c); };
+const quadStr = (a, b, c) => `${a === 1 ? '' : a}x²${b === 0 ? '' : ' ' + sgn(b).replace(/ 1$/, ' ') + 'x'}${c === 0 ? '' : ' ' + sgn(c)}`.replace(/([+−]) x/, '$1 x');
+const fmtFrac = (n, d) => n + '/' + d;
+
+const DRILLS = {
+  char: [
+    () => { const it = pick([['movement', 'an action by an organism that changes its position'], ['respiration', 'chemical reactions in cells that release energy'], ['sensitivity', 'detecting and responding to changes in the environment'], ['growth', 'a permanent increase in size'], ['excretion', 'removal of toxic waste made by cells'], ['nutrition', 'taking in materials for energy, growth and development'], ['reproduction', 'making more of the same kind of organism']]);
+      return choiceItem(`Which characteristic of living things is “${it[1]}”?`, it[0], ['movement', 'respiration', 'sensitivity', 'growth', 'excretion', 'nutrition', 'reproduction'].filter(x => x !== it[0]).slice(0, 3), [['MRS GREN', it[0] + ' = ' + it[1]]]); },
+    () => { const it = pick([['has feathers and a beak', 'bird'], ['has hair and mammary glands', 'mammal'], ['has moist skin and lays eggs in water', 'amphibian'], ['has dry scaly skin and lays soft-shelled eggs', 'reptile'], ['has gills and scales', 'fish'], ['has six legs and three body parts', 'insect'], ['has eight legs and two body parts', 'arachnid']]);
+      return choiceItem(`An animal ${it[0]}. Which group is it in?`, it[1], ['bird', 'mammal', 'amphibian', 'reptile', 'fish', 'insect', 'arachnid'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['Homo sapiens', 'Homo sapiens'], ['Canis lupus', 'Canis lupus'], ['Panthera leo', 'Panthera leo'], ['Felis catus', 'Felis catus']]); const [g, s] = it[0].split(' ');
+      const wrong = [`${g.toLowerCase()} ${s}`, `${g} ${s.charAt(0).toUpperCase() + s.slice(1)}`, `${g.toUpperCase()} ${s.toUpperCase()}`];
+      return choiceItem('Which is the correct way to write a binomial name?', it[0], wrong, [['Rule', 'Genus has a capital letter, species is all small letters'], ['Answer', it[0]]]); },
+    () => { const it = pick([['the first word in a binomial name', 'genus'], ['the second word in a binomial name', 'species']]);
+      return choiceItem(`In Panthera leo, which term describes ${it[0]}?`, it[1], [it[1] === 'genus' ? 'species' : 'genus', 'kingdom', 'family'], [['Rule', 'genus then species']]); },
+    () => { const it = pick([['has a backbone', 'vertebrate'], ['has no backbone', 'invertebrate'], ['is not made of cells', 'virus'], ['has jointed legs and an exoskeleton', 'arthropod']]);
+      return choiceItem(`Which term describes an organism that ${it[0]}?`, it[1], ['vertebrate', 'invertebrate', 'virus', 'arthropod'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
+  ],
+  cells: [
+    () => { const it = pick([['controls the activities of the cell and contains DNA', 'nucleus'], ['is the site of aerobic respiration', 'mitochondria'], ['makes proteins', 'ribosomes'], ['controls what enters and leaves the cell', 'cell membrane'], ['strengthens a plant cell and is made of cellulose', 'cell wall'], ['absorbs light for photosynthesis', 'chloroplasts'], ['is filled with cell sap and keeps a plant cell firm', 'permanent vacuole']]);
+      return choiceItem(`Which cell structure ${it[0]}?`, it[1], ['nucleus', 'mitochondria', 'ribosomes', 'cell membrane', 'cell wall', 'chloroplasts', 'permanent vacuole'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const a = pick([40, 50, 100, 20, 25]), m = pick([50, 100, 200, 250, 400]), im = a * m / 1000;
+      return { kind:'num', q:`A cell is ${a} µm long. A drawing of it is ${im} mm long. Calculate the magnification (× …).`, ans:m, tol:0, s:[['Convert actual size', `${a} µm = ${a / 1000} mm`], ['Divide', `${im} ÷ ${a / 1000} = ${m}`]] }; },
+    () => { const a = pick([40, 50, 100, 20, 25, 80]), m = pick([100, 200, 250, 400, 500]), im = a * m / 1000;
+      return { kind:'num', q:`In a photo the image of a cell is ${im} mm long at magnification × ${m}. Find the actual length in µm.`, ans:a, tol:0, s:[['Formula', 'actual = image ÷ magnification'], ['mm', `${im} ÷ ${m} = ${a / 1000} mm`], ['Convert', `× 1000 = ${a} µm`]] }; },
+    () => { const it = pick([['is found in plant cells but not animal cells', 'cell wall'], ['is found in plant cells but not animal cells and contains chlorophyll', 'chloroplast']]);
+      const q = pick(['cell wall', 'chloroplast', 'large permanent vacuole']);
+      return choiceItem('Which structure is found in plant cells but NOT animal cells?', q, ['mitochondria', 'ribosomes', 'nucleus'], [['Plant only', 'cell wall, chloroplasts, large vacuole']]); },
+    () => { const it = pick([['carries oxygen and has no nucleus', 'red blood cell'], ['absorbs water and has a long thin extension', 'root hair cell'], ['carries electrical impulses and has a long axon', 'nerve cell'], ['swims to the egg and has a tail', 'sperm cell'], ['has many chloroplasts for photosynthesis', 'palisade cell']]);
+      return choiceItem(`Which specialised cell ${it[0]}?`, it[1], ['red blood cell', 'root hair cell', 'nerve cell', 'sperm cell', 'palisade cell'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); }
+  ],
+  move: [
+    () => { const it = pick([['net movement of particles down a concentration gradient with no energy', 'diffusion'], ['net movement of water through a partially permeable membrane', 'osmosis'], ['movement of particles against a concentration gradient using energy', 'active transport']]);
+      return choiceItem(`Which process is the ${it[0]}?`, it[1], ['diffusion', 'osmosis', 'active transport'].filter(x => x !== it[1]).concat(['transpiration']).slice(0, 3), [['Match', it[1] + ': ' + it[0]]]); },
+    () => { const n = pick([1, 2, 3, 4, 5, 6, 10, 12]);
+      return { kind:'num', q:`A cube has sides of ${n} cm. Calculate its surface area to volume ratio.`, ans:6 / n, tol:0.02, s:[['Surface area', `6 × ${n}² = ${6 * n * n} cm²`], ['Volume', `${n}³ = ${n * n * n} cm³`], ['Ratio', `${6 * n * n} ÷ ${n * n * n} = ${num(6 / n)}`]] }; },
+    () => { const i = pick([10, 20, 25, 40, 50]), up = Math.random() < 0.5, d = rint(1, Math.floor(i / 5)) * (up ? 1 : -1), f = i + d, ans = d * 100 / i;
+      return { kind:'num', q:`A potato cylinder has an initial mass of ${i} g and a final mass of ${f} g. Calculate the percentage change in mass (use a minus sign for a decrease).`, ans, tol:0.02, s:[['Change', `${f} − ${i} = ${d} g`], ['Divide by initial', `${d} ÷ ${i} × 100 = ${num(ans)} %`]] }; },
+    () => { const it = pick([['pure water', 'swell and may burst'], ['a very concentrated sugar solution', 'shrink'], ['a solution with the same concentration as the cell', 'show no net change']]);
+      return choiceItem(`What happens to animal cells placed in ${it[0]}?`, it[1], ['swell and may burst', 'shrink', 'show no net change'].filter(x => x !== it[1]), [['Rule', 'water moves from dilute to concentrated']]); },
+    () => { const it = pick([['a plant cell in pure water', 'turgid'], ['a plant cell in a concentrated solution', 'flaccid']]);
+      return choiceItem(`Which word describes ${it[0]}?`, it[1], ['turgid', 'flaccid', 'burst'].filter(x => x !== it[1]).slice(0, 2), [['Rule', 'water enters: turgid; water leaves: flaccid']]); }
+  ],
+  molecules: [
+    () => { const it = pick([['starch', 'iodine solution', 'blue-black'], ['reducing sugar', 'Benedict’s solution (heated)', 'brick-red'], ['protein', 'biuret reagent', 'purple'], ['fat', 'ethanol then water', 'cloudy white emulsion']]);
+      return choiceItem(`Which is the positive result for the ${it[0]} test with ${it[1]}?`, it[2], ['blue-black', 'brick-red', 'purple', 'cloudy white emulsion', 'stays blue'].filter(x => x !== it[2]).slice(0, 3), [['Match', it[0] + ': ' + it[1] + ' gives ' + it[2]]]); },
+    () => { const it = pick([['starch', 'iodine solution'], ['reducing sugar', 'Benedict’s solution'], ['protein', 'biuret reagent'], ['vitamin C', 'DCPIP']]);
+      return choiceItem(`Which reagent is used to test for ${it[0]}?`, it[1], ['iodine solution', 'Benedict’s solution', 'biuret reagent', 'DCPIP'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['A', 'T'], ['T', 'A'], ['C', 'G'], ['G', 'C']]);
+      return choiceItem(`In DNA, which base pairs with ${it[0]}?`, it[1], ['A', 'T', 'C', 'G'].filter(x => x !== it[1] && x !== it[0]).concat([it[0]]).slice(0, 3), [['Rule', 'A with T, C with G']]); },
+    () => { const it = pick([['starch', 'glucose'], ['protein', 'amino acids'], ['fat', 'fatty acids and glycerol']]);
+      return choiceItem(`Which small molecules join to make ${it[0]}?`, it[1], ['glucose', 'amino acids', 'fatty acids and glycerol', 'water'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const s = pick(['T A C G', 'A A T C', 'G C A T', 'C G G A']), p = s.split(' ').map(b => ({ A: 'T', T: 'A', C: 'G', G: 'C' }[b])).join(' ');
+      const wrong = [s.split(' ').reverse().join(' '), s.split(' ').map(b => ({ A: 'C', T: 'G', C: 'A', G: 'T' }[b])).join(' '), s].filter(x => x !== p);
+      return choiceItem(`One strand of DNA reads ${s}. What does the paired strand read?`, p, [...new Set(wrong)].slice(0, 3).concat(['A A A A']).slice(0, 3), [['Rule', 'A with T, C with G'], ['Answer', p]]); }
+  ],
+  enzymes: [
+    () => { const v = pick([12, 18, 24, 30, 36, 40, 60]), t = pick([2, 4, 5, 10, 20, 25]);
+      return { kind:'num', q:`An enzyme reaction gives ${v} cm³ of gas in ${t} s. Calculate the rate in cm³/s.`, ans:v / t, tol:0.02, s:[['Formula', 'rate = volume ÷ time'], ['Substitute', `${v} ÷ ${t} = ${num(v / t)} cm³/s`]] }; },
+    () => { const it = pick([['starch', 'amylase', 'maltose'], ['protein', 'protease', 'amino acids'], ['fat', 'lipase', 'fatty acids and glycerol'], ['hydrogen peroxide', 'catalase', 'water and oxygen']]);
+      return choiceItem(`Which enzyme acts on ${it[0]}?`, it[1], ['amylase', 'protease', 'lipase', 'catalase'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ': ' + it[0] + ' → ' + it[2]]]); },
+    () => { const it = pick([['starch', 'maltose'], ['protein', 'amino acids'], ['fat', 'fatty acids and glycerol'], ['hydrogen peroxide', 'water and oxygen']]);
+      return choiceItem(`What are the products when the matching enzyme breaks down ${it[0]}?`, it[1], ['maltose', 'amino acids', 'fatty acids and glycerol', 'water and oxygen'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ' → ' + it[1]]]); },
+    () => { const it = pick([['an enzyme is heated to 80 °C', 'it is denatured'], ['an enzyme is cooled to 5 °C', 'it works slowly but is not denatured'], ['the temperature is 37 °C', 'it works at its optimum rate']]);
+      return choiceItem(`What happens when ${it[0]}?`, it[1], ['it is denatured', 'it works slowly but is not denatured', 'it works at its optimum rate', 'it is used up'].filter(x => x !== it[1]).slice(0, 3), [['Rule', 'high temperature denatures; low temperature slows']]); },
+    () => { const it = pick([['the shape of the active site', 'the substrate no longer fits'], ['an enzyme that works at only one substrate', 'specific']]);
+      return choiceItem('A denatured enzyme cannot work because…', 'the active site has changed shape', ['the enzyme is used up', 'the substrate is too large', 'the pH is 7'], [['Rule', 'denatured = active site changes shape']]); }
+  ],
+  plantnut: [
+    () => { const it = pick([['carbon dioxide', 'reactant'], ['water', 'reactant'], ['glucose', 'product'], ['oxygen', 'product']]);
+      return choiceItem(`In photosynthesis, is ${it[0]} a reactant or a product?`, it[1], [it[1] === 'reactant' ? 'product' : 'reactant'], [['Equation', 'carbon dioxide + water → glucose + oxygen']]); },
+    () => { const it = pick([['absorbs light energy', 'chlorophyll'], ['is where photosynthesis happens', 'chloroplast'], ['let carbon dioxide into the leaf', 'stomata'], ['carries water up to the leaf', 'xylem'], ['carries sugars away from the leaf', 'phloem'], ['contains most of the chloroplasts', 'palisade mesophyll']]);
+      return choiceItem(`Which part ${it[0]}?`, it[1], ['chlorophyll', 'chloroplast', 'stomata', 'xylem', 'phloem', 'palisade mesophyll'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['nitrate ions', 'stunted growth'], ['magnesium ions', 'yellow leaves']]);
+      return choiceItem(`A plant lacks ${it[0]}. What symptom is seen?`, it[1], ['stunted growth', 'yellow leaves', 'wilting', 'no flowers'].filter(x => x !== it[1]).slice(0, 3), [['Rule', 'nitrate makes amino acids (growth); magnesium makes chlorophyll (yellow leaves)']]); },
+    () => { const it = pick([['a plant is given more light and the rate stops rising', 'another factor is limiting'], ['the rate rises as light intensity rises', 'light is limiting']]);
+      return choiceItem(`On a graph, ${it[0]}. What does this show?`, it[1], ['another factor is limiting', 'light is limiting', 'the plant has died', 'respiration has stopped'].filter(x => x !== it[1]).slice(0, 3), [['Rule', 'the rate levels off when another factor is limiting']]); },
+    () => { const it = pick([['boil the leaf', 'to kill it and soften it'], ['warm it in ethanol', 'to remove chlorophyll'], ['add iodine', 'to test for starch']]);
+      return choiceItem(`In the starch test, why do you ${it[0]}?`, it[1], ['to kill it and soften it', 'to remove chlorophyll', 'to test for starch', 'to make glucose'].filter(x => x !== it[1]).slice(0, 3), [['Steps', 'boil, ethanol, rinse, iodine']]); }
+  ]
+};
+let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1]];
+const MOCK_N = MOCK.length;
+function drawMock(){
+  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
+  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
+  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
+  store.mock = MOCK; save();
+}
+if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+
+/* ---------- worked examples: live working table and notes ---------- */
+for (const key in CH) CH[key].worked.forEach(w => {
+  w.board0 = () => wkBoard(w, -1);
+  w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
+});
+/* ---------- state & rendering ---------- */
+const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['mock','','Mini mock']];
+let cur = 'start', sub_ = 'learn';
+try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(([k,c,n]) => `<button class="tab" role="tab" aria-selected="${k===cur}" data-tab="${k}">${c ? `<small>${c}</small>` : ''}${n}</button>`).join('');
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]'); if (!b) return;
+  cur = b.dataset.tab; sub_ = 'learn'; renderTabs(); render(); window.scrollTo(0,0);
+});
+function examScore(key, list){ let got = 0, tot = 0; list.forEach((q,i) => { tot += q.m; got += Math.min(q.m, (store.ticks[key+'-'+i] || []).length); }); return [got, tot]; }
+function render(){
+  const v = document.getElementById('view');
+  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
+  bindView();
+}
+const KEYS = ['char','cells','move','molecules','enzymes','plantnut'];
+function renderStart(){
+  const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+    return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
+      <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Biology 0610</span><h2>Biology full-year pack</h2>
+  <p class="lede">Six topics so far, in Cambridge syllabus order: living things, cells, movement into and out of cells, biological molecules, enzymes and plant nutrition. More topics are added chapter by chapter. Work through each tab from left to right, then try the mini mock.</p></div>
+  <div class="stack" style="margin-top:20px">
+  <div class="card"><h3>How to use each topic</h3><div class="plan">
+    <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
+    <div><b>2 · Diagrams</b>Copy these into your notebook from memory.</div>
+    <div><b>3 · Worked</b>Try the question on paper first, then tap <i>Next step</i> to check each line.</div>
+    <div><b>4 · Drill</b>Fresh questions every time. Aim for 5 in a row.</div>
+    <div><b>5 · Quiz</b>Quick multiple-choice checks with instant feedback.</div>
+    <div><b>6 · Exam Qs</b>Write your answer on paper first. Then open the mark scheme and tick the points you wrote.</div></div></div>
+  <div class="grid2">
+    <div class="card"><h3>Your progress</h3>${rows}<p class="note">Saved on this device only.</p></div>
+    <div class="card"><h3>Command words</h3><dl class="cw">
+      <dt>State</dt><dd>Give a short fact. No explanation needed.</dd>
+      <dt>Describe</dt><dd>Say what happens or what it looks like.</dd>
+      <dt>Explain</dt><dd>Give a reason. Use because or so.</dd>
+      <dt>Compare</dt><dd>Give a similarity or difference for each point.</dd>
+      <dt>Calculate</dt><dd>Show formula, substitution and answer with a unit.</dd></dl></div></div>
+  <div class="card"><h3>Habits that save marks</h3><ul>
+    <li>Use the ==exact keywords== from the mark scheme: osmosis, partially permeable, denatured.</li>
+    <li>For ==explain== questions, give a ==reason== for every point. Use because.</li>
+    <li>For calculations, write ==formula, substitution, answer== and the ==unit==.</li>
+    <li>Answer with ==the number of points== the marks suggest: 3 marks needs 3 points.</li></ul></div>
+  <div class="card"><h3>Real past papers</h3><p>After finishing a topic, try real Cambridge questions from the Biology 0610 papers and check the mark schemes:
+    <a href="https://pastpapers.papacambridge.com/papers/caie/igcse-biology-0610" target="_blank" rel="noopener">PapaCambridge 0610</a> ·
+    <a href="https://pastpapersacademy.com/past-papers/" target="_blank" rel="noopener">Past Papers Academy</a>.</p></div>
+  </div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
+}
+function cardHTML(card){
+  const tbl = card.table ? `<div class="tbl"><table><thead><tr>${card.table[0].map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${card.table.slice(1).map(r => `<tr>${r.map(c => `<td>${fmt(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '';
+  return `<div class="card"><h3>${card.h}</h3>${(card.p||[]).map(p=>`<p>${fmt(p)}</p>`).join('')}${card.f?`<div class="formula">${card.f.map(x=>`<span>${x}</span>`).join('')}</div>`:''}${card.list?`<ul>${card.list.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul>`:''}${tbl}</div>`;
+}
+/* ---------- explanatory worked examples: Key idea, why lines, exam tip, live working table ---------- */
+/* e.r rows: [label, value, step]. step -1 = given in the question; otherwise the step at which the row fills in. */
+function wkBoard(e, k){
+  const rows = e.r.map(([lab, val, at]) => { const on = at <= k;
+    return `<tr class="${at === k && k >= 0 ? 'cur' : ''}"><th>${lab}</th><td class="${on ? (at >= 0 ? 'fill' : '') : 'q'}">${on ? fmt(val) : '?'}</td></tr>`; }).join('');
+  return `<table class="wb">${rows}</table>${e.f ? `<p class="bnote">${fmt(e.f)}</p>` : ''}`;
+}
+function updateBoard(wk, items){
+  const bi = wk.querySelector('.board-in'); if (!bi) return;
+  const w = CH[cur].worked[+wk.dataset.worked]; let html = w.board0();
+  items.forEach((li, j) => { if (!li.hidden && w.s[j][3]) html = w.s[j][3](); });
+  bi.innerHTML = html;
+  items.forEach(li => li.classList.remove('now')); const vis = items.filter(li => !li.hidden); if (vis.length) vis[vis.length-1].classList.add('now');
+}
+
+function renderChapter(k){
+  const c = CH[k];
+  const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],['drill','Drill'],['quiz','Quiz'],['exam','Exam Qs']];
+  let body = '';
+  if (sub_ === 'learn') body = c.learn.map(cardHTML).join('') + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
+  if (sub_ === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
+  if (sub_ === 'worked') body = `<div class="card"><h3>How to use these</h3><p class="note">Read the question and try it on paper. Then tap <b>Next step</b>. Each step shows the working, and the line underneath explains <b>why</b>. The table beside it fills in as you go. The exam tip appears at the end.</p></div>` + c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>${w.intro ? `<p class="intro"><b>Key idea:</b> ${fmt(w.intro)}</p>` : ''}
+      ${w.board0 ? '<div class="wk-split"><div class="board"><span class="eyebrow">Working table</span><div class="board-in">' + w.board0() + '</div></div>' : ''}<ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(st[1])}</span>${st[2] ? `<span class="why2">${fmt(st[2])}</span>` : ''}</li>`).join('')}</ol>${w.board0 ? '</div>' : ''}
+      ${w.tip ? `<p class="tip" hidden><b>Exam tip:</b> ${fmt(w.tip)}</p>` : ''}
+      <div class="row"><button class="btn primary" data-next>Next step</button><button class="btn ghost" data-all>Show all</button><button class="btn ghost" data-hide>Hide</button></div></div>`).join('');
+  if (sub_ === 'drill') body = `<div class="card" id="drill"></div>`;
+  if (sub_ === 'quiz') body = `<div class="card"><div class="scorebar"><div><h3>Quick quiz</h3><p class="note">Tap an answer. Best score is saved.</p></div><div class="big-score"><span id="qs">0</span>/${c.quiz.length}</div></div><div class="row"><button class="btn ghost" data-reset>Start again</button></div></div>`
+    + c.quiz.map((q,i) => `<div class="card" data-quiz="${i}"><span class="eyebrow">Q${i+1}</span><p class="q">${q.q}</p><div class="opts">${q.o.map((o,j) => `<button class="opt" data-o="${j}">${o}</button>`).join('')}</div><p class="why" hidden>${fmt(q.w)}</p></div>`).join('');
+  if (sub_ === 'exam') { const [g,t] = examScore(k, c.exam);
+    body = `<div class="card"><div class="scorebar"><div><h3>Exam-style questions</h3><p class="note">Answer on paper first. Then open the mark scheme and tick each point you wrote. Each tick = 1 mark.</p></div><div class="big-score" id="exscore">${g}/${t}</div></div></div>` + c.exam.map((q,i) => examCard(k+'-'+i, q, i)).join(''); }
+  return `<div class="chhead fadein"><span class="eyebrow">${c.code} · Biology</span><h2>${c.name}</h2><p class="lede">${c.lede}</p></div>
+  <nav class="sub" role="tablist">${subs.map(([s,n]) => `<button class="subtab" role="tab" aria-selected="${s===sub_}" data-sub="${s}">${n}</button>`).join('')}</nav>
+  <div class="stack fadein">${body}</div>`;
+}
+function examCard(key, q, i){
+  const ticks = store.ticks[key] || []; const open = store.ticks['open-'+key];
+  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${i+1}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
+    <p class="q">${q.q}</p>
+    <div class="row"><button class="btn primary" data-ms>${open?'Hide mark scheme':'Show mark scheme'}</button><span class="got">${ticks.length?Math.min(ticks.length,q.m)+'/'+q.m:''}</span></div>
+    <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
+    ${q.p.map((p,j) => `<button class="point" aria-pressed="${ticks.includes(j)}" data-pt="${j}"><span class="box">✓</span><span>${fmt(p)}</span></button>`).join('')}</div></div>`;
+}
+let timer = null, left = 45*60;
+const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+function renderMock(){
+  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
+  return `<div class="chhead fadein"><span class="eyebrow">All eight topics</span><h2>Mini mock</h2>
+    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
+      <p class="note">45 minutes. About 1 minute per mark, plus time to check.</p></div>
+    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+}
+let quizScore = 0;
+function bindView(){
+  quizScore = 0;
+  if (cur !== 'start' && cur !== 'mock' && sub_ === 'drill') newDrill();
+  if (cur === 'mock') {
+    document.getElementById('tgo').onclick = () => {
+      if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
+      document.getElementById('tgo').textContent = 'Pause';
+      timer = setInterval(() => { left = Math.max(0, left-1); const c = document.getElementById('clock');
+        if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
+        if (!left) { clearInterval(timer); timer = null; } }, 1000);
+    };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 45*60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
+  }
+}
+document.getElementById('view').addEventListener('click', e => {
+  const t = e.target;
+  const st = t.closest('[data-sub]'); if (st) { sub_ = st.dataset.sub; render(); return; }
+  const wk = t.closest('[data-worked]');
+  if (wk) { const items = [...wk.querySelectorAll('.steps li')];
+    if (t.closest('[data-next]')) { const n = items.find(li => li.hidden); if (n) n.hidden = false; }
+    if (t.closest('[data-all]')) items.forEach(li => li.hidden = false);
+    if (t.closest('[data-hide]')) items.forEach(li => li.hidden = true);
+    wk.querySelector('[data-next]').disabled = !items.some(li => li.hidden); const tp = wk.querySelector('.tip'); if (tp) tp.hidden = items.some(li => li.hidden); updateBoard(wk, items); return; }
+  const qz = t.closest('[data-quiz]');
+  if (qz && t.closest('[data-o]') && !qz.dataset.done) {
+    const q = CH[cur].quiz[+qz.dataset.quiz]; const j = +t.closest('[data-o]').dataset.o; qz.dataset.done = '1';
+    qz.querySelectorAll('.opt').forEach((b,bi) => { b.disabled = true; if (bi === q.a) b.classList.add('right'); else if (bi === j) b.classList.add('wrong'); });
+    qz.querySelector('.why').hidden = false; if (j === q.a) quizScore++;
+    document.getElementById('qs').textContent = quizScore;
+    if (quizScore > (store.quiz[cur] || 0)) { store.quiz[cur] = quizScore; save(); } return; }
+  if (t.closest('[data-reset]')) { render(); return; }
+  const ex = t.closest('[data-exam]');
+  if (ex) { const key = ex.dataset.exam, max = +ex.dataset.max;
+    if (t.closest('[data-ms]')) { const ms = ex.querySelector('.ms'); ms.hidden = !ms.hidden; store.ticks['open-'+key] = !ms.hidden; save(); t.closest('[data-ms]').textContent = ms.hidden ? 'Show mark scheme' : 'Hide mark scheme'; return; }
+    const pt = t.closest('[data-pt]');
+    if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
+      store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
+      ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
+      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
+});
+
+/* ---------- drill engine ---------- */
+let drillCur = null, streak = 0;
+function judge(raw){
+  const d = drillCur;
+  if (d.kind === 'num') { const x = parseFloat(raw.replace(',', '.')); if (isNaN(x)) return null; return { ok: Math.abs(x - d.ans) <= (d.tol != null ? d.tol : Math.abs(d.ans)*0.02) + 1e-9 }; }
+  if (d.kind === 'pf') { const sp = x => x.replace(/²/g, '^2').replace(/³/g, '^3'); const out = []; let m; const re = /(\d+)(?:\^(\d+))?/g; const r = sp(Array.isArray(raw) ? raw.join('*') : String(raw));
+    while ((m = re.exec(r))) { const e = m[2] ? +m[2] : 1; for (let i = 0; i < e; i++) out.push(+m[1]); } if (!out.length) return null;
+    return { ok: out.slice().sort((a, b) => a - b).join(',') === d.ans.join(',') }; }
+  if (d.kind === 'pair') { const v = (Array.isArray(raw) ? raw.join(',') : String(raw)).replace(/−/g, '-').match(/-?\d+(?:\.\d+)?/g); if (!v) return null; if (v.length !== 2) return { ok:false, note:'Type two numbers like 3,5.' };
+    return { ok: Math.abs(+v[0] - d.ans[0]) < 1e-9 && Math.abs(+v[1] - d.ans[1]) < 1e-9 }; }
+  if (d.kind === 'text') { const n = s => s.replace(/\s+/g, '').replace(/[−–]/g, '-').toLowerCase(); const r = n(raw); if (!r) return null; return { ok: r === n(d.ans) }; }
+  if (d.kind === 'frac') { const P = s => { const m = s.replace(/\s+/g, '').match(/^(-?\d+)(?:\/(\d+))?$/); return m ? [+m[1], m[2] ? +m[2] : 1] : null; };
+    const x = P(raw), y = P(d.ans); if (!x) return raw.trim() ? { ok:false, note:'Write it like 7/12.' } : null; if (!x[1]) return { ok:false };
+    if (x[0] * y[1] !== y[0] * x[1]) return { ok:false };
+    const g = (a, b) => b ? g(b, a % b) : Math.abs(a); return g(x[0], x[1]) === 1 ? { ok:true } : { ok:false, note:'Right value, but simplify it.' }; }
+  if (d.kind === 'config') { const m = raw.match(/\d+/g); if (!m) return null; return { ok: m.join(',') === d.ans }; }
+  if (d.kind === 'formula') { const r = unsub(raw.replace(/\s+/g, '')); if (!r) return null;
+    if (r === d.ans) return { ok:true }; if (r.toLowerCase() === d.ans.toLowerCase()) return { ok:true, note:`Watch the capital letters: ${sub(d.ans)}` }; return { ok:false }; }
+  return null;
+}
+const answerText = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'num' ? num(d.ans) : d.kind === 'pf' ? d.ans.join(' × ') : d.kind === 'pair' ? '(' + d.ans.join(', ') + ')' : d.ans;
+function showResult(ok, note){
+  streak = ok ? streak + 1 : 0;
+  if (streak > (store.drill[cur] || 0)) { store.drill[cur] = streak; save(); }
+  const d = drillCur;
+  document.getElementById('dfb').innerHTML = `<div class="fb ${ok?'ok':'no'}"><span class="verdict">${ok ? 'Correct!' : 'Not quite. The answer is ' + answerText(d) + '.'}${note ? ' ' + note : ''}</span>
+    <ol class="steps">${d.s.map((s,j)=>`<li ${j===d.s.length-1?'class="final"':''}><span class="sl">${s[0]}</span><span class="st">${s[1]}</span></li>`).join('')}</ol>
+    <div class="row"><button class="btn primary" type="button" id="dnext">Next question</button></div></div>`;
+  document.getElementById('dnext').onclick = newDrill;
+  document.querySelector('#drill .stat').textContent = `streak ${streak} · best ${store.drill[cur] || 0}`;
+}
+function newDrill(){
+  const box = document.getElementById('drill'); if (!box) return;
+  drillCur = pick(DRILLS[CH[cur].drill])();
+  const d = drillCur;
+  const input = d.kind === 'choice'
+    ? `<div class="opts" id="dch">${d.choices.map((o,j) => `<button class="opt" type="button" data-dc="${j}">${o}</button>`).join('')}</div>`
+    : `<form class="answer" id="dform"><label for="dans" class="note">Your answer</label><input id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" ${d.kind==='num'?'inputmode="decimal"':''} placeholder="${d.kind==='pair'?'e.g. 3,5':d.kind==='pf'?'e.g. 2*2*3':d.kind==='text'?'type your answer':d.kind==='frac'?'e.g. 7/12':'number'}"><button class="btn primary" type="submit">Check</button></form>`;
+  box.innerHTML = `<div class="scorebar"><span class="eyebrow">Practice drill</span><span class="stat">streak ${streak} · best ${store.drill[cur] || 0}</span></div>
+    <p class="drillq">${d.q}</p>${input}<div id="dfb"></div>
+    <div class="row"><button class="btn ghost" type="button" id="dskip">Skip to a new question</button></div>`;
+  if (d.kind === 'choice') {
+    document.getElementById('dch').onclick = ev => { const b = ev.target.closest('[data-dc]'); if (!b || d.done) return; d.done = true; const j = +b.dataset.dc;
+      document.querySelectorAll('#dch .opt').forEach((o,oi) => { o.disabled = true; if (oi === d.ans) o.classList.add('right'); else if (oi === j) o.classList.add('wrong'); });
+      showResult(j === d.ans); };
+  } else {
+    document.getElementById('dform').onsubmit = ev => { ev.preventDefault(); if (d.done) return;
+      const r = judge(document.getElementById('dans').value.trim());
+      if (!r) { document.getElementById('dfb').innerHTML = `<div class="fb no"><span class="verdict">Type an answer first.</span></div>`; return; }
+      d.done = true; showResult(r.ok, r.note); };
+  }
+  document.getElementById('dskip').onclick = () => { streak = 0; newDrill(); };
+}
+renderTabs(); render();
+
+/* chapter tabs: arrow buttons, mouse wheel and keep the selected tab in view (for screens without touch) */
+(function(){
+  const nav = document.getElementById('tabs'), L = document.getElementById('tabL'), R = document.getElementById('tabR');
+  const upd = () => { const m = nav.scrollWidth - nav.clientWidth; L.hidden = nav.scrollLeft <= 2; R.hidden = nav.scrollLeft >= m - 2; };
+  L.onclick = () => nav.scrollBy({ left: -nav.clientWidth * .7, behavior: 'smooth' });
+  R.onclick = () => nav.scrollBy({ left: nav.clientWidth * .7, behavior: 'smooth' });
+  nav.addEventListener('scroll', upd); window.addEventListener('resize', upd);
+  nav.addEventListener('wheel', e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { nav.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive: false });
+  new MutationObserver(() => { const a = nav.querySelector('[aria-selected="true"]'); if (a) a.scrollIntoView({ inline: 'center', block: 'nearest' }); upd(); }).observe(nav, { childList: true });
+  const a = nav.querySelector('[aria-selected="true"]'); if (a) a.scrollIntoView({ inline: 'center', block: 'nearest' }); upd();
+})();
+</script>
+</body>
+</html>

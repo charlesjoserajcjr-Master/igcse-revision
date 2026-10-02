@@ -50,6 +50,9 @@ Term 1 packs (`physics.html`, `chemistry.html`, `cs.html`) are frozen and labell
 ## Full-year Computer Science progress
 `cs-year.html`: Term 1 chapters (Data representation, Data transmission, Boolean logic) plus Hardware, Software, The internet and security, Algorithms and problem solving, Programming in Python and Databases/SQL (9 chapters). Still to add: automated and emerging technologies (robotics, AI, IoT), ethics and the digital divide, more trace-table and pseudocode practice.
 
+## Full-year Biology progress
+`biology-year.html` (Cambridge 0610, built on the maths engine, storage key `biopack-v1`): 6 chapters so far: Living organisms and classification, Cells, Movement into and out of cells, Biological molecules, Enzymes, Plant nutrition and the leaf. Still to add in syllabus order: human nutrition, transport in plants, transport in animals, diseases and immunity, gas exchange and respiration, excretion, coordination and response, drugs, reproduction, inheritance, variation and selection, organisms and environment, human influences on ecosystems.
+
 ## Known limitations
 - Progress is saved only in the browser on that device.
 - GitHub Pages must stay enabled (Settings → Pages → Deploy from branch `main` / root).
