@@ -175,6 +175,19 @@ svg .grnt{fill:var(--good);font-weight:700}
 #gsvg svg{display:block;width:100%;max-width:540px;height:auto}
 #csvg svg{display:block;width:100%;max-width:680px;height:auto}
 #gsvg,#csvg{overflow-x:auto}
+.intro{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:.98rem}
+.steps .why2{grid-column:2;font-family:var(--body);font-size:.93rem;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.steps li.final .st .tbl,.steps .st .tbl{margin-block:6px;color:var(--ink);font-weight:400}
+.tip{background:var(--kw-bg);color:var(--kw-ink);border-radius:8px;padding:10px 14px;font-size:.95rem}
+.tip mark.kw{background:transparent;padding:0;text-decoration:underline}
+.tt.pv td,.tt.pv th{border:1px solid var(--line);min-width:2.6em}
+.tt.pv td.one{background:var(--accent-soft);font-weight:700}
+.tt td.lost{background:var(--hot-soft);color:var(--hot);font-weight:700}
+.tt td.fill{background:var(--good-soft);color:var(--good);font-weight:700}
+.tt.add th{color:var(--muted);font-weight:400;text-align:right}
+.tt.add tr.carry td{color:var(--hot);font-size:.8rem;font-weight:700}
+.tt.add tr.sum td{border-top:2px solid var(--ink);font-weight:700;color:var(--good)}
+.tt.add td{padding:4px 9px}
 a{color:var(--accent)}
 @media (prefers-reduced-motion: no-preference){.fadein{animation:fi .25s ease-out}@keyframes fi{from{transform:translateY(4px)}to{transform:none}}}
 </style>
@@ -411,6 +424,291 @@ function gateLiveSVG(t, a, b){
   return s;
 }
 
+/* ---------- worked-example visual helpers ---------- */
+function placeHTML(n){
+  const b = bin8(n);
+  return `<div class="tbl"><table class="tt pv"><tr>${PV.map(p => `<th>${p}</th>`).join('')}</tr><tr>${[...b].map(x => `<td class="${x === '1' ? 'one' : ''}">${x}</td>`).join('')}</tr></table></div>`;
+}
+function addHTML(a, b){
+  const A = bin8(a), B = bin8(b); const cr = Array(9).fill(''); const res = Array(8); let carry = 0;
+  for (let i = 7; i >= 0; i--) { const t = +A[i] + +B[i] + carry; res[i] = t % 2; carry = t >> 1; if (carry) cr[i] = '1'; }
+  const row = (lab, cells, cls) => `<tr class="${cls||''}"><th>${lab}</th>${cells.map(c => `<td>${c}</td>`).join('')}</tr>`;
+  return `<div class="tbl"><table class="tt add">${row('carry', cr, 'carry')}${row('', [''].concat([...A]))}${row('+', [''].concat([...B]))}${row('=', [carry ? '1' : ''].concat(res), 'sum')}</table></div>`;
+}
+function shiftHTML(before, after, lostIdx, fillIdx){
+  const r = (bits, mark, cls) => `<tr>${[...bits].map((x,i) => `<td class="${mark.includes(i) ? cls : x === '1' ? 'one' : ''}">${x}</td>`).join('')}</tr>`;
+  return `<div class="tbl"><table class="tt pv">${r(before, lostIdx, 'lost')}${r(after, fillIdx, 'fill')}</table></div>`;
+}
+function svgEx2(){
+  const or = gateShape('OR', 160, 20), and1 = gateShape('AND', 160, 120), not = gateShape('NOT', 260, 120), and2 = gateShape('AND', 400, 70);
+  let s = `<svg viewBox="0 0 560 200" role="img" aria-label="Circuit for X = (A OR B) AND NOT (B AND C)" style="display:block;width:100%;max-width:560px;height:auto">`;
+  s += wire([[50,30],[or.ins[0][0],30]]) + wire([[50,50],[or.ins[1][0],50]]) + wire([[100,130],[160,130]]) + wire([[50,150],[160,150]]);
+  s += `<circle cx="100" cy="50" r="3" class="inkf"/>` + wire([[100,50],[100,130]]);
+  s += wire([[and1.out[0],140],[260,140]]) + wire([[or.out[0],40],[360,40],[360,80],[400,80]]) + wire([[not.out[0],140],[370,140],[370,100],[400,100]]) + wire([[and2.out[0],90],[530,90]]);
+  s += or.s + and1.s + not.s + and2.s;
+  s += `<text x="40" y="35" class="end mono lbl">A</text><text x="40" y="55" class="end mono lbl">B</text><text x="40" y="155" class="end mono lbl">C</text>
+  <text x="205" y="18" class="mono" style="font-size:11px">A OR B</text><text x="196" y="178" class="mono" style="font-size:11px">B AND C</text><text x="300" y="178" class="mono" style="font-size:11px">NOT (B AND C)</text><text x="540" y="95" class="mono lbl">X</text></svg>`;
+  return s;
+}
+
+/* ---------- WORKED: data ---------- */
+const WK_DATA = [
+  { q:'Convert the denary number 150 to 8-bit binary.',
+    intro:'Each bit has a ==place value==. They double from right to left: 1, 2, 4, 8, 16, 32, 64, 128. To convert, find which place values ==add up to the number==.',
+    s:[['Write the 8 place values','128  64  32  16  8  4  2  1','An 8-bit number always has these 8 columns. The biggest is on the left.'],
+       ['Does 128 fit into 150?','Yes → 1 under 128.   150 − 128 = 22 left','Always start with the ==biggest== place value. If it fits, write 1 and ==subtract== it.'],
+       ['Do 64 or 32 fit into 22?','No → 0 under 64, 0 under 32','They are bigger than 22, so they get 0.'],
+       ['Does 16 fit into 22?','Yes → 1 under 16.   22 − 16 = 6 left',''],
+       ['Does 8 fit into 6?','No → 0 under 8',''],
+       ['Does 4 fit into 6?','Yes → 1 under 4.   6 − 4 = 2 left',''],
+       ['Does 2 fit into 2?','Yes → 1 under 2.   2 − 2 = 0 left','When you reach 0, every column left gets a 0.'],
+       ['Answer', () => placeHTML(150) + '1001 0110','==Check by adding back==: 128 + 16 + 4 + 2 = 150 ✓']],
+    tip:'Write ==all 8 bits==, including zeros at the front: 5 is 00000101, not 101.' },
+  { q:'Convert the binary number 10110101 to denary.',
+    intro:'Binary to denary is the reverse: ==add the place values== that have a 1 under them.',
+    s:[['Put the bits under the place values', () => placeHTML(181),'Line up the bits from the left: the first bit is under 128.'],
+       ['Pick out the columns with a 1','128, 32, 16, 4, 1','Columns with 0 add nothing, so ignore them.'],
+       ['Add them','128 + 32 + 16 + 4 + 1','Add in steps: 128 + 32 = 160, + 16 = 176, + 4 = 180, + 1 = 181.'],
+       ['Answer','181','']],
+    tip:'The largest 8-bit number is 11111111 = ==255==. If your answer is bigger than 255, something is wrong.' },
+  { q:'Convert the binary number 10010110 to hexadecimal.',
+    intro:'One hex digit holds exactly ==4 bits== (a ==nibble==). 4 bits make 0 to 15, and hex digits go 0 to F (15).',
+    s:[['Split into nibbles','1001 | 0110','Split into ==two groups of 4==, starting from the right.'],
+       ['Place values inside a nibble','8  4  2  1','Each nibble uses the small place values 8, 4, 2, 1.'],
+       ['First nibble: 1001','8 + 1 = 9  → hex 9','Values 0–9 are written the same in hex.'],
+       ['Second nibble: 0110','4 + 2 = 6  → hex 6',''],
+       ['Answer','96','Keep the digits in the same order. Check: 9 × 16 + 6 = 150, and 10010110 = 150 ✓']],
+    tip:'Learn these: 1010 = ==A==, 1011 = ==B==, 1100 = ==C==, 1101 = ==D==, 1110 = ==E==, 1111 = ==F==.' },
+  { q:'Convert the denary number 200 to hexadecimal.',
+    intro:'A 2-digit hex number has place values ==16== and ==1==. So we find how many 16s fit, and what is left over.',
+    s:[['How many 16s are in 200?','200 ÷ 16 = 12 remainder 8','16 × 12 = 192. 200 − 192 = 8 left over.'],
+       ['The 16s digit','12 → C','The whole number goes in the 16s column. 12 is more than 9, so use a letter: A=10, B=11, ==C=12==.'],
+       ['The 1s digit','8 → 8','The ==remainder== goes in the 1s column.'],
+       ['Answer','C8','Check: 12 × 16 + 8 = 192 + 8 = 200 ✓']],
+    tip:'The paper is ==non-calculator==, so learn the 16 times table: 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240.' },
+  { q:'Convert the hexadecimal number 3E to denary.',
+    intro:'Hex place values are ==16== (left digit) and ==1== (right digit).',
+    s:[['Left digit × 16','3 × 16 = 48','The 3 is in the 16s column, so it is worth 48.'],
+       ['Right digit','E = 14','Change the letter back to a number: A=10, B=11, C=12, D=13, ==E=14==, F=15.'],
+       ['Add them','48 + 14 = 62',''],
+       ['Answer','62','']],
+    tip:'A common slip is treating E as 15. Count it: A, B, C, D, E = 10, 11, 12, 13, ==14==.' },
+  { q:'Convert the hexadecimal number B7 to 8-bit binary.',
+    intro:'Go the other way: turn ==each hex digit into 4 bits==, then join them.',
+    s:[['First digit B','B = 11 = 8 + 2 + 1 → 1011','Use 8, 4, 2, 1. 11 needs 8, 2 and 1.'],
+       ['Second digit 7','7 = 4 + 2 + 1 → 0111','Always write ==4 bits==, so 7 is 0111, not 111.'],
+       ['Join the nibbles','1011 0111',''],
+       ['Answer','10110111','Check: 128 + 32 + 16 + 4 + 2 + 1 = 183, and B7 = 11 × 16 + 7 = 183 ✓']],
+    tip:'This is why programmers like hex: ==each digit is exactly 4 bits==, so conversion is quick.' },
+  { q:'Add the binary numbers 01101110 and 01011011.',
+    intro:'Binary addition works like normal addition, from ==right to left==, but you carry when a column reaches 2. Rules: 0+0=0, 0+1=1, ==1+1=10== (write 0, carry 1), ==1+1+1=11== (write 1, carry 1).',
+    s:[['Column 1 (far right)','0 + 1 = 1','Write 1. Nothing to carry.'],
+       ['Column 2','1 + 1 = 10','1 + 1 = 2, which is ==10 in binary==. Write 0 and ==carry 1== to the next column.'],
+       ['Column 3','1 + 0 + carry 1 = 10','Again 2: write 0, carry 1.'],
+       ['Column 4','1 + 1 + carry 1 = 11','1 + 1 + 1 = 3, which is ==11 in binary==. Write 1, carry 1.'],
+       ['Columns 5 to 8','keep going the same way','Always add the ==carry== from the column before.'],
+       ['Full working', () => addHTML(110, 91),'The orange row shows every carry. Examiners like to see the carries.'],
+       ['Answer and check','11001001 = 201','110 + 91 = 201 in denary ✓. 201 is ≤ 255, so ==no overflow==.']],
+    tip:'Write the carries above the next column. If you make a slip, the working can still earn marks.' },
+  { q:'Add 11000000 and 01000001. Explain what happens.',
+    intro:'An 8-bit register can only hold 8 bits. If the answer needs a ==9th bit==, that bit is lost. This is an ==overflow error==.',
+    s:[['Add column by column', () => addHTML(192, 65),'The last column (1 + 1) makes a carry, but there is ==no 9th column== in the register.'],
+       ['What the register keeps','0000 0001','Only the 8 right-hand bits are stored. That is 1, which is wrong.'],
+       ['Check in denary','192 + 65 = 257','257 is bigger than ==255==, the largest 8-bit number.'],
+       ['Conclusion','OVERFLOW ERROR','The result is too big to store in 8 bits.']],
+    tip:'For “explain overflow”, say: the result is ==greater than 255== / needs a ==9th bit== which ==cannot be stored== in the 8-bit register.' },
+  { q:'Perform a logical right shift of two places on 00110100. What is the effect?',
+    intro:'A ==logical shift== moves every bit left or right. Right means ==÷ 2 for each place==. Empty spaces are ==filled with 0==.',
+    s:[['Start value','0011 0100 = 52','32 + 16 + 4 = 52.'],
+       ['Move every bit 2 places right', () => shiftHTML('00110100','00001101',[6,7],[0,1]),'The top row is before, the bottom row after. The two 0s on the right fall off (orange). Two new 0s come in on the left (green).'],
+       ['New value','0000 1101 = 13','8 + 4 + 1 = 13.'],
+       ['Effect','52 ÷ 4 = 13','2 places right = ÷ 2 ÷ 2 = ==÷ 4==.']],
+    tip:'If a ==1 falls off== the end, the answer is no longer exact. Mention “==bits are lost==, so the result may be inaccurate”.' },
+  { q:'Perform a logical left shift of one place on 11000101.',
+    intro:'Left shift = ==× 2 for each place==. But watch the left-most bit: if it is a 1, it ==falls off==.',
+    s:[['Start value','1100 0101 = 197',''],
+       ['Move every bit 1 place left', () => shiftHTML('11000101','10001010',[0],[7]),'The left-most 1 is pushed out (orange). A 0 fills the right (green).'],
+       ['New value','1000 1010 = 138','197 × 2 should be 394, but 394 is too big for 8 bits.'],
+       ['Effect','Not × 2: a 1 was lost','Because a ==1 was shifted out==, the result is ==wrong==.']],
+    tip:'Always check what falls off the end before saying “× 2”.' },
+  { q:'Write −20 in 8-bit two’s complement.',
+    intro:'In two’s complement the left-most bit is worth ==−128==. To make a negative number: write the positive, ==flip every bit==, then ==add 1==.',
+    s:[['Write +20 in binary','0001 0100','16 + 4 = 20.'],
+       ['Flip (invert) every bit','1110 1011','Every 0 becomes 1 and every 1 becomes 0.'],
+       ['Add 1','1110 1100','1011 + 1 = 1100: 1 + 1 = 10, write 0 carry 1, and so on.'],
+       ['Check','−128 + 64 + 32 + 8 + 4 = −20 ✓','A negative number ==always starts with 1==.']],
+    tip:'The most common mistake is forgetting to ==add 1== after flipping.' },
+  { q:'What denary value does the two’s complement number 10110100 represent?',
+    intro:'Read it like normal binary, but the 128 column is ==−128==.',
+    s:[['Place values','−128  64  32  16  8  4  2  1','Only the first column changes sign.'],
+       ['Columns with a 1','−128, 32, 16, 4',''],
+       ['Add','−128 + 32 + 16 + 4','32 + 16 + 4 = 52.'],
+       ['Answer','−128 + 52 = −76','']],
+    tip:'If the first bit is 0, the number is positive and you read it normally.' },
+  { q:'An image is 1024 × 768 pixels with a colour depth of 24 bits. Calculate its file size in MiB.',
+    intro:'Every pixel needs ==colour depth== bits. So total bits = ==number of pixels × colour depth==. Then convert units: ÷ 8 for bytes, ÷ 1024 for KiB, ÷ 1024 again for MiB.',
+    s:[['Write the formula','size = width × height × colour depth','Show this line: it can earn a mark on its own.'],
+       ['Number of pixels','1024 × 768 = 786 432 pixels',''],
+       ['Total bits','786 432 × 24 = 18 874 368 bits','Each pixel uses 24 bits.'],
+       ['Bits → bytes','18 874 368 ÷ 8 = 2 359 296 bytes','==8 bits = 1 byte==.'],
+       ['Bytes → KiB','2 359 296 ÷ 1024 = 2304 KiB','==1024 bytes = 1 KiB== (not 1000).'],
+       ['KiB → MiB','2304 ÷ 1024 = 2.25 MiB','Give the ==unit== in the final answer.']],
+    tip:'Without a calculator, simplify first: 1024 × 768 × 24 ÷ 8 ÷ 1024 ÷ 1024 = 768 × 3 ÷ 1024 = 2304 ÷ 1024 = 2.25. The 1024s cancel.' },
+  { q:'A 60-second mono sound is sampled at 44 100 Hz with a sample resolution of 16 bits. Calculate its size in MiB.',
+    intro:'The sound is measured ==44 100 times every second==, and each sample is stored in ==16 bits==.',
+    s:[['Write the formula','size = sample rate × resolution × seconds',''],
+       ['Bits per second','44 100 × 16 = 705 600 bits','That is how much data one second of sound needs.'],
+       ['Total bits','705 600 × 60 = 42 336 000 bits','Multiply by the length in seconds.'],
+       ['→ bytes','42 336 000 ÷ 8 = 5 292 000 bytes',''],
+       ['→ KiB → MiB','5 292 000 ÷ 1024 ÷ 1024 ≈ 5.05 MiB','Stereo would need ==× 2== (two channels).']],
+    tip:'Higher sample rate or resolution makes the sound ==more accurate== but the file ==larger==. You can be asked to explain this.' },
+  { q:'Compress WWWWWWBBBWWWW using run-length encoding.',
+    intro:'RLE finds ==runs== (the same value repeated) and stores each run as ==count + value==.',
+    s:[['Find the runs','WWWWWW | BBB | WWWW','Draw a line wherever the letter changes.'],
+       ['Count each run','6 W, 3 B, 4 W',''],
+       ['Write count + value','6W3B4W',''],
+       ['How much smaller?','13 characters → 6 characters','RLE works best when there are ==long runs== of the same data.'],
+       ['Lossy or lossless?','Lossless','You can rebuild the ==exact original== from 6W3B4W, so ==no data is lost==.']],
+    tip:'RLE can make data ==bigger== if there are no repeats: ABCD → 1A1B1C1D.' }
+];
+
+/* ---------- WORKED: transmission ---------- */
+const WK_TRANS = [
+  { q:'A system uses EVEN parity. The parity bit is the first bit. Add the parity bit to the data 1100101.', prose:true,
+    intro:'With ==even parity==, the parity bit is chosen so the ==total number of 1s== in the byte is ==even==.',
+    s:[['Count the 1s in the data','1100101 has ==4== ones','1 + 1 + 0 + 0 + 1 + 0 + 1 = 4.'],
+       ['Is it already even?','4 is ==even==','So we do not need another 1.'],
+       ['Choose the parity bit','parity bit = ==0==','If the count had been odd, the parity bit would be 1 to make it even.'],
+       ['Byte sent','0 1100101 → ==01100101==','']],
+    tip:'With ==odd parity== the rule flips: the parity bit makes the total number of 1s ==odd==.' },
+  { q:'A system uses ODD parity. The byte 10110110 is received. Has an error been detected?', prose:true,
+    intro:'The receiver ==counts the 1s== and checks the count matches the agreed parity.',
+    s:[['Count the 1s','1 0 1 1 0 1 1 0 → ==5== ones',''],
+       ['What does odd parity need?','an ==odd== number of 1s','5 is odd.'],
+       ['Conclusion','==No error detected==','The byte passes the check.']],
+    tip:'Say “==no error detected==”, not “no error”. A two-bit error could still be hiding.' },
+  { q:'A system uses EVEN parity. The byte 10110011 is received. What happens?', prose:true,
+    intro:'If the count is wrong, the receiver knows ==at least one bit changed== during transmission.',
+    s:[['Count the 1s','1 0 1 1 0 0 1 1 → ==5== ones',''],
+       ['Even parity needs an even count','5 is ==odd==','So a bit must have changed.'],
+       ['What happens','==Error detected==: the receiver asks for the data to be ==resent==',''],
+       ['Can it say which bit?','==No==','One parity bit only shows that something is wrong, not where. A ==parity block== is needed to find the exact bit.']],
+    tip:'Errors are caused by ==interference==, which can make data ==lost, gained or changed==.' },
+  { q:'Why can a parity check miss an error? Use an example with even parity.', prose:true,
+    intro:'Parity only checks whether the count of 1s is even or odd.',
+    s:[['Byte sent','1011 0010 → 4 ones (==even==) ✓',''],
+       ['Two bits flip on the way','1011 ==11==10 → 6 ones','Bits 5 and 6 both changed from 0 to 1.'],
+       ['Receiver’s check','6 is ==even==, so it ==passes==','The data is wrong but the check says it is fine.'],
+       ['Conclusion','Parity ==cannot detect an even number of bit changes==','This is the limitation examiners ask for.']],
+    tip:'This is a favourite 1-mark “state a limitation” answer.' },
+  { q:'Describe how a file is sent across the internet using packet switching.', prose:true,
+    intro:'Big files are not sent in one piece. They are cut into ==packets==, and each packet finds its own way.',
+    s:[['1. Split','The file is ==broken into packets==. Each gets a ==header== with the destination IP, source IP and ==packet number==.','The packet number is what lets the file be rebuilt later.'],
+       ['2. Route','Each packet is sent ==independently==. ==Routers== choose the best route for each one at that moment.','So packets of the same file can take ==different routes==.'],
+       ['3. Arrive','Packets can ==arrive out of order== (packet 3 before packet 1).','Some routes are busier or longer than others.'],
+       ['4. Rebuild','The receiver ==reassembles the packets in order using the packet numbers==.',''],
+       ['5. Missing?','Any lost packet is ==requested again==.','']],
+    tip:'A 4-mark “describe” answer needs 4 separate points, in order. Use these five steps.' },
+  { q:'A printer is connected by a 3 m cable. Should the connection use serial or parallel transmission? Explain.', prose:true,
+    intro:'Think about ==distance== and ==reliability==.',
+    s:[['Choice','==Serial== (e.g. USB)',''],
+       ['Reason 1','Bits travel ==one at a time== down ==one wire==, so they ==arrive in order==.',''],
+       ['Reason 2','==No skewing==: with parallel, bits on different wires can arrive at slightly different times over longer cables.','Skewing gets worse as the cable gets longer.'],
+       ['Reason 3','Serial cables are ==cheaper== and thinner (fewer wires).','']],
+    tip:'Parallel is only better over ==very short== distances, such as ==inside the computer==.' },
+  { q:'Explain why a video call needs full-duplex transmission.', prose:true,
+    intro:'Match the ==direction== of data to how the device is used.',
+    s:[['What happens in a video call','Both people ==talk and listen at the same time==.',''],
+       ['So data must travel','==in both directions at the same time==.','Half-duplex would make people take turns, like a walkie-talkie.'],
+       ['That is','==full-duplex==','']],
+    tip:'Simplex = ==one way==. Half-duplex = ==both ways, one at a time==. Full-duplex = ==both ways at once==.' },
+  { q:'Three bytes are sent: 25, 40, 61. The checksum is their total. The receiver gets 25, 44, 61. Explain how the error is found.', prose:true,
+    intro:'A ==checksum== is a value ==calculated from the data== and sent ==with it==. (Real systems use a more complex calculation, but the idea is the same.)',
+    s:[['Sender calculates','25 + 40 + 61 = ==126==; sends the data ==and== the checksum 126',''],
+       ['Receiver recalculates','25 + 44 + 61 = ==130==','The receiver does the ==same calculation== on what it received.'],
+       ['Compare','130 ≠ 126','The two values ==do not match==.'],
+       ['Result','==Error detected== → data is ==resent==','']],
+    tip:'Key words: ==calculated from the data==, ==sent with the data==, ==recalculated==, ==compared==.' },
+  { q:'Describe how an echo check works, and give one drawback.', prose:true,
+    intro:'The receiver sends the data ==straight back== to the sender.',
+    s:[['1','The receiver ==sends a copy of the data back== to the sender.',''],
+       ['2','The sender ==compares== the returned copy with the ==original==.',''],
+       ['3','If they ==differ==, there was an error and the data is ==resent==.',''],
+       ['Drawback','The sender ==cannot tell if the error happened on the way there or on the way back==. It also ==doubles== the data sent.','']],
+    tip:'Do not mix it up with ARQ: an echo check sends the ==data== back; ARQ sends an ==acknowledgement==.' },
+  { q:'Describe how ARQ makes sure data arrives correctly.', prose:true,
+    intro:'ARQ (Automatic Repeat reQuest) uses ==acknowledgements== and a ==timeout==.',
+    s:[['1','The sender sends the data and starts a ==timer (timeout)==.',''],
+       ['2','The receiver checks the data (e.g. with a checksum). If it is correct, it sends back a positive ==acknowledgement==.',''],
+       ['3','If the sender gets the acknowledgement in time, it sends the next packet.',''],
+       ['4','If ==no acknowledgement== arrives before the ==timeout==, the sender ==resends== the data ==automatically==.','This covers data that is ==lost== as well as data that is ==damaged==.']],
+    tip:'Two keywords earn most of the marks here: ==acknowledgement== and ==timeout==.' },
+  { q:'Show how the check digit of the ISBN 978-0-306-40615-? is worked out.', prose:true,
+    intro:'A ==check digit== is calculated from the other digits and added to the end. It catches ==typing mistakes==. (You will not be asked this exact method; it shows the idea.)',
+    s:[['Multiply digits by 1, 3, 1, 3 …','9×1 + 7×3 + 8×1 + 0×3 + 3×1 + 0×3 + 6×1 + 4×3 + 0×1 + 6×3 + 1×1 + 5×3','Alternate weights of 1 and 3.'],
+       ['Add them','9 + 21 + 8 + 0 + 3 + 0 + 6 + 12 + 0 + 18 + 1 + 15 = ==93==',''],
+       ['Find what makes the next 10','93 → 100 needs ==7==','10 − (93 mod 10) = 10 − 3 = 7.'],
+       ['Check digit','==7== → ISBN 978-0-306-40615-7','If someone types a digit wrong or ==swaps two digits==, the check digit will not match.']],
+    tip:'Check digits are for ==data entry==; parity, checksum, echo and ARQ are for ==data transmission==.' },
+  { q:'Riya wants to send Arjun a file using asymmetric encryption. Describe how this keeps it secure.', prose:true,
+    intro:'Asymmetric encryption uses a ==pair of keys==: a ==public key== anyone can have, and a ==private key== only the owner has.',
+    s:[['1. Get the key','Riya uses ==Arjun’s public key==.','Arjun can give his public key to anyone. It can only lock, not unlock.'],
+       ['2. Encrypt','The file becomes ==ciphertext== (scrambled).',''],
+       ['3. Send','The ciphertext is sent across the network. A hacker might ==intercept== it.','Encryption does ==not stop== interception.'],
+       ['4. Decrypt','Only ==Arjun’s private key== can turn it back into plaintext. He ==never shares== it.',''],
+       ['Result','An intercepted copy is ==meaningless== to the hacker.','']],
+    tip:'With ==symmetric== encryption the same key does both jobs, so the key itself has to be sent and ==could be intercepted==.' }
+];
+
+/* ---------- WORKED: logic ---------- */
+const WK_LOGIC = [
+  { q:'Complete the truth table for X = (A AND B) OR NOT C.',
+    intro:'With 3 inputs there are 2 × 2 × 2 = ==8 rows==. Add a ==working column== for each bracket, then combine them for X.',
+    s:[['List the inputs','000, 001, 010, 011, 100, 101, 110, 111','Count up in binary. C changes every row, B every 2 rows, A every 4 rows. Then you never miss a row.'],
+       ['Working column P = A AND B','0 0 0 0 0 0 1 1','AND is 1 only when ==both== A and B are 1: the last two rows.'],
+       ['Working column Q = NOT C','1 0 1 0 1 0 1 0','NOT ==flips== C: where C is 0, Q is 1.'],
+       ['X = P OR Q','1 0 1 0 1 0 1 1','OR is 1 when ==at least one== of P or Q is 1.'],
+       ['Full table', () => workingTable(EXPR[9], rowsFor(3)),'In the exam you can add these working columns: they help you avoid mistakes.']],
+    tip:'Each pair of rows is usually worth 1 mark, so a careful table is easy marks.' },
+  { q:'A = 0, B = 1, C = 1. Find X for X = (A NOR B) OR (B AND C).',
+    intro:'Work out each ==bracket first==, then the gate that joins them.',
+    s:[['First bracket: A NOR B','0 NOR 1 = 0','NOR is 1 ==only when both inputs are 0==. B is 1, so the answer is 0.'],
+       ['Second bracket: B AND C','1 AND 1 = 1','AND: both are 1, so 1.'],
+       ['Join with OR','0 OR 1 = 1','OR gives 1 when at least one input is 1.'],
+       ['Answer','X = 1','']],
+    tip:'Write each bracket’s value on its own line. It stops you mixing things up.' },
+  { q:'A heater H switches on when the temperature is low (T = 1) and the window is not open (W = 0), or when the override switch S is on (S = 1). Write the logic expression.',
+    intro:'Turn the sentence into logic piece by piece. “and” → ==AND==, “or” → ==OR==, “not / is off / is 0” → ==NOT==.',
+    s:[['Split the sentence at “or”','(temperature low and window not open)  OR  (override on)','The word ==“or”== between two conditions is usually the main gate.'],
+       ['First condition','T AND NOT W','“Window is not open” means W must be 0, so we need ==NOT W== to make it 1.'],
+       ['Second condition','S',''],
+       ['Join them','H = (T AND NOT W) OR S','Put ==brackets== round the first condition so it is worked out first.']],
+    tip:'Check with a test case: T = 1, W = 0, S = 0 → (1 AND 1) OR 0 = 1, so the heater is on ✓.' },
+  { q:'Draw a logic circuit for X = (A OR B) AND NOT (B AND C).',
+    intro:'Draw ==one gate per operator==. Start with the brackets (they are closest to the inputs) and end with the gate that joins everything.',
+    s:[['Gates needed','OR, AND, NOT, AND','Count the words: A ==OR== B, ==AND==, ==NOT==, B ==AND== C. That is 4 gates.'],
+       ['Bracket 1','OR gate with inputs A and B',''],
+       ['Bracket 2','AND gate with inputs B and C, then a NOT gate after it','B is used twice, so its wire ==splits== (draw a dot where it branches).'],
+       ['Final gate','AND gate joining (A OR B) and NOT (B AND C)','The final gate always gives X.'],
+       ['Circuit', () => svgEx2(),'Label every input (A, B, C) and the output (X).']],
+    tip:'Use the exact shapes: AND has a flat back and round front; OR has a curved back and pointed front; a small circle means NOT.' },
+  { q:'A and B go into a NOR gate. Its output and C go into an AND gate. Write the expression and find X when A = 0, B = 0, C = 1.',
+    intro:'Read a circuit from ==left to right==, writing what each gate outputs.',
+    s:[['First gate','A NOR B','Write the output of the first gate as a bracket.'],
+       ['Second gate','(A NOR B) AND C',''],
+       ['Expression','X = (A NOR B) AND C',''],
+       ['Substitute: A NOR B','0 NOR 0 = 1','NOR gives 1 only when ==both inputs are 0==.'],
+       ['Then AND C','1 AND 1 = 1',''],
+       ['Answer','X = 1','']],
+    tip:'Write the expression first, then substitute values. Marks are given for both.' },
+  { q:'A gate gives these outputs: 00 → 0, 01 → 1, 10 → 1, 11 → 0. Which gate is it?',
+    intro:'Look for the ==pattern== in the output column.',
+    s:[['When is it 1?','01 and 10','Only when the inputs are ==different==.'],
+       ['What about 11?','0','So it cannot be OR (OR gives 1 for 11).'],
+       ['Gate','XOR','XOR = “==exclusive OR==”: one or the other, ==but not both==.']],
+    tip:'Learn each gate’s pattern for 00, 01, 10, 11: AND 0001 · OR 0111 · NAND 1110 · NOR 1000 · XOR 0110.' }
+];
+
 /* ---------- content ---------- */
 const CH = {
 data: {
@@ -440,26 +738,7 @@ data: {
     { svg: svgPixels, cap: 'A tiny 1-bit image. Each pixel is one bit.' },
     { svg: svgRLE, cap: 'Run-length encoding replaces each run with a count and the value.' }
   ],
-  worked: [
-    { q: 'Convert 150 to 8-bit binary.',
-      s: [['Largest place value that fits','150 − 128 = 22  → 1 under 128'],['Next','22 − 16 = 6  → 1 under 16'],['Next','6 − 4 = 2  → 1 under 4'],['Next','2 − 2 = 0  → 1 under 2'],['Fill the rest with 0','1001 0110']] },
-    { q: 'Convert the binary number 10010110 to hexadecimal.',
-      s: [['Split into nibbles','1001 | 0110'],['First nibble','1001 = 8 + 1 = 9'],['Second nibble','0110 = 4 + 2 = 6'],['Answer','96']] },
-    { q: 'Convert the hexadecimal number 3E to denary.',
-      s: [['Place values','16 and 1'],['First digit','3 × 16 = 48'],['Second digit','E = 14'],['Add','48 + 14 = 62']] },
-    { q: 'Add 11000000 and 01000001. Is there an overflow?',
-      s: [['In denary (to check)','192 + 65 = 257'],['Add the bits','1 0000 0001 (9 bits)'],['8-bit register keeps','0000 0001'],['Conclusion','257 > 255, so OVERFLOW ERROR: the 9th bit cannot be stored']] },
-    { q: 'Perform a logical right shift of two places on 00110100. What is the effect?',
-      s: [['Start','0011 0100 = 52'],['Move every bit 2 places right; fill with 0s','0000 1101'],['New value','13'],['Effect','divided by 4 (52 ÷ 4 = 13)']] },
-    { q: 'Write −20 in 8-bit two’s complement.',
-      s: [['Write +20','0001 0100'],['Invert every bit','1110 1011'],['Add 1','1110 1100'],['Check','−128 + 64 + 32 + 8 + 4 = −20 ✓']] },
-    { q: 'An image is 1024 × 768 pixels with a colour depth of 24 bits. Calculate its file size in MiB.',
-      s: [['Bits','1024 × 768 × 24 = 18 874 368 bits'],['Bytes (÷ 8)','2 359 296 bytes'],['KiB (÷ 1024)','2304 KiB'],['MiB (÷ 1024)','2.25 MiB']] },
-    { q: 'A 60-second mono sound is sampled at 44 100 Hz with a sample resolution of 16 bits. Calculate its size in MiB.',
-      s: [['Bits','44 100 × 16 × 60 = 42 336 000 bits'],['Bytes (÷ 8)','5 292 000 bytes'],['KiB (÷ 1024)','5167.97 KiB'],['MiB (÷ 1024)','≈ 5.05 MiB']] },
-    { q: 'Compress WWWWWWBBBWWWW using run-length encoding.',
-      s: [['Find the runs','WWWWWW | BBB | WWWW'],['Count each run','6 W, 3 B, 4 W'],['Write count + value','6W3B4W'],['Saving','13 characters → 6 characters']] }
-  ],
+  worked: WK_DATA,
   drill: 'data',
   quiz: [
     { q: 'Why do computers use binary?', o: ['It is easier for people to read', 'Their switches/logic gates have only two states', 'It uses less electricity than hex', 'Binary numbers are shorter'], a: 1, w: 'Logic gates / transistors are either ==on or off==, so data must be in binary.' },
@@ -522,20 +801,7 @@ trans: {
     { svg: svgParity, cap: 'An even parity check detecting a changed bit.' },
     { svg: svgEncrypt, cap: 'Symmetric and asymmetric encryption.' }
   ],
-  worked: [
-    { q: 'A system uses EVEN parity. Add the parity bit (as the first bit) to the data 1100101.',
-      s: [['Count the 1s in the data','1100101 has 4 ones'],['Even parity: total must be even','4 is already even → parity bit = 0'],['Byte sent','0 1100101 = 01100101']] },
-    { q: 'A system uses ODD parity. The byte 10110110 is received. Has an error been detected?',
-      s: [['Count the 1s','1+0+1+1+0+1+1+0 = 5'],['Odd parity needs an odd total','5 is odd'],['Conclusion','No error detected']] },
-    { q: 'A system uses EVEN parity. The byte 10110011 is received. Has an error been detected?',
-      s: [['Count the 1s','5'],['Even parity needs an even total','5 is odd'],['Conclusion','Error detected → ask the sender to resend']] },
-    { q: 'Explain why a video call needs full-duplex transmission.', prose: true,
-      s: [['Both people','==talk and listen at the same time=='],['So data must travel','==in both directions at the same time=='],['That is','==full-duplex==']] },
-    { q: 'Describe how ARQ makes sure data arrives correctly.', prose: true,
-      s: [['1','The receiver checks the data and sends an ==acknowledgement== if it is correct'],['2','The sender starts a ==timeout== when it sends the data'],['3','If ==no acknowledgement== arrives before the timeout…'],['4','…the sender ==resends== the data']] },
-    { q: 'Riya wants to send Arjun a file using asymmetric encryption. Describe how this works.', prose: true,
-      s: [['Encrypt','Riya encrypts the file with Arjun’s ==public key=='],['Send','The ==ciphertext== is sent across the network'],['Decrypt','Only Arjun’s ==private key== can decrypt it; he never shares it'],['If intercepted','The data is ==meaningless== without the private key']] }
-  ],
+  worked: WK_TRANS,
   drill: 'trans',
   quiz: [
     { q: 'Which part of a packet holds the destination IP address?', o: ['header', 'payload', 'trailer', 'checksum'], a: 0, w: 'IP addresses and the packet number are in the ==header==.' },
@@ -580,16 +846,7 @@ logic: {
     { svg: svgGates, cap: 'The six gate symbols and their truth tables. Learn to draw them exactly.' },
     { svg: svgCircuit, cap: 'A circuit for X = (A AND B) OR NOT C. P and Q are the working columns in the truth table.' }
   ],
-  worked: [
-    { q: 'Complete the truth table for X = (A AND B) OR NOT C.',
-      s: [['Inputs (8 rows)','ABC = 000 001 010 011 100 101 110 111'],['Working: A AND B','0 0 0 0 0 0 1 1'],['Working: NOT C','1 0 1 0 1 0 1 0'],['X = OR of the two','1 0 1 0 1 0 1 1']] },
-    { q: 'A heater H switches on when the temperature is low (T = 1) and the window is not open (W = 0), or when the override switch S is on. Write the logic expression.',
-      s: [['Condition 1','T AND NOT W'],['Condition 2','S'],['Join with OR','H = (T AND NOT W) OR S']] },
-    { q: 'In a circuit, A and B go into a NOR gate. Its output and C go into an AND gate. Write the expression and find X when A = 0, B = 0, C = 1.',
-      s: [['Expression','X = (A NOR B) AND C'],['A NOR B with A = 0, B = 0','1 (both inputs 0)'],['1 AND C with C = 1','1'],['Answer','X = 1']] },
-    { q: 'A gate gives these outputs: 00 → 0, 01 → 1, 10 → 1, 11 → 0. Which gate is it?',
-      s: [['Output 1 when…','the inputs are different'],['Both 1 gives 0','so it is not OR'],['Gate','XOR']] }
-  ],
+  worked: WK_LOGIC,
   drill: 'logic',
   lab: true,
   quiz: [
@@ -767,8 +1024,9 @@ function renderChapter(k){
   let body = '';
   if (sub_ === 'learn') body = c.learn.map(cardHTML).join('') + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
   if (sub_ === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
-  if (sub_ === 'worked') body = c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>
-      <ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(st[1])}</span></li>`).join('')}</ol>
+  if (sub_ === 'worked') body = `<div class="card"><h3>How to use these</h3><p class="note">Read the question and try it on paper. Then tap <b>Next step</b>. Each step shows the working, and the line underneath explains <b>why</b>. The exam tip appears when you reach the end.</p></div>` + c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>${w.intro ? `<p class="intro"><b>Key idea:</b> ${fmt(w.intro)}</p>` : ''}
+      <ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(typeof st[1] === 'function' ? st[1]() : st[1])}</span>${st[2] ? `<span class="why2">${fmt(st[2])}</span>` : ''}</li>`).join('')}</ol>
+      ${w.tip ? `<p class="tip" hidden><b>Exam tip:</b> ${fmt(w.tip)}</p>` : ''}
       <div class="row"><button class="btn primary" data-next>Next step</button><button class="btn ghost" data-all>Show all</button><button class="btn ghost" data-hide>Hide</button></div></div>`).join('');
   if (sub_ === 'drill') body = `<div class="card" id="drill"></div>`;
   if (sub_ === 'lab') body = renderLab();
@@ -825,7 +1083,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (t.closest('[data-next]')) { const n = items.find(li => li.hidden); if (n) n.hidden = false; }
     if (t.closest('[data-all]')) items.forEach(li => li.hidden = false);
     if (t.closest('[data-hide]')) items.forEach(li => li.hidden = true);
-    wk.querySelector('[data-next]').disabled = !items.some(li => li.hidden); return; }
+    wk.querySelector('[data-next]').disabled = !items.some(li => li.hidden); const tp = wk.querySelector('.tip'); if (tp) tp.hidden = items.some(li => li.hidden); return; }
   const qz = t.closest('[data-quiz]');
   if (qz && t.closest('[data-o]') && !qz.dataset.done) {
     const q = CH[cur].quiz[+qz.dataset.quiz]; const j = +t.closest('[data-o]').dataset.o; qz.dataset.done = '1';
