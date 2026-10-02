@@ -211,6 +211,11 @@ svg .grnt{fill:var(--good);font-weight:700}
 .steps li.now .st{background:var(--kw-bg);color:var(--kw-ink);border-radius:4px;padding:0 4px}
 a{color:var(--accent)}
 @media (prefers-reduced-motion: no-preference){.fadein{animation:fi .25s ease-out}@keyframes fi{from{transform:translateY(4px)}to{transform:none}}}
+.tabwrap{display:flex;align-items:center;gap:6px;min-width:0}
+.tabwrap .tabs{flex:1;min-width:0;scroll-behavior:smooth}
+.tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
+.tabarrow:hover{border-color:var(--accent);color:var(--accent)}
+.tabarrow[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -221,7 +226,7 @@ a{color:var(--accent)}
       <a href="./" class="examdate">← All subjects</a>
       <div class="examdate">Computer Science exam · Fri 9 Oct · 2 h</div>
     </div>
-    <nav class="tabs" role="tablist" id="tabs"></nav>
+    <div class="tabwrap"><button class="tabarrow" id="tabL" type="button" aria-label="Scroll chapters left" hidden>&#8249;</button><nav class="tabs" role="tablist" id="tabs"></nav><button class="tabarrow" id="tabR" type="button" aria-label="Scroll chapters right">&#8250;</button></div>
   </div>
 </header>
 <main class="wrap" id="view"></main>
@@ -1378,6 +1383,18 @@ document.getElementById('view').addEventListener('click', e => {
   const ci = e.target.closest('[data-ci]'); if (ci) { const k = ci.dataset.ci; if (k === 'A') CA = 1 - CA; if (k === 'B') CB = 1 - CB; if (k === 'C') CC = 1 - CC; drawLab(); }
 });
 renderTabs(); render();
+
+/* chapter tabs: arrow buttons, mouse wheel and keep the selected tab in view (for screens without touch) */
+(function(){
+  const nav = document.getElementById('tabs'), L = document.getElementById('tabL'), R = document.getElementById('tabR');
+  const upd = () => { const m = nav.scrollWidth - nav.clientWidth; L.hidden = nav.scrollLeft <= 2; R.hidden = nav.scrollLeft >= m - 2; };
+  L.onclick = () => nav.scrollBy({ left: -nav.clientWidth * .7, behavior: 'smooth' });
+  R.onclick = () => nav.scrollBy({ left: nav.clientWidth * .7, behavior: 'smooth' });
+  nav.addEventListener('scroll', upd); window.addEventListener('resize', upd);
+  nav.addEventListener('wheel', e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { nav.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive: false });
+  new MutationObserver(() => { const a = nav.querySelector('[aria-selected="true"]'); if (a) a.scrollIntoView({ inline: 'center', block: 'nearest' }); upd(); }).observe(nav, { childList: true });
+  const a = nav.querySelector('[aria-selected="true"]'); if (a) a.scrollIntoView({ inline: 'center', block: 'nearest' }); upd();
+})();
 </script>
 </body>
 </html>
