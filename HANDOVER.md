@@ -28,12 +28,13 @@ Handed over from a Claude chat session on 2 Oct 2026. Read `CLAUDE.md` for how t
 - [x] Chemistry pack — same, plus dot-and-cross / periodic table / reactivity series / salt-prep diagrams, 34-mark mock
 - [x] CS pack — same, plus logic gate explorer and circuit simulator ("Try it"), truth-table drill, 33 explanatory worked examples with side working tables, 36-mark mock
 - [x] Physics and Chemistry worked examples now explanatory (Key idea, why lines, exam tip, live side table)
+- [x] Maths pack `maths.html` (8 topics from the term 1 portion list, 44 worked examples, 28 drill generators). Drill kinds `text` and `frac` added.
 - [x] Drill generators self-checked (Chemistry 5,100 items, CS 7,200 items: every answer key accepted)
 
 ## Open tasks (suggested order)
 1. **DONE (2 Oct 2026): Physics and Chemistry worked examples → CS style.** Notes live in an `enhance({...})` block before `renderChapter` in each file (intro, why per step, tip, side-table rows). Original brief: add `intro`, `why` lines, `tip`, and side boards where a table helps (e.g. density formula triangle filling in; particle-count table for atoms; ion-charge balancing for formulae; reactivity-series pointer for displacement). Port `updateBoard`, `attach`, the board CSS and the worked-example renderer from `cs.html`. Priority if before Mon 5 Oct.
 2. Bring `physics.html` onto the newer engine (proper `<head>`, `sub_`, `judge()` with kinds) so all three share one engine.
-3. After the exams: start the long-term question bank. Next subjects: Maths (portion: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, probability), then deepen Physics/Chemistry/CS across the full 0625/0620/0478 syllabuses. Suggested structure: one page per subject, topics as tabs, same engine.
+3. **In progress:** whole-syllabus packs. Maths first topics are built. Next: get the school's Term 2 and Term 3 portion sheets (Maths, Physics, Chemistry, CS, Biology), then add chapters and a Biology pack. Original note: Next subjects: Maths (portion: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, probability), then deepen Physics/Chemistry/CS across the full 0625/0620/0478 syllabuses. Suggested structure: one page per subject, topics as tabs, same engine.
 4. Optional: a short diagnostic test per subject to find weak topics.
 5. Optional: a shared progress view for the parent (would need a backend or a hosted store; currently progress is per-device `localStorage`).
 

@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maths Revision Pack</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: lab-notebook study app — sticky chapter bar, one column of working cards on a faint graph-paper ground (shared with the Physics pack) */
+:root{
+  --paper:#EEF3F6; --card:#FFFFFF; --ink:#132235; --muted:#56687C; --line:#D3DDE6; --grid:rgba(19,34,53,.045);
+  --accent:#0A6C96; --accent-soft:#E1F0F7; --hot:#D2470E; --hot-soft:#FCE9E0;
+  --kw-bg:#FFE45C; --kw-ink:#132235;
+  --good:#2B8A3E; --good-soft:#E3F4E6; --bad:#C92A2A; --bad-soft:#FBE4E4;
+  --water:#DCEEF6; --cu:#4A9BD8; --copper:#B4602B; --zinc:#A3ADB8; --ppt:#F2E6A0; --noble:#E6F2E0;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#0E1620; --card:#16212D; --ink:#E5EDF4; --muted:#93A4B6; --line:#2A3949; --grid:rgba(229,237,244,.035);
+  --accent:#5DB8E2; --accent-soft:#16344A; --hot:#FF8C55; --hot-soft:#3E2216;
+  --kw-bg:#6B5A00; --kw-ink:#FFF3B0;
+  --good:#69DB7C; --good-soft:#173322; --bad:#FF8787; --bad-soft:#3D1C1C;
+  --water:#1B3A4D; --cu:#2F7DBA; --copper:#D07A40; --zinc:#6C7884; --ppt:#6B6232; --noble:#1D3322; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:0 64px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.6rem;font-weight:800}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+mark.kw{background:var(--kw-bg);color:var(--kw-ink);padding:0 .2em;border-radius:3px;font-weight:700;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--line)}
+.top .wrap{padding-block:12px 10px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+.brand h1 span{color:var(--accent)}
+.examdate{font-family:var(--mono);font-size:.78rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;font-weight:700;font-size:.95rem}
+.tab small{font-family:var(--mono);font-weight:400;color:var(--muted);margin-right:6px;font-size:.75rem}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tab[aria-selected="true"] small{color:inherit;opacity:.7}
+.sub{display:flex;gap:4px;flex-wrap:wrap;margin-block:20px 18px;border-bottom:2px solid var(--line)}
+.subtab{border:0;background:none;padding:10px 12px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px}
+.subtab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.chhead{display:flex;flex-direction:column;gap:6px;margin-top:22px}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lede{color:var(--muted);max-width:62ch}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.formula{font-family:var(--mono);font-size:1.05rem;font-weight:600;background:var(--accent-soft);color:var(--ink);border-radius:8px;padding:10px 14px;align-self:flex-start;max-width:100%;overflow-x:auto;display:flex;flex-direction:column;gap:4px}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse;font-size:.95rem;min-width:100%}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 12px 7px 0;text-align:left;vertical-align:top}
+.tbl th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.mistakes{background:var(--hot-soft);border-color:transparent}
+.mistakes h3{color:var(--hot)}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+figure .svgbox{overflow-x:auto}
+figure svg{display:block;width:100%;min-width:440px;height:auto}
+figcaption{font-size:.95rem}
+svg .ln{stroke:var(--ink);stroke-width:2;fill:none}
+svg .thin{stroke:var(--muted);stroke-width:1;fill:none}
+svg .glass{stroke:var(--ink);stroke-width:2;fill:none}
+svg .acc{stroke:var(--accent);stroke-width:2.5;fill:none}
+svg .hotl{stroke:var(--hot);stroke-width:2.5;fill:none}
+svg .accf{fill:var(--accent)}
+svg .hotf{fill:var(--hot)}
+svg .inkf{fill:var(--ink)}
+svg .cardf{fill:var(--card)}
+svg .shell{fill:none;stroke:var(--muted);stroke-width:1.4}
+svg .atom{fill:var(--card);stroke:var(--ink);stroke-width:1.8}
+svg .nuc{fill:var(--accent-soft);stroke:var(--ink);stroke-width:1.4}
+svg .cross{stroke:var(--hot);stroke-width:2.4}
+svg .metal{fill:var(--accent-soft);stroke:var(--line)}
+svg .nonmetal{fill:var(--card);stroke:var(--line)}
+svg .noble{fill:var(--noble);stroke:var(--line)}
+svg .cuf{fill:var(--cu)}
+svg .waterf{fill:var(--water)}
+svg .copperf{fill:var(--copper)}
+svg .zincf{fill:var(--zinc);stroke:var(--ink);stroke-width:1.2}
+svg .pptf{fill:var(--ppt);stroke:var(--ink);stroke-width:1}
+svg text{fill:var(--ink);font-family:var(--body);font-size:13px}
+svg .lbl{font-weight:700}
+svg .sym{font-family:var(--display);font-weight:800;font-size:22px;text-anchor:middle}
+svg .mid{text-anchor:middle}
+svg .end{text-anchor:end}
+svg .mut{fill:var(--muted)}
+svg .acct{fill:var(--accent);font-weight:700}
+svg .hott{fill:var(--hot);font-weight:700}
+svg .mono{font-family:var(--mono)}
+.q{font-weight:700}
+.steps{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--mono);font-size:.8rem;font-weight:600;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;grid-row:span 2}
+.steps .sl{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.steps .st{font-family:var(--mono);font-size:1rem;min-width:0;overflow-wrap:anywhere}
+.steps li.final .st{font-weight:700;color:var(--good)}
+.steps .prose{font-family:var(--body)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:9px 16px;font-weight:700}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+.drillq{font-size:1.1rem}
+.answer{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.answer input{font:inherit;font-family:var(--mono);font-size:1.1rem;padding:9px 12px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:12ch}
+.unit{font-family:var(--mono);color:var(--muted)}
+.fb{border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.fb.ok{background:var(--good-soft)}
+.fb.no{background:var(--bad-soft)}
+.fb .verdict{font-weight:700}
+.fb.ok .verdict{color:var(--good)}
+.fb.no .verdict{color:var(--bad)}
+.stat{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 14px;font-weight:400}
+.opt.right{border-color:var(--good);background:var(--good-soft);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.why{font-size:.95rem;border-left:3px solid var(--accent);padding-left:12px}
+.scorebar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.big-score{font-family:var(--display);font-size:1.8rem;font-weight:800}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.marks{font-family:var(--mono);font-size:.85rem;color:var(--muted);white-space:nowrap}
+.ms{display:flex;flex-direction:column;gap:6px}
+.ms-intro{font-size:.9rem;color:var(--muted)}
+.point{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 12px;font-weight:400}
+.point .box{width:24px;height:24px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;font-weight:700;color:var(--card)}
+.point[aria-pressed="true"]{border-color:var(--good)}
+.point[aria-pressed="true"] .box{background:var(--good);border-color:var(--good)}
+.got{font-family:var(--mono);font-weight:600}
+.note{font-size:.9rem;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.prog{display:flex;flex-direction:column;gap:6px}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.pl{display:flex;justify-content:space-between;font-size:.9rem;gap:8px}
+.pl span:last-child{font-family:var(--mono);color:var(--muted);white-space:nowrap}
+.cw{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.cw dt{font-weight:700;color:var(--accent)}
+.cw dd{margin:0}
+.plan{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.plan div{position:relative;padding:0 0 12px 18px}
+.plan div::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--accent)}
+.plan b{font-family:var(--mono);font-size:.82rem;color:var(--muted);display:block;font-weight:600}
+.timer{font-family:var(--mono);font-size:2.2rem;font-weight:600;font-variant-numeric:tabular-nums}
+.timer.low{color:var(--hot)}
+a{color:var(--accent)}
+@media (prefers-reduced-motion: no-preference){.fadein{animation:fi .25s ease-out}@keyframes fi{from{transform:translateY(4px)}to{transform:none}}}
+.intro{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:.98rem;margin:0}
+.steps .why2{grid-column:2;font-family:var(--body);font-size:.93rem;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.steps li.now .st{color:var(--ink)}
+.tip{background:var(--kw-bg);color:var(--kw-ink);border-radius:8px;padding:10px 14px;font-size:.95rem;margin:0}
+.tip mark.kw{background:transparent;padding:0;text-decoration:underline}
+.wk-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,330px);grid-template-areas:"steps board";gap:18px;align-items:start}
+.wk-split .steps{grid-area:steps}
+.wk-split .board{grid-area:board;position:sticky;top:150px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;overflow-x:auto}
+@media (max-width:700px){.wk-split{grid-template-columns:minmax(0,1fr);grid-template-areas:"board" "steps"}.wk-split .board{top:118px;z-index:2}}
+.wb{border-collapse:collapse;font-size:.88rem;width:100%}
+.wb th,.wb td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;background:var(--card)}
+.wb th{color:var(--muted);font-weight:400;white-space:nowrap;width:1%}
+.wb td{font-family:var(--mono);overflow-wrap:anywhere}
+.wb td.q{color:var(--muted);font-weight:400}
+.wb td.fill{background:var(--good-soft);color:var(--good);font-weight:700}
+.wb tr.cur th,.wb tr.cur td{outline:2px solid var(--hot);outline-offset:-2px}
+.bnote{font-size:.9rem;margin:0}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>Maths <span>Revision</span> Pack</h1>
+      <a href="./" class="examdate">← All subjects</a>
+      <div class="examdate">Grade 8 · Cambridge IGCSE</div>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+<main class="wrap" id="view"></main>
+
+<script>
+/* ---------- helpers ---------- */
+const fmt = s => String(s).replace(/==(.+?)==/g,'<mark class="kw">$1</mark>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const rint = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const shuffle = a => { const b = a.slice(); for (let i = b.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]] = [b[j],b[i]]; } return b; };
+const num = x => String(Math.round(x*100)/100);
+let store = {};
+try { store = JSON.parse(localStorage.getItem('mathpack-v1') || '{}') || {}; } catch(e) { store = {}; }
+store.ticks = store.ticks || {}; store.quiz = store.quiz || {}; store.drill = store.drill || {};
+const save = () => { try { localStorage.setItem('mathpack-v1', JSON.stringify(store)); } catch(e) {} };
+/* ---------- diagrams ---------- */
+function arrowDefs(id){
+  return `<defs><marker id="a-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="inkf"/></marker>
+  <marker id="b-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="accf"/></marker></defs>`;
+}
+const T = (x, y, s, cls = '') => `<text x="${x}" y="${y}" class="${cls}">${s}</text>`;
+const sq = (x, y, s, cls = 'metal') => `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="3" class="${cls}"/>`;
+
+function svgBalance(){
+  const units = (x0, y0, n, per) => Array.from({length:n}, (_, i) => sq(x0 + (i % per) * 22, y0 - Math.floor(i / per) * 22, 18, 'nonmetal')).join('');
+  return `<svg viewBox="0 0 560 250" role="img" aria-label="Balance showing 2x + 3 = 11">
+  <line x1="60" y1="70" x2="500" y2="70" class="ln"/><polygon points="280,70 255,130 305,130" class="nuc"/>
+  <line x1="110" y1="70" x2="80" y2="140" class="thin"/><line x1="110" y1="70" x2="170" y2="140" class="thin"/><rect x="70" y="140" width="110" height="8" rx="3" class="inkf"/>
+  <line x1="450" y1="70" x2="400" y2="140" class="thin"/><line x1="450" y1="70" x2="500" y2="140" class="thin"/><rect x="390" y="140" width="120" height="8" rx="3" class="inkf"/>
+  ${sq(78, 108, 28, 'metal')}${T(92, 128, 'x', 'mid lbl')}${sq(108, 108, 28, 'metal')}${T(122, 128, 'x', 'mid lbl')}
+  ${units(142, 128, 3, 3)}
+  ${units(398, 128, 6, 6)}${units(398, 106, 5, 6)}
+  ${T(125, 175, '2x + 3', 'mid mono lbl')}${T(450, 175, '11', 'mid mono lbl')}${T(280, 175, '=', 'mid mono acct')}
+  ${T(280, 212, 'Take 3 from both sides: 2x = 8. Halve both sides: x = 4.', 'mid acct')}${T(280, 234, 'Keep the balance: do the same to both sides.', 'mid mut')}</svg>`;
+}
+function svgNumLine(){
+  const X = v => 60 + (v + 4) * 45;
+  const base = y => `<line x1="40" y1="${y}" x2="520" y2="${y}" class="ln"/>` + [-4,-3,-2,-1,0,1,2,3,4,5,6].map(v => `<line x1="${X(v)}" y1="${y-5}" x2="${X(v)}" y2="${y+5}" class="ln"/>${T(X(v), y+22, v, 'mid mono')}`).join('');
+  return `<svg viewBox="0 0 560 230" role="img" aria-label="Inequalities on a number line">
+  ${base(60)}<line x1="${X(2)}" y1="60" x2="520" y2="60" class="acc"/><circle cx="${X(2)}" cy="60" r="7" class="cardf" style="stroke:var(--accent);stroke-width:2.5"/>${T(X(2), 26, 'x > 2  (open circle)', 'acct')}
+  ${base(160)}<line x1="40" y1="160" x2="${X(-1)}" y2="160" class="acc"/><circle cx="${X(-1)}" cy="160" r="7" class="accf"/>${T(X(-1)+60, 126, 'x ≤ −1  (filled circle)', 'acct')}</svg>`;
+}
+function svgParallel(){
+  const P1 = [229, 70], P2 = [337, 150];
+  return `<svg viewBox="0 0 760 230" role="img" aria-label="Angles on parallel lines">
+  <line x1="40" y1="70" x2="420" y2="70" class="ln"/><line x1="40" y1="150" x2="420" y2="150" class="ln"/><line x1="190" y1="20" x2="360" y2="200" class="acc"/>
+  ${T(205, 62, 'a', 'hott')}${T(313, 142, 'b', 'hott')}${T(238, 92, 'c', 'hott')}${T(346, 142, 'd', 'hott')}
+  ${T(60, 60, '▶▶', 'mut')}${T(60, 140, '▶▶', 'mut')}
+  ${T(440, 60, 'a = b   corresponding (F shape)', 'lbl')}${T(440, 100, 'b = c   alternate (Z shape)', 'lbl')}${T(440, 140, 'c + d = 180°   co-interior (C shape)', 'lbl')}
+  ${T(440, 180, 'Lines must be parallel (arrows).', 'mut')}</svg>`;
+}
+function svgHexagon(){
+  const cx = 170, cy = 115, r = 85, pts = [0,1,2,3,4,5].map(k => { const a = (-90 + 60 * k) * Math.PI / 180; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; });
+  const f = p => p.map(v => v.toFixed(1)).join(',');
+  const p0 = pts[0], p1 = pts[1], dx = p1[0] - p0[0], dy = p1[1] - p0[1], L = Math.hypot(dx, dy);
+  const ext = [p1[0] + dx / L * 55, p1[1] + dy / L * 55];
+  return `<svg viewBox="0 0 620 230" role="img" aria-label="Interior and exterior angles of a regular hexagon">
+  <polygon points="${pts.map(f).join(' ')}" class="metal" style="stroke:var(--ink);stroke-width:2"/>
+  <line x1="${f(p1).split(',')[0]}" y1="${f(p1).split(',')[1]}" x2="${f(ext).split(',')[0]}" y2="${f(ext).split(',')[1]}" class="hotl"/>
+  ${T(p1[0] - 38, p1[1] + 8, '120°', 'mid mono lbl')}${T(p1[0] + 30, p1[1] + 38, '60°', 'mid mono hott')}
+  ${T(300, 60, 'Regular hexagon: n = 6', 'lbl')}${T(300, 88, 'Interior sum = (6 − 2) × 180 = 720°', 'mono')}${T(300, 112, 'Each interior = 720 ÷ 6 = 120°', 'mono')}
+  ${T(300, 136, 'Exterior angles add to 360°', 'mono')}${T(300, 160, 'Each exterior = 360 ÷ 6 = 60°', 'mono hott')}${T(300, 190, 'interior + exterior = 180°', 'mut')}</svg>`;
+}
+function svgScatter(){
+  const pts = [[1,35],[2,42],[3,48],[4,55],[5,52],[6,66],[7,70],[8,78]], X = h => 70 + h * 45, Y = sc => 190 - sc * 1.9;
+  return `<svg viewBox="0 0 700 240" role="img" aria-label="Scatter graph with a line of best fit">
+  <line x1="60" y1="200" x2="450" y2="200" class="ln"/><line x1="60" y1="20" x2="60" y2="200" class="ln"/>
+  ${pts.map(([h, sc]) => `<circle cx="${X(h)}" cy="${Y(sc)}" r="5" class="accf"/>`).join('')}
+  <line x1="${X(0.5)}" y1="${Y(32)}" x2="${X(8.5)}" y2="${Y(81)}" class="hotl"/>
+  ${T(255, 232, 'Hours revised', 'mid lbl')}${T(14, 110, 'Score', 'lbl')}
+  ${T(470, 70, 'Positive correlation:', 'lbl')}${T(470, 90, 'as one goes up,', '')}${T(470, 108, 'the other goes up.', '')}
+  ${T(470, 140, 'Red line = line of', 'hott')}${T(470, 158, 'best fit. Use it to', 'hott')}${T(470, 176, 'estimate values.', 'hott')}</svg>`;
+}
+function svgBars(){
+  const d = [['Football', 24], ['Cricket', 18], ['Swim', 12], ['Other', 6]];
+  return `<svg viewBox="0 0 700 230" role="img" aria-label="Bar chart and pie angles">
+  <line x1="50" y1="190" x2="330" y2="190" class="ln"/><line x1="50" y1="20" x2="50" y2="190" class="ln"/>
+  ${d.map(([n, v], i) => `<rect x="${70 + i * 65}" y="${190 - v * 6}" width="48" height="${v * 6}" class="metal" style="stroke:var(--accent);stroke-width:2"/>${T(94 + i * 65, 208, n, 'mid')}${T(94 + i * 65, 184 - v * 6, v, 'mid mono lbl')}`).join('')}
+  ${T(360, 50, 'Pie chart angles (60 students)', 'lbl')}
+  ${d.map(([n, v], i) => T(360, 80 + i * 24, `${n}: ${v} ÷ 60 × 360 = ${v * 6}°`, 'mono')).join('')}
+  ${T(360, 190, 'Angles add to 360°', 'acct')}</svg>`;
+}
+function svgAreas(){
+  return `<svg viewBox="0 0 720 210" role="img" aria-label="Area formulas">
+  <rect x="20" y="40" width="120" height="70" class="metal" style="stroke:var(--ink);stroke-width:2"/>${T(80, 130, 'l × w', 'mid mono lbl')}${T(80, 152, 'rectangle', 'mid mut')}
+  <polygon points="190,110 310,110 250,40" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="250" y1="40" x2="250" y2="110" class="hotl" stroke-dasharray="4 3"/>${T(256, 82, 'h', 'hott')}${T(250, 130, 'b', 'mid mono')}${T(250, 152, '½ × b × h', 'mid mono lbl')}${T(250, 174, 'triangle', 'mid mut')}
+  <polygon points="360,110 500,110 475,40 395,40" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="395" y1="40" x2="395" y2="110" class="hotl" stroke-dasharray="4 3"/>${T(435, 32, 'a', 'mid mono')}${T(430, 130, 'b', 'mid mono')}${T(386, 82, 'h', 'end hott')}${T(430, 152, '½ × (a + b) × h', 'mid mono lbl')}${T(430, 174, 'trapezium', 'mid mut')}
+  <circle cx="620" cy="75" r="45" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="620" y1="75" x2="665" y2="75" class="hotl"/>${T(644, 68, 'r', 'mid hott')}${T(620, 150, 'π × r²', 'mid mono lbl')}${T(620, 172, 'circle (area)', 'mid mut')}${T(620, 192, 'C = 2 × π × r', 'mid mono')}</svg>`;
+}
+function svgCyl(){
+  return `<svg viewBox="0 0 620 240" role="img" aria-label="Cylinder volume">
+  <ellipse cx="130" cy="60" rx="70" ry="20" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="60" y1="60" x2="60" y2="170" class="ln"/><line x1="200" y1="60" x2="200" y2="170" class="ln"/><path d="M60 170 A70 20 0 0 0 200 170" class="ln"/>
+  <line x1="130" y1="60" x2="200" y2="60" class="hotl"/>${T(166, 52, 'r', 'mid hott')}<line x1="226" y1="60" x2="226" y2="170" class="thin"/>${T(240, 120, 'h', 'hott')}
+  ${T(300, 70, 'Volume = area of circle × height', 'lbl')}${T(300, 100, 'V = π × r² × h', 'mono acct')}${T(300, 130, 'Any prism: V = area of end × length', 'mono')}
+  ${T(300, 170, 'Units: cm × cm × cm = cm³', 'mut')}${T(300, 192, '1 cm³ = 1 mL     1000 cm³ = 1 litre', 'mut')}</svg>`;
+}
+function svgFracWall(){
+  const rows = [1, 2, 3, 4, 6], W = 480, X0 = 40;
+  return `<svg viewBox="0 0 560 240" role="img" aria-label="Fraction wall showing 2/3 = 4/6">
+  ${rows.map((n, i) => Array.from({length:n}, (_, j) => { const hl = (n === 3 && j < 2) || (n === 6 && j < 4); return `<rect x="${X0 + j * W / n}" y="${20 + i * 40}" width="${W / n}" height="34" class="${hl ? 'accf' : 'metal'}" style="stroke:var(--ink);stroke-width:1.5;${hl ? 'fill-opacity:.4' : ''}"/>${T(X0 + (j + .5) * W / n, 42 + i * 40, n === 1 ? '1' : '1/' + n, 'mid mono')}`; }).join('')).join('')}
+  ${T(280, 232, '2/3 = 4/6: the shaded parts cover the same length', 'mid acct')}</svg>`;
+}
+function svgMachine(){
+  const box = (x, t) => `<rect x="${x}" y="40" width="80" height="44" rx="8" class="metal" style="stroke:var(--accent);stroke-width:2"/>${T(x + 40, 68, t, 'mid mono lbl')}`;
+  const box2 = (x, t) => `<rect x="${x}" y="150" width="80" height="44" rx="8" class="nonmetal" style="stroke:var(--hot);stroke-width:2"/>${T(x + 40, 178, t, 'mid mono lbl')}`;
+  return `<svg viewBox="0 0 560 240" role="img" aria-label="Function machine and its inverse">${arrowDefs('m')}
+  ${T(30, 68, 'x', 'mid mono lbl')}<line x1="44" y1="62" x2="96" y2="62" class="ln" marker-end="url(#a-m)"/>${box(100, '× 3')}<line x1="180" y1="62" x2="226" y2="62" class="ln" marker-end="url(#a-m)"/>${box(230, '+ 2')}<line x1="310" y1="62" x2="366" y2="62" class="ln" marker-end="url(#a-m)"/>${T(390, 68, 'y = 3x + 2', 'mono lbl')}
+  ${T(30, 178, 'x', 'mid mono lbl')}<line x1="96" y1="172" x2="44" y2="172" class="hotl" marker-end="url(#a-m)"/>${box2(100, '÷ 3')}<line x1="226" y1="172" x2="184" y2="172" class="hotl" marker-end="url(#a-m)"/>${box2(230, '− 2')}<line x1="366" y1="172" x2="314" y2="172" class="hotl" marker-end="url(#a-m)"/>${T(390, 178, 'y', 'mono lbl')}
+  ${T(280, 120, 'Forwards (blue)', 'mid acct')}${T(280, 224, 'Inverse: go backwards, do the opposite operation, in reverse order (red)', 'mid hott')}</svg>`;
+}
+function svgLine(){
+  const X = v => 200 + v * 50, Y = v => 130 - v * 14;
+  return `<svg viewBox="0 0 700 240" role="img" aria-label="Graph of y = 2x + 1">
+  ${[-2,-1,0,1,2,3,4].map(v => `<line x1="${X(v)}" y1="20" x2="${X(v)}" y2="${Y(-2)}" class="thin" style="opacity:.35"/>${T(X(v), Y(-2) + 16, v, 'mid mono mut')}`).join('')}
+  <line x1="${X(-2) - 10}" y1="${Y(0)}" x2="${X(4) + 10}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="14" x2="${X(0)}" y2="${Y(-2)}" class="ln"/>
+  <line x1="${X(-1)}" y1="${Y(-1)}" x2="${X(3.5)}" y2="${Y(8)}" class="acc"/>
+  ${[[0,1],[1,3],[2,5]].map(([a, b]) => `<circle cx="${X(a)}" cy="${Y(b)}" r="4.5" class="hotf"/>`).join('')}
+  <polyline points="${X(0)},${Y(1)} ${X(1)},${Y(1)} ${X(1)},${Y(3)}" class="hotl" fill="none"/>${T(X(.5), Y(1) + 15, '1', 'mid hott')}${T(X(1) + 12, Y(2), '2', 'hott')}
+  ${T(450, 50, 'y = 2x + 1', 'mono acct')}${T(450, 80, 'gradient = 2', 'mono')}${T(450, 102, '(up 2 for every 1 across)', 'mut')}${T(450, 132, 'y-intercept = 1', 'mono')}${T(450, 154, '(where it crosses the y-axis)', 'mut')}</svg>`;
+}
+function svgRatioBar(){
+  return `<svg viewBox="0 0 560 190" role="img" aria-label="Sharing Rs 360 in the ratio 5 to 4">
+  ${Array.from({length:9}, (_, i) => `<rect x="${40 + i * 50}" y="50" width="50" height="44" class="${i < 5 ? 'accf' : 'hotf'}" style="fill-opacity:.35;stroke:var(--ink);stroke-width:1.5"/>${T(65 + i * 50, 78, '40', 'mid mono')}`).join('')}
+  ${T(165, 38, '5 parts', 'mid acct')}${T(390, 38, '4 parts', 'mid hott')}${T(165, 118, '5 × 40 = 200', 'mid mono lbl')}${T(390, 118, '4 × 40 = 160', 'mid mono lbl')}
+  ${T(280, 156, 'Share Rs 360 in the ratio 5 : 4.   Total parts = 9.   One part = 360 ÷ 9 = 40.', 'mid mut')}</svg>`;
+}
+function svgSDT(){
+  return `<svg viewBox="0 0 560 220" role="img" aria-label="Speed distance time triangle">
+  <polygon points="140,20 60,170 220,170" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="76" y1="120" x2="204" y2="120" class="ln"/><line x1="140" y1="120" x2="140" y2="170" class="ln"/>
+  ${T(140, 98, 'D', 'mid mono lbl')}${T(100, 153, 'S', 'mid mono lbl')}${T(180, 153, 'T', 'mid mono lbl')}
+  ${T(290, 60, 'Cover what you want to find:', 'lbl')}${T(290, 92, 'D = S × T', 'mono acct')}${T(290, 118, 'S = D ÷ T', 'mono acct')}${T(290, 144, 'T = D ÷ S', 'mono acct')}${T(290, 184, 'Check units: km and hours give km/h.', 'mut')}</svg>`;
+}
+function svgScale(){
+  const X = p => 50 + p * 460;
+  return `<svg viewBox="0 0 560 190" role="img" aria-label="Probability scale from 0 to 1">
+  <line x1="50" y1="80" x2="510" y2="80" class="ln"/>${[0, .25, .5, .75, 1].map(p => `<line x1="${X(p)}" y1="70" x2="${X(p)}" y2="90" class="ln"/>${T(X(p), 112, p === 0 ? '0' : p === 1 ? '1' : p === .5 ? '1/2' : p === .25 ? '1/4' : '3/4', 'mid mono lbl')}`).join('')}
+  ${T(50, 50, 'impossible', 'mid acct')}${T(X(.25), 50, 'unlikely', 'mid mut')}${T(X(.5), 50, 'even chance', 'mid acct')}${T(X(.75), 50, 'likely', 'mid mut')}${T(510, 50, 'certain', 'mid acct')}
+  ${T(280, 160, 'P(event) = number of favourable outcomes ÷ total number of outcomes', 'mid mono')}${T(280, 182, 'P(not A) = 1 − P(A)', 'mid mono acct')}</svg>`;
+}
+function svgTree(){
+  const br = (x1, y1, x2, y2, lab, ly) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="acc"/>${T((x1 + x2) / 2 - 8, (y1 + y2) / 2 + (ly || 0), lab, 'mid mono hott')}`;
+  return `<svg viewBox="0 0 640 250" role="img" aria-label="Tree diagram: two picks with replacement">
+  ${br(50, 125, 200, 65, '0.4', -8)}${br(50, 125, 200, 185, '0.6', 16)}
+  ${br(200, 65, 380, 30, '0.4', -6)}${br(200, 65, 380, 100, '0.6', 14)}${br(200, 185, 380, 150, '0.4', -6)}${br(200, 185, 380, 220, '0.6', 14)}
+  ${T(205, 62, 'R', 'lbl')}${T(205, 182, 'B', 'lbl')}${T(392, 34, 'RR: 0.4 × 0.4 = 0.16', 'mono')}${T(392, 104, 'RB: 0.4 × 0.6 = 0.24', 'mono')}${T(392, 154, 'BR: 0.6 × 0.4 = 0.24', 'mono')}${T(392, 224, 'BB: 0.6 × 0.6 = 0.36', 'mono')}
+  ${T(16, 130, 'start', 'mut')}${T(560, 245, 'total = 1', 'mid acct')}</svg>`;
+}
+/* ---------- content ---------- */
+const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
+const CH = {
+eq: {
+  code: 'Algebra', name: 'Equations and inequalities',
+  lede: 'Solve step by step and keep both sides balanced. For inequalities, one rule is new: flip the sign when you multiply or divide by a negative.',
+  learn: [
+    { h: 'Solving equations', p: ['An equation is like a ==balance==. Whatever you do to one side, do to the ==other side==.'], list: ['Undo ==+ and −== first, then undo ==× and ÷==.', 'With ==brackets==, expand them first.', 'With letters on both sides, ==collect the x terms== on one side (the side that keeps x positive).', 'Always ==check== by putting your answer back into the original equation.'], f: ['2x + 3 = 11', '2x = 8', 'x = 4'] },
+    { h: 'Inequalities', list: ['< means less than, > means greater than.', '≤ means less than ==or equal to==, ≥ means greater than or equal to.', 'Solve them ==exactly like equations==.', 'But if you multiply or divide by a ==negative number==, ==reverse the sign==.', 'On a number line, an ==open circle== means not included (< or >). A ==filled circle== means included (≤ or ≥).'] },
+    { h: 'Forming equations from words', table: [['Words', 'Algebra'], ['a number', 'x'], ['3 more than a number', 'x + 3'], ['twice a number', '2x'], ['3 less than twice a number', '2x − 3'], ['a number divided by 4', 'x ÷ 4'], ['perimeter of a rectangle', '2 × length + 2 × width']] }
+  ],
+  mistakes: ['Changing only ==one side== of the equation.', 'Forgetting to multiply ==every term== in the brackets: 3(x + 2) = 3x + 6, not 3x + 2.', 'Not ==reversing the inequality== when dividing by a negative.', 'Moving a term across without ==changing its sign==.', 'Not checking the answer by ==substituting==.'],
+  diagrams: [
+    { svg: svgBalance, cap: 'An equation is a balance. Do the ==same to both sides== to keep it level.' },
+    { svg: svgNumLine, cap: 'Inequalities on a number line: ==open circle== for < and >, ==filled circle== for ≤ and ≥.' }
+  ],
+  worked: [
+    W('Solve 3x + 5 = 20.', 'Undo the operations in ==reverse order==: the + 5 first, then the × 3.', 'Always ==check== by substituting back.', '3x + 5 = 20',
+      [['Undo + 5', '3x = 20 − 5 = 15', 'Subtract 5 from both sides to remove the + 5.'], ['Undo × 3', 'x = 15 ÷ 3 = 5', 'Divide both sides by 3.'], ['Check', '3 × 5 + 5 = 20 ✓', 'Put x = 5 in the original. It gives 20, so it is right.']],
+      [['Original', '3x + 5 = 20', -1], ['After − 5', '3x = 15', 0], ['x', '5', 1], ['Check', '3 × 5 + 5 = 20 ✓', 2]]),
+    W('Solve 5x − 4 = 2x + 11.', 'x is on ==both sides==. Collect the x terms on one side first.', 'Move the ==smaller== x term, so your x stays positive.', 'Collect x, then solve',
+      [['Subtract 2x from both sides', '3x − 4 = 11', 'The smaller x term (2x) is removed, leaving 5x − 2x = 3x.'], ['Add 4 to both sides', '3x = 15', 'Now the − 4 is gone from the left.'], ['Divide by 3', 'x = 5', 'One x is worth 15 ÷ 3.'], ['Check both sides', 'LHS 25 − 4 = 21,  RHS 10 + 11 = 21 ✓', 'Both sides must give the same number.']],
+      [['Original', '5x − 4 = 2x + 11', -1], ['Collect x', '3x − 4 = 11', 0], ['Collect numbers', '3x = 15', 1], ['x', '5', 2], ['Check', '21 = 21 ✓', 3]]),
+    W('Solve 3(x − 2) = 18.', 'With ==brackets==, either ==expand first== or divide both sides by the number outside.', 'Multiply ==every term== inside the brackets.', '3(x − 2) = 3x − 6',
+      [['Expand the brackets', '3x − 6 = 18', '3 × x = 3x and 3 × (−2) = −6.'], ['Add 6 to both sides', '3x = 24', 'This removes the − 6.'], ['Divide by 3', 'x = 8', ''], ['Check', '3 × (8 − 2) = 3 × 6 = 18 ✓', '']],
+      [['Original', '3(x − 2) = 18', -1], ['Expanded', '3x − 6 = 18', 0], ['3x', '24', 1], ['x', '8', 2], ['Check', '18 = 18 ✓', 3]]),
+    W('Solve 4x − 3 > 13 and show it on a number line.', 'Solve an inequality like an equation. Only the ==sign== is different.', 'A strict > sign uses an ==open circle==.', 'Same steps as an equation',
+      [['Add 3 to both sides', '4x > 16', 'Same as an equation. Keep the > sign.'], ['Divide by 4', 'x > 4', 'Dividing by a positive number does not change the sign.'], ['Number line', 'Open circle at 4, arrow to the right', '4 is not included, so the circle is open.']],
+      [['Inequality', '4x − 3 > 13', -1], ['4x', '> 16', 0], ['x', '> 4', 1], ['Number line', 'open circle at 4, arrow right', 2]]),
+    W('Solve 5 − 2x ≥ 1.', 'This one has ==−2x==. Dividing by a negative ==reverses== the sign.', 'Substitute a test value to check the direction, e.g. x = 0 gives 5 ≥ 1, true.', 'Divide by negative: flip the sign',
+      [['Subtract 5 from both sides', '−2x ≥ −4', '1 − 5 = −4.'], ['Divide by −2 and REVERSE the sign', 'x ≤ 2', 'Dividing by a negative flips ≥ into ≤.'], ['Check with x = 0', '5 − 0 = 5 ≥ 1 ✓', '0 is less than 2, and it works, so the direction is right.']],
+      [['Inequality', '5 − 2x ≥ 1', -1], ['−2x', '≥ −4', 0], ['x (flipped)', '≤ 2', 1], ['Test x = 0', '5 ≥ 1 ✓', 2]]),
+    W('I think of a number, multiply it by 3, then subtract 4. The answer is 17. Find the number.', 'Call the number ==x==, turn the words into an ==equation==, then solve it.', 'Always say what x stands for: “Let the number be x”.', 'Words → equation',
+      [['Let the number be x', '3x − 4 = 17', '“Multiply by 3” is 3x. “Subtract 4” is − 4.'], ['Add 4 to both sides', '3x = 21', ''], ['Divide by 3', 'x = 7', ''], ['Check', '3 × 7 − 4 = 17 ✓', 'Does 7 give 17 in the story? Yes.']],
+      [['Equation', '3x − 4 = 17', 0], ['3x', '21', 1], ['The number', '7', 2], ['Check', '17 ✓', 3]], true)
+  ],
+  drill: 'eq',
+  quiz: [
+    { q: 'Solve x + 7 = 12.', o: ['19', '5', '−5', '7'], a: 1, w: 'Subtract 7 from both sides: x = 12 − 7 = ==5==.' },
+    { q: 'Solve 4x = 28.', o: ['24', '32', '7', '112'], a: 2, w: 'Divide both sides by 4: x = 28 ÷ 4 = ==7==.' },
+    { q: 'Solve 2x − 5 = 9.', o: ['2', '7', '4', '14'], a: 1, w: 'Add 5: 2x = 14. Divide by 2: x = ==7==.' },
+    { q: 'When must you reverse an inequality sign?', o: ['when adding a number', 'when multiplying or dividing by a negative number', 'always', 'when the answer is negative'], a: 1, w: 'Only when you ==multiply or divide by a negative==.' },
+    { q: 'Which number line shows x > 3?', o: ['filled circle at 3, arrow right', 'open circle at 3, arrow right', 'open circle at 3, arrow left', 'filled circle at 3, arrow left'], a: 1, w: '> means 3 is ==not included==: open circle. Greater: arrow to the ==right==.' },
+    { q: 'Three more than twice a number is 15. Which equation?', o: ['3x + 2 = 15', '2x + 3 = 15', '2x − 3 = 15', '5x = 15'], a: 1, w: '“Twice a number” = 2x. “Three more” = + 3.' }
+  ],
+  exam: [
+    { q: 'Solve (a) 4x − 7 = 21 [2] (b) 3(x + 2) = 2x + 11 [3]', m: 5,
+      p: ['4x = 28 (==add 7== to both sides)', '==x = 7==', 'Expands the bracket: ==3x + 6==', 'Collects x terms: x = 11 − 6', '==x = 5=='] },
+    { q: 'Solve 5x + 2 < 3x + 12. Then write down the largest integer value of x.', m: 3,
+      p: ['==2x < 10==', '==x < 5==', 'Largest integer = ==4=='] },
+    { q: 'A rectangle has length (x + 5) cm and width x cm. Its perimeter is 38 cm. Form an equation and find the length.', m: 4,
+      p: ['==2(x + 5) + 2x = 38==', '4x + 10 = 38', '==x = 7==', 'Length = ==12 cm=='] }
+  ]
+},
+ang: {
+  code: 'Geometry', name: 'Angles',
+  lede: 'Learn the angle facts and always give a reason: examiners give marks for the fact you used, not just the number.',
+  learn: [
+    { h: 'Angle facts', list: ['Angles on a ==straight line== add to ==180°==.', 'Angles around a ==point== add to ==360°==.', '==Vertically opposite== angles are ==equal==.', 'Angles in a ==triangle== add to ==180°==.', 'Angles in a ==quadrilateral== add to ==360°==.', 'In an ==isosceles== triangle the two ==base angles== are equal.'] },
+    { h: 'Parallel lines', p: ['A line crossing two ==parallel== lines makes pairs of related angles.'], table: [['Name', 'Shape', 'Rule'], ['Corresponding', 'F', 'equal'], ['Alternate', 'Z', 'equal'], ['Co-interior', 'C', 'add to 180°']] },
+    { h: 'Polygons', list: ['Sum of interior angles = ==(n − 2) × 180°==, where n = number of sides.', 'Exterior angles of any polygon add to ==360°==.', '==Regular== polygon (all sides and angles equal): each exterior angle = ==360 ÷ n==.', 'Interior angle + exterior angle = ==180°==.'], table: [['Shape', 'Sides', 'Interior angle sum'], ['Triangle', '3', '180°'], ['Quadrilateral', '4', '360°'], ['Pentagon', '5', '540°'], ['Hexagon', '6', '720°'], ['Octagon', '8', '1080°'], ['Decagon', '10', '1440°']] }
+  ],
+  mistakes: ['Giving an angle with ==no reason==. Write “alternate angles are equal”.', 'Using the ==wrong parallel-line rule==: co-interior angles add to 180°, they are not equal.', 'Using n instead of ==(n − 2)== for the interior angle sum.', 'Forgetting the lines must be ==parallel== before using these rules.', 'Missing the ==degrees sign==.'],
+  diagrams: [
+    { svg: svgParallel, cap: 'Parallel lines (arrows): ==corresponding (F)== and ==alternate (Z)== angles are equal; ==co-interior (C)== angles add to 180°.' },
+    { svg: svgHexagon, cap: 'Regular polygon: ==exterior = 360 ÷ n==, ==interior = 180 − exterior==.' }
+  ],
+  worked: [
+    W('The angles of a triangle are x, 2x and 3x. Find x and the three angles.', 'The angles in a ==triangle add to 180°==. Write the angles as an ==equation==.', 'Say “angles in a triangle add to 180°” in your answer.', 'x + 2x + 3x = 180',
+      [['Angles add to 180°', 'x + 2x + 3x = 180', 'This is the angle fact for any triangle.'], ['Add like terms', '6x = 180', 'x + 2x + 3x = 6x.'], ['Divide by 6', 'x = 30', ''], ['The angles', '30°, 60°, 90°', 'x = 30, 2x = 60, 3x = 90. They add up to 180°.']],
+      [['Equation', 'x + 2x + 3x = 180', 0], ['6x', '180', 1], ['x', '30°', 2], ['Angles', '30°, 60°, 90°', 3]]),
+    W('Two parallel lines are cut by a transversal. One angle is 65°. Find (a) the alternate angle (b) the co-interior angle.', 'Use the ==Z shape== for alternate, ==C shape== for co-interior.', 'Write the ==reason== after each answer.', 'Alternate = equal. Co-interior add to 180°.',
+      [['Alternate angle', '65°', 'Alternate (Z) angles between parallel lines are ==equal==.'], ['Co-interior angle', '180 − 65', 'Co-interior (C) angles add to ==180°==.'], ['Answer', '115°', '180 − 65 = 115.']],
+      [['Given angle', '65°', -1], ['Alternate', '65°  (equal)', 0], ['Co-interior', '180 − 65 = 115°', 2]]),
+    W('Find the sum of the interior angles of a decagon. Then find each interior angle of a regular decagon.', 'A decagon has ==10 sides==. Use ==(n − 2) × 180==.', 'Check: 10 × 144 = 1440 ✓.', 'Sum = (n − 2) × 180',
+      [['Write the formula', 'sum = (n − 2) × 180', 'Learn this formula.'], ['Substitute n = 10', '(10 − 2) × 180 = 8 × 180', 'A decagon has 10 sides.'], ['Sum', '1440°', '8 × 180 = 1440.'], ['Each angle (regular)', '1440 ÷ 10 = 144°', 'All angles are equal, so divide by the number of angles.']],
+      [['n', '10', -1], ['(n − 2) × 180', '8 × 180', 1], ['Sum', '1440°', 2], ['Each angle', '1440 ÷ 10 = 144°', 3]]),
+    W('Each exterior angle of a regular polygon is 30°. How many sides does it have? Find each interior angle.', 'Exterior angles always add to ==360°==. For a regular polygon, ==n = 360 ÷ exterior angle==.', 'This is quicker than the interior angle formula.', 'n = 360 ÷ exterior',
+      [['Use the exterior angle rule', 'n = 360 ÷ 30', 'Each exterior angle × number of sides = 360.'], ['Number of sides', 'n = 12', '360 ÷ 30 = 12.'], ['Interior angle', '180 − 30 = 150°', 'Interior and exterior angles on a straight line add to 180°.']],
+      [['Exterior', '30°', -1], ['Sides n', '360 ÷ 30 = 12', 1], ['Interior', '180 − 30 = 150°', 2]]),
+    W('Triangle ABC is isosceles. The angle at the top is 40°. Find the base angles.', 'In an ==isosceles== triangle the two ==base angles are equal==.', 'Add the three angles to check: 40 + 70 + 70 = 180.', 'base angle = (180 − apex) ÷ 2',
+      [['Angles add to 180°', '180 − 40 = 140°', 'This leaves 140° for the two base angles together.'], ['Base angles are equal', '140 ÷ 2', 'Share the 140° between two equal angles.'], ['Answer', '70° each', 'Check: 40 + 70 + 70 = 180.']],
+      [['Top angle', '40°', -1], ['Left for base', '180 − 40 = 140°', 0], ['Each base angle', '140 ÷ 2 = 70°', 2]])
+  ],
+  drill: 'ang',
+  quiz: [
+    { q: 'Angles on a straight line add to…', o: ['90°', '180°', '270°', '360°'], a: 1, w: '==180°==.' },
+    { q: 'The angles in a quadrilateral add to…', o: ['180°', '270°', '360°', '540°'], a: 2, w: 'Two triangles fit in a quadrilateral: 2 × 180 = ==360°==.' },
+    { q: 'Alternate angles on parallel lines are…', o: ['equal', 'add to 180°', 'add to 90°', 'add to 360°'], a: 0, w: 'Alternate (Z) angles are ==equal==.' },
+    { q: 'The interior angles of a pentagon add to…', o: ['360°', '450°', '540°', '720°'], a: 2, w: '(5 − 2) × 180 = ==540°==.' },
+    { q: 'The exterior angles of any polygon add to…', o: ['180°', '360°', '540°', 'depends on the sides'], a: 1, w: 'Always ==360°==.' },
+    { q: 'Co-interior angles on parallel lines…', o: ['are equal', 'add to 180°', 'add to 360°', 'are 90° each'], a: 1, w: 'Co-interior (C) angles add to ==180°==.' }
+  ],
+  exam: [
+    { q: 'In triangle ABC, AB = AC and angle BAC = 50°. Work out angle ABC. Give a reason for each step.', m: 3,
+      p: ['Triangle is ==isosceles==, so the ==base angles are equal==.', '(180 − 50) ÷ 2 (==angles in a triangle add to 180°==)', '==65°=='] },
+    { q: 'A regular polygon has an exterior angle of 24°. (a) How many sides does it have? [2] (b) Find each interior angle. [1] (c) Find the sum of the interior angles. [2]', m: 5,
+      p: ['360 ÷ 24', '==15 sides==', '180 − 24 = ==156°==', '(15 − 2) × 180', '==2340°=='] },
+    { q: 'A straight line crosses two parallel lines. One angle is 112°. Find (a) the corresponding angle and (b) the co-interior angle. Give a reason for each.', m: 4,
+      p: ['==112°==', 'Reason: ==corresponding angles are equal==', '180 − 112 = ==68°==', 'Reason: ==co-interior angles add to 180°=='] }
+  ]
+},
+stat: {
+  code: 'Statistics', name: 'Statistical investigations',
+  lede: 'Collect, show and describe data. Know the three averages, how to draw a pie chart, and how to describe a scatter graph.',
+  learn: [
+    { h: 'The investigation cycle', list: ['==Problem==: write a clear question (and a hypothesis).', '==Plan==: decide what to collect and how (sample, survey, experiment).', '==Data==: collect it and record it in a table.', '==Analysis==: draw charts and calculate averages.', '==Conclusion==: answer the question and say how reliable it is.'] },
+    { h: 'Averages and range', list: ['==Mean== = total of the values ÷ how many values.', '==Median== = the ==middle value== when the data is in ==order==. With two middle values, find the number halfway between.', '==Mode== = the ==most common== value.', '==Range== = ==largest − smallest== (a measure of spread).', 'From a frequency table: mean = ==Σ(f × x) ÷ Σf==.'] },
+    { h: 'Charts and graphs', list: ['==Bar chart==: compare categories. Bars have gaps.', '==Pie chart==: angle = ==frequency ÷ total × 360°==.', '==Scatter graph==: shows if two things are related (==correlation==): positive, negative or none.', '==Line of best fit==: a straight line through the middle of the points, used to ==estimate==.', '==Bias==: a sample that is not ==representative== (for example, asking only the football team about favourite sports).'] }
+  ],
+  mistakes: ['Finding the median of ==unordered== data. Put the numbers in order first.', 'Giving the ==frequency== as the mode instead of the ==value==.', 'Forgetting to ==add up the angles to 360°== on a pie chart.', 'Saying “correlation” with no ==type== (positive/negative/none).', 'Dividing the total by the wrong count when finding the mean.'],
+  diagrams: [
+    { svg: svgScatter, cap: 'Scatter graph with a ==line of best fit==. This shows ==positive correlation==.' },
+    { svg: svgBars, cap: 'The same survey as a bar chart and as pie chart angles.' }
+  ],
+  worked: [
+    W('Find the mean, median, mode and range of 4, 7, 7, 9, 12, 15.', 'Four different questions about one list. The data is ==already in order==.', 'Show the total before you divide, so you can earn the method mark.', 'mean = total ÷ count',
+      [['Mean: add them up', '4 + 7 + 7 + 9 + 12 + 15 = 54', 'The mean needs the total of all the values.'], ['Mean: divide by the count', '54 ÷ 6 = 9', 'There are 6 values.'], ['Median', '(7 + 9) ÷ 2 = 8', 'Six values means two in the middle: 7 and 9. Halfway between is 8.'], ['Mode and range', 'mode = 7,  range = 15 − 4 = 11', '7 appears twice, the most. Range = biggest − smallest.']],
+      [['Total', '54', 0], ['Mean', '54 ÷ 6 = 9', 1], ['Median', '8', 2], ['Mode', '7', 3], ['Range', '15 − 4 = 11', 3]]),
+    W('Find the median of 9, 3, 7, 12, 5.', 'The data is ==not in order==. Order it first.', 'Never take the middle of an unordered list.', 'Order, then find the middle',
+      [['Put in order', '3, 5, 7, 9, 12', 'The median is the middle of an ordered list.'], ['Find the middle', '5 values, so the 3rd one', 'With 5 values, two lie on each side of the middle.'], ['Answer', 'median = 7', '']],
+      [['Ordered', '3, 5, 7, 9, 12', 0], ['Position', '3rd of 5', 1], ['Median', '7', 2]]),
+    W('Scores 1, 2, 3, 4 have frequencies 3, 5, 4, 2. Find the mean score.', 'From a frequency table: ==mean = Σ(f × x) ÷ Σf==.', 'Add a column f × x to your table.', 'mean = Σfx ÷ Σf',
+      [['Total frequency', '3 + 5 + 4 + 2 = 14', 'This is how many scores there are.'], ['Multiply score × frequency', '3 + 10 + 12 + 8 = 33', '1 × 3, 2 × 5, 3 × 4, 4 × 2. This is the total of all the scores.'], ['Divide', '33 ÷ 14 = 2.357…', 'Total of scores ÷ number of scores.'], ['Round', 'mean = 2.4 (1 d.p.)', '']],
+      [['Σf', '14', 0], ['Σfx', '33', 1], ['Mean', '33 ÷ 14 = 2.357…', 2], ['To 1 d.p.', '2.4', 3]]),
+    W('A survey of 60 students: football 24, cricket 18, swimming 12, other 6. Find the pie chart angles.', 'Each student is worth the same angle: ==360° ÷ 60 = 6°==.', 'Check the angles add up to 360°.', 'angle = frequency ÷ total × 360',
+      [['Angle for one student', '360 ÷ 60 = 6°', 'The whole circle represents all 60 students.'], ['Football and cricket', '24 × 6 = 144°,  18 × 6 = 108°', 'Multiply each frequency by 6.'], ['Swimming and other', '12 × 6 = 72°,  6 × 6 = 36°', ''], ['Check', '144 + 108 + 72 + 36 = 360° ✓', 'A correct pie chart always totals 360°.']],
+      [['Football', '24 × 6 = 144°', 1], ['Cricket', '18 × 6 = 108°', 1], ['Swimming', '12 × 6 = 72°', 2], ['Other', '6 × 6 = 36°', 2], ['Total', '360° ✓', 3]]),
+    W('The mean of 5 numbers is 8. A sixth number is added and the mean becomes 9. Find the sixth number.', 'Work with ==totals==, not means. Total = mean × count.', 'This is a common “harder” mean question. Use totals.', 'total = mean × count',
+      [['Total of the first 5', '5 × 8 = 40', 'Mean × count gives the total.'], ['Total of all 6', '6 × 9 = 54', 'The new mean is 9 for 6 numbers.'], ['Sixth number', '54 − 40 = 14', 'The extra total is the new number.']],
+      [['Old total', '5 × 8 = 40', 0], ['New total', '6 × 9 = 54', 1], ['Sixth number', '54 − 40 = 14', 2]])
+  ],
+  drill: 'stat',
+  quiz: [
+    { q: 'Which average is the most common value?', o: ['mean', 'median', 'mode', 'range'], a: 2, w: 'The ==mode==.' },
+    { q: 'The median of 3, 8, 5, 9, 1 is…', o: ['5', '8', '5.2', '9'], a: 0, w: 'In order: 1, 3, 5, 8, 9. The middle is ==5==.' },
+    { q: 'The range of 4, 9, 2, 15 is…', o: ['13', '15', '2', '7.5'], a: 0, w: '15 − 2 = ==13==.' },
+    { q: 'On a scatter graph, as one value goes up the other goes down. This is…', o: ['positive correlation', 'negative correlation', 'no correlation', 'a line of best fit'], a: 1, w: '==Negative correlation==.' },
+    { q: 'On a pie chart, a quarter of the data has an angle of…', o: ['25°', '45°', '90°', '180°'], a: 2, w: '360 ÷ 4 = ==90°==.' },
+    { q: 'A survey on favourite sport asks only the school football team. The sample is…', o: ['random', 'biased', 'large enough', 'fair'], a: 1, w: 'It is ==biased==: not ==representative== of everyone.' }
+  ],
+  exam: [
+    { q: 'Here are 8 numbers: 6, 9, 4, 9, 12, 8, 9, 5. Find (a) the mode [1] (b) the median [2] (c) the range [1] (d) the mean [2].', m: 6,
+      p: ['Mode = ==9==', 'Puts in order: ==4, 5, 6, 8, 9, 9, 9, 12==', 'Median = ==8.5==', 'Range = 12 − 4 = ==8==', 'Total = 62', 'Mean = 62 ÷ 8 = ==7.75=='] },
+    { q: 'A scatter graph shows temperature (x) and ice-cream sales (y). The points go upwards. Describe the correlation and say what a line of best fit is used for.', m: 3,
+      p: ['==Positive correlation==', 'As temperature rises, sales ==rise==', 'A line of best fit is used to ==estimate== (predict) sales for a given temperature'] },
+    { q: '40 pupils are asked how they travel to school: walk 10, bus 16, car 8, cycle 6. Calculate the angle for each on a pie chart.', m: 4,
+      p: ['One pupil = 360 ÷ 40 = ==9°==', 'Walk 10 × 9 = ==90°==, bus 16 × 9 = ==144°==', 'Car 8 × 9 = ==72°==', 'Cycle 6 × 9 = ==54°== (total 360°)'] }
+  ]
+},
+shape: {
+  code: 'Measure', name: 'Shapes and measurements',
+  lede: 'Area, volume and units. Write the formula, substitute, then give the answer with its unit.',
+  learn: [
+    { h: 'Perimeter and area', list: ['==Rectangle==: area = l × w. ==Triangle==: area = ==½ × b × h==.', '==Parallelogram==: area = b × h (==perpendicular== height).', '==Trapezium==: area = ==½ × (a + b) × h==, where a and b are the parallel sides.', '==Circle==: area = ==πr²==, circumference = ==2πr== (or πd).', 'Use π = 3.14 unless the question says otherwise.'] },
+    { h: 'Volume', list: ['==Cuboid==: V = l × w × h.', '==Prism==: V = ==cross-section area × length==.', '==Cylinder==: V = ==πr²h== (a circular prism).', 'Surface area of a cuboid = ==2(lw + lh + wh)==.'] },
+    { h: 'Units', table: [['Convert', 'Rule'], ['1 m to cm', '× 100'], ['1 m² to cm²', '× 10 000'], ['1 cm³ to mL', '1 cm³ = 1 mL'], ['1 litre', '1000 cm³'], ['1 m³', '1 000 000 cm³'], ['Area unit', 'cm², m²'], ['Volume unit', 'cm³, m³']] }
+  ],
+  mistakes: ['Using the ==slant side== instead of the ==perpendicular height==.', 'Forgetting the ==½== in the triangle and trapezium formulae.', 'Using ==diameter== where ==radius== is needed. r = d ÷ 2.', 'Writing r² as ==r × 2==. It means r × r.', 'Giving ==cm== when the answer should be ==cm²== or ==cm³==.'],
+  diagrams: [
+    { svg: svgAreas, cap: 'Area formulas. Always use the ==perpendicular== height (dashed).' },
+    { svg: svgCyl, cap: 'Volume of a cylinder = ==πr²h==. For any prism: ==cross-section × length==.' }
+  ],
+  worked: [
+    W('A trapezium has parallel sides 6 cm and 10 cm. The distance between them is 4 cm. Find its area.', 'The area of a ==trapezium== is the ==average of the parallel sides × height==.', 'Write the unit: cm².', 'A = ½ × (a + b) × h',
+      [['Write the formula', 'A = ½ × (a + b) × h', 'a and b are the two parallel sides.'], ['Substitute', 'A = ½ × (6 + 10) × 4', 'Add the parallel sides first.'], ['Work out', 'A = ½ × 16 × 4 = 8 × 4', 'Half of 16 is 8.'], ['Answer with unit', 'A = 32 cm²', 'Area is measured in square units.']],
+      [['a, b, h', '6, 10, 4 cm', -1], ['a + b', '16', 1], ['½ × 16', '8', 2], ['Area', '32 cm²', 3]]),
+    W('A circle has radius 5 cm. Find its circumference and area. Use π = 3.14.', 'Circumference is ==around==, area is ==inside==. Different formulae!', 'The unit of area has a ==2== (cm²). Circumference is just cm.', 'C = 2πr,  A = πr²',
+      [['Circumference formula', 'C = 2 × π × r', 'Distance around the circle.'], ['Substitute', 'C = 2 × 3.14 × 5 = 31.4 cm', '2 × 5 = 10, then × 3.14.'], ['Area formula', 'A = π × r²', 'r² means r × r.'], ['Substitute', 'A = 3.14 × 25 = 78.5 cm²', '5² = 25. Then × 3.14.']],
+      [['Radius', '5 cm', -1], ['Circumference', '31.4 cm', 1], ['r²', '25', 3], ['Area', '78.5 cm²', 3]]),
+    W('A prism has a triangular cross-section with base 6 cm and height 4 cm. Its length is 10 cm. Find the volume.', 'Volume of a ==prism== = ==cross-section area × length==.', 'First find the ==area of the end face==, then multiply by the length.', 'V = area of end × length',
+      [['Area of the triangle', '½ × 6 × 4 = 12 cm²', 'The cross-section is a triangle.'], ['Multiply by the length', 'V = 12 × 10', 'The end face is repeated along the whole length.'], ['Answer with unit', 'V = 120 cm³', 'Volume is in cubic units.']],
+      [['Cross-section', '½ × 6 × 4 = 12 cm²', 0], ['Length', '10 cm', -1], ['Volume', '12 × 10 = 120 cm³', 2]]),
+    W('A cylinder has radius 3 cm and height 10 cm. Find its volume. Use π = 3.14.', 'A cylinder is a ==circle × height==. Use ==V = πr²h==.', 'Square the radius first, not the whole of π × r.', 'V = π × r² × h',
+      [['Write the formula', 'V = π × r² × h', ''], ['Substitute', 'V = 3.14 × 3² × 10', 'r = 3, h = 10.'], ['Work out r²', 'V = 3.14 × 9 × 10 = 3.14 × 90', '3² = 9, then 9 × 10 = 90.'], ['Answer with unit', 'V = 282.6 cm³', '3.14 × 90 = 282.6.']],
+      [['r, h', '3 cm, 10 cm', -1], ['r²', '9', 1], ['π × r² × h', '3.14 × 90', 2], ['Volume', '282.6 cm³', 3]]),
+    W('A tank measures 50 cm by 40 cm by 30 cm. Find its volume in cm³ and in litres.', 'For a ==cuboid==, multiply the three edges. ==1000 cm³ = 1 litre==.', 'Divide by 1000 to go from cm³ to litres.', 'V = l × w × h',
+      [['Multiply the edges', '50 × 40 × 30', 'Length × width × height.'], ['Work out', '50 × 40 = 2000,  2000 × 30 = 60 000 cm³', 'Do it in two steps.'], ['Convert to litres', '60 000 ÷ 1000 = 60 litres', '1 litre = 1000 cm³.']],
+      [['Edges', '50, 40, 30 cm', -1], ['Volume', '60 000 cm³', 1], ['In litres', '60 L', 2]])
+  ],
+  drill: 'shape',
+  quiz: [
+    { q: 'The area of a triangle with base 8 cm and height 5 cm is…', o: ['40 cm²', '20 cm²', '13 cm²', '26 cm²'], a: 1, w: '½ × 8 × 5 = ==20 cm²==.' },
+    { q: 'A circle has diameter 10 cm. Using π = 3.14, its circumference is…', o: ['31.4 cm', '62.8 cm', '78.5 cm', '314 cm'], a: 0, w: 'C = πd = 3.14 × 10 = ==31.4 cm==.' },
+    { q: '1 litre is equal to…', o: ['10 cm³', '100 cm³', '1000 cm³', '10 000 cm³'], a: 2, w: '1 litre = ==1000 cm³==.' },
+    { q: 'Which formula gives the area of a trapezium?', o: ['a × b × h', '½ × (a + b) × h', '½ × a × h', '(a + b) × h'], a: 1, w: '==½ × (a + b) × h==.' },
+    { q: 'The volume of a prism is…', o: ['perimeter × length', 'cross-section area × length', 'surface area × length', 'base × height'], a: 1, w: '==Cross-section area × length==.' },
+    { q: 'The area of a circle of radius 4 cm (π = 3.14) is…', o: ['25.12 cm²', '50.24 cm²', '12.56 cm²', '200.96 cm²'], a: 1, w: '3.14 × 4 × 4 = ==50.24 cm²==.' }
+  ],
+  exam: [
+    { q: 'A trapezium has parallel sides 8 cm and 12 cm and height 5 cm. (a) Calculate its area. [2] It is the cross-section of a prism of length 20 cm. (b) Calculate the volume. [2]', m: 4,
+      p: ['½ × (8 + 12) × 5', '==50 cm²==', '50 × 20', '==1000 cm³=='] },
+    { q: 'A circular pond has radius 3 m. Using π = 3.14, calculate (a) the circumference [2] (b) the area [2].', m: 4,
+      p: ['C = 2 × 3.14 × 3', '==18.84 m==', 'A = 3.14 × 3²', '==28.26 m²=='] },
+    { q: 'A cylindrical tin has radius 4 cm and height 10 cm. Using π = 3.14, calculate its volume in cm³ and in litres.', m: 3,
+      p: ['V = ==πr²h==', '3.14 × 4² × 10 = ==502.4 cm³==', 'Converts: 502.4 ÷ 1000 = ==0.5024 litres=='] }
+  ]
+},
+frac: {
+  code: 'Number', name: 'Fractions',
+  lede: 'Equivalent fractions, the four operations, and fractions of amounts. Always simplify your final answer.',
+  learn: [
+    { h: 'Equivalent fractions and simplifying', list: ['Multiply or divide ==top and bottom by the same number== to get an equivalent fraction.', '==Simplify== by dividing top and bottom by their ==highest common factor==.', 'An ==improper== fraction has the top bigger than the bottom (7/4). A ==mixed number== is a whole number and a fraction (1 3/4).', 'Convert: 7/4 = 1 3/4 because 7 ÷ 4 = 1 remainder 3.'] },
+    { h: 'Adding and subtracting', list: ['You can only add or subtract fractions with the ==same denominator== (bottom).', 'Find a ==common denominator==, change both fractions, then add or subtract the ==tops only==.', 'The denominator ==stays the same==.', 'With mixed numbers, change them to ==improper fractions== first.'], f: ['3/4 + 2/3', '9/12 + 8/12', '17/12 = 1 5/12'] },
+    { h: 'Multiplying, dividing and amounts', list: ['==Multiply==: tops × tops, bottoms × bottoms. Simplify.', '==Divide==: keep the first, ==flip== the second, then multiply.', '==Fraction of an amount==: divide by the bottom, multiply by the top.'], table: [['Fraction', 'Decimal', 'Percentage'], ['1/2', '0.5', '50%'], ['1/4', '0.25', '25%'], ['3/4', '0.75', '75%'], ['1/5', '0.2', '20%'], ['1/10', '0.1', '10%'], ['1/8', '0.125', '12.5%']] }
+  ],
+  mistakes: ['Adding the ==denominators== as well: 1/2 + 1/3 is not 2/5.', 'Not ==simplifying== the final answer.', 'Flipping the ==wrong== fraction when dividing. Keep the first, flip the second.', 'Not converting ==mixed numbers== before multiplying or dividing.', 'Forgetting the ==common denominator== for subtraction.'],
+  diagrams: [
+    { svg: svgFracWall, cap: 'Fraction wall. ==Equivalent fractions== cover the same length: 2/3 = 4/6.' }
+  ],
+  worked: [
+    W('Work out 3/4 + 2/3.', 'The denominators are different, so find a ==common denominator==. The smallest is ==12==.', 'Change an improper answer to a mixed number.', 'Same denominator, then add tops',
+      [['Common denominator', 'The smallest number 4 and 3 both go into is 12', 'Multiples of 4: 4, 8, 12. Multiples of 3: 3, 6, 9, 12.'], ['Change both fractions', '3/4 = 9/12   and   2/3 = 8/12', 'Multiply top and bottom by the same number: 3 × 3 and 4 × 3; 2 × 4 and 3 × 4.'], ['Add the tops', '9/12 + 8/12 = 17/12', 'The bottom stays at 12.'], ['Mixed number', '17/12 = 1 5/12', '17 ÷ 12 = 1 remainder 5.']],
+      [['Denominator', '12', 0], ['3/4', '9/12', 1], ['2/3', '8/12', 1], ['Sum', '17/12', 2], ['Mixed', '1 5/12', 3]]),
+    W('Work out 5/6 − 1/4.', 'Subtract ==tops only== after the denominators match.', 'Check: 7/12 is less than 5/6, as it should be.', 'Common denominator first',
+      [['Common denominator', '12', '6 and 4 both go into 12.'], ['Change both fractions', '5/6 = 10/12   and   1/4 = 3/12', '5 × 2 = 10 and 6 × 2 = 12; 1 × 3 = 3 and 4 × 3 = 12.'], ['Subtract the tops', '10/12 − 3/12 = 7/12', 'Cannot simplify: 7 and 12 share no factor.']],
+      [['Denominator', '12', 0], ['5/6', '10/12', 1], ['1/4', '3/12', 1], ['Answer', '7/12', 2]]),
+    W('Work out 2/3 × 9/10.', 'Multiplying is simple: ==tops × tops==, ==bottoms × bottoms==. Then ==simplify==.', 'You can cancel before multiplying: 9 and 3 divide by 3.', 'a/b × c/d = (a × c)/(b × d)',
+      [['Multiply the tops', '2 × 9 = 18', ''], ['Multiply the bottoms', '3 × 10 = 30', ''], ['Simplify', '18/30 = 3/5', 'Divide top and bottom by 6, the highest common factor.']],
+      [['Top', '18', 0], ['Bottom', '30', 1], ['Simplified', '3/5', 2]]),
+    W('Work out 3/4 ÷ 2/5.', 'To ==divide==, keep the first fraction, ==flip== the second, and ==multiply==.', 'Flip only the second fraction.', 'Keep, flip, multiply',
+      [['Keep the first', '3/4', 'Do not change it.'], ['Flip the second, change ÷ to ×', '3/4 × 5/2', '2/5 flipped is 5/2.'], ['Multiply', '15/8', '3 × 5 = 15 and 4 × 2 = 8.'], ['Mixed number', '1 7/8', '15 ÷ 8 = 1 remainder 7.']],
+      [['Flip', '5/2', 1], ['Multiply', '15/8', 2], ['Mixed', '1 7/8', 3]]),
+    W('Find 3/5 of 40 kg.', '“Of” means ==multiply==. Divide by the ==bottom==, multiply by the ==top==.', 'Check: 3/5 is a bit more than half, and 24 is a bit more than 20.', 'amount ÷ bottom × top',
+      [['Divide by the bottom', '40 ÷ 5 = 8', 'This finds 1/5 of 40.'], ['Multiply by the top', '8 × 3 = 24', 'We want 3 of the fifths.'], ['Answer with unit', '24 kg', '']],
+      [['1/5', '8 kg', 0], ['3/5', '24 kg', 1]]),
+    W('Work out 2 1/2 × 1 1/3.', 'Change ==mixed numbers== to ==improper fractions== before multiplying.', 'Never multiply the whole numbers and fractions separately.', 'Mixed → improper first',
+      [['Make improper', '2 1/2 = 5/2   and   1 1/3 = 4/3', '2 × 2 + 1 = 5 and 1 × 3 + 1 = 4.'], ['Multiply', '5/2 × 4/3 = 20/6', 'Tops: 5 × 4. Bottoms: 2 × 3.'], ['Simplify', '20/6 = 10/3', 'Divide by 2.'], ['Mixed number', '3 1/3', '10 ÷ 3 = 3 remainder 1.']],
+      [['2 1/2', '5/2', 0], ['1 1/3', '4/3', 0], ['Product', '20/6', 1], ['Simplified', '10/3 = 3 1/3', 3]])
+  ],
+  drill: 'frac',
+  quiz: [
+    { q: 'The simplest form of 12/18 is…', o: ['6/9', '2/3', '3/4', '4/6'], a: 1, w: 'Divide by 6: 12/18 = ==2/3==.' },
+    { q: '1/2 + 1/3 = ?', o: ['2/5', '1/5', '5/6', '2/6'], a: 2, w: '3/6 + 2/6 = ==5/6==.' },
+    { q: '3/5 of 20 is…', o: ['12', '15', '8', '60'], a: 0, w: '20 ÷ 5 = 4, then 4 × 3 = ==12==.' },
+    { q: 'To divide by a fraction you…', o: ['divide the tops', 'add the bottoms', 'multiply by its reciprocal (flipped)', 'subtract'], a: 2, w: '==Flip the second fraction and multiply==.' },
+    { q: '0.75 as a fraction is…', o: ['1/4', '3/4', '7/5', '3/5'], a: 1, w: '0.75 = 75/100 = ==3/4==.' },
+    { q: '7/4 as a mixed number is…', o: ['1 1/4', '1 3/4', '2 3/4', '3 1/4'], a: 1, w: '7 ÷ 4 = 1 remainder 3: ==1 3/4==.' }
+  ],
+  exam: [
+    { q: 'Work out (a) 2/5 + 3/10 [2] (b) 3/4 × 8/9 giving your answer in its simplest form [2].', m: 4,
+      p: ['Common denominator: 4/10 + 3/10', '==7/10==', '3/4 × 8/9 = 24/36', '==2/3== (simplified)'] },
+    { q: 'Anil spends 1/3 of his money on a book and 1/4 on lunch. (a) What fraction does he spend altogether? (b) What fraction is left? (c) He started with Rs 240. How much is left?', m: 4,
+      p: ['1/3 + 1/4 = 4/12 + 3/12 = ==7/12==', 'Left = 1 − 7/12 = ==5/12==', '240 ÷ 12 = 20', '20 × 5 = ==Rs 100=='] },
+    { q: 'Work out 2 1/4 ÷ 3/4.', m: 3,
+      p: ['Improper fraction: ==9/4==', '==Flip== and multiply: 9/4 × 4/3', '= ==3=='] }
+  ]
+},
+seq: {
+  code: 'Algebra', name: 'Sequences and functions',
+  lede: 'Find rules, nth terms and function values, and read straight-line graphs.',
+  learn: [
+    { h: 'Sequences', list: ['A ==term-to-term rule== tells you how to get the next term.', 'In an ==arithmetic== sequence the ==difference== d is the same each time.', '==nth term== = ==dn + (a − d)==, where d is the difference and a is the first term.', 'Check by putting n = 1 and n = 2 into your rule.', 'Learn: ==square numbers== 1, 4, 9, 16, 25. ==Triangular== 1, 3, 6, 10, 15. ==Powers of 2==: 2, 4, 8, 16, 32.'], f: ['5, 8, 11, 14', 'd = 3,  nth term = 3n + 2'] },
+    { h: 'Function machines', list: ['A ==function machine== takes an input, does steps in order, and gives an output.', 'f(x) = 2x + 3 means “multiply x by 2, then add 3”.', 'f(4) means ==put x = 4==: 2 × 4 + 3 = 11.', 'To go ==backwards==, use the ==inverse== operations in ==reverse order==.'] },
+    { h: 'Straight-line graphs', list: ['The graph of y = mx + c is a ==straight line==.', '==m== is the ==gradient== (steepness): up ÷ across.', '==c== is the ==y-intercept== (where it crosses the y-axis).', 'Make a ==table of values==, plot the points, and join them with a ruler.'] }
+  ],
+  mistakes: ['Writing the ==difference== as the nth term. 3, 6, 9 is 3n, but 5, 8, 11 is 3n + 2.', 'Not ==checking== the rule with n = 1.', 'Undoing the steps in the ==same order== instead of reverse.', 'Substituting a negative without ==brackets==: x = −2 in 3x gives 3 × (−2) = −6.', 'Confusing ==gradient== and ==intercept==.'],
+  diagrams: [
+    { svg: svgMachine, cap: 'A function machine and its inverse. ==Reverse the order== and ==use the opposite operations==.' },
+    { svg: svgLine, cap: 'y = 2x + 1: ==gradient 2==, ==y-intercept 1==.' }
+  ],
+  worked: [
+    W('Find the nth term of 5, 8, 11, 14, …', 'Use ==nth term = dn + (a − d)==. First find the difference d.', 'Check with n = 1: the first term should come out as 5.', 'nth term = dn + (a − d)',
+      [['Find the difference', '8 − 5 = 3,  11 − 8 = 3', 'The terms go up by 3 every time, so the rule starts 3n.'], ['Compare 3n with the sequence', '3n gives 3, 6, 9, 12', 'These are the 3 times table.'], ['Adjust', '5 − 3 = 2, so add 2', 'Each real term is 2 more than 3n.'], ['nth term', '3n + 2', 'Check: n = 4 gives 14 ✓.']],
+      [['d', '3', 0], ['3n gives', '3, 6, 9, 12', 1], ['Difference to add', '+ 2', 2], ['nth term', '3n + 2', 3]]),
+    W('The nth term is 3n + 2. Find the 10th term. Is 83 a term?', 'Put the value of ==n== in. To test a number, ==solve== 3n + 2 = 83.', 'n must be a ==whole number== for it to be a term.', 'Substitute, or solve',
+      [['10th term', '3 × 10 + 2', 'Put n = 10 into 3n + 2.'], ['Answer', '= 32', '30 + 2.'], ['Is 83 a term?', '3n + 2 = 83, so 3n = 81', 'Subtract 2 from both sides.'], ['Solve', 'n = 27. A whole number, so YES, 83 is the 27th term', '81 ÷ 3 = 27.']],
+      [['10th term', '3 × 10 + 2 = 32', 1], ['Solve for 83', '3n = 81', 2], ['n', '27 (whole number)', 3], ['83 a term?', 'Yes', 3]]),
+    W('f(x) = 3x − 2. Find f(5), and solve f(x) = 19.', 'f(5) means ==put x = 5==. Solving f(x) = 19 means ==find x== when the output is 19.', 'f(5) gives an output; f(x) = 19 asks for an input.', 'f(x) = 3x − 2',
+      [['Find f(5)', '3 × 5 − 2', 'Replace x by 5.'], ['Answer', 'f(5) = 13', '15 − 2 = 13.'], ['Solve f(x) = 19', '3x − 2 = 19', 'Set the rule equal to 19.'], ['Solve', '3x = 21,  x = 7', 'Add 2, then divide by 3.']],
+      [['f(5)', '3 × 5 − 2 = 13', 1], ['Equation', '3x − 2 = 19', 2], ['x', '7', 3]]),
+    W('A machine does × 4 then + 3. The output is 27. What was the input?', 'Work ==backwards== using the ==inverse== operations, in ==reverse order==.', 'Check by running the number forwards: 6 × 4 + 3 = 27.', 'Inverse of + 3 is − 3.  Inverse of × 4 is ÷ 4.',
+      [['Output', '27', 'This is where we start.'], ['Undo + 3', '27 − 3 = 24', 'The last step done is the first to undo.'], ['Undo × 4', '24 ÷ 4 = 6', ''], ['Check forwards', '6 × 4 + 3 = 27 ✓', '']],
+      [['Output', '27', -1], ['After − 3', '24', 1], ['Input', '6', 2], ['Check', '27 ✓', 3]]),
+    W('Complete a table of values for y = 2x − 1 for x = −1, 0, 1, 2, 3. State the gradient and y-intercept.', 'Substitute each x into the rule. Take care with the ==negative== x.', 'The ==gradient== is the number in front of x. The ==intercept== is the number on its own.', 'y = mx + c',
+      [['x = −1', 'y = 2 × (−1) − 1 = −3', 'Use brackets for a negative.'], ['x = 0 and x = 1', 'y = −1 and y = 1', '2 × 0 − 1 and 2 × 1 − 1.'], ['x = 2 and x = 3', 'y = 3 and y = 5', ''], ['Gradient and intercept', 'gradient 2, y-intercept −1', 'From y = mx + c: m = 2 and c = −1.']],
+      [['x = −1', 'y = −3', 0], ['x = 0', 'y = −1', 1], ['x = 1', 'y = 1', 1], ['x = 2', 'y = 3', 2], ['x = 3', 'y = 5', 2], ['m and c', '2 and −1', 3]])
+  ],
+  drill: 'seq',
+  quiz: [
+    { q: 'The nth term of 3, 7, 11, 15 is…', o: ['3n + 4', '4n − 1', '4n + 3', 'n + 4'], a: 1, w: 'd = 4, and 4n gives 4, 8, … so subtract 1: ==4n − 1==.' },
+    { q: 'What is the next term in 2, 4, 8, 16?', o: ['24', '30', '32', '20'], a: 2, w: 'Each term is doubled: 16 × 2 = ==32==.' },
+    { q: 'f(x) = 2x + 1. What is f(3)?', o: ['6', '7', '8', '5'], a: 1, w: '2 × 3 + 1 = ==7==.' },
+    { q: 'What is the gradient of y = 3x − 2?', o: ['−2', '2', '3', '1/3'], a: 2, w: 'In y = mx + c, the gradient m is ==3==.' },
+    { q: 'The nth term is 5n − 1. The 10th term is…', o: ['49', '51', '50', '9'], a: 0, w: '5 × 10 − 1 = ==49==.' },
+    { q: 'Input → × 3 → − 1 → output. The output is 14. The input is…', o: ['5', '13/3', '39', '15'], a: 0, w: 'Undo: 14 + 1 = 15, then 15 ÷ 3 = ==5==.' }
+  ],
+  exam: [
+    { q: '(a) Find the nth term of 7, 11, 15, 19, … [2] (b) Is 100 a term in this sequence? Show your working. [2]', m: 4,
+      p: ['Difference is ==4==', 'nth term = ==4n + 3==', '4n + 3 = 100 gives n = ==24.25==', 'Not a whole number, so ==100 is not a term=='] },
+    { q: 'f(x) = 5x − 3. (a) Find f(4). [1] (b) Solve f(x) = 22. [2]', m: 3,
+      p: ['5 × 4 − 3 = ==17==', '5x − 3 = 22 so 5x = 25', '==x = 5=='] },
+    { q: 'Complete the table for y = 3x + 1 for x = −2, −1, 0, 1, 2 and state the gradient of the graph.', m: 3,
+      p: ['Values ==−5, −2, 1, 4, 7== (all correct)', 'Gradient = ==3==', 'y-intercept = ==1=='] }
+  ]
+},
+ratio: {
+  code: 'Number', name: 'Ratio and proportion',
+  lede: 'Sharing in a ratio, the unitary method, percentage change and speed. Always find one part first.',
+  learn: [
+    { h: 'Ratio', list: ['A ratio compares ==parts==. Simplify by dividing both sides by the ==highest common factor==.', 'To ==share in a ratio==: add the parts, divide the total by that to get ==one part==, then multiply.', 'Ratios must be in the ==same units== before simplifying.'], f: ['Share 360 in 5 : 4', '5 + 4 = 9 parts', '360 ÷ 9 = 40 per part'] },
+    { h: 'Direct proportion', list: ['Two things in ==direct proportion== increase together at the same rate.', '==Unitary method==: find the value for ==one==, then multiply.', '==Best buy==: work out the ==cost per unit== (or units per cost) for each and compare.', 'Scaling a recipe: find the amount for 1 person, then multiply.'] },
+    { h: 'Percentages and speed', list: ['==Percentage of an amount==: 10% = ÷ 10, 1% = ÷ 100.', '==Increase by 15%== means multiply by ==1.15==. ==Decrease by 15%== means multiply by ==0.85==.', '==Speed = distance ÷ time==. Distance = speed × time. Time = distance ÷ speed.', 'Convert minutes to hours by ==÷ 60==: 24 min = 0.4 h.'] }
+  ],
+  mistakes: ['Not ==adding the parts== before dividing the total.', 'Giving the ratio parts in the ==wrong order==: boys : girls is not girls : boys.', 'Comparing ==different quantities== in best buy (not per unit).', 'Using ==minutes== in speed questions that need hours.', 'Working out the percentage but forgetting to ==add or subtract== it.'],
+  diagrams: [
+    { svg: svgRatioBar, cap: 'Share in a ratio: ==total parts==, then ==one part==, then ==each share==.' },
+    { svg: svgSDT, cap: 'Speed–distance–time triangle. ==Cover== what you want.' }
+  ],
+  worked: [
+    W('Share Rs 360 in the ratio 5 : 4.', 'Find the ==total number of parts==, then the value of ==one part==.', 'Check the two shares add up to the total.', 'one part = total ÷ number of parts',
+      [['Add the parts', '5 + 4 = 9 parts', 'The whole amount is split into 9 equal parts.'], ['Value of one part', '360 ÷ 9 = 40', 'Each part is worth Rs 40.'], ['Multiply for each share', '5 × 40 = 200   and   4 × 40 = 160', 'The first share has 5 parts, the second has 4.'], ['Check', '200 + 160 = 360 ✓', '']],
+      [['Parts', '5 + 4 = 9', 0], ['One part', '360 ÷ 9 = 40', 1], ['Share 1', '5 × 40 = Rs 200', 2], ['Share 2', '4 × 40 = Rs 160', 2], ['Check', '360 ✓', 3]]),
+    W('Simplify the ratio 24 : 36.', 'Divide both numbers by their ==highest common factor==.', 'A fully simplified ratio has no common factor left.', 'Divide by the HCF',
+      [['Find the HCF', '12 divides into both 24 and 36', '24 = 2 × 12 and 36 = 3 × 12.'], ['Divide both sides', '24 ÷ 12 = 2   and   36 ÷ 12 = 3', ''], ['Answer', '2 : 3', 'No number divides both 2 and 3.']],
+      [['HCF', '12', 0], ['Divided', '2 and 3', 1], ['Ratio', '2 : 3', 2]]),
+    W('A recipe for 4 people uses 300 g of flour. How much flour is needed for 10 people?', 'Use the ==unitary method==: find the amount for ==1 person==, then multiply.', 'Say “for 1 person” in your working.', 'Find one, then scale',
+      [['Flour for 1 person', '300 ÷ 4 = 75 g', 'Divide to find one.'], ['Flour for 10 people', '75 × 10', 'Multiply to scale up.'], ['Answer with unit', '750 g', '']],
+      [['For 4', '300 g', -1], ['For 1', '75 g', 0], ['For 10', '750 g', 2]]),
+    W('Which is the better buy: 500 g for Rs 90, or 750 g for Rs 120?', 'Compare ==the price of the same amount== for each. Here, price per 100 g.', 'The lowest price per unit is the best buy.', 'Compare cost per 100 g',
+      [['Price per 100 g: first pack', '90 ÷ 5 = Rs 18', '500 g is 5 lots of 100 g.'], ['Price per 100 g: second pack', '120 ÷ 7.5 = Rs 16', '750 g is 7.5 lots of 100 g.'], ['Compare and conclude', '16 < 18, so the 750 g pack is the better buy', 'Cheaper per 100 g.']],
+      [['500 g pack', 'Rs 18 per 100 g', 0], ['750 g pack', 'Rs 16 per 100 g', 1], ['Best buy', '750 g pack', 2]]),
+    W('Increase Rs 80 by 15%.', 'Percentage increase: use a ==multiplier==. Increase by 15% means ×1.15.', 'Check: the answer must be bigger than 80.', 'new = old × (1 + percentage ÷ 100)',
+      [['Find the multiplier', '100% + 15% = 115% = 1.15', 'You keep all 100% and add 15%.'], ['Multiply', '80 × 1.15', ''], ['Answer', 'Rs 92', '80 × 1.15 = 92.']],
+      [['Multiplier', '1.15', 0], ['Calculation', '80 × 1.15', 1], ['New amount', 'Rs 92', 2]]),
+    W('A car travels 150 km in 2.5 hours. Find its average speed, then the time to travel 240 km at that speed.', 'Use ==speed = distance ÷ time== and ==time = distance ÷ speed==.', 'Always write the units: km/h.', 'S = D ÷ T,  T = D ÷ S',
+      [['Speed', 'S = D ÷ T = 150 ÷ 2.5', 'Distance over time.'], ['Answer', 'S = 60 km/h', '150 ÷ 2.5 = 60.'], ['Time for 240 km', 'T = D ÷ S = 240 ÷ 60', 'Now find the time.'], ['Answer', 'T = 4 hours', '240 ÷ 60 = 4.']],
+      [['Speed', '60 km/h', 1], ['Distance', '240 km', -1], ['Time', '240 ÷ 60 = 4 h', 3]])
+  ],
+  drill: 'ratio',
+  quiz: [
+    { q: 'Simplify 15 : 25.', o: ['1 : 2', '3 : 5', '5 : 3', '15 : 5'], a: 1, w: 'Divide by 5: ==3 : 5==.' },
+    { q: 'Share 60 in the ratio 1 : 2. The larger share is…', o: ['20', '30', '40', '45'], a: 2, w: '3 parts, 60 ÷ 3 = 20. Larger = 2 × 20 = ==40==.' },
+    { q: '5 pens cost Rs 20. How much do 8 pens cost?', o: ['Rs 28', 'Rs 32', 'Rs 40', 'Rs 25'], a: 1, w: '1 pen = Rs 4. 8 × 4 = ==Rs 32==.' },
+    { q: 'To increase an amount by 10%, multiply by…', o: ['0.1', '0.9', '1.1', '10'], a: 2, w: '100% + 10% = 110% = ==1.1==.' },
+    { q: 'A car travels 120 km in 3 hours. Its speed is…', o: ['360 km/h', '40 km/h', '4 km/h', '117 km/h'], a: 1, w: '120 ÷ 3 = ==40 km/h==.' },
+    { q: '2 kg costs Rs 50 and 5 kg costs Rs 110. Which is cheaper per kg?', o: ['2 kg pack', '5 kg pack', 'same', 'cannot tell'], a: 1, w: '50 ÷ 2 = Rs 25 per kg. 110 ÷ 5 = Rs 22 per kg. ==5 kg pack== is cheaper.' }
+  ],
+  exam: [
+    { q: 'The ratio of boys to girls in a class is 3 : 5. There are 40 students. How many girls are there?', m: 3,
+      p: ['3 + 5 = ==8 parts==', '40 ÷ 8 = ==5==', '5 × 5 = ==25 girls=='] },
+    { q: 'A shirt costs Rs 800. In a sale the price is reduced by 15%. Work out the sale price.', m: 3,
+      p: ['15% of 800 = ==120==', '800 − 120', '==Rs 680=='] },
+    { q: 'Meera cycles 36 km in 2 hours 24 minutes. Calculate her average speed in km/h.', m: 3,
+      p: ['2 h 24 min = ==2.4 hours==', 'Speed = ==distance ÷ time== = 36 ÷ 2.4', '==15 km/h=='] }
+  ]
+},
+prob: {
+  code: 'Probability', name: 'Probability',
+  lede: 'Probabilities are numbers from 0 to 1. Write them as fractions, and always give a reason.',
+  learn: [
+    { h: 'The probability scale', list: ['Probability goes from ==0 (impossible)== to ==1 (certain)==.', 'P(event) = ==number of favourable outcomes ÷ total number of outcomes==.', 'P(not A) = ==1 − P(A)==.', 'The probabilities of all the possible outcomes add up to ==1==.', 'Write probabilities as ==fractions, decimals or percentages==, never as ratios or “1 in 4”.'] },
+    { h: 'Combined events', list: ['A ==sample space== lists all outcomes. Two dice have ==36== outcomes; two coins have ==4==.', '==Independent== events do not affect each other.', 'P(A ==and== B) = ==P(A) × P(B)== for independent events.', 'P(A ==or== B) = ==P(A) + P(B)== if they cannot both happen.', 'A ==tree diagram== shows the branches. ==Multiply along== the branches, ==add== between outcomes.'] },
+    { h: 'Experiments and relative frequency', list: ['==Relative frequency== = number of times it happened ÷ total number of trials.', '==Expected number== = probability × number of trials.', 'More trials give a ==more reliable== estimate.', 'A ==fair== die or coin has ==equal chances== for each outcome.'] }
+  ],
+  mistakes: ['Giving a probability ==greater than 1== or negative.', 'Writing “1 in 6” or “1 : 5” instead of ==1/6==.', 'Adding when you should ==multiply== for “and”.', 'Forgetting that ==probabilities add to 1==: P(not A) = 1 − P(A).', 'Not ==simplifying== the fraction.'],
+  diagrams: [
+    { svg: svgScale, cap: 'The probability scale from ==0== to ==1==.' },
+    { svg: svgTree, cap: 'Tree diagram: a bag with 4 red and 6 blue counters, picking twice ==with replacement==.' }
+  ],
+  worked: [
+    W('A bag has 5 red, 3 blue and 2 green counters. One is picked at random. Find P(blue) and P(not blue).', 'P(event) = ==favourable ÷ total==. Count the ==total== first.', 'P(not blue) = 1 − P(blue).', 'P = favourable ÷ total',
+      [['Total number of counters', '5 + 3 + 2 = 10', 'This is the number of equally likely outcomes.'], ['P(blue)', '3/10', '3 blue counters out of 10.'], ['P(not blue)', '1 − 3/10 = 7/10', 'Probabilities add up to 1, so take it away from 1.']],
+      [['Total', '10', 0], ['P(blue)', '3/10', 1], ['P(not blue)', '7/10', 2]]),
+    W('Two fair dice are thrown. Find the probability that the total is 7.', 'List the ==successful outcomes==. There are 6 × 6 = ==36== possible outcomes.', 'Always simplify: 6/36 = 1/6.', 'P = favourable ÷ 36',
+      [['Total outcomes', '6 × 6 = 36', 'Each die has 6 faces.'], ['Ways to make 7', '(1,6) (2,5) (3,4) (4,3) (5,2) (6,1)', 'That is 6 pairs.'], ['Probability', '6/36 = 1/6', 'Divide top and bottom by 6.']],
+      [['Total', '36', 0], ['Favourable', '6', 1], ['P(total 7)', '6/36 = 1/6', 2]]),
+    W('The probability of rain on a day is 0.3. How many rainy days are expected in 20 days?', '==Expected number = probability × number of trials==.', 'The answer need not be a whole number in theory, but here it is.', 'expected = P × n',
+      [['Write the rule', 'expected = P × n', ''], ['Substitute', '0.3 × 20', 'P = 0.3, n = 20 days.'], ['Answer', '6 days', '0.3 × 20 = 6.']],
+      [['P(rain)', '0.3', -1], ['Days', '20', -1], ['Expected', '6 days', 2]]),
+    W('A spinner lands on red with probability 0.2, on blue with probability 0.5 and on green with probability x. Find x.', 'All the probabilities must add up to ==1==.', 'Check x is between 0 and 1.', 'sum of probabilities = 1',
+      [['Add what you know', '0.2 + 0.5 = 0.7', 'These two colours together.'], ['Take from 1', 'x = 1 − 0.7', 'The total must be 1.'], ['Answer', 'x = 0.3', '']],
+      [['Known', '0.2 + 0.5 = 0.7', 0], ['x', '1 − 0.7', 1], ['Answer', '0.3', 2]]),
+    W('A coin is flipped twice. Find the probability of two heads.', 'The flips are ==independent==, so ==multiply== the probabilities.', 'Or list the 4 outcomes: HH, HT, TH, TT. One of the four is HH.', 'P(A and B) = P(A) × P(B)',
+      [['P(head) on one flip', '1/2', 'A fair coin has two equally likely sides.'], ['Both heads', '1/2 × 1/2', 'The word “and” means multiply.'], ['Answer', '1/4', '']],
+      [['P(H)', '1/2', 0], ['P(H and H)', '1/2 × 1/2', 1], ['Answer', '1/4', 2]]),
+    W('A bag has 4 red and 6 blue counters. One is picked, replaced, and another is picked. Find P(both red).', 'With ==replacement==, the bag is the same for the second pick. ==Multiply== the two probabilities.', 'Without replacement the second probability would change.', 'P(R) × P(R)',
+      [['P(red) on the first pick', '4/10 = 2/5', '4 red out of 10 counters.'], ['P(red) on the second pick', '4/10 = 2/5', 'The counter was replaced, so nothing has changed.'], ['Multiply', '2/5 × 2/5 = 4/25', '“Both” means “and”, so multiply.']],
+      [['First red', '2/5', 0], ['Second red', '2/5', 1], ['Both red', '4/25', 2]])
+  ],
+  drill: 'prob',
+  quiz: [
+    { q: 'The probability of an impossible event is…', o: ['0', '1', '0.5', '−1'], a: 0, w: '==0==.' },
+    { q: 'A fair die is rolled. P(even number) is…', o: ['1/6', '1/3', '1/2', '2/3'], a: 2, w: '3 even numbers out of 6: ==1/2==.' },
+    { q: 'P(rain) = 0.4. P(no rain) is…', o: ['0.4', '0.6', '1.4', '0.04'], a: 1, w: '1 − 0.4 = ==0.6==.' },
+    { q: 'The probabilities of all outcomes of an experiment add up to…', o: ['0', '0.5', '1', '100'], a: 2, w: 'Always ==1==.' },
+    { q: 'How many outcomes are there when a coin is tossed twice?', o: ['2', '3', '4', '6'], a: 2, w: 'HH, HT, TH, TT: ==4==.' },
+    { q: 'P(A) = 1/5 and P(B) = 1/2 are independent. P(A and B) is…', o: ['7/10', '1/10', '2/5', '3/10'], a: 1, w: '1/5 × 1/2 = ==1/10==.' }
+  ],
+  exam: [
+    { q: 'A bag contains 6 red, 4 white and 5 black counters. One is picked at random. Find (a) P(white) [1] (b) P(not black) [2].', m: 3,
+      p: ['==4/15==', 'Not black = 1 − 5/15 (or 10/15)', '==2/3== (10/15)'] },
+    { q: 'Two fair dice are thrown. List the ways to get a total of 8 and find P(total 8).', m: 3,
+      p: ['==(2,6) (3,5) (4,4) (5,3) (6,2)== (5 ways)', 'Total outcomes = ==36==', 'P = ==5/36=='] },
+    { q: 'A spinner landed on red 18 times in 60 spins. (a) Write down the relative frequency of red. [1] (b) How many reds are expected in 200 spins? [2]', m: 3,
+      p: ['18/60 = ==0.3==', '0.3 × 200', '==60=='] }
+  ]
+}
+};
+/* ---------- drill generators ---------- */
+const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+const choiceItem = (q, correct, wrongs, s) => { const o = shuffle([correct, ...wrongs]); return { kind:'choice', q, choices:o, ans:o.indexOf(correct), s }; };
+const fr = (n, d) => { const g = gcd(n, d); n /= g; d /= g; return d === 1 ? String(n) : n + '/' + d; };
+const lin = (a, b) => (a === 1 ? 'x' : a + 'x') + (b === 0 ? '' : b < 0 ? ' − ' + (-b) : ' + ' + b);
+const sgn = n => n < 0 ? '− ' + (-n) : '+ ' + n;
+const nth = (d, c) => { const a = d === 1 ? 'n' : d === -1 ? '-n' : d + 'n'; return c === 0 ? a : a + (c < 0 ? c : '+' + c); };
+const fmtFrac = (n, d) => n + '/' + d;
+
+const DRILLS = {
+  eq: [
+    () => { const x = rint(1, 12), a = rint(2, 9), b = rint(-12, 15) || 4; const c = a * x + b;
+      return { kind:'num', q:`Solve ${lin(a, b)} = ${c}.`, ans:x, tol:0,
+        s:[['Undo the ' + (b < 0 ? '− ' + (-b) : '+ ' + b), `${a}x = ${c} ${b < 0 ? '+ ' + (-b) : '− ' + b} = ${a * x}`],['Divide by ' + a, `x = ${a * x} ÷ ${a} = ${x}`],['Check', `${a} × ${x} ${sgn(b)} = ${c} ✓`]] }; },
+    () => { const x = rint(1, 10), c = rint(1, 5), a = rint(c + 1, 9), b = rint(-8, 8), d = (a - c) * x + b;
+      return { kind:'num', q:`Solve ${lin(a, b)} = ${lin(c, d)}.`, ans:x, tol:0,
+        s:[['Subtract ' + c + 'x from both sides', `${lin(a - c, b)} = ${d}`],['Move the number', `${a - c}x = ${d - b}`],['Divide by ' + (a - c), `x = ${x}`]] }; },
+    () => { const x = rint(1, 9), a = rint(2, 6), b = rint(1, 7), c = a * (x + b);
+      return { kind:'num', q:`Solve ${a}(x + ${b}) = ${c}.`, ans:x, tol:0,
+        s:[['Expand', `${a}x + ${a * b} = ${c}`],['Subtract ' + a * b, `${a}x = ${c - a * b}`],['Divide by ' + a, `x = ${x}`]] }; },
+    () => { const a = rint(2, 6), k = rint(1, 8); const wrong = [`x ≥ −${k}`, `x ≤ ${k}`, `x ≥ ${k}`];
+      return choiceItem(`Solve −${a}x ≥ ${a * k}.`, `x ≤ −${k}`, wrong,
+        [['Divide both sides by −' + a, `x ? −${k}   (sign still to decide)`],['Dividing by a NEGATIVE reverses the sign', `≥ becomes ≤`],['Answer', `x ≤ −${k}`]]); }
+  ],
+  ang: [
+    () => { const a = rint(30, 80), b = rint(30, 80), x = 180 - a - b;
+      return { kind:'num', q:`Angles on a straight line are ${a}°, ${b}° and x. Find x.`, ans:x, tol:0,
+        s:[['Angles on a straight line add to 180°', `${a} + ${b} + x = 180`],['Subtract', `x = 180 − ${a + b}`],['Answer', `${x}°`]] }; },
+    () => { const n = rint(5, 12), ans = (n - 2) * 180;
+      return { kind:'num', q:`Find the sum of the interior angles of a polygon with ${n} sides.`, ans, tol:0,
+        s:[['Formula', 'sum = (n − 2) × 180'],['Substitute', `(${n} − 2) × 180 = ${n - 2} × 180`],['Answer', `${ans}°`]] }; },
+    () => { const n = pick([5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 36]), ext = 360 / n, mode = rint(0, 2);
+      if (mode === 0) return { kind:'num', q:`Find one exterior angle of a regular polygon with ${n} sides.`, ans:ext, tol:0, s:[['Exterior angles add to 360°', `360 ÷ ${n}`],['Answer', `${ext}°`]] };
+      if (mode === 1) return { kind:'num', q:`Find one interior angle of a regular polygon with ${n} sides.`, ans:180 - ext, tol:0, s:[['Exterior angle', `360 ÷ ${n} = ${ext}°`],['Interior = 180 − exterior', `180 − ${ext}`],['Answer', `${180 - ext}°`]] };
+      return { kind:'num', q:`A regular polygon has an exterior angle of ${ext}°. How many sides does it have?`, ans:n, tol:0, s:[['n = 360 ÷ exterior angle', `360 ÷ ${ext}`],['Answer', `${n} sides`]] }; },
+    () => { const A = rint(40, 140), kind = pick(['alternate', 'corresponding', 'co-interior']); const ans = kind === 'co-interior' ? 180 - A : A;
+      return { kind:'num', q:`Two parallel lines are crossed by a transversal. One angle is ${A}°. Find the ${kind} angle.`, ans, tol:0,
+        s:[['Rule', kind === 'co-interior' ? 'co-interior angles add to 180°' : kind + ' angles are equal'],['Work out', kind === 'co-interior' ? `180 − ${A}` : String(A)],['Answer', `${ans}°`]] }; }
+  ],
+  stat: [
+    () => { const n = rint(4, 6), m = rint(4, 20); let xs, last;
+      do { xs = Array.from({length:n - 1}, () => rint(1, 2 * m)); last = n * m - xs.reduce((p, c) => p + c, 0); } while (last < 1 || last > 2 * m + 8);
+      xs.push(last); xs = shuffle(xs);
+      return { kind:'num', q:`Find the mean of ${xs.join(', ')}.`, ans:m, tol:0,
+        s:[['Add them up', `${xs.join(' + ')} = ${n * m}`],['Divide by how many', `${n * m} ÷ ${n} = ${m}`],['Answer', String(m)]] }; },
+    () => { const n = pick([5, 7, 4, 6]); const xs = shuffle(Array.from({length:30}, (_, i) => i + 1)).slice(0, n); const o = xs.slice().sort((a, b) => a - b);
+      const med = n % 2 ? o[(n - 1) / 2] : (o[n / 2 - 1] + o[n / 2]) / 2;
+      return { kind:'num', q:`Find the median of ${xs.join(', ')}.`, ans:med, tol:0.01,
+        s:[['Put in order', o.join(', ')],[n % 2 ? 'Middle value' : 'Two middle values, find halfway', n % 2 ? String(med) : `(${o[n / 2 - 1]} + ${o[n / 2]}) ÷ 2`],['Answer', String(med)]] }; },
+    () => { const n = rint(5, 7), xs = Array.from({length:n}, () => rint(1, 40)); const mx = Math.max(...xs), mn = Math.min(...xs);
+      return { kind:'num', q:`Find the range of ${xs.join(', ')}.`, ans:mx - mn, tol:0,
+        s:[['Largest and smallest', `${mx} and ${mn}`],['Range = largest − smallest', `${mx} − ${mn}`],['Answer', String(mx - mn)]] }; },
+    () => { const [T, deg] = pick([[20, 18], [24, 15], [30, 12], [36, 10], [40, 9], [60, 6]]); const f = rint(2, Math.floor(T / 2));
+      return { kind:'num', q:`In a survey of ${T} people, ${f} chose football. What angle is football on a pie chart?`, ans:f * deg, tol:0,
+        s:[['One person', `360 ÷ ${T} = ${deg}°`],['Football', `${f} × ${deg}`],['Answer', `${f * deg}°`]] }; }
+  ],
+  shape: [
+    () => { const t = rint(0, 1), a = rint(2, 12) * 2, h = rint(3, 12);
+      return t ? { kind:'num', q:`Find the area of a triangle with base ${a} cm and height ${h} cm.`, ans:a * h / 2, tol:0, s:[['Formula', 'A = ½ × b × h'],['Substitute', `½ × ${a} × ${h}`],['Answer', `${a * h / 2} cm²`]] }
+        : { kind:'num', q:`Find the area of a rectangle ${a} cm by ${h} cm.`, ans:a * h, tol:0, s:[['Formula', 'A = l × w'],['Substitute', `${a} × ${h}`],['Answer', `${a * h} cm²`]] }; },
+    () => { let a, b, h; do { a = rint(3, 12); b = rint(a + 1, 16); h = rint(2, 10); } while ((a + b) * h % 2);
+      return { kind:'num', q:`A trapezium has parallel sides ${a} cm and ${b} cm and height ${h} cm. Find its area.`, ans:(a + b) * h / 2, tol:0,
+        s:[['Formula', 'A = ½ × (a + b) × h'],['Substitute', `½ × (${a} + ${b}) × ${h} = ½ × ${a + b} × ${h}`],['Answer', `${(a + b) * h / 2} cm²`]] }; },
+    () => { const r = rint(2, 12), which = rint(0, 1), ans = which ? 3.14 * r * r : 2 * 3.14 * r;
+      return { kind:'num', q:`A circle has radius ${r} cm. Find its ${which ? 'area' : 'circumference'}. Use π = 3.14.`, ans:Math.round(ans * 100) / 100, tol:0.011,
+        s:which ? [['Formula', 'A = π × r²'],['Substitute', `3.14 × ${r} × ${r} = 3.14 × ${r * r}`],['Answer', `${num(ans)} cm²`]] : [['Formula', 'C = 2 × π × r'],['Substitute', `2 × 3.14 × ${r}`],['Answer', `${num(ans)} cm`]] }; },
+    () => { const l = rint(2, 12), w = rint(2, 10), h = rint(2, 9);
+      return { kind:'num', q:`A cuboid is ${l} cm by ${w} cm by ${h} cm. Find its volume.`, ans:l * w * h, tol:0,
+        s:[['Formula', 'V = l × w × h'],['Substitute', `${l} × ${w} × ${h}`],['Answer', `${l * w * h} cm³`]] }; },
+    () => { const r = rint(2, 8), h = rint(2, 12), v = 3.14 * r * r * h;
+      return { kind:'num', q:`A cylinder has radius ${r} cm and height ${h} cm. Find its volume. Use π = 3.14.`, ans:Math.round(v * 100) / 100, tol:0.011,
+        s:[['Formula', 'V = π × r² × h'],['Substitute', `3.14 × ${r}² × ${h} = 3.14 × ${r * r} × ${h}`],['Answer', `${num(v)} cm³`]] }; }
+  ],
+  frac: [
+    () => { const D = [2, 3, 4, 5, 6, 8, 10]; let b, d, p, q, plus = Math.random() < .6;
+      do { b = pick(D); d = pick(D); p = rint(1, b - 1); q = rint(1, d - 1); } while (b === d || (!plus && p * d <= q * b));
+      const L = b * d / gcd(b, d), n1 = p * L / b, n2 = q * L / d, top = plus ? n1 + n2 : n1 - n2;
+      return { kind:'frac', q:`Work out ${p}/${b} ${plus ? '+' : '−'} ${q}/${d}. Give your answer as a simplified fraction, like 7/12.`, ans:fr(top, L),
+        s:[['Common denominator', String(L)],['Change the fractions', `${n1}/${L} ${plus ? '+' : '−'} ${n2}/${L}`],['Add or subtract the tops', `${top}/${L}`],['Simplify', fr(top, L)]] }; },
+    () => { const D = [2, 3, 4, 5, 6, 8, 9, 10]; const b = pick(D), d = pick(D), p = rint(1, b - 1), q = rint(1, d - 1);
+      return { kind:'frac', q:`Work out ${p}/${b} × ${q}/${d}. Give your answer as a simplified fraction, like 3/10.`, ans:fr(p * q, b * d),
+        s:[['Multiply the tops', `${p} × ${q} = ${p * q}`],['Multiply the bottoms', `${b} × ${d} = ${b * d}`],['Simplify', fr(p * q, b * d)]] }; },
+    () => { const D = [2, 3, 4, 5, 6, 8, 9]; const b = pick(D), d = pick(D), p = rint(1, b - 1), q = rint(1, d - 1);
+      return { kind:'frac', q:`Work out ${p}/${b} ÷ ${q}/${d}. Give your answer as a simplified fraction (for example 15/8).`, ans:fr(p * d, b * q),
+        s:[['Keep, flip, multiply', `${p}/${b} × ${d}/${q}`],['Multiply', `${p * d}/${b * q}`],['Simplify', fr(p * d, b * q)]] }; },
+    () => { const d = rint(3, 9), p = rint(1, d - 1), k = rint(2, 9), amt = d * k;
+      return { kind:'num', q:`Find ${p}/${d} of ${amt}.`, ans:p * k, tol:0,
+        s:[['Divide by the bottom', `${amt} ÷ ${d} = ${k}`],['Multiply by the top', `${k} × ${p}`],['Answer', String(p * k)]] }; }
+  ],
+  seq: [
+    () => { const d = pick([2, 3, 4, 5, 6, 7, 8, 9, -2, -3, -4, -5]), a = rint(1, 20), c = a - d; const ts = [0, 1, 2, 3].map(i => a + i * d);
+      return { kind:'text', q:`Find the nth term of ${ts.join(', ')}, … (type it like 3n+2).`, ans:nth(d, c),
+        s:[['Difference', String(d)],[`${nth(d, 0)} gives`, [1, 2, 3, 4].map(n => n * d).join(', ')],['Adjust to get the first term', `${a} − ${d} = ${c}`],['nth term', nth(d, c)]] }; },
+    () => { const d = rint(2, 9), c = rint(-6, 8) || 2, n = rint(5, 15), ans = d * n + c;
+      return { kind:'num', q:`The nth term of a sequence is ${d}n ${sgn(c)}. Find the ${n}th term.`, ans, tol:0,
+        s:[['Substitute n', `${d} × ${n} ${sgn(c)}`],['Answer', String(ans)]] }; },
+    () => { const a = rint(2, 6), b = rint(-5, 8), k = rint(-3, 6), ans = a * k + b;
+      return { kind:'num', q:`f(x) = ${lin(a, b)}. Find f(${k}).`, ans, tol:0,
+        s:[['Substitute x', `${a} × ${k < 0 ? '(' + k + ')' : k} ${sgn(b)}`],['Answer', String(ans)]] }; },
+    () => { const t = rint(0, 2); let ts, ans, why;
+      if (t === 0) { const a = rint(1, 20), d = rint(2, 9); ts = [0, 1, 2, 3].map(i => a + i * d); ans = a + 4 * d; why = `add ${d} each time`; }
+      else if (t === 1) { const a = rint(1, 3), r = rint(2, 3); ts = [0, 1, 2, 3].map(i => a * r ** i); ans = a * r ** 4; why = `multiply by ${r} each time`; }
+      else { const k = rint(1, 6); ts = [0, 1, 2, 3].map(i => (k + i) ** 2); ans = (k + 4) ** 2; why = 'square numbers'; }
+      return { kind:'num', q:`What is the next term in ${ts.join(', ')}, … ?`, ans, tol:0, s:[['Spot the rule', why],['Next term', String(ans)]] }; }
+  ],
+  ratio: [
+    () => { const g = rint(2, 12); let p, q; do { p = rint(1, 9); q = rint(1, 9); } while (gcd(p, q) !== 1 || p === q);
+      return { kind:'text', q:`Simplify the ratio ${p * g} : ${q * g}. (type it like 2:3)`, ans:`${p}:${q}`, s:[['Divide both by the HCF', String(g)],['Answer', `${p} : ${q}`]] }; },
+    () => { let p, q; do { p = rint(1, 7); q = rint(1, 7); } while (gcd(p, q) !== 1 || p === q); const k = rint(2, 15), tot = k * (p + q), big = Math.random() < .5;
+      return { kind:'num', q:`Share ${tot} in the ratio ${p} : ${q}. How much is the ${big ? 'larger' : 'smaller'} share?`, ans:k * (big ? Math.max(p, q) : Math.min(p, q)), tol:0, s:[['Add the parts', `${p} + ${q} = ${p + q}`],['One part', `${tot} ÷ ${p + q} = ${k}`],['Shares', `${p} × ${k} = ${p * k},  ${q} × ${k} = ${q * k}`]] }; },
+    () => { const n = rint(3, 9), c = rint(2, 12), m = rint(10, 20); const each = c;
+      return { kind:'num', q:`${n} notebooks cost Rs ${n * c}. How much do ${m} notebooks cost?`, ans:m * each, tol:0, s:[['Cost of 1', `${n * c} ÷ ${n} = Rs ${c}`],['Cost of ' + m, `${m} × ${c}`],['Answer', `Rs ${m * c}`]] }; },
+    () => { const P = rint(2, 12) * 20, x = pick([10, 20, 25, 50]), up = Math.random() < .5, ans = up ? P * (100 + x) / 100 : P * (100 - x) / 100;
+      return { kind:'num', q:`${up ? 'Increase' : 'Decrease'} Rs ${P} by ${x}%.`, ans, tol:0.01, s:[['Multiplier', `${up ? 100 + x : 100 - x}% = ${(up ? 100 + x : 100 - x) / 100}`],['Multiply', `${P} × ${(up ? 100 + x : 100 - x) / 100}`],['Answer', `Rs ${num(ans)}`]] }; },
+    () => { const s = rint(2, 12) * 5, t = pick([1, 2, 3, 4, 0.5, 1.5, 2.5]), mode = rint(0, 1);
+      return mode ? { kind:'num', q:`A bus travels at ${s} km/h for ${t} hours. How far does it go?`, ans:s * t, tol:0.01, s:[['D = S × T', `${s} × ${t}`],['Answer', `${s * t} km`]] }
+        : { kind:'num', q:`A cyclist travels ${s * t} km in ${t} hours. Find the average speed in km/h.`, ans:s, tol:0.01, s:[['S = D ÷ T', `${s * t} ÷ ${t}`],['Answer', `${s} km/h`]] }; }
+  ],
+  prob: [
+    () => { const r = rint(1, 8), b = rint(1, 8), g = rint(1, 6), col = pick([['red', r], ['blue', b], ['green', g]]); const tot = r + b + g;
+      return { kind:'frac', q:`A bag has ${r} red, ${b} blue and ${g} green counters. One is picked at random. Find P(${col[0]}) as a simplified fraction.`, ans:fr(col[1], tot),
+        s:[['Total', `${r} + ${b} + ${g} = ${tot}`],['Favourable', String(col[1])],['P', fr(col[1], tot)]] }; },
+    () => { const p = rint(1, 19) * 5 / 100, ans = Math.round((1 - p) * 100) / 100;
+      return { kind:'num', q:`P(A) = ${p}. Find P(not A).`, ans, tol:0.001, s:[['P(not A) = 1 − P(A)', `1 − ${p}`],['Answer', String(ans)]] }; },
+    () => { const p = pick([0.1, 0.2, 0.25, 0.4, 0.5]), n = rint(2, 30) * 20, ans = Math.round(p * n);
+      return { kind:'num', q:`The probability of a seed growing is ${p}. How many of ${n} seeds are expected to grow?`, ans, tol:0, s:[['expected = P × n', `${p} × ${n}`],['Answer', String(ans)]] }; },
+    () => { const b = rint(2, 6), d = rint(2, 6), p = rint(1, b - 1), q = rint(1, d - 1);
+      return { kind:'frac', q:`Two independent events have P(A) = ${p}/${b} and P(B) = ${q}/${d}. Find P(A and B) as a simplified fraction.`, ans:fr(p * q, b * d),
+        s:[['Multiply', `${p}/${b} × ${q}/${d} = ${p * q}/${b * d}`],['Simplify', fr(p * q, b * d)]] }; },
+    () => { const s = rint(2, 12), ways = 6 - Math.abs(s - 7);
+      return { kind:'frac', q:`Two fair dice are thrown. Find P(total = ${s}) as a simplified fraction.`, ans:fr(ways, 36),
+        s:[['Total outcomes', '36'],['Ways to make ' + s, String(ways)],['P', fr(ways, 36)]] }; }
+  ]
+};
+
+const MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2]];
+
+/* ---------- worked examples: live working table and notes ---------- */
+for (const key in CH) CH[key].worked.forEach(w => {
+  w.board0 = () => wkBoard(w, -1);
+  w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
+});
+/* ---------- state & rendering ---------- */
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['mock','','Mini mock']];
+let cur = 'start', sub_ = 'learn';
+try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(([k,c,n]) => `<button class="tab" role="tab" aria-selected="${k===cur}" data-tab="${k}">${c ? `<small>${c}</small>` : ''}${n}</button>`).join('');
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]'); if (!b) return;
+  cur = b.dataset.tab; sub_ = 'learn'; renderTabs(); render(); window.scrollTo(0,0);
+});
+function examScore(key, list){ let got = 0, tot = 0; list.forEach((q,i) => { tot += q.m; got += Math.min(q.m, (store.ticks[key+'-'+i] || []).length); }); return [got, tot]; }
+function render(){
+  const v = document.getElementById('view');
+  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
+  bindView();
+}
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob'];
+function renderStart(){
+  const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+    return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
+      <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
+  <p class="lede">Eight topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <div class="stack" style="margin-top:20px">
+  <div class="card"><h3>How to use each topic</h3><div class="plan">
+    <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
+    <div><b>2 · Diagrams</b>Copy these into your notebook from memory.</div>
+    <div><b>3 · Worked</b>Try the question on paper first, then tap <i>Next step</i> to check each line.</div>
+    <div><b>4 · Drill</b>Fresh questions every time. Aim for 5 in a row.</div>
+    <div><b>5 · Quiz</b>Quick multiple-choice checks with instant feedback.</div>
+    <div><b>6 · Exam Qs</b>Write your answer on paper first. Then open the mark scheme and tick the points you wrote.</div></div></div>
+  <div class="grid2">
+    <div class="card"><h3>Your progress</h3>${rows}<p class="note">Saved on this device only.</p></div>
+    <div class="card"><h3>Command words</h3><dl class="cw">
+      <dt>Work out</dt><dd>Do the calculation and show each step.</dd>
+      <dt>Calculate</dt><dd>Same: use the numbers given and show working.</dd>
+      <dt>Solve</dt><dd>Find the value of the unknown letter.</dd>
+      <dt>Show that</dt><dd>Prove the given answer. Write every step.</dd>
+      <dt>Explain</dt><dd>Give a reason. For angles, name the angle fact.</dd></dl></div></div>
+  <div class="card"><h3>Habits that save marks</h3><ul>
+    <li>Write the ==formula== first, then ==substitute==, then give the answer.</li>
+    <li>Show ==every step==. Method marks are given even if the answer is wrong.</li>
+    <li>Write the ==unit== (cm², cm³, km/h, Rs) and the ==degree sign==.</li>
+    <li>Do a quick ==check==: put your answer back in, or ask “is it sensible?”.</li></ul></div>
+  <div class="card"><h3>Real past papers</h3><p>After finishing a topic, try real Cambridge questions from the Maths 0580 papers and check the mark schemes:
+    <a href="https://pastpapers.papacambridge.com/papers/caie/igcse-mathematics-0580" target="_blank" rel="noopener">PapaCambridge 0580</a> ·
+    <a href="https://pastpapersacademy.com/past-papers/" target="_blank" rel="noopener">Past Papers Academy</a>.</p></div>
+  </div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
+}
+function cardHTML(card){
+  const tbl = card.table ? `<div class="tbl"><table><thead><tr>${card.table[0].map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${card.table.slice(1).map(r => `<tr>${r.map(c => `<td>${fmt(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '';
+  return `<div class="card"><h3>${card.h}</h3>${(card.p||[]).map(p=>`<p>${fmt(p)}</p>`).join('')}${card.f?`<div class="formula">${card.f.map(x=>`<span>${x}</span>`).join('')}</div>`:''}${card.list?`<ul>${card.list.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul>`:''}${tbl}</div>`;
+}
+/* ---------- explanatory worked examples: Key idea, why lines, exam tip, live working table ---------- */
+/* e.r rows: [label, value, step]. step -1 = given in the question; otherwise the step at which the row fills in. */
+function wkBoard(e, k){
+  const rows = e.r.map(([lab, val, at]) => { const on = at <= k;
+    return `<tr class="${at === k && k >= 0 ? 'cur' : ''}"><th>${lab}</th><td class="${on ? (at >= 0 ? 'fill' : '') : 'q'}">${on ? fmt(val) : '?'}</td></tr>`; }).join('');
+  return `<table class="wb">${rows}</table>${e.f ? `<p class="bnote">${fmt(e.f)}</p>` : ''}`;
+}
+function updateBoard(wk, items){
+  const bi = wk.querySelector('.board-in'); if (!bi) return;
+  const w = CH[cur].worked[+wk.dataset.worked]; let html = w.board0();
+  items.forEach((li, j) => { if (!li.hidden && w.s[j][3]) html = w.s[j][3](); });
+  bi.innerHTML = html;
+  items.forEach(li => li.classList.remove('now')); const vis = items.filter(li => !li.hidden); if (vis.length) vis[vis.length-1].classList.add('now');
+}
+
+function renderChapter(k){
+  const c = CH[k];
+  const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],['drill','Drill'],['quiz','Quiz'],['exam','Exam Qs']];
+  let body = '';
+  if (sub_ === 'learn') body = c.learn.map(cardHTML).join('') + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
+  if (sub_ === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
+  if (sub_ === 'worked') body = `<div class="card"><h3>How to use these</h3><p class="note">Read the question and try it on paper. Then tap <b>Next step</b>. Each step shows the working, and the line underneath explains <b>why</b>. The table beside it fills in as you go. The exam tip appears at the end.</p></div>` + c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>${w.intro ? `<p class="intro"><b>Key idea:</b> ${fmt(w.intro)}</p>` : ''}
+      ${w.board0 ? '<div class="wk-split"><div class="board"><span class="eyebrow">Working table</span><div class="board-in">' + w.board0() + '</div></div>' : ''}<ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(st[1])}</span>${st[2] ? `<span class="why2">${fmt(st[2])}</span>` : ''}</li>`).join('')}</ol>${w.board0 ? '</div>' : ''}
+      ${w.tip ? `<p class="tip" hidden><b>Exam tip:</b> ${fmt(w.tip)}</p>` : ''}
+      <div class="row"><button class="btn primary" data-next>Next step</button><button class="btn ghost" data-all>Show all</button><button class="btn ghost" data-hide>Hide</button></div></div>`).join('');
+  if (sub_ === 'drill') body = `<div class="card" id="drill"></div>`;
+  if (sub_ === 'quiz') body = `<div class="card"><div class="scorebar"><div><h3>Quick quiz</h3><p class="note">Tap an answer. Best score is saved.</p></div><div class="big-score"><span id="qs">0</span>/${c.quiz.length}</div></div><div class="row"><button class="btn ghost" data-reset>Start again</button></div></div>`
+    + c.quiz.map((q,i) => `<div class="card" data-quiz="${i}"><span class="eyebrow">Q${i+1}</span><p class="q">${q.q}</p><div class="opts">${q.o.map((o,j) => `<button class="opt" data-o="${j}">${o}</button>`).join('')}</div><p class="why" hidden>${fmt(q.w)}</p></div>`).join('');
+  if (sub_ === 'exam') { const [g,t] = examScore(k, c.exam);
+    body = `<div class="card"><div class="scorebar"><div><h3>Exam-style questions</h3><p class="note">Answer on paper first. Then open the mark scheme and tick each point you wrote. Each tick = 1 mark.</p></div><div class="big-score" id="exscore">${g}/${t}</div></div></div>` + c.exam.map((q,i) => examCard(k+'-'+i, q, i)).join(''); }
+  return `<div class="chhead fadein"><span class="eyebrow">${c.code} · Maths</span><h2>${c.name}</h2><p class="lede">${c.lede}</p></div>
+  <nav class="sub" role="tablist">${subs.map(([s,n]) => `<button class="subtab" role="tab" aria-selected="${s===sub_}" data-sub="${s}">${n}</button>`).join('')}</nav>
+  <div class="stack fadein">${body}</div>`;
+}
+function examCard(key, q, i){
+  const ticks = store.ticks[key] || []; const open = store.ticks['open-'+key];
+  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${i+1}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
+    <p class="q">${q.q}</p>
+    <div class="row"><button class="btn primary" data-ms>${open?'Hide mark scheme':'Show mark scheme'}</button><span class="got">${ticks.length?Math.min(ticks.length,q.m)+'/'+q.m:''}</span></div>
+    <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
+    ${q.p.map((p,j) => `<button class="point" aria-pressed="${ticks.includes(j)}" data-pt="${j}"><span class="box">✓</span><span>${fmt(p)}</span></button>`).join('')}</div></div>`;
+}
+let timer = null, left = 45*60;
+const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+function renderMock(){
+  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
+  return `<div class="chhead fadein"><span class="eyebrow">All eight topics</span><h2>Mini mock</h2>
+    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
+      <p class="note">45 minutes. About 1 minute per mark, plus time to check.</p></div>
+    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+}
+let quizScore = 0;
+function bindView(){
+  quizScore = 0;
+  if (cur !== 'start' && cur !== 'mock' && sub_ === 'drill') newDrill();
+  if (cur === 'mock') {
+    document.getElementById('tgo').onclick = () => {
+      if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
+      document.getElementById('tgo').textContent = 'Pause';
+      timer = setInterval(() => { left = Math.max(0, left-1); const c = document.getElementById('clock');
+        if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
+        if (!left) { clearInterval(timer); timer = null; } }, 1000);
+    };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 45*60; render(); };
+    document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
+  }
+}
+document.getElementById('view').addEventListener('click', e => {
+  const t = e.target;
+  const st = t.closest('[data-sub]'); if (st) { sub_ = st.dataset.sub; render(); return; }
+  const wk = t.closest('[data-worked]');
+  if (wk) { const items = [...wk.querySelectorAll('.steps li')];
+    if (t.closest('[data-next]')) { const n = items.find(li => li.hidden); if (n) n.hidden = false; }
+    if (t.closest('[data-all]')) items.forEach(li => li.hidden = false);
+    if (t.closest('[data-hide]')) items.forEach(li => li.hidden = true);
+    wk.querySelector('[data-next]').disabled = !items.some(li => li.hidden); const tp = wk.querySelector('.tip'); if (tp) tp.hidden = items.some(li => li.hidden); updateBoard(wk, items); return; }
+  const qz = t.closest('[data-quiz]');
+  if (qz && t.closest('[data-o]') && !qz.dataset.done) {
+    const q = CH[cur].quiz[+qz.dataset.quiz]; const j = +t.closest('[data-o]').dataset.o; qz.dataset.done = '1';
+    qz.querySelectorAll('.opt').forEach((b,bi) => { b.disabled = true; if (bi === q.a) b.classList.add('right'); else if (bi === j) b.classList.add('wrong'); });
+    qz.querySelector('.why').hidden = false; if (j === q.a) quizScore++;
+    document.getElementById('qs').textContent = quizScore;
+    if (quizScore > (store.quiz[cur] || 0)) { store.quiz[cur] = quizScore; save(); } return; }
+  if (t.closest('[data-reset]')) { render(); return; }
+  const ex = t.closest('[data-exam]');
+  if (ex) { const key = ex.dataset.exam, max = +ex.dataset.max;
+    if (t.closest('[data-ms]')) { const ms = ex.querySelector('.ms'); ms.hidden = !ms.hidden; store.ticks['open-'+key] = !ms.hidden; save(); t.closest('[data-ms]').textContent = ms.hidden ? 'Show mark scheme' : 'Hide mark scheme'; return; }
+    const pt = t.closest('[data-pt]');
+    if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
+      store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
+      ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
+      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
+});
+
+/* ---------- drill engine ---------- */
+let drillCur = null, streak = 0;
+function judge(raw){
+  const d = drillCur;
+  if (d.kind === 'num') { const x = parseFloat(raw.replace(',', '.')); if (isNaN(x)) return null; return { ok: Math.abs(x - d.ans) <= (d.tol != null ? d.tol : Math.abs(d.ans)*0.02) + 1e-9 }; }
+  if (d.kind === 'text') { const n = s => s.replace(/\s+/g, '').replace(/[−–]/g, '-').toLowerCase(); const r = n(raw); if (!r) return null; return { ok: r === n(d.ans) }; }
+  if (d.kind === 'frac') { const P = s => { const m = s.replace(/\s+/g, '').match(/^(-?\d+)(?:\/(\d+))?$/); return m ? [+m[1], m[2] ? +m[2] : 1] : null; };
+    const x = P(raw), y = P(d.ans); if (!x) return raw.trim() ? { ok:false, note:'Write it like 7/12.' } : null; if (!x[1]) return { ok:false };
+    if (x[0] * y[1] !== y[0] * x[1]) return { ok:false };
+    const g = (a, b) => b ? g(b, a % b) : Math.abs(a); return g(x[0], x[1]) === 1 ? { ok:true } : { ok:false, note:'Right value, but simplify it.' }; }
+  if (d.kind === 'config') { const m = raw.match(/\d+/g); if (!m) return null; return { ok: m.join(',') === d.ans }; }
+  if (d.kind === 'formula') { const r = unsub(raw.replace(/\s+/g, '')); if (!r) return null;
+    if (r === d.ans) return { ok:true }; if (r.toLowerCase() === d.ans.toLowerCase()) return { ok:true, note:`Watch the capital letters: ${sub(d.ans)}` }; return { ok:false }; }
+  return null;
+}
+const answerText = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'num' ? num(d.ans) : d.ans;
+function showResult(ok, note){
+  streak = ok ? streak + 1 : 0;
+  if (streak > (store.drill[cur] || 0)) { store.drill[cur] = streak; save(); }
+  const d = drillCur;
+  document.getElementById('dfb').innerHTML = `<div class="fb ${ok?'ok':'no'}"><span class="verdict">${ok ? 'Correct!' : 'Not quite. The answer is ' + answerText(d) + '.'}${note ? ' ' + note : ''}</span>
+    <ol class="steps">${d.s.map((s,j)=>`<li ${j===d.s.length-1?'class="final"':''}><span class="sl">${s[0]}</span><span class="st">${s[1]}</span></li>`).join('')}</ol>
+    <div class="row"><button class="btn primary" type="button" id="dnext">Next question</button></div></div>`;
+  document.getElementById('dnext').onclick = newDrill;
+  document.querySelector('#drill .stat').textContent = `streak ${streak} · best ${store.drill[cur] || 0}`;
+}
+function newDrill(){
+  const box = document.getElementById('drill'); if (!box) return;
+  drillCur = pick(DRILLS[CH[cur].drill])();
+  const d = drillCur;
+  const input = d.kind === 'choice'
+    ? `<div class="opts" id="dch">${d.choices.map((o,j) => `<button class="opt" type="button" data-dc="${j}">${o}</button>`).join('')}</div>`
+    : `<form class="answer" id="dform"><label for="dans" class="note">Your answer</label><input id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" ${d.kind==='num'?'inputmode="decimal"':''} placeholder="${d.kind==='text'?'type your answer':d.kind==='frac'?'e.g. 7/12':'number'}"><button class="btn primary" type="submit">Check</button></form>`;
+  box.innerHTML = `<div class="scorebar"><span class="eyebrow">Practice drill</span><span class="stat">streak ${streak} · best ${store.drill[cur] || 0}</span></div>
+    <p class="drillq">${d.q}</p>${input}<div id="dfb"></div>
+    <div class="row"><button class="btn ghost" type="button" id="dskip">Skip to a new question</button></div>`;
+  if (d.kind === 'choice') {
+    document.getElementById('dch').onclick = ev => { const b = ev.target.closest('[data-dc]'); if (!b || d.done) return; d.done = true; const j = +b.dataset.dc;
+      document.querySelectorAll('#dch .opt').forEach((o,oi) => { o.disabled = true; if (oi === d.ans) o.classList.add('right'); else if (oi === j) o.classList.add('wrong'); });
+      showResult(j === d.ans); };
+  } else {
+    document.getElementById('dform').onsubmit = ev => { ev.preventDefault(); if (d.done) return;
+      const r = judge(document.getElementById('dans').value.trim());
+      if (!r) { document.getElementById('dfb').innerHTML = `<div class="fb no"><span class="verdict">Type an answer first.</span></div>`; return; }
+      d.done = true; showResult(r.ok, r.note); };
+  }
+  document.getElementById('dskip').onclick = () => { streak = 0; newDrill(); };
+}
+renderTabs(); render();
+</script>
+</body>
+</html>

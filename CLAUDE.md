@@ -11,6 +11,7 @@ Live site (GitHub Pages, branch `main`, root): https://charlesjoserajcjr-master.
 | `index.html` | Home page linking the subject packs. Add a card here for every new pack. |
 | `physics.html` | Physics pack: Ch 9 Density, Ch 10 Thermal energy transfer, Ch 11 Sound. Oldest engine (see below). |
 | `chemistry.html` | Chemistry pack: Ch 4 Atoms and periodic table, Ch 5 Bonding, Ch 6 Displacement, Ch 7 Salts. |
+| `maths.html` | Maths pack (0580): equations, angles, statistics, shapes, fractions, sequences, ratio, probability. Built on the chemistry engine plus `text`/`frac` drill kinds. Worked examples carry `intro`, `tip`, `f`, per-step why and `r` rows for the side table. |
 | `cs.html` | Computer Science pack (0478): Ch 1 Data representation, Ch 2 Data transmission, Ch 10 Boolean logic. Newest engine. |
 | `tools/check.py` | Headless-browser test: clicks every tab, self-checks every drill generator, screenshots diagrams. Run it before every push. |
 | `HANDOVER.md` | Project history, decisions, status and the to-do list. Read it first. |
