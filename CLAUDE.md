@@ -31,6 +31,7 @@ Each pack is **one self-contained HTML file**: inline CSS + inline JS + inline S
   - Optional `intro` ("Key idea" box) and `tip` ("Exam tip", revealed after the last step). `prose:true` switches the step font from mono to body.
 - **Drills** are random generators in `DRILLS[key]` returning `{kind, q, ans, s, …}`. Kinds: `num` (with `tol`), `choice` (`choices`, `ans` = index), `config` (e.g. 2,8,1), `formula` (case-checked chemical formula), `bits` (8-bit binary), `text` (hex / RLE, case-insensitive), `table` (tap-to-fill truth table). `judge()` marks typed answers.
 - **Exam questions**: `{q, m (marks), p: [marking points]}`. The student writes on paper, then taps each point he got; score = min(ticks, marks).
+- **Mock papers** (`maths.html` only so far): `PAPERS`, `buildMock()` and `drawMock()` build Cambridge-pattern papers (Core 80 marks / 90 min, Extended 100 marks / 120 min) from drill generators plus the exam bank. See HANDOVER.md. `tools/check.py` verifies mark totals, duplicates and calculator rules.
 - **Progress** is stored in `localStorage` (keys `physpack-v1`, `chempack-v1`, `cspack-v1`) — per device only.
 - **Theme**: CSS tokens on `:root` with a `prefers-color-scheme: dark` block. Every colour must come from a token (diagrams included) so both themes work.
 

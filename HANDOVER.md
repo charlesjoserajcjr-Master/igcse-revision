@@ -53,6 +53,14 @@ Term 1 packs (`physics.html`, `chemistry.html`, `cs.html`) are frozen and labell
 ## Full-year Biology progress
 `biology-year.html` (Cambridge 0610, built on the maths engine, storage key `biopack-v1`) is complete for the core course: 19 chapters in syllabus order: classification, cells, movement into and out of cells, biological molecules, enzymes, plant nutrition, human nutrition, transport in plants, transport in animals, diseases and immunity, gas exchange and respiration, excretion, coordination and response, drugs, reproduction, inheritance, variation and selection, organisms and environment, human influences on ecosystems. Possible additions later: more exam questions per chapter, Extended-only material (nephron detail, ADH, accommodation) and the school's Term 2/3 order.
 
+## Mock papers follow the Cambridge 0580 pattern (Maths, 2 Oct 2026)
+Measured from 15 past papers (2025 and 2026, supplied by the parent; stored outside the repo because they are copyrighted):
+- **Core** (Paper 1 non-calculator, Paper 3 calculator): 80 marks, 1 h 30, about 25 questions in about 45 parts. Parts are mostly 1 and 2 marks (about 55% of parts are 1 mark, 35% are 2 marks, about 10% are 3 to 4 marks).
+- **Extended** (Paper 2 non-calculator, Paper 4 calculator): 100 marks, 2 h, about 24 questions in about 44 parts, mostly 2 and 3 marks.
+- Papers start with easy number questions and get harder; a question often has parts (a), (b), (c).
+`maths.html` now has `PAPERS` (four paper types), `buildMock()` and a paper chooser on the Mock paper tab. Each paper is built to the exact mark total from: (a) 1 and 2 mark parts made from the drill generators (grouped into questions of 1 to 4 parts, answer and method shown as the mark scheme) and (b) 3 to 5 mark questions from each chapter's exam bank. Topic mix targets about 30% number, 22% algebra, 24% geometry, 10% graphs, 14% statistics and probability. Non-calculator papers leave out calculator topics (Pythagoras and trig, bearings, 3D, circles, loci) and any wording that needs a calculator. Core leaves out cumulative frequency, functions and quadratics. Matrices appear in none of the 15 papers, so they are never used in mocks. `tools/check.py` checks 40 builds of every paper type for exact totals, duplicates and calculator rules.
+Not done yet: the other packs (Physics, Chemistry, CS, Biology) still use the older Mini mock. Match them to the real paper layout when the parent shares past papers for those subjects.
+
 ## Known limitations
 - Progress is saved only in the browser on that device.
 - GitHub Pages must stay enabled (Settings → Pages → Deploy from branch `main` / root).

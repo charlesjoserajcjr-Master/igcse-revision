@@ -68,6 +68,15 @@ with sync_playwright() as p:
                     else: pg.fill('#dans', '1'); pg.click('form button[type=submit]')
                     pg.click('#dnext')
     pg.click('[data-tab=mock]'); pg.click('[data-tab=start]')
+    # Cambridge-pattern mock papers (maths pack): marks must total exactly, no repeated question text, no calculator-only topics in non-calculator papers
+    if pg.evaluate("typeof PAPERS !== 'undefined'"):
+        bad = pg.evaluate("""() => { const bad = [];
+          for (const t of Object.keys(PAPERS)) { const P = PAPERS[t];
+            for (let n = 0; n < 40; n++) { const q = buildMock(t), tot = q.reduce((s, x) => s + x.m, 0);
+              if (tot !== P.marks) bad.push([t, 'total', tot]);
+              const seen = new Set(); q.forEach(x => { if (seen.has(x.q)) bad.push([t, 'duplicate', x.q.slice(0, 40)]); seen.add(x.q); if (!P.calc && NOCALC_OUT.includes(x.ch)) bad.push([t, 'calculator topic', x.ch]); if (!P.calc && x.ch !== 'round' && NC_BAD.test(x.q)) bad.push([t, 'calculator wording', x.q.slice(0, 50)]); if (!x.p.length) bad.push([t, 'no mark scheme', x.q.slice(0, 40)]); }); } }
+          return bad.slice(0, 10); }""")
+        print('bad mock papers:', bad)
     pg.set_viewport_size({'width': 400, 'height': 900})
     width = pg.evaluate('document.documentElement.scrollWidth')
     print('page width at 400px viewport:', width, '(OK)' if width <= 400 else '(SIDEWAYS SCROLL!)')

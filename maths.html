@@ -155,6 +155,7 @@ svg .mono{font-family:var(--mono)}
 .plan b{font-family:var(--mono);font-size:.82rem;color:var(--muted);display:block;font-weight:600}
 .timer{font-family:var(--mono);font-size:2.2rem;font-weight:600;font-variant-numeric:tabular-nums}
 .timer.low{color:var(--hot)}
+.pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
 a{color:var(--accent)}
 @media (prefers-reduced-motion: no-preference){.fadein{animation:fi .25s ease-out}@keyframes fi{from{transform:translateY(4px)}to{transform:none}}}
 .intro{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:.98rem;margin:0}
@@ -2682,15 +2683,71 @@ const DRILLS = {
   ]
 };
 
-let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0],['ineq',0],['loci',0],['matx',0],['round',0],['numb2',0],['solid',0]];
-const MOCK_N = MOCK.length;
-function drawMock(){
-  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
-  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
-  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
-  store.mock = MOCK; save();
+/* ---------- mock papers in the Cambridge 0580 pattern ---------- */
+/* Paper layouts measured from 15 past papers (2025 and 2026): Core 80 marks / 90 min, Extended 100 marks / 120 min.
+   Core: about 25 questions in ~45 parts, mostly 1 and 2 marks. Extended: about 24 questions in ~44 parts, mostly 2 and 3 marks. */
+const PAPERS = {
+  core1: { name: 'Paper 1', tier: 'Core', calc: false, marks: 80, mins: 90, drill: { 1: 22, 2: 18 }, exam: { 3: 6, 4: 1 } },
+  core3: { name: 'Paper 3', tier: 'Core', calc: true, marks: 80, mins: 90, drill: { 1: 22, 2: 18 }, exam: { 3: 6, 4: 1 } },
+  ext2: { name: 'Paper 2', tier: 'Extended', calc: false, marks: 100, mins: 120, drill: { 1: 11, 2: 16 }, exam: { 3: 12, 4: 4, 5: 1 } },
+  ext4: { name: 'Paper 4', tier: 'Extended', calc: true, marks: 100, mins: 120, drill: { 1: 11, 2: 16 }, exam: { 3: 12, 4: 4, 5: 1 } }
+};
+const MOCK_GROUPS = { number: ['frac', 'ratio', 'numb', 'pow', 'pct', 'numb2', 'round', 'sets'], algebra: ['eq', 'seq', 'alg', 'simul', 'quad', 'func', 'ineq'], geometry: ['ang', 'shape', 'solid', 'simil', 'circ', 'loci', 'trans', 'vect', 'bear', 'pyth'], graphs: ['coord', 'graph'], data: ['stat', 'prob', 'tree', 'cumf'] };
+const MOCK_WEIGHT = { number: 0.3, algebra: 0.22, geometry: 0.24, graphs: 0.1, data: 0.14 };
+const NOCALC_OUT = ['pyth', 'bear', 'solid', 'circ', 'loci'], CORE_OUT = ['cumf', 'func', 'quad'];
+const mockChapters = P => Object.keys(CH).filter(k => k !== 'matx' && (P.tier === 'Extended' || !CORE_OUT.includes(k)) && (P.calc || !NOCALC_OUT.includes(k)));
+const NC_BAD = /π|3\.14|\bsin\b|\bcos\b|\btan\b|√|d\.p\.|decimal place|3 significant|3 s\.f\./i;
+const MOCK_KINDS = ['num', 'choice', 'frac', 'text', 'pair'];
+const mockAnswer = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'pair' ? '(' + d.ans.join(', ') + ')' : String(d.ans) + (d.unit ? ' ' + d.unit : '');
+const MOCK_GENS = {}; for (const k in DRILLS) MOCK_GENS[k] = DRILLS[k].filter(g => { try { return MOCK_KINDS.includes(g().kind); } catch (e) { return false; } });
+const MOCK_GENS_NC = {}; for (const k in MOCK_GENS) MOCK_GENS_NC[k] = k === 'round' ? MOCK_GENS[k] : MOCK_GENS[k].filter(g => { for (let i = 0; i < 25; i++) if (NC_BAD.test(g().q)) return false; return true; });
+const mockGens = (k, nc) => nc ? MOCK_GENS_NC[k] : MOCK_GENS[k];
+function drillPart(k, want, usedGen, nc){
+  let best = null, any = null; const base = mockGens(k, nc), fresh = base.filter(g => !(usedGen || []).includes(g)), gens = fresh.length ? fresh : base;
+  for (let t = 0; t < 40; t++) {
+    const g = pick(gens), d = g(), skip = nc && k !== 'round' && NC_BAD.test(d.q);
+    const m = d.kind === 'choice' ? 1 : (d.s && d.s.length >= 3 ? 2 : 1), ans = mockAnswer(d);
+    const steps = (d.s || []).slice(0, -1).map(x => x[1] != null ? x[1] : x[0]).filter(Boolean);
+    const part = { q: d.q + (d.kind === 'choice' ? '<br>' + d.choices.map((c, i) => 'ABCD'[i] + '&nbsp; ' + c).join('<br>') : ''), m,
+      p: m === 2 ? ['Method: ' + (steps.join('; ') || 'correct working'), '==Answer: ' + ans + '=='] : ['==Answer: ' + ans + '=='], ch: k };
+    part.g = g; if (!any) any = part; if (skip) continue; if (!best) best = part; if (m === want) return part;
+  }
+  return best || any;
 }
-if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+function buildMock(type){ let q; for (let i = 0; i < 25; i++) { q = buildMockOnce(type); const parts = [].concat(...q.map(x => x.q.split('<br><br>').map(y => y.replace(/^\([abc]\) /, '').replace(/ <span class="pm">.*$/, ''))));
+    if (q.reduce((s, x) => s + x.m, 0) === PAPERS[type].marks && new Set(parts).size === parts.length) break; } return q; }
+function buildMockOnce(type){
+  const P = PAPERS[type], chs = mockChapters(P), cnt = {}, used = {}, gmarks = {}, units = [];
+  const grpOf = k => Object.keys(MOCK_GROUPS).find(g => MOCK_GROUPS[g].includes(k));
+  const chooseChapter = cands => { const byG = {}; cands.forEach(k => { (byG[grpOf(k)] = byG[grpOf(k)] || []).push(k); });
+    const need = g => (gmarks[g] || 0) / MOCK_WEIGHT[g], gs = Object.keys(byG), lo = Math.min(...gs.map(need)), g = pick(gs.filter(x => need(x) === lo));
+    const cs = byG[g], low = Math.min(...cs.map(c => cnt[c] || 0)); return pick(cs.filter(c => (cnt[c] || 0) === low)); };
+  const add = (k, m) => { cnt[k] = (cnt[k] || 0) + 1; gmarks[grpOf(k)] = (gmarks[grpOf(k)] || 0) + m; };
+  Object.keys(P.exam).sort((a, b) => b - a).forEach(m => { for (let n = 0; n < P.exam[m]; n++) {
+    const okQ = (k, q, i) => !used[k + i] && (P.calc || k === 'round' || !NC_BAD.test(q.q));
+    let cands = chs.filter(k => CH[k].exam.some((q, i) => q.m === +m && okQ(k, q, i))); if (!cands.length) cands = chs.filter(k => CH[k].exam.some((q, i) => Math.abs(q.m - m) <= 1 && okQ(k, q, i)));
+    const k = chooseChapter(cands); const idx = shuffle(CH[k].exam.map((q, i) => i).filter(i => okQ(k, CH[k].exam[i], i))).sort((a, b) => Math.abs(CH[k].exam[a].m - m) - Math.abs(CH[k].exam[b].m - m))[0];
+    used[k + idx] = 1; const q = CH[k].exam[idx]; add(k, q.m); units.push({ ch: [k], m: q.m, single: { q: q.q, m: q.m, p: q.p } }); } });
+  const slots = []; Object.keys(P.drill).forEach(m => { for (let n = 0; n < P.drill[m]; n++) slots.push(+m); }); shuffle(slots);
+  while (slots.length) { const k = chooseChapter(chs.filter(c => mockGens(c, !P.calc).length)), size = Math.min(slots.length, mockGens(k, !P.calc).length, P.tier === 'Core' ? pick([1, 2, 2, 3, 3]) : pick([2, 3, 3, 4])), parts = [];
+    const gensUsed = []; for (let i = 0; i < size; i++) { let pt; for (let t = 0; t < 6; t++) { pt = drillPart(k, slots[0], gensUsed, !P.calc); if (!parts.some(x => x.q === pt.q)) break; } gensUsed.push(pt.g); parts.push(pt); slots.shift(); }
+    parts.forEach(p => add(k, p.m)); units.push({ ch: [k], m: parts.reduce((s, p) => s + p.m, 0), parts }); }
+  let total = units.reduce((s, u) => s + u.m, 0), guard = 0;
+  while (total !== P.marks && guard++ < 60) { const diff = P.marks - total;
+    if (diff > 0) { const k = chooseChapter(chs.filter(c => mockGens(c, !P.calc).length)), pt = drillPart(k, Math.min(2, diff), [], !P.calc); if (pt.m <= diff) { add(k, pt.m); units.push({ ch: [k], m: pt.m, parts: [pt] }); total += pt.m; } }
+    else { const u = units.find(u => u.parts && u.parts.length > 1 && u.parts.some(p => p.m <= -diff)); if (!u) break; const i = u.parts.findIndex(p => p.m <= -diff); total -= u.parts[i].m; u.m -= u.parts[i].m; u.parts.splice(i, 1); } }
+  const grpBias = u => grpOf(u.ch[0]) === 'number' ? -1.6 : grpOf(u.ch[0]) === 'algebra' ? -0.4 : 0.4;
+  units.sort((a, b) => (a.m + grpBias(a) + Math.random() * 1.8) - (b.m + grpBias(b) + Math.random() * 1.8));
+  return units.map(u => { if (u.single) return Object.assign({ ch: u.ch[0] }, u.single); const lab = u.parts.length > 1;
+    return { ch: u.ch[0], m: u.m, q: u.parts.map((p, i) => (lab ? '(' + 'abc'[i] + ') ' : '') + p.q + ' <span class="pm">[' + p.m + ']</span>').join('<br><br>'), p: [].concat(...u.parts.map((p, i) => p.p.map(x => (lab ? '(' + 'abc'[i] + ') ' : '') + x))) }; });
+}
+let MOCKQ = [];
+function drawMock(type){
+  type = PAPERS[type] ? type : (PAPERS[store.mockType] ? store.mockType : 'core1');
+  MOCKQ = buildMock(type); store.mockType = type; store.mockq = MOCKQ;
+  Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save();
+}
+if (Array.isArray(store.mockq) && store.mockq.length && PAPERS[store.mockType] && store.mockq.reduce((s, q) => s + q.m, 0) === PAPERS[store.mockType].marks) MOCKQ = store.mockq; else drawMock(store.mockType || 'core1');
 
 /* ---------- worked examples: live working table and notes ---------- */
 for (const key in CH) CH[key].worked.forEach(w => {
@@ -2698,7 +2755,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['ineq','Graphs','Inequality regions'],['loci','Geometry','Loci'],['matx','Number','Matrices'],['round','Number','Rounding & bounds'],['numb2','Number','Recurring & rates'],['solid','Measure','3D shapes'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['ineq','Graphs','Inequality regions'],['loci','Geometry','Loci'],['matx','Number','Matrices'],['round','Number','Rounding & bounds'],['numb2','Number','Recurring & rates'],['solid','Measure','3D shapes'],['mock','','Mock paper']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2794,17 +2851,26 @@ function examCard(key, q, i){
     <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
     ${q.p.map((p,j) => `<button class="point" aria-pressed="${ticks.includes(j)}" data-pt="${j}"><span class="box">✓</span><span>${fmt(p)}</span></button>`).join('')}</div></div>`;
 }
-let timer = null, left = 45*60;
+let timer = null, left = PAPERS[store.mockType].mins * 60;
 const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
 function renderMock(){
-  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
-  return `<div class="chhead fadein"><span class="eyebrow">All eight topics</span><h2>Mini mock</h2>
-    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
+  const P = PAPERS[store.mockType], list = MOCKQ; const [g,t] = examScore('mock', list), perMin = (P.mins / P.marks).toFixed(2);
+  const types = Object.keys(PAPERS).map(k => `<button class="btn ${k === store.mockType ? 'primary' : 'ghost'}" data-ptype="${k}">${PAPERS[k].name} · ${PAPERS[k].tier} · ${PAPERS[k].calc ? 'calculator' : 'no calculator'}</button>`).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0580 pattern</span><h2>Mock paper</h2>
+    <p class="lede">${P.name} style, ${P.tier}: ${t} marks, ${P.mins} minutes, ${list.length} questions. Short questions first, longer ones later, like the real paper.</p></div>
     <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Core papers have lots of 1 and 2 mark questions. Extended papers have more 2 and 3 mark questions. Ask your teacher which tier you sit.</p></div>
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==${Math.floor(P.mins / 60)} hour${P.mins >= 120 ? 's' : ''}${P.mins % 60 ? ' ' + P.mins % 60 + ' minutes' : ''}==. Total: ==${t} marks==.</li>
+      <li>${P.calc ? 'You ==may use a calculator==.' : 'Calculators ==must not be used==.'}</li>
+      <li>Answer all questions on paper. Show ==all necessary working==: method marks are given.</li>
+      <li>The marks for each part are in square brackets [ ].</li>
+      <li>That is about ${perMin} minutes per mark.</li></ul>
+      <details><summary><b>List of formulas</b> (printed in the real paper)</summary><div class="formula" style="margin-top:8px"><span>triangle: A = ½ b h</span><span>circle: A = π r², C = 2 π r</span><span>cylinder: curved area = 2 π r h, V = π r² h</span><span>cone: curved area = π r l, V = ⅓ π r² h</span><span>sphere: S = 4 π r², V = ⅓·4 π r³</span><span>prism: V = A l</span><span>pyramid: V = ⅓ A h</span></div></details></div>
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
-      <p class="note">45 minutes. About 1 minute per mark, plus time to check.</p></div>
-    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New paper (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div></div>
+    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
 }
 let quizScore = 0;
 function bindView(){
@@ -2818,8 +2884,9 @@ function bindView(){
         if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
-    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 45*60; render(); };
-    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = PAPERS[store.mockType].mins * 60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; drawMock(store.mockType); left = PAPERS[store.mockType].mins * 60; render(); };
+    document.getElementById('view').querySelectorAll('[data-ptype]').forEach(b => b.onclick = () => { clearInterval(timer); timer = null; drawMock(b.dataset.ptype); left = PAPERS[store.mockType].mins * 60; render(); });
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
@@ -2847,7 +2914,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
       store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const list = cur === 'mock' ? MOCKQ : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
 });
 
