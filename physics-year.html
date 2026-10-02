@@ -25,6 +25,11 @@
 .tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 12px 7px 0;text-align:left;vertical-align:top}
 .tbl th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 svg .mono{font-family:var(--mono)}
+.tabwrap{display:flex;align-items:center;gap:6px;min-width:0}
+.tabwrap .tabs{flex:1;min-width:0;scroll-behavior:smooth}
+.tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
+.tabarrow:hover{border-color:var(--accent);color:var(--accent)}
+.tabarrow[hidden]{display:none}
 </style>
 <title>Physics Full-Year Pack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,7 +209,7 @@ a{color:var(--accent)}
       <a href="./" class="examdate" style="text-decoration:none">← All subjects</a>
       <div class="examdate">Grade 8 · Whole syllabus</div>
     </div>
-    <nav class="tabs" role="tablist" id="tabs"></nav>
+    <div class="tabwrap"><button class="tabarrow" id="tabL" type="button" aria-label="Scroll chapters left" hidden>&#8249;</button><nav class="tabs" role="tablist" id="tabs"></nav><button class="tabarrow" id="tabR" type="button" aria-label="Scroll chapters right">&#8250;</button></div>
   </div>
 </header>
 <main class="wrap" id="view"></main>
@@ -1620,6 +1625,18 @@ function newDrill(){
 }
 
 renderTabs(); render();
+
+/* chapter tabs: arrow buttons, mouse wheel and keep the selected tab in view (for screens without touch) */
+(function(){
+  const nav = document.getElementById('tabs'), L = document.getElementById('tabL'), R = document.getElementById('tabR');
+  const upd = () => { const m = nav.scrollWidth - nav.clientWidth; L.hidden = nav.scrollLeft <= 2; R.hidden = nav.scrollLeft >= m - 2; };
+  L.onclick = () => nav.scrollBy({ left: -nav.clientWidth * .7, behavior: 'smooth' });
+  R.onclick = () => nav.scrollBy({ left: nav.clientWidth * .7, behavior: 'smooth' });
+  nav.addEventListener('scroll', upd); window.addEventListener('resize', upd);
+  nav.addEventListener('wheel', e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { nav.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive: false });
+  new MutationObserver(() => { const a = nav.querySelector('[aria-selected="true"]'); if (a) a.scrollIntoView({ inline: 'center', block: 'nearest' }); upd(); }).observe(nav, { childList: true });
+  const a = nav.querySelector('[aria-selected="true"]'); if (a) a.scrollIntoView({ inline: 'center', block: 'nearest' }); upd();
+})();
 </script>
 
 </body>
