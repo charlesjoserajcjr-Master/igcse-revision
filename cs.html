@@ -188,6 +188,27 @@ svg .grnt{fill:var(--good);font-weight:700}
 .tt.add tr.carry td{color:var(--hot);font-size:.8rem;font-weight:700}
 .tt.add tr.sum td{border-top:2px solid var(--ink);font-weight:700;color:var(--good)}
 .tt.add td{padding:4px 9px}
+.wk-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,340px);grid-template-areas:"steps board";gap:18px;align-items:start}
+.wk-split .steps{grid-area:steps}
+.wk-split .board{grid-area:board;position:sticky;top:150px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;overflow-x:auto}
+@media (max-width:700px){.wk-split{grid-template-columns:minmax(0,1fr);grid-template-areas:"board" "steps"}.wk-split .board{top:118px;z-index:2}}
+.bt{font-size:.82rem}
+.bt td,.bt th{padding:4px 6px!important;min-width:1.9em!important}
+.bt th.cur,.bt td.cur{outline:2px solid var(--hot);outline-offset:-2px}
+.bt th.rl{text-align:left;color:var(--muted);font-weight:400;white-space:nowrap;border:0}
+.bt td.par{box-shadow:inset 0 -3px 0 var(--hot)}
+.bnote{font-size:.9rem;margin:0}
+.nibs{display:flex;gap:8px;flex-wrap:wrap}
+.nibs .curt{outline:2px solid var(--hot);border-radius:4px}
+.hexd{font-weight:700;color:var(--accent)}
+.units td{text-align:left!important;font-family:var(--mono)}
+.units .how{color:var(--muted)}
+.units tr.hl2 td,.units tr.hl2 th{background:var(--kw-bg);color:var(--kw-ink)}
+.runs{display:flex;gap:6px;flex-wrap:wrap}
+.run{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--card)}
+.run.done{background:var(--accent-soft)}
+.run.curr{outline:2px solid var(--hot)}
+.steps li.now .st{background:var(--kw-bg);color:var(--kw-ink);border-radius:4px;padding:0 4px}
 a{color:var(--accent)}
 @media (prefers-reduced-motion: no-preference){.fadein{animation:fi .25s ease-out}@keyframes fi{from{transform:translateY(4px)}to{transform:none}}}
 </style>
@@ -961,6 +982,154 @@ const DRILLS = {
   ]
 };
 
+/* ---------- live side boards for worked examples ---------- */
+const bnote = n => n ? `<p class="bnote">${n}</p>` : '';
+function pvBoard(bits, cur, note, heads){
+  heads = heads || PV;
+  return `<table class="tt pv bt"><tr>${heads.map((p,i) => `<th class="${i === cur ? 'cur' : ''}">${p}</th>`).join('')}</tr><tr>${bits.map((x,i) => `<td class="${i === cur ? 'cur' : ''} ${x === '1' ? 'one' : ''}">${x === '' ? '&nbsp;' : x}</td>`).join('')}</tr></table>${bnote(note)}`;
+}
+const partial = (b, n) => b.slice(0, n).split('').concat(Array(8 - n).fill(''));
+function nibBoard(b, show, note, reverse){
+  const half = (bits, i) => { const v = parseInt(bits, 2), h = v.toString(16).toUpperCase(); const on = show > i;
+    const bitCells = [...bits].map(x => `<td class="${(!reverse || on) && x === '1' ? 'one' : ''}">${reverse && !on ? '?' : x}</td>`).join('');
+    const hexCell = reverse ? `${h} = ${v}` : on ? `${v} → ${h}` : '?';
+    return `<table class="tt pv bt ${show === i + 1 ? 'curt' : ''}"><tr>${[8,4,2,1].map(p => `<th>${p}</th>`).join('')}</tr><tr>${bitCells}</tr><tr><td colspan="4" class="hexd">${hexCell}</td></tr></table>`; };
+  return `<div class="nibs">${half(b.slice(0,4), 0)}${half(b.slice(4), 1)}</div>${bnote(note)}`;
+}
+function gridBoard(heads, rows, note, cur){
+  return `<table class="tt pv bt"><tr><th></th>${heads.map((h,i) => `<th class="${i === cur ? 'cur' : ''}">${h}</th>`).join('')}</tr>${rows.map(([lab, cells]) => `<tr><th class="rl">${lab}</th>${cells.map((c,i) => `<td class="${i === cur ? 'cur' : ''} ${c === '1' ? 'one' : ''}">${c === '' ? '&nbsp;' : c}</td>`).join('')}</tr>`).join('')}</table>${bnote(note)}`;
+}
+function addBoard(a, b, k, note){
+  const A = bin8(a), B = bin8(b); const cr = Array(9).fill(''), res = Array(8).fill(''); let carry = 0;
+  for (let i = 7; i >= 0; i--) { const t = +A[i] + +B[i] + carry; carry = t >> 1; if (i >= 8 - k) { res[i] = String(t % 2); if (carry) cr[i] = '1'; } }
+  const curCol = k >= 1 && k <= 8 ? 8 - k + 1 : -1;
+  const row = (lab, cells, cls) => `<tr class="${cls||''}"><th class="rl">${lab}</th>${cells.map((c,i) => `<td class="${i === curCol && k < 8 ? 'cur' : ''}">${c === '' ? '&nbsp;' : c}</td>`).join('')}</tr>`;
+  const over = k >= 8 && carry ? '1' : '';
+  return `<table class="tt add bt">${row('carry', cr, 'carry')}${row('', [''].concat([...A]))}${row('+', [''].concat([...B]))}${row('=', [over].concat(res), 'sum')}</table>${bnote(note)}`;
+}
+function unitBoard(rows, k, note){
+  return `<table class="tt bt units">${rows.map(([u, v, how], i) => `<tr class="${i === k - 1 ? 'hl2' : ''}"><th class="rl">${u}</th><td>${i < k ? v : '?'}</td><td class="how">${i < k ? how : ''}</td></tr>`).join('')}</table>${bnote(note)}`;
+}
+function byteBoard(bits, note, parityFirst){
+  return `<table class="tt pv bt"><tr>${[...bits].map((x,i) => `<td class="${x === '1' ? 'one' : ''} ${parityFirst && i === 0 ? 'par' : ''}">${x}</td>`).join('')}</tr></table>${bnote(note)}`;
+}
+function ttBoard(ex, cols, note){
+  const rows = rowsFor(ex.n); const heads = (ex.n === 3 ? ['A','B','C'] : ['A','B']).concat(ex.parts.map(p => p[0]), ['X']); const nIn = ex.n;
+  return `<table class="tt bt"><tr>${heads.map((h,i) => `<th class="${i === cols - 1 && i >= nIn ? 'cur' : ''}">${h}</th>`).join('')}</tr>${rows.map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}${ex.parts.map((p,j) => `<td class="${nIn + j === cols - 1 ? 'cur' : ''}">${nIn + j < cols ? p[1](...r) : ''}</td>`).join('')}<td class="xcol ${heads.length === cols ? 'cur' : ''}">${heads.length <= cols ? ex.f(...r) : ''}</td></tr>`).join('')}</table>${bnote(note)}`;
+}
+function runBoard(runs, k, note){
+  return `<div class="runs">${runs.map(([c, n], i) => `<div class="run ${i < k ? 'done' : ''} ${i === k - 1 ? 'curr' : ''}"><span class="mono">${c.repeat(n)}</span><b>${i < k ? n + c : '?'}</b></div>`).join('')}</div>${bnote(note)}`;
+}
+const attach = (w, b0, boards) => { w.board0 = b0; w.s.forEach((st, j) => { if (boards[j]) st[3] = boards[j]; }); };
+
+/* data */
+attach(WK_DATA[0], () => pvBoard(Array(8).fill(''), -1, 'Number to convert: <b>150</b>'), [
+  () => pvBoard(Array(8).fill(''), -1, 'Number to convert: <b>150</b>'),
+  () => pvBoard(partial('10010110',1), 0, '128 fits: 150 − 128 = <b>22</b> left'),
+  () => pvBoard(partial('10010110',3), 2, '64 and 32 are too big for 22 → 0, 0'),
+  () => pvBoard(partial('10010110',4), 3, '16 fits: 22 − 16 = <b>6</b> left'),
+  () => pvBoard(partial('10010110',5), 4, '8 is too big for 6 → 0'),
+  () => pvBoard(partial('10010110',6), 5, '4 fits: 6 − 4 = <b>2</b> left'),
+  () => pvBoard(partial('10010110',7), 6, '2 fits: 2 − 2 = <b>0</b> left'),
+  () => pvBoard(partial('10010110',8), 7, 'Nothing left → 0 under 1.<br>128 + 16 + 4 + 2 = <b>150</b> ✓')]);
+WK_DATA[0].s[7][1] = '1001 0110';
+attach(WK_DATA[1], () => pvBoard(Array(8).fill(''), -1, 'Binary: 10110101'), [
+  () => pvBoard([...'10110101'], -1, 'Each bit sits under its place value'),
+  () => pvBoard([...'10110101'], -1, 'Blue = a 1: count <b>128, 32, 16, 4, 1</b>'),
+  () => pvBoard([...'10110101'], -1, 'Running total:<br>128 → 160 → 176 → 180 → <b>181</b>'),
+  () => pvBoard([...'10110101'], -1, '= <b>181</b>')]);
+WK_DATA[1].s[0][1] = 'see the table';
+attach(WK_DATA[2], () => nibBoard('10010110', 0), [
+  () => nibBoard('10010110', 0, 'Two nibbles: 1001 and 0110'),
+  () => nibBoard('10010110', 0, 'Each nibble uses 8, 4, 2, 1'),
+  () => nibBoard('10010110', 1, '1001 = 8 + 1 = 9 → <b>9</b>'),
+  () => nibBoard('10010110', 2, '0110 = 4 + 2 = 6 → <b>6</b>'),
+  () => nibBoard('10010110', 2, 'Hex: <b>96</b>')]);
+const hx = (v, d, note, cur) => gridBoard(['16s','1s'], [['value', v], ['hex', d]], note, cur);
+attach(WK_DATA[3], () => hx(['?','?'], ['?','?'], '200 = ? × 16 + ?'), [
+  () => hx(['12','8'], ['?','?'], '200 ÷ 16 = 12 remainder 8'),
+  () => hx(['12','8'], ['C','?'], '12 → <b>C</b>', 0),
+  () => hx(['12','8'], ['C','8'], '8 → <b>8</b>', 1),
+  () => hx(['12','8'], ['C','8'], 'Hex: <b>C8</b><br>12 × 16 + 8 = 200 ✓')]);
+const hd = (v, note, cur) => gridBoard(['16s','1s'], [['hex', ['3','E']], ['worth', v]], note, cur);
+attach(WK_DATA[4], () => hd(['?','?'], 'Hex: 3E'), [
+  () => hd(['3 × 16 = 48','?'], '', 0),
+  () => hd(['48','E = 14'], '', 1),
+  () => hd(['48','14'], '48 + 14 = <b>62</b>'),
+  () => hd(['48','14'], 'Denary: <b>62</b>')]);
+attach(WK_DATA[5], () => nibBoard('10110111', 0, '', true), [
+  () => nibBoard('10110111', 1, 'B = 11 = 8 + 2 + 1 → <b>1011</b>', true),
+  () => nibBoard('10110111', 2, '7 = 4 + 2 + 1 → <b>0111</b>', true),
+  () => nibBoard('10110111', 2, 'Join: 1011 0111', true),
+  () => nibBoard('10110111', 2, 'Binary: <b>10110111</b>', true)]);
+attach(WK_DATA[6], () => addBoard(110, 91, 0, 'Start at the right-hand column'), [
+  () => addBoard(110, 91, 1, '0 + 1 = 1'), () => addBoard(110, 91, 2, '1 + 1 = 10 → write 0, carry 1'),
+  () => addBoard(110, 91, 3, '1 + 0 + 1 = 10 → write 0, carry 1'), () => addBoard(110, 91, 4, '1 + 1 + 1 = 11 → write 1, carry 1'),
+  () => addBoard(110, 91, 8, 'Columns 5 to 8 done the same way'), () => addBoard(110, 91, 8, 'Orange = carries'),
+  () => addBoard(110, 91, 8, '<b>11001001</b> = 201 ✓')]);
+WK_DATA[6].s[5][1] = 'see the table';
+attach(WK_DATA[7], () => addBoard(192, 65, 0, ''), [
+  () => addBoard(192, 65, 8, 'The left-most carry needs a 9th column'), () => addBoard(192, 65, 8, 'Register keeps only the 8 bits: 0000 0001'),
+  () => addBoard(192, 65, 8, '192 + 65 = 257 > 255'), () => addBoard(192, 65, 8, '<b>Overflow error</b>')]);
+WK_DATA[7].s[0][1] = 'see the table';
+const sb = (rows, note) => gridBoard(['','','','','','','',''], rows, note).replace(/<tr><th><\/th>(<th class=""><\/th>)+<\/tr>/, '');
+attach(WK_DATA[8], () => sb([['before', [...'00110100']]], '= 52'), [
+  () => sb([['before', [...'00110100']]], '32 + 16 + 4 = 52'),
+  () => sb([['before', [...'00110100']], ['after', [...'00001101']]], 'The two right-hand 0s fall off; two 0s come in on the left'),
+  () => sb([['before', [...'00110100']], ['after', [...'00001101']]], '8 + 4 + 1 = <b>13</b>'),
+  () => sb([['before', [...'00110100']], ['after', [...'00001101']]], '52 ÷ 4 = <b>13</b> ✓')]);
+WK_DATA[8].s[1][1] = 'see the table';
+attach(WK_DATA[9], () => sb([['before', [...'11000101']]], '= 197'), [
+  () => sb([['before', [...'11000101']]], '= 197'),
+  () => sb([['before', [...'11000101']], ['after', [...'10001010']]], 'The left-most 1 falls off; a 0 comes in on the right'),
+  () => sb([['before', [...'11000101']], ['after', [...'10001010']]], '128 + 8 + 2 = <b>138</b>'),
+  () => sb([['before', [...'11000101']], ['after', [...'10001010']]], '138 is not 197 × 2: a 1 was lost')]);
+WK_DATA[9].s[1][1] = 'see the table';
+const TCH = ['−128',64,32,16,8,4,2,1];
+attach(WK_DATA[10], () => gridBoard(TCH, [['+20', Array(8).fill('')]], ''), [
+  () => gridBoard(TCH, [['+20', [...'00010100']]], '16 + 4 = 20'),
+  () => gridBoard(TCH, [['+20', [...'00010100']], ['flip', [...'11101011']]], 'Every bit flipped'),
+  () => gridBoard(TCH, [['+20', [...'00010100']], ['flip', [...'11101011']], ['+1', [...'11101100']]], 'Add 1'),
+  () => gridBoard(TCH, [['+20', [...'00010100']], ['flip', [...'11101011']], ['+1', [...'11101100']]], '−128 + 64 + 32 + 8 + 4 = <b>−20</b> ✓')]);
+attach(WK_DATA[11], () => pvBoard([...'10110100'], -1, '', TCH), [
+  () => pvBoard([...'10110100'], 0, 'First column is −128', TCH), () => pvBoard([...'10110100'], -1, 'Columns with a 1: −128, 32, 16, 4', TCH),
+  () => pvBoard([...'10110100'], -1, '32 + 16 + 4 = 52', TCH), () => pvBoard([...'10110100'], -1, '−128 + 52 = <b>−76</b>', TCH)]);
+const IMG = [['pixels','786 432','1024 × 768'],['bits','18 874 368','× 24'],['bytes','2 359 296','÷ 8'],['KiB','2304','÷ 1024'],['MiB','2.25','÷ 1024']];
+attach(WK_DATA[12], () => unitBoard(IMG, 0, 'Units ladder'), [
+  () => unitBoard(IMG, 0, 'Formula first'), () => unitBoard(IMG, 1), () => unitBoard(IMG, 2), () => unitBoard(IMG, 3), () => unitBoard(IMG, 4), () => unitBoard(IMG, 5, '<b>2.25 MiB</b>')]);
+const SND = [['bits per second','705 600','44 100 × 16'],['bits','42 336 000','× 60 s'],['bytes','5 292 000','÷ 8'],['KiB','5168 (approx.)','÷ 1024'],['MiB','5.05','÷ 1024']];
+attach(WK_DATA[13], () => unitBoard(SND, 0, 'Units ladder'), [
+  () => unitBoard(SND, 0, 'Formula first'), () => unitBoard(SND, 1), () => unitBoard(SND, 2), () => unitBoard(SND, 3), () => unitBoard(SND, 5, '<b>≈ 5.05 MiB</b>')]);
+const RUNS = [['W',6],['B',3],['W',4]];
+attach(WK_DATA[14], () => runBoard(RUNS, 0, 'WWWWWWBBBWWWW'), [
+  () => runBoard(RUNS, 0, 'Three runs'), () => runBoard(RUNS, 3, ''), () => runBoard(RUNS, 3, '<b>6W3B4W</b>'), () => runBoard(RUNS, 3, '13 → 6 characters'), () => runBoard(RUNS, 3, 'Lossless: rebuild exactly')]);
+
+/* transmission */
+attach(WK_TRANS[0], () => byteBoard('?1100101', 'Parity bit goes first', true), [
+  () => byteBoard('?1100101', 'Data has <b>4</b> ones', true), () => byteBoard('?1100101', '4 is even', true),
+  () => byteBoard('01100101', 'Parity bit = <b>0</b> → total still 4 (even)', true), () => byteBoard('01100101', 'Sent: <b>01100101</b>', true)]);
+attach(WK_TRANS[1], () => byteBoard('10110110', 'Received'), [
+  () => byteBoard('10110110', 'Blue = 1s: <b>5</b>'), () => byteBoard('10110110', 'Odd parity needs an odd count'), () => byteBoard('10110110', '5 is odd → <b>passes</b>')]);
+attach(WK_TRANS[2], () => byteBoard('10110011', 'Received'), [
+  () => byteBoard('10110011', 'Blue = 1s: <b>5</b>'), () => byteBoard('10110011', 'Even parity needs an even count'),
+  () => byteBoard('10110011', '5 is odd → <b>error</b>: resend'), () => byteBoard('10110011', 'Which bit changed? Cannot tell')]);
+attach(WK_TRANS[3], () => byteBoard('10110010', 'Sent: 4 ones (even)'), [
+  () => byteBoard('10110010', 'Sent: 4 ones (even)'), () => byteBoard('10111110', 'Received: 6 ones'),
+  () => byteBoard('10111110', '6 is even → passes, but it is <b>wrong</b>'), () => byteBoard('10111110', 'Two-bit errors are missed')]);
+
+/* logic */
+const EXL = EXPR[9];
+attach(WK_LOGIC[0], () => ttBoard(EXL, 3, 'Inputs only'), [
+  () => ttBoard(EXL, 3, 'Count up 000 → 111'), () => ttBoard(EXL, 4, 'A AND B'), () => ttBoard(EXL, 5, 'NOT C'), () => ttBoard(EXL, 6, 'X = P OR Q'), () => ttBoard(EXL, 6, 'Complete')]);
+WK_LOGIC[0].s[4][1] = 'see the table';
+const ev = (cells, note, cur) => gridBoard(['A','B','C','A NOR B','B AND C','X'], [['', cells]], note, cur);
+attach(WK_LOGIC[1], () => ev(['0','1','1','','',''], 'Inputs'), [
+  () => ev(['0','1','1','0','',''], '0 NOR 1 = 0', 3), () => ev(['0','1','1','0','1',''], '1 AND 1 = 1', 4),
+  () => ev(['0','1','1','0','1','1'], '0 OR 1 = 1', 5), () => ev(['0','1','1','0','1','1'], 'X = <b>1</b>')]);
+const gt = (n, note) => gridBoard(['A','B','X'], [['',['0','0','0']],['',['0','1','1']],['',['1','0','1']],['',['1','1','0']]].map((r,i) => [r[0], i < n || n === 4 ? r[1] : [r[1][0], r[1][1], '']]), note, 2);
+attach(WK_LOGIC[5], () => gt(4, 'Output column: 0 1 1 0'), [
+  () => gt(4, '1 when the inputs are different'), () => gt(4, '11 → 0, so not OR'), () => gt(4, '<b>XOR</b>')]);
+
 const MOCK = [['data',0],['data',3],['data',5],['data',6],['trans',0],['trans',4],['trans',7],['logic',0],['logic',1],['logic',2]];
 
 /* ---------- state & rendering ---------- */
@@ -1025,7 +1194,7 @@ function renderChapter(k){
   if (sub_ === 'learn') body = c.learn.map(cardHTML).join('') + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
   if (sub_ === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
   if (sub_ === 'worked') body = `<div class="card"><h3>How to use these</h3><p class="note">Read the question and try it on paper. Then tap <b>Next step</b>. Each step shows the working, and the line underneath explains <b>why</b>. The exam tip appears when you reach the end.</p></div>` + c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>${w.intro ? `<p class="intro"><b>Key idea:</b> ${fmt(w.intro)}</p>` : ''}
-      <ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(typeof st[1] === 'function' ? st[1]() : st[1])}</span>${st[2] ? `<span class="why2">${fmt(st[2])}</span>` : ''}</li>`).join('')}</ol>
+      ${w.board0 ? '<div class="wk-split"><div class="board"><span class="eyebrow">Working table</span><div class="board-in">' + w.board0() + '</div></div>' : ''}<ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(typeof st[1] === 'function' ? st[1]() : st[1])}</span>${st[2] ? `<span class="why2">${fmt(st[2])}</span>` : ''}</li>`).join('')}</ol>${w.board0 ? '</div>' : ''}
       ${w.tip ? `<p class="tip" hidden><b>Exam tip:</b> ${fmt(w.tip)}</p>` : ''}
       <div class="row"><button class="btn primary" data-next>Next step</button><button class="btn ghost" data-all>Show all</button><button class="btn ghost" data-hide>Hide</button></div></div>`).join('');
   if (sub_ === 'drill') body = `<div class="card" id="drill"></div>`;
@@ -1083,7 +1252,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (t.closest('[data-next]')) { const n = items.find(li => li.hidden); if (n) n.hidden = false; }
     if (t.closest('[data-all]')) items.forEach(li => li.hidden = false);
     if (t.closest('[data-hide]')) items.forEach(li => li.hidden = true);
-    wk.querySelector('[data-next]').disabled = !items.some(li => li.hidden); const tp = wk.querySelector('.tip'); if (tp) tp.hidden = items.some(li => li.hidden); return; }
+    wk.querySelector('[data-next]').disabled = !items.some(li => li.hidden); const tp = wk.querySelector('.tip'); if (tp) tp.hidden = items.some(li => li.hidden); updateBoard(wk, items); return; }
   const qz = t.closest('[data-quiz]');
   if (qz && t.closest('[data-o]') && !qz.dataset.done) {
     const q = CH[cur].quiz[+qz.dataset.quiz]; const j = +t.closest('[data-o]').dataset.o; qz.dataset.done = '1';
@@ -1160,6 +1329,14 @@ function newDrill(){
   document.getElementById('dskip').onclick = () => { streak = 0; newDrill(); };
 }
 
+
+function updateBoard(wk, items){
+  const bi = wk.querySelector('.board-in'); if (!bi) return;
+  const w = CH[cur].worked[+wk.dataset.worked]; let html = w.board0();
+  items.forEach((li, j) => { if (!li.hidden && w.s[j][3]) html = w.s[j][3](); });
+  bi.innerHTML = html;
+  items.forEach(li => li.classList.remove('now')); const vis = items.filter(li => !li.hidden); if (vis.length) vis[vis.length-1].classList.add('now');
+}
 /* ---------- Try it: logic lab ---------- */
 let LG = 'AND', LA = 0, LB = 1, CA = 1, CB = 0, CC = 0;
 function renderLab(){
