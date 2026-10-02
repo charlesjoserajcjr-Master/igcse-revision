@@ -47,6 +47,9 @@ Term 1 packs (`physics.html`, `chemistry.html`, `cs.html`) are frozen and labell
 ## Full-year Chemistry progress
 `chemistry-year.html`: Term 1 chapters (Atoms, Bonding, Displacement, Salts) plus Separation techniques, Formulae/Mr/equations, The mole, Rates, Energetics, Electrolysis, Metals and extraction, Air and water, Hydrocarbons, Alcohols/acids/polymers and Chemical analysis (16 chapters). Still to add: states of matter and diffusion, periodic table groups in detail, more exam questions per chapter.
 
+## Full-year Computer Science progress
+`cs-year.html`: Term 1 chapters (Data representation, Data transmission, Boolean logic) plus Hardware, Software, The internet and security, Algorithms and problem solving, Programming in Python and Databases/SQL (9 chapters). Still to add: automated and emerging technologies (robotics, AI, IoT), ethics and the digital divide, more trace-table and pseudocode practice.
+
 ## Known limitations
 - Progress is saved only in the browser on that device.
 - GitHub Pages must stay enabled (Settings → Pages → Deploy from branch `main` / root).

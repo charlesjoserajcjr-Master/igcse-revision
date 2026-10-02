@@ -216,6 +216,13 @@ a{color:var(--accent)}
 .tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
+.wb{border-collapse:collapse;font-size:.88rem;width:100%}
+.wb th,.wb td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;background:var(--card)}
+.wb th{color:var(--muted);font-weight:400;white-space:nowrap;width:1%}
+.wb td{font-family:var(--mono);overflow-wrap:anywhere}
+.wb td.q{color:var(--muted);font-weight:400}
+.wb td.fill{background:var(--good-soft);color:var(--good);font-weight:700}
+.wb tr.cur th,.wb tr.cur td{outline:2px solid var(--hot);outline-offset:-2px}
 </style>
 </head>
 <body>
@@ -735,7 +742,75 @@ const WK_LOGIC = [
     tip:'Learn each gate’s pattern for 00, 01, 10, 11: AND 0001 · OR 0111 · NAND 1110 · NOR 1000 · XOR 0110.' }
 ];
 
-/* ---------- content ---------- */
+/* ---------- content ---------- *//* ---------- new chapters: helpers and diagrams ---------- */
+const T = (x, y, s, cls = '') => `<text x="${x}" y="${y}" class="${cls}">${s}</text>`;
+const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
+function wkBoard(e, k){
+  const rows = e.r.map(([lab, val, at]) => { const on = at <= k;
+    return `<tr class="${at === k && k >= 0 ? 'cur' : ''}"><th>${lab}</th><td class="${on ? (at >= 0 ? 'fill' : '') : 'q'}">${on ? fmt(val) : '?'}</td></tr>`; }).join('');
+  return `<table class="wb">${rows}</table>${e.f ? `<p class="bnote">${fmt(e.f)}</p>` : ''}`;
+}
+function svgCPU(){
+  const box = (x, y, w, h, t, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" class="${cls}" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + w / 2, y + h / 2 + 5, t, 'mid lbl')}`;
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="CPU components and buses">${arrowDefs('u')}
+  <rect x="40" y="30" width="400" height="230" rx="10" class="nonmetal" style="stroke:var(--accent);stroke-width:2.5"/>${T(240, 24, 'CPU', 'mid acct')}
+  ${box(60, 56, 170, 54, 'Control Unit (CU)')}${box(250, 56, 170, 54, 'ALU')}${box(60, 130, 80, 40, 'PC')}${box(150, 130, 80, 40, 'MAR')}${box(250, 130, 80, 40, 'MDR')}${box(340, 130, 80, 40, 'CIR')}${box(60, 190, 80, 40, 'ACC')}${box(150, 190, 270, 40, 'Cache')}
+  <line x1="440" y1="90" x2="520" y2="90" class="acc" marker-end="url(#b-u)"/><line x1="440" y1="150" x2="520" y2="150" class="hotl" marker-end="url(#h-u)"/><line x1="440" y1="210" x2="520" y2="210" class="ln" marker-end="url(#a-u)"/>
+  ${box(530, 50, 140, 190, 'RAM')}${T(570, 275, 'main memory', 'mid mut')}
+  ${T(700, 70, 'Address bus', 'acct')}${T(700, 90, '(one way, to memory)', 'mut')}${T(700, 140, 'Data bus', 'hott')}${T(700, 160, '(two way)', 'mut')}${T(700, 210, 'Control bus', 'lbl')}${T(700, 230, 'carries control signals', 'mut')}</svg>`;
+}
+function svgFDE(){
+  const b = (x, y, t, s) => `<rect x="${x}" y="${y}" width="230" height="64" rx="10" class="metal" style="stroke:var(--accent);stroke-width:2"/>${T(x + 115, y + 28, t, 'mid lbl')}${T(x + 115, y + 48, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Fetch decode execute cycle">${arrowDefs('f')}
+  ${b(30, 50, '1. FETCH', 'PC → MAR; RAM → MDR → CIR')}${b(315, 50, '2. DECODE', 'CU works out the instruction')}${b(600, 50, '3. EXECUTE', 'ALU, memory or I/O does it')}
+  <line x1="262" y1="82" x2="311" y2="82" class="ln" marker-end="url(#a-f)"/><line x1="547" y1="82" x2="596" y2="82" class="ln" marker-end="url(#a-f)"/><polyline points="715,116 715,200 145,200 145,120" class="hotl" fill="none" marker-end="url(#h-f)"/>
+  ${T(415, 226, 'repeat for the next instruction (PC has been incremented)', 'mid hott')}${T(40, 262, 'The cycle repeats billions of times a second: the clock speed in GHz.', 'lbl')}</svg>`;
+}
+function svgLayers(){
+  const L = (y, t, s, cls) => `<rect x="120" y="${y}" width="360" height="52" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.6"/>${T(300, y + 24, t, 'mid lbl')}${T(300, y + 42, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Layers of a computer system">${arrowDefs('l')}
+  ${L(20, 'User', 'uses the computer', 'nonmetal')}${L(86, 'Application software', 'word processor, browser, games', 'metal')}${L(152, 'Operating system', 'manages hardware and software', 'metal')}${L(218, 'Hardware', 'CPU, memory, storage, devices', 'nonmetal')}
+  ${T(520, 50, 'System software:', 'lbl')}${T(520, 72, 'OS and utility programs', 'mut')}${T(520, 110, 'Application software:', 'lbl')}${T(520, 132, 'programs for the user’s tasks', 'mut')}${T(520, 176, 'Translators (compilers,', 'lbl')}${T(520, 198, 'interpreters) are system', 'lbl')}${T(520, 220, 'software too.', 'lbl')}</svg>`;
+}
+function svgDNS(){
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="How a browser finds a web page using DNS">${arrowDefs('n')}
+  <rect x="30" y="100" width="150" height="60" rx="8" class="metal" style="stroke:var(--ink);stroke-width:1.6"/>${T(105, 136, 'Your browser', 'mid lbl')}
+  <rect x="350" y="20" width="160" height="60" rx="8" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/>${T(430, 56, 'DNS server', 'mid lbl')}
+  <rect x="680" y="100" width="150" height="60" rx="8" class="metal" style="stroke:var(--ink);stroke-width:1.6"/>${T(755, 136, 'Web server', 'mid lbl')}
+  <line x1="150" y1="100" x2="350" y2="60" class="acc" marker-end="url(#b-n)"/>${T(210, 66, '1. www.example.com?', 'mid acct')}
+  ${T(470, 106, '2. IP address 93.184.216.34', 'mid hott')}
+  <line x1="180" y1="140" x2="676" y2="140" class="ln" marker-end="url(#a-n)"/>${T(430, 168, '3. request the page (HTTP / HTTPS)', 'mid lbl')}
+  <line x1="676" y1="152" x2="184" y2="152" class="acc" marker-end="url(#b-n)"/>${T(430, 192, '4. page data sent back', 'mid acct')}
+  ${T(40, 244, 'DNS = Domain Name System: it turns a domain name into an IP address.', 'lbl')}${T(40, 266, 'URL = protocol :// domain name / path   e.g. https://www.example.com/page.html', 'mono')}</svg>`;
+}
+function svgFlow(){
+  const sh = (x, y, w, h, t, kind) => kind === 'term' ? `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h / 2}" class="metal" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + w / 2, y + h / 2 + 5, t, 'mid')}`
+    : kind === 'io' ? `<polygon points="${x + 14},${y} ${x + w},${y} ${x + w - 14},${y + h} ${x},${y + h}" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + w / 2, y + h / 2 + 5, t, 'mid')}`
+    : kind === 'dec' ? `<polygon points="${x + w / 2},${y} ${x + w},${y + h / 2} ${x + w / 2},${y + h} ${x},${y + h / 2}" class="metal" style="stroke:var(--accent);stroke-width:2"/>${T(x + w / 2, y + h / 2 + 5, t, 'mid')}`
+    : `<rect x="${x}" y="${y}" width="${w}" height="${h}" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + w / 2, y + h / 2 + 5, t, 'mid')}`;
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="Flowchart symbols and a small flowchart">${arrowDefs('w')}
+  ${sh(40, 20, 130, 40, 'START / END', 'term')}${sh(40, 80, 130, 40, 'INPUT / OUTPUT', 'io')}${sh(40, 140, 130, 40, 'process', 'proc')}${sh(40, 200, 130, 70, 'decision?', 'dec')}
+  ${T(190, 44, 'terminator (oval)', 'mut')}${T(190, 104, 'input / output (parallelogram)', 'mut')}${T(190, 164, 'process (rectangle)', 'mut')}${T(190, 238, 'decision (diamond), Yes / No', 'mut')}
+  ${sh(560, 10, 110, 36, 'START', 'term')}<line x1="615" y1="46" x2="615" y2="66" class="ln" marker-end="url(#a-w)"/>${sh(540, 68, 150, 40, 'INPUT mark', 'io')}<line x1="615" y1="108" x2="615" y2="128" class="ln" marker-end="url(#a-w)"/>${sh(550, 130, 130, 70, 'mark ≥ 50?', 'dec')}
+  <line x1="680" y1="165" x2="734" y2="165" class="ln" marker-end="url(#a-w)"/>${T(707, 156, 'Yes', 'mid acct')}${sh(736, 146, 116, 38, 'OUTPUT Pass', 'io')}
+  <line x1="615" y1="200" x2="615" y2="236" class="ln" marker-end="url(#a-w)"/>${T(632, 222, 'No', 'acct')}${sh(552, 238, 126, 38, 'OUTPUT Fail', 'io')}
+  <line x1="794" y1="184" x2="794" y2="308" class="thin"/><line x1="794" y1="308" x2="672" y2="308" class="thin" marker-end="url(#a-w)"/><line x1="615" y1="276" x2="615" y2="290" class="thin"/>${sh(560, 292, 110, 34, 'END', 'term')}</svg>`;
+}
+function svgDBTable(){
+  const cols = ['StudentID', 'Name', 'Age', 'House'], rows = [['101', 'Asha', '14', 'Red'], ['102', 'Ravi', '13', 'Blue'], ['103', 'Meena', '14', 'Red'], ['104', 'Kabir', '15', 'Green']];
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="A database table with fields and records">
+  ${cols.map((c, i) => `<rect x="${40 + i * 120}" y="40" width="120" height="34" class="metal" style="stroke:var(--ink);stroke-width:1.4"/>${T(100 + i * 120, 62, c, 'mid lbl')}`).join('')}
+  ${rows.map((r, j) => r.map((v, i) => `<rect x="${40 + i * 120}" y="${74 + j * 34}" width="120" height="34" class="nonmetal" style="stroke:var(--ink);stroke-width:1"/>${T(100 + i * 120, 96 + j * 34, v, 'mid mono')}`).join('')).join('')}
+  ${T(100, 30, 'primary key', 'mid hott')}${T(340, 30, 'field names (columns)', 'mid acct')}${T(540, 120, 'one row = one record', 'acct')}${T(540, 142, '(all the data about one student)', 'mut')}${T(540, 190, 'one column = one field', 'acct')}${T(40, 236, 'SELECT Name, Age', 'mono lbl')}${T(40, 258, 'FROM Student', 'mono lbl')}${T(40, 280, 'WHERE House = "Red"', 'mono lbl')}${T(340, 258, 'Result: Asha 14, Meena 14', 'mono hott')}</svg>`;
+}
+function svgPython(){
+  const cell = (i, v) => `<rect x="${60 + i * 80}" y="190" width="80" height="44" class="metal" style="stroke:var(--ink);stroke-width:1.6"/>${T(100 + i * 80, 218, v, 'mid mono lbl')}${T(100 + i * 80, 258, i, 'mid mono hott')}`;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Python operators and list indices">
+  ${T(40, 30, 'Operators', 'lbl')}${T(40, 56, '7 / 2   = 3.5   (decimal)', 'mono')}${T(40, 78, '7 // 2  = 3     (whole number part)', 'mono')}${T(40, 100, '7 % 2   = 1     (remainder)', 'mono')}${T(40, 122, '2 ** 3  = 8     (power)', 'mono')}
+  ${T(460, 30, 'Loops', 'lbl')}${T(460, 56, 'range(1, 5)     → 1 2 3 4', 'mono')}${T(460, 78, 'range(2, 10, 3) → 2 5 8', 'mono')}${T(460, 100, 'stop value is NOT included', 'mono hott')}
+  ${T(40, 170, 'names = ["Ann", "Bo", "Cy", "Di"]', 'mono acct')}${cell(0, 'Ann')}${cell(1, 'Bo')}${cell(2, 'Cy')}${cell(3, 'Di')}${T(400, 218, 'names[0] = "Ann"   len(names) = 4', 'mono')}${T(400, 258, 'index (starts at 0)', 'mut')}</svg>`;
+}
+
 const CH = {
 data: {
   code: 'Ch 1', name: 'Data representation',
@@ -900,6 +975,298 @@ logic: {
     { q: 'Complete the truth table for X = NOT A AND (B XOR C). (Rows ABC = 000 to 111.)', m: 4,
       p: ['Rows 000, 001: ==0, 1==', 'Rows 010, 011: ==1, 0==', 'Rows 100, 101: ==0, 0==', 'Rows 110, 111: ==0, 0=='] }
   ]
+},
+hw: {
+  code: 'Topic 3', name: 'Hardware',
+  lede: 'What is inside a computer and how the CPU runs a program. Learn the fetch–decode–execute cycle in order.',
+  learn: [
+    { h: 'The CPU and the fetch–decode–execute cycle', list: ['The ==CPU (central processing unit)== runs program instructions. It has a ==control unit (CU)==, an ==arithmetic logic unit (ALU)== and ==registers==.', '==CU==: controls and ==decodes== instructions. ==ALU==: does ==calculations and logic==. ==Registers==: tiny, very fast storage inside the CPU.', '==PC== (program counter): address of the ==next instruction==. ==MAR==: address being used. ==MDR==: data being used. ==CIR==: the ==current instruction==. ==ACC==: ==results== of calculations.', '==Fetch==: PC → MAR; the instruction goes from ==RAM== to MDR and then to CIR; PC increases by 1. ==Decode==: the CU works out what to do. ==Execute==: the instruction is carried out.', 'Buses: ==address bus== (one way, CPU to memory), ==data bus== (two way), ==control bus==.'] },
+    { h: 'CPU performance, cores and embedded systems', list: ['Performance depends on ==clock speed== (GHz, more cycles per second), ==number of cores== (more instructions at once) and ==cache size== (faster memory close to the CPU).', 'An ==embedded system== is a computer ==inside a device== with one dedicated job (washing machine, microwave, car engine control, central heating).', 'A ==general-purpose== computer can do many different jobs (laptop, tablet).'] },
+    { h: 'Memory, storage and devices', table: [['Type', 'Examples', 'Key points'], ['RAM', 'main memory', 'volatile (loses data when off); read and write; holds running programs and data'], ['ROM', 'BIOS / boot instructions', 'non-volatile; read only; holds the start-up program'], ['Magnetic storage', 'hard disk drive (HDD)', 'large and cheap; has moving parts; slower; can be damaged by shock'], ['Optical storage', 'CD, DVD, Blu-ray', 'laser reads pits and lands; cheap, portable; low capacity; scratches'], ['Solid-state storage', 'SSD, USB flash, SD card', 'no moving parts; fast, quiet, durable; costs more per GB']] },
+    { h: 'Input, output and sensors', list: ['==Input devices==: keyboard, mouse, touch screen, scanner, microphone, camera, ==sensors==.', '==Output devices==: monitor, printer, speaker, actuator, projector.', '==Sensors== measure physical quantities and send data to the computer: ==temperature, pressure, light, moisture, infrared (motion), magnetic field, sound==.', '==Virtual memory==: part of the hard drive or SSD used as extra RAM when RAM is full. It is ==slower== than real RAM.', '==Cloud storage== is data stored on remote servers over the internet: accessible anywhere, easy to share, but ==needs an internet connection== and has ==security and cost== concerns.'] }
+  ],
+  mistakes: ['Saying ==RAM is non-volatile== or ROM is volatile.', 'Saying the ==CPU stores== files. It processes; storage is separate.', 'Mixing up the ==order== of the cycle: fetch, decode, execute.', 'Saying ==more cores always doubles== the speed. It depends on the software.', 'Calling the ==hard drive RAM==. Primary memory is RAM and ROM.'],
+  diagrams: [
+    { svg: svgCPU, cap: 'Inside the CPU: ==CU, ALU and registers== connected to ==RAM== by buses.' },
+    { svg: svgFDE, cap: 'The ==fetch–decode–execute== cycle repeats for every instruction.' }
+  ],
+  worked: [
+    W('An instruction is stored at address 100. Describe what happens during the FETCH stage.', 'The ==PC== holds the address of the next instruction. Follow it through the ==registers==.', 'Learn the order: PC, MAR, MDR, CIR.', 'PC → MAR → (RAM) → MDR → CIR',
+      [['PC holds the address', 'PC = 100', 'The program counter says which instruction comes next.'], ['Address copied to MAR', 'MAR = 100', 'The memory address register tells RAM where to look.'], ['Instruction fetched from RAM', 'MDR = the instruction', 'The data is copied from address 100 into the memory data register.'], ['Instruction copied to CIR', 'CIR = the instruction', 'The current instruction register holds it for decoding.'], ['PC incremented', 'PC = 101', 'It now points to the next instruction.']],
+      [['PC', '100', 0], ['MAR', '100', 1], ['MDR', 'the instruction', 2], ['CIR', 'the instruction', 3], ['PC after', '101', 4]]),
+    W('Compare RAM and ROM.', 'Compare ==volatile==, ==read/write== and ==contents==.', 'Give a comparison for each, not just a description.', 'Volatile v non-volatile',
+      [['Volatility', 'RAM is volatile (loses data when the power is off). ROM is non-volatile.', ''], ['Read and write', 'RAM can be read and written. ROM can only be read.', ''], ['What each holds', 'RAM holds the programs and data currently in use. ROM holds the boot-up (start-up) instructions.', ''], ['Size', 'RAM is larger and can be added. ROM is small.', '']],
+      [['Volatility', 'RAM yes, ROM no', 0], ['Read/write', 'RAM both, ROM read only', 1], ['Contents', 'running programs v boot-up', 2]], true),
+    W('A photographer needs to take thousands of photos on a mountain. Choose the best storage device and explain why.', 'Think: ==durable==, ==portable==, ==large capacity==, ==no moving parts==.', 'Give at least two reasons and compare with another type.', 'Solid-state',
+      [['Choice', 'SD card (solid-state storage)', ''], ['Why: no moving parts', 'It is not damaged by knocks or vibration', 'A hard disk could be damaged.'], ['Why: portable', 'It is small and light', ''], ['Why: capacity', 'It can hold thousands of photos', 'Cards can be swapped when full.']],
+      [['Choice', 'SD card', 0], ['No moving parts', 'durable', 1], ['Portable', 'small, light', 2], ['Capacity', 'thousands of photos', 3]], true),
+    W('Name a suitable sensor for (a) an automatic door (b) a greenhouse heater (c) a burglar alarm.', 'Match the ==quantity measured== to the ==sensor==.', 'Use the sensor list.', 'Quantity to sensor',
+      [['(a) Automatic door', 'Infrared (motion) sensor or pressure sensor', 'Detects a person approaching.'], ['(b) Greenhouse heater', 'Temperature sensor', 'Switches the heater on when it is too cold.'], ['(c) Burglar alarm', 'Infrared (motion) sensor, or a magnetic sensor on doors and windows', 'Detects movement or opening.']],
+      [['Door', 'infrared / pressure', 0], ['Greenhouse', 'temperature', 1], ['Alarm', 'infrared / magnetic', 2]], true),
+    W('Explain how a CPU with more cores can improve performance.', 'Link ==cores== to ==instructions at once==.', 'Mention that software must be able to use them.', 'More cores, more instructions at the same time',
+      [['A core', 'A processing unit that can run the fetch–decode–execute cycle', 'A dual-core CPU has two.'], ['More cores', 'More instructions can be processed at the same time', 'The work is shared between cores.'], ['The limit', 'The software must be written to use several cores', 'Otherwise the extra cores do little.']],
+      [['Core', 'runs the cycle', 0], ['More cores', 'more instructions at once', 1], ['Limit', 'software must use them', 2]], true),
+    W('Give two differences between an embedded system and a general-purpose computer.', 'Think about the ==job== and ==where it is==.', 'Give an example of each.', 'One job v many jobs',
+      [['Purpose', 'An embedded system does one dedicated job. A general-purpose computer does many jobs.', ''], ['Where', 'An embedded system is built into another device. A general-purpose computer is a stand-alone device.', ''], ['Examples', 'Washing machine controller v a laptop', '']],
+      [['Purpose', 'one job v many', 0], ['Where', 'inside a device v stand-alone', 1], ['Examples', 'washing machine v laptop', 2]], true)
+  ],
+  drill: 'hw',
+  quiz: [
+    { q: 'Which register holds the address of the next instruction?', o: ['MAR', 'MDR', 'PC', 'CIR'], a: 2, w: 'The ==program counter (PC)==.' },
+    { q: 'Which type of memory is volatile?', o: ['ROM', 'RAM', 'SSD', 'BIOS'], a: 1, w: '==RAM== loses its data when the power is off.' },
+    { q: 'The ALU…', o: ['stores files', 'does calculations and logic', 'controls the buses', 'displays output'], a: 1, w: 'It does ==arithmetic and logic==.' },
+    { q: 'Which storage has no moving parts?', o: ['HDD', 'DVD', 'SSD', 'floppy disk'], a: 2, w: '==SSD== (solid state).' },
+    { q: 'Which is the correct order?', o: ['execute, fetch, decode', 'fetch, decode, execute', 'decode, fetch, execute', 'fetch, execute, decode'], a: 1, w: '==Fetch, decode, execute==.' },
+    { q: 'An embedded system…', o: ['does many jobs', 'is built into a device for one job', 'is a laptop', 'is a server'], a: 1, w: '==One dedicated job== inside a device.' }
+  ],
+  exam: [
+    { q: 'Describe the purpose of the control unit and the ALU in a CPU.', m: 2,
+      p: ['The ==control unit== controls the processing and decodes instructions (sends signals)', 'The ==ALU== carries out arithmetic calculations and logical (comparison) operations'] },
+    { q: 'Describe the fetch stage of the fetch–decode–execute cycle.', m: 4,
+      p: ['The address of the next instruction in the ==PC== is copied to the ==MAR==', 'The instruction at that address is copied from ==RAM to the MDR==', 'The instruction is copied to the ==CIR==', 'The ==PC is incremented== (increased by 1)'] },
+    { q: 'Give three differences between a hard disk drive and a solid-state drive.', m: 3,
+      p: ['An HDD has ==moving parts==; an SSD has none', 'An SSD is ==faster== / more durable / quieter / uses less power', 'An HDD is ==cheaper per GB== (more capacity for the price)'] }
+  ]
+},
+sw: {
+  code: 'Topic 4', name: 'Software',
+  lede: 'System and application software, translators and what an operating system does.',
+  learn: [
+    { h: 'System software and the operating system', list: ['==System software== runs the computer: the ==operating system (OS)== and ==utility programs==. ==Application software== does tasks for the user (word processor, browser, game).', 'The OS ==manages== the ==hardware and software==. Functions: ==managing files==, ==managing memory==, ==multitasking== (running several programs), ==controlling peripherals== (using device drivers), ==providing a user interface==, ==security== (user accounts, passwords) and ==error handling==.', 'A ==device driver== lets the OS communicate with a hardware device.', 'A ==user interface== can be a ==GUI== (windows, icons, menus, pointer) or a ==command line (CLI)== (typed commands).'] },
+    { h: 'Utility software', table: [['Utility', 'What it does'], ['antivirus', 'finds and removes malware; scans files'], ['firewall', 'checks network traffic and blocks unauthorised access'], ['disk defragmenter', 'puts the parts of files together on an HDD for faster access (not needed for SSD)'], ['backup', 'copies files so they can be restored if lost'], ['compression', 'makes files smaller to save space or send faster'], ['disk formatter / cleanup', 'prepares a disk for use; deletes unwanted files']] },
+    { h: 'Programming languages and translators', list: ['==High-level language== (Python, Java): ==English-like==, easy to read and debug, ==portable== (works on different computers), but must be ==translated==.', '==Low-level language==: ==machine code== (binary, runs directly) and ==assembly language== (mnemonics like ADD). ==Fast==, can control hardware directly, but ==hard to write== and ==specific to one type of CPU==.', '==Compiler==: translates the ==whole program at once== into an ==executable file==. Runs fast; errors are reported ==after== translation; source code is hidden.', '==Interpreter==: translates and runs the program ==one line at a time==. Stops at the first error (easy to debug) but runs ==slower== and needs the source code.', '==Assembler==: translates ==assembly language== into machine code.', 'An ==IDE== (integrated development environment) has a ==code editor==, ==translator==, ==error diagnostics==, ==debugging tools== (breakpoints, stepping, variable watch) and ==auto-complete==.'] }
+  ],
+  mistakes: ['Saying a ==compiler runs line by line==. That is an interpreter.', 'Saying ==low-level== languages are easier. They are harder.', 'Saying ==the OS is application software==.', 'Listing ==a function of the OS== that is really a utility (such as antivirus).', 'Saying ==defragmentation speeds up an SSD==. It is for hard disk drives.'],
+  diagrams: [{ svg: svgLayers, cap: 'The ==operating system== sits between ==application software== and the ==hardware==.' }],
+  worked: [
+    W('Describe four functions of an operating system.', 'Think about what the OS ==manages==.', 'Give a short description of each, not just a name.', 'Files, memory, peripherals, security',
+      [['Managing files', 'Creates, names, moves, copies and deletes files and folders', ''], ['Managing memory', 'Decides which programs use which part of RAM and stops them interfering', ''], ['Controlling peripherals', 'Uses device drivers to communicate with printers, keyboards and other devices', ''], ['Security', 'Provides user accounts and passwords so only authorised users can use the computer', 'Other functions: multitasking and the user interface.']],
+      [['1', 'manages files', 0], ['2', 'manages memory', 1], ['3', 'controls peripherals', 2], ['4', 'security', 3]], true),
+    W('Compare a compiler and an interpreter.', 'Compare ==how much== is translated at a time, ==speed== and ==errors==.', 'Give a point for each, with a comparison.', 'Whole program v one line',
+      [['How they translate', 'A compiler translates the whole program at once. An interpreter translates one line at a time.', ''], ['Output', 'A compiler produces an executable file. An interpreter produces no file; it runs the code directly.', ''], ['Speed', 'Compiled programs run faster. Interpreted programs run slower.', ''], ['Errors', 'A compiler lists the errors after translating. An interpreter stops at the first error, which helps debugging.', '']],
+      [['Translation', 'whole v one line', 0], ['Output', 'executable v none', 1], ['Speed', 'faster v slower', 2], ['Errors', 'list v first error', 3]], true),
+    W('Give two advantages and one disadvantage of using a high-level language instead of machine code.', 'Compare ==ease== and ==portability==.', 'Remember: high-level programs need translating.', 'Easy, portable, needs a translator',
+      [['Advantage 1', 'Easier to read, write and debug (English-like)', ''], ['Advantage 2', 'Portable: can run on different types of computer', 'Machine code is specific to one type of CPU.'], ['Disadvantage', 'It must be translated, so it can run slower and cannot control the hardware as directly', '']],
+      [['Advantage 1', 'easy to read and debug', 0], ['Advantage 2', 'portable', 1], ['Disadvantage', 'needs translating', 2]], true),
+    W('Which utility software would you use to (a) find and remove a virus (b) make a large file smaller before emailing (c) keep a copy of your work in case the disk fails?', 'Match the ==job== to the ==utility==.', 'A firewall is not the same as an antivirus.', 'Job to utility',
+      [['(a)', 'Antivirus software', 'It scans files and removes malware.'], ['(b)', 'Compression software', 'It makes the file smaller.'], ['(c)', 'Backup software', 'It copies the files to another storage device.']],
+      [['(a)', 'antivirus', 0], ['(b)', 'compression', 1], ['(c)', 'backup', 2]], true),
+    W('Explain why a device driver is needed when a new printer is connected to a computer.', 'The OS must be able to ==communicate== with the device.', 'Use the keywords: operating system, communicate, hardware.', 'The driver translates for the OS',
+      [['The problem', 'The operating system does not know how to control this particular printer', ''], ['The driver', 'A device driver is a small program that tells the OS how to use the printer', ''], ['The result', 'The OS can send print jobs and the printer responds correctly', '']],
+      [['Problem', 'OS cannot control the printer', 0], ['Driver', 'program that translates', 1], ['Result', 'printing works', 2]], true),
+    W('Describe three features of an IDE that help a programmer.', 'Think: ==write==, ==check==, ==fix==.', 'Name the feature and say how it helps.', 'Editor, diagnostics, debugging',
+      [['Code editor', 'Colours keywords and suggests code (auto-complete), so there are fewer typing mistakes', ''], ['Error diagnostics', 'Shows syntax errors and where they are', ''], ['Debugging tools', 'Breakpoints, stepping through the code and watching variables help find logic errors', ''], ['Also', 'A built-in translator lets you run the program from the IDE', '']],
+      [['Editor', 'colours, auto-complete', 0], ['Diagnostics', 'finds syntax errors', 1], ['Debugging', 'breakpoints, stepping', 2]], true)
+  ],
+  drill: 'sw',
+  quiz: [
+    { q: 'Which is system software?', o: ['a spreadsheet', 'the operating system', 'a game', 'a web browser'], a: 1, w: 'The ==operating system==.' },
+    { q: 'A compiler translates…', o: ['one line at a time', 'the whole program at once', 'only comments', 'machine code to Python'], a: 1, w: 'The ==whole program at once==.' },
+    { q: 'A device driver…', o: ['stores files', 'lets the OS communicate with hardware', 'removes viruses', 'compresses files'], a: 1, w: 'It lets the ==OS communicate with a device==.' },
+    { q: 'Which language is low-level?', o: ['Python', 'Java', 'assembly language', 'HTML'], a: 2, w: '==Assembly language==.' },
+    { q: 'Which utility copies files in case of loss?', o: ['firewall', 'backup', 'defragmenter', 'compression'], a: 1, w: '==Backup==.' },
+    { q: 'An interpreter…', o: ['makes an executable file', 'stops at the first error', 'runs faster than a compiler', 'only translates assembly'], a: 1, w: 'It ==stops at the first error==.' }
+  ],
+  exam: [
+    { q: 'State the difference between system software and application software. Give one example of each.', m: 3,
+      p: ['==System software== runs and manages the computer / hardware', '==Application software== lets the user do a task (word processing, games)', 'Examples: system = operating system / utility; application = word processor / browser'] },
+    { q: 'Describe two differences between a compiler and an interpreter.', m: 2,
+      p: ['A compiler translates the ==whole program at once==; an interpreter translates ==line by line==', 'A compiler creates an ==executable file== (runs faster); an interpreter does not'] },
+    { q: 'A programmer writes a program in a high-level language. Explain why it must be translated before the computer can run it.', m: 2,
+      p: ['The CPU can only run ==machine code== (binary)', 'The high-level language must be ==translated== (compiled or interpreted) into machine code'] }
+  ]
+},
+net: {
+  code: 'Topic 5', name: 'The internet and security',
+  lede: 'How a web page reaches you, and how data is protected from attack.',
+  learn: [
+    { h: 'The internet and the World Wide Web', list: ['The ==internet== is the ==global network of networks==. The ==World Wide Web (WWW)== is the ==collection of web pages== accessed using the internet.', 'A ==URL== (uniform resource locator) is the address of a web page: ==protocol://domain name/path==, for example https://www.example.com/page.html.', '==HTTP== is the protocol for web pages. ==HTTPS== is the ==secure== version that ==encrypts== the data.', 'A ==web browser== shows web pages. A ==web server== stores them. The ==IP address== identifies a device on a network.', '==DNS== (domain name system) ==translates a domain name into an IP address==.'] },
+    { h: 'Cookies', list: ['A ==cookie== is a ==small text file== stored on your computer by a website.', '==Session cookies== are ==deleted when the browser closes== (for example a shopping basket).', '==Persistent cookies== are ==stored until they expire== (for example saved login, language, preferences, tracking for adverts).'] },
+    { h: 'Cyber security', table: [['Threat', 'What it is', 'Protection'], ['malware (virus, worm, trojan, spyware, ransomware)', 'harmful software', 'antivirus, updates, careful downloads'], ['phishing', 'fake emails or messages tricking you into giving details', 'check links, do not click, spam filters'], ['pharming', 'fake website reached by changing the DNS or by malware', 'check the URL and padlock, antivirus'], ['brute-force attack', 'trying every possible password', 'strong passwords, lock accounts after tries'], ['DDoS', 'a flood of requests that crashes a server', 'firewall, proxy server'], ['data interception', 'reading data in transit', 'encryption (HTTPS)']] },
+    { h: 'Staying safe', list: ['==Strong password==: long, a mix of ==upper case, lower case, numbers and symbols==, not a word or your name; change regularly.', '==Two-factor authentication==: a password plus a ==second proof== (code sent to a phone).', '==Biometrics==: fingerprint, face or iris.', 'A ==firewall== monitors incoming and outgoing traffic and blocks unauthorised access.', '==Encryption== scrambles data so it cannot be read without the key. ==Software updates== fix security holes.'] }
+  ],
+  mistakes: ['Saying the ==internet and the WWW are the same thing==.', 'Saying ==DNS stores web pages==. It stores domain-to-IP records.', 'Mixing up ==phishing== (a fake message) and ==pharming== (a fake website).', 'Saying ==cookies are viruses==. They are small text files.', 'Using a ==personal detail== (birthday, pet name) as a password.'],
+  diagrams: [{ svg: svgDNS, cap: '==DNS== turns the domain name into an ==IP address== so the browser can find the server.' }],
+  worked: [
+    W('Identify the parts of the URL https://www.school.com/maths/home.html', 'A URL is ==protocol://domain name/path==.', 'Learn the three parts.', 'protocol, domain, path',
+      [['Protocol', 'https', 'The secure web protocol.'], ['Domain name', 'www.school.com', 'Identifies the website (the web server).'], ['Path / file', '/maths/home.html', 'The folder and the page.']],
+      [['Protocol', 'https', 0], ['Domain', 'www.school.com', 1], ['Path', '/maths/home.html', 2]]),
+    W('Describe how a browser finds a web page when a user types a URL.', 'Use ==DNS==, ==IP address== and ==web server==.', 'Give the steps in order.', 'DNS then web server',
+      [['Browser sends the domain name', 'to a DNS server', 'The browser only knows the name, not the address.'], ['DNS returns the IP address', 'for that domain', 'The DNS server looks it up.'], ['Browser requests the page', 'from the web server at that IP address', 'Using HTTP or HTTPS.'], ['Web server sends the page back', 'and the browser displays it', '']],
+      [['1', 'domain name to DNS', 0], ['2', 'DNS gives the IP address', 1], ['3', 'request to web server', 2], ['4', 'page returned and shown', 3]], true),
+    W('State the difference between phishing and pharming.', 'Compare ==how== the user is tricked.', 'Phishing starts with a message; pharming sends you to a fake website.', 'Fake message v fake website',
+      [['Phishing', 'A fake email or message tricks the user into clicking a link or giving personal details', ''], ['Pharming', 'Malware or a changed DNS record sends the user to a fake website even when they type the correct address', ''], ['Protection', 'Do not click links in unexpected emails; check the URL and the padlock; use antivirus', '']],
+      [['Phishing', 'fake message', 0], ['Pharming', 'fake website', 1], ['Protection', 'check URL, antivirus', 2]], true),
+    W('Explain the difference between a session cookie and a persistent cookie. Give one use of each.', 'Compare ==when== they are deleted.', 'Give an example of each.', 'Browser closes v expiry date',
+      [['Session cookie', 'Deleted when the browser is closed', 'Use: keeping items in a shopping basket.'], ['Persistent cookie', 'Stored until its expiry date, even after the browser closes', 'Use: remembering your login or language.']],
+      [['Session', 'deleted at close', 0], ['Persistent', 'kept until it expires', 1]], true),
+    W('Describe a DDoS attack and one way to protect against it.', 'Many devices send a ==flood of requests==.', 'Mention the server cannot cope.', 'Flood of requests',
+      [['The attack', 'Many computers (a botnet) send huge numbers of requests to a web server at the same time', ''], ['The effect', 'The server cannot cope and becomes slow or crashes, so real users cannot get in', ''], ['Protection', 'A firewall or proxy server that blocks the unusual traffic', '']],
+      [['Attack', 'flood of requests', 0], ['Effect', 'server crashes', 1], ['Protection', 'firewall / proxy', 2]], true),
+    W('Give four rules for a strong password and explain why two-factor authentication improves security.', 'Think: ==length==, ==mix==, ==not guessable==, ==change==.', '2FA means a stolen password is not enough.', 'Long, mixed, unguessable',
+      [['Rules', 'At least 12 characters; upper and lower case, numbers and symbols; not a name or word; do not reuse it', ''], ['Two-factor authentication', 'The user needs a second proof, such as a code sent to a phone', ''], ['Why it is better', 'Even if a hacker learns the password, they cannot log in without the second factor', '']],
+      [['Rules', 'long, mixed, unguessable', 0], ['2FA', 'password + code', 1], ['Why', 'stolen password is not enough', 2]], true)
+  ],
+  drill: 'net',
+  quiz: [
+    { q: 'DNS translates…', o: ['an IP address to a MAC address', 'a domain name to an IP address', 'text to binary', 'HTTP to HTTPS'], a: 1, w: 'A ==domain name into an IP address==.' },
+    { q: 'HTTPS is different from HTTP because it…', o: ['is faster', 'encrypts the data', 'is older', 'only works on phones'], a: 1, w: 'It ==encrypts== the data.' },
+    { q: 'A fake email asking for your bank details is…', o: ['pharming', 'phishing', 'a DDoS attack', 'a firewall'], a: 1, w: '==Phishing==.' },
+    { q: 'A session cookie is deleted…', o: ['after a year', 'when the browser is closed', 'never', 'by the server'], a: 1, w: 'When the ==browser is closed==.' },
+    { q: 'Which is the strongest password?', o: ['password', 'ravi2011', 'T7!kq9#Lm2$x', '12345678'], a: 2, w: '==Long, with a mix of characters==.' },
+    { q: 'A firewall…', o: ['stores web pages', 'blocks unauthorised network traffic', 'compresses files', 'speeds up the CPU'], a: 1, w: 'It ==blocks unauthorised access==.' }
+  ],
+  exam: [
+    { q: 'Explain the difference between the internet and the World Wide Web.', m: 2,
+      p: ['The ==internet== is the global network of connected networks (the infrastructure)', 'The ==World Wide Web== is the collection of web pages / websites that are accessed using the internet'] },
+    { q: 'Describe how a DNS server is used when a user types a web address into a browser.', m: 3,
+      p: ['The browser sends the ==domain name== to the DNS server', 'The DNS server finds and returns the ==IP address==', 'The browser uses the IP address to contact the ==web server=='] },
+    { q: 'Describe two ways a user can protect their account from a brute-force attack.', m: 2,
+      p: ['Use a ==strong password== (long, mixed characters)', 'Use ==two-factor authentication== (or the account locks after a number of wrong attempts)'] }
+  ]
+},
+algo: {
+  code: 'Topic 7', name: 'Algorithms and problem solving',
+  lede: 'Plan a solution, show it as a flowchart or pseudocode, trace it, and test it.',
+  learn: [
+    { h: 'Solving problems', list: ['Stages of the program development life cycle: ==analysis, design, coding, testing==.', '==Abstraction==: keep the ==important details==, remove the unnecessary ones. ==Decomposition==: break a problem into ==smaller parts==. ==Pattern recognition==: spot similarities.', 'An ==algorithm== is a ==step-by-step set of instructions== to solve a problem.', 'Inputs, processes, outputs and storage are the four parts of a program.'] },
+    { h: 'Flowcharts and pseudocode', list: ['Flowchart symbols: ==terminator (oval)== for start and end, ==process (rectangle)==, ==decision (diamond)== with Yes/No, ==input/output (parallelogram)==.', '==Pseudocode== uses structured English: ==INPUT, OUTPUT, IF … THEN … ELSE … ENDIF, FOR … TO … NEXT, WHILE … DO … ENDWHILE, REPEAT … UNTIL==.', 'A ==trace table== shows the ==values of variables== as each line of an algorithm runs. Use it to find errors.'] },
+    { h: 'Standard algorithms', list: ['==Totalling==: set total to 0, add each value. ==Counting==: set count to 0, add 1 each time. ==Average== = total ÷ count.', '==Linear search==: check each item in turn from the start until found or the end.', '==Bubble sort==: compare ==neighbouring items== and ==swap== if in the wrong order. Repeat passes until no swaps are needed.', '==Validation== checks data is ==reasonable== (range, length, type, presence, format, check digit). ==Verification== checks data was ==entered correctly== (double entry, visual check).', 'Test data: ==normal==, ==abnormal==, ==extreme (boundary)==, ==erroneous== (wrong type). Errors: ==syntax==, ==logic==, ==runtime==.'] }
+  ],
+  mistakes: ['Using the ==wrong symbol== for a decision (it is a diamond).', 'Forgetting to ==set the total to 0== before adding.', 'Mixing up ==validation== (is it sensible?) and ==verification== (is it what was meant?).', 'Saying a ==bubble sort swaps== any two items. It swaps neighbours.', 'Choosing test data that are all ==normal==.'],
+  diagrams: [{ svg: svgFlow, cap: '==Flowchart symbols== and a small flowchart: input a mark, decide, output.' }],
+  worked: [
+    W('Complete a trace table for this algorithm and state the output.  total = 0;  FOR i = 1 TO 4;  total = total + i;  NEXT i;  OUTPUT total', 'Write the ==value of each variable== after each pass.', 'Reset the total to 0 before the loop.', 'Trace table',
+      [['Start', 'total = 0', ''], ['i = 1', 'total = 0 + 1 = 1', ''], ['i = 2', 'total = 1 + 2 = 3', ''], ['i = 3', 'total = 3 + 3 = 6', ''], ['i = 4, then output', 'total = 6 + 4 = 10. OUTPUT 10', 'The algorithm adds the numbers 1 to 4.']],
+      [['Start', 'total = 0', 0], ['i = 1', 'total = 1', 1], ['i = 2', 'total = 3', 2], ['i = 3', 'total = 6', 3], ['i = 4', 'total = 10', 4]]),
+    W('Use a linear search to find 8 in the list 5, 3, 8, 1. How many items are checked?', 'A ==linear search== checks each item ==in order== from the start.', 'It stops as soon as the item is found.', 'Check from the start',
+      [['Check item 1', '5: not 8', ''], ['Check item 2', '3: not 8', ''], ['Check item 3', '8: found!', 'Stop searching.'], ['Result', '8 is at position 3 after checking 3 items', 'If it were not in the list, all 4 would be checked.']],
+      [['Item 1', '5, no', 0], ['Item 2', '3, no', 1], ['Item 3', '8, found', 2], ['Items checked', '3', 3]]),
+    W('Show the first pass of a bubble sort on 5, 3, 8, 1 (ascending).', 'Compare ==neighbours== and ==swap== if the left is bigger.', 'The largest value “bubbles” to the end.', 'Compare neighbours',
+      [['Compare 5 and 3', '5 > 3: swap → 3, 5, 8, 1', ''], ['Compare 5 and 8', '5 < 8: no swap → 3, 5, 8, 1', ''], ['Compare 8 and 1', '8 > 1: swap → 3, 5, 1, 8', ''], ['End of pass 1', '3, 5, 1, 8', 'The largest value (8) is now at the end. More passes are needed.']],
+      [['5 v 3', 'swap', 0], ['5 v 8', 'no swap', 1], ['8 v 1', 'swap', 2], ['After pass 1', '3, 5, 1, 8', 3]]),
+    W('A program asks for a person’s age, which must be between 11 and 16 inclusive. Choose test data of each type.', 'Normal, abnormal, extreme and erroneous.', 'Extreme data lies on the boundaries.', 'Range 11 to 16',
+      [['Normal', '13', 'Inside the range.'], ['Extreme (boundary)', '11 and 16', 'Valid, but on the edges.'], ['Abnormal', '10 and 17 (or 25)', 'Outside the range; should be rejected.'], ['Erroneous', '“twelve” or 12.5', 'Wrong type of data; should be rejected.']],
+      [['Normal', '13', 0], ['Extreme', '11, 16', 1], ['Abnormal', '10, 17', 2], ['Erroneous', 'text', 3]]),
+    W('A form checks that a name is entered, a password has at least 8 characters, and age is a whole number. Name the validation check for each.', 'Match the check to what it tests.', 'Presence, length, type.', 'Validation types',
+      [['A name is entered', 'Presence check', 'Checks the field is not empty.'], ['At least 8 characters', 'Length check', 'Checks the number of characters.'], ['Age is a whole number', 'Type check', 'Checks the data is of the right type (integer).']],
+      [['Name entered', 'presence check', 0], ['8 characters', 'length check', 1], ['Whole number', 'type check', 2]], true),
+    W('This algorithm should add up 3 numbers but it outputs the wrong value.  total = 10;  FOR i = 1 TO 3;  INPUT n;  total = total + n;  NEXT i;  OUTPUT total. Find the error.', 'Look at the ==starting value== of the total.', 'This is a logic error: the program runs but gives a wrong answer.', 'Initialise the total to 0',
+      [['Trace with 1, 2, 3', 'total starts at 10, then 11, 13, 16', 'The output is 16.'], ['Expected', '1 + 2 + 3 = 6', ''], ['The error', 'total should start at 0, not 10', 'This is a logic error.'], ['Fix', 'total = 0', 'Then the output is 6.']],
+      [['Output now', '16', 0], ['Expected', '6', 1], ['Error', 'total starts at 10', 2], ['Fix', 'total = 0', 3]])
+  ],
+  drill: 'algo',
+  quiz: [
+    { q: 'Which flowchart symbol is a decision?', o: ['oval', 'rectangle', 'diamond', 'parallelogram'], a: 2, w: 'A ==diamond==.' },
+    { q: 'Breaking a problem into smaller parts is…', o: ['abstraction', 'decomposition', 'validation', 'compilation'], a: 1, w: '==Decomposition==.' },
+    { q: 'Validation checks that data is…', o: ['reasonable and acceptable', 'identical to the original', 'encrypted', 'sorted'], a: 0, w: '==Reasonable and acceptable==.' },
+    { q: 'In a bubble sort, items are compared…', o: ['with the first item', 'with neighbouring items', 'randomly', 'with the last item only'], a: 1, w: '==Neighbouring items==.' },
+    { q: 'Test data on the edge of a valid range is…', o: ['normal', 'abnormal', 'extreme', 'erroneous'], a: 2, w: '==Extreme (boundary)== data.' },
+    { q: 'A program runs but gives the wrong answer. This is a…', o: ['syntax error', 'logic error', 'validation error', 'power error'], a: 1, w: 'A ==logic error==.' }
+  ],
+  exam: [
+    { q: 'State the purpose of a trace table.', m: 2,
+      p: ['To show the ==values of variables== as the algorithm is run', 'To ==find errors== (check the algorithm works)'] },
+    { q: 'An algorithm should total five numbers. Describe the steps needed in pseudocode terms.', m: 4,
+      p: ['Set ==total to 0== at the start', 'Use a ==loop== that repeats five times', '==INPUT== a number in each repetition and ==add it to the total==', '==OUTPUT the total== at the end'] },
+    { q: 'A password must be at least 8 characters. State the validation check used and give one example of data that would be rejected.', m: 2,
+      p: ['==Length check==', 'Any password with fewer than 8 characters, e.g. ==“cat12”=='] }
+  ]
+},
+prog: {
+  code: 'Topic 8', name: 'Programming in Python',
+  lede: 'Variables, decisions, loops, lists and functions. Work out what the code does before you run it.',
+  learn: [
+    { h: 'Variables and data types', list: ['A ==variable== stores a value that can change. A ==constant== does not change while the program runs.', 'Data types: ==integer (int)== whole numbers, ==real (float)== decimals, ==string (str)== text, ==Boolean (bool)== True or False.', '==input()== always gives a ==string==; use int() or float() to convert.', 'Operators: ==+ − * /== (/ gives a decimal), ==// (integer division)==, ==% (remainder, MOD)==, ==** (power)==.', 'Comparison: &#61;&#61; (equals), !=, <, >, <=, >=. Logic: and, or, not.'], f: ['7 // 2 = 3     7 % 2 = 1     2 ** 3 = 8'] },
+    { h: 'Selection and iteration', list: ['==Selection==: ==if / elif / else==. Only the first true branch runs.', '==for i in range(start, stop, step)==: ==count-controlled== loop. The stop value is ==not included==. range(1, 5) gives 1, 2, 3, 4.', '==while condition==: ==condition-controlled== loop. The condition is checked ==before== each repeat.', 'An ==infinite loop== happens if the condition never becomes false.', '==Input validation==: use a while loop to ask again until the data is acceptable.'] },
+    { h: 'Strings, lists and functions', list: ['==len(s)== gives the length of a string. Characters are numbered from ==0==: s[0] is the first. ==s[1:4]== gives characters 1 to 3.', 'A ==list== (array) holds several values: names = ["Ann", "Bo"]. ==names[0]== is the first. ==len(names)== is the number of items. append() adds an item.', 'A ==function== returns a value: ==def add(a, b): return a + b==. A ==procedure== does a job without returning a value.', '==Parameters== are the names in the definition; ==arguments== are the values passed in.', 'Files: ==open("data.txt", "r")== to read, "w" to write, then ==close()==.'] }
+  ],
+  mistakes: ['Using ==input()== as a number without ==int()==.', 'Thinking ==range(1, 5) includes 5==.', 'Forgetting that ==lists start at index 0==.', 'Using &#61; (assignment) instead of &#61;&#61; (comparison) in an if.', 'Forgetting the ==colon== and ==indentation== after if, for, while and def.'],
+  diagrams: [{ svg: svgPython, cap: '==Operators== and ==list indices== (counting starts at 0).' }],
+  worked: [
+    W('State the data type of each value: 42, 3.14, "hello", True.', 'Look at ==how the value is written==.', 'Quotation marks make a string, even if it holds digits.', 'int, float, str, bool',
+      [['42', 'integer (int)', 'A whole number.'], ['3.14', 'real (float)', 'Has a decimal point.'], ['"hello"', 'string (str)', 'Text in quotation marks.'], ['True', 'Boolean (bool)', 'True or False only.']],
+      [['42', 'int', 0], ['3.14', 'float', 1], ['"hello"', 'str', 2], ['True', 'bool', 3]]),
+    W('Work out the output.  for i in range(2, 10, 3):  print(i)', '==range(2, 10, 3)== starts at 2, steps by 3 and stops ==before 10==.', 'The stop value is never included.', 'Start, stop, step',
+      [['Start at 2', 'First value: 2', 'It prints 2.'], ['Add 3', 'Next value: 5', 'It prints 5.'], ['Add 3', 'Next value: 8', 'It prints 8.'], ['Add 3', '11 is not less than 10, so the loop ends', 'Output: 2, 5, 8 (three lines).']],
+      [['1st', '2', 0], ['2nd', '5', 1], ['3rd', '8', 2], ['Loop ends', '11 ≥ 10', 3]]),
+    W('Work out the output.  x = 7;  if x > 10: print("big");  elif x > 5: print("medium");  else: print("small")', 'Only the ==first true condition== runs.', 'Test the conditions in order from the top.', 'First true branch',
+      [['x > 10?', '7 > 10 is False', 'Skip the first branch.'], ['x > 5?', '7 > 5 is True', 'This branch runs.'], ['Output', 'medium', 'The else branch is skipped.']],
+      [['x > 10', 'False', 0], ['x > 5', 'True', 1], ['Output', 'medium', 2]]),
+    W('Write a loop that asks for a number between 1 and 10 until the user enters a valid number.', 'Use a ==while loop== with the ==invalid condition==.', 'Ask once before the loop, then again inside it.', 'Input validation loop',
+      [['Ask first', 'n = int(input("Enter 1 to 10: "))', ''], ['Loop while it is invalid', 'while n < 1 or n > 10:', 'The loop repeats only while the value is wrong.'], ['Ask again inside the loop', '    n = int(input("Try again: "))', 'The indentation puts it inside the loop.'], ['After the loop', 'n is now valid', '']],
+      [['Ask', 'input a number', 0], ['Condition', 'n < 1 or n > 10', 1], ['Inside', 'ask again', 2], ['After', 'valid', 3]]),
+    W('Work out the output.  nums = [4, 8, 2, 6];  total = 0;  for n in nums:  total = total + n;  print(total / len(nums))', 'Add all the items, then divide by how many.', 'len(nums) is 4.', 'Total ÷ count',
+      [['Add the items', '4 + 8 + 2 + 6 = 20', 'total = 20.'], ['len(nums)', '4', 'There are four items.'], ['Divide', '20 / 4', ''], ['Output', '5.0', '/ always gives a decimal in Python.']],
+      [['total', '20', 0], ['len', '4', 1], ['20 / 4', '5.0', 2], ['Output', '5.0', 3]]),
+    W('Work out the output.  def double(a):  return a * 2;  print(double(5) + 1)', 'The function ==returns== a value that is used in the sum.', 'Work from the inside out.', 'Call the function first',
+      [['Call double(5)', 'a = 5, so it returns 5 × 2 = 10', ''], ['Add 1', '10 + 1', ''], ['Output', '11', '']],
+      [['double(5)', '10', 0], ['+ 1', '11', 1], ['Output', '11', 2]])
+  ],
+  drill: 'prog',
+  quiz: [
+    { q: 'What does 7 // 2 give?', o: ['3.5', '3', '4', '1'], a: 1, w: 'Integer division: ==3==.' },
+    { q: 'What does 7 % 2 give?', o: ['3', '3.5', '1', '0'], a: 2, w: 'The remainder: ==1==.' },
+    { q: 'range(1, 5) produces…', o: ['1, 2, 3, 4, 5', '1, 2, 3, 4', '0, 1, 2, 3, 4', '2, 3, 4, 5'], a: 1, w: '==1, 2, 3, 4==. The stop value is not included.' },
+    { q: 'The data type of input() is always…', o: ['integer', 'string', 'float', 'Boolean'], a: 1, w: 'A ==string==.' },
+    { q: 'The first item in a list has index…', o: ['1', '0', '-1', 'none'], a: 1, w: 'Index ==0==.' },
+    { q: 'A function differs from a procedure because it…', o: ['has no name', 'returns a value', 'cannot have parameters', 'always loops'], a: 1, w: 'It ==returns a value==.' }
+  ],
+  exam: [
+    { q: 'State the output of: x = 5;  for i in range(3):  x = x + i;  print(x)', m: 3,
+      p: ['i takes the values ==0, 1, 2==', 'x = 5 + 0 + 1 + 2', '==8=='] },
+    { q: 'Write a Python program that asks the user for two numbers and prints the larger one.', m: 4,
+      p: ['==Inputs== two numbers (converted with int() or float())', 'Uses an ==if== to compare them', 'Prints the larger when the first is bigger', '==else== prints the other (works when they are equal)'] },
+    { q: 'Explain the difference between a for loop and a while loop.', m: 2,
+      p: ['A ==for== loop repeats a ==set number of times== (count-controlled)', 'A ==while== loop repeats ==until a condition is false== (condition-controlled)'] }
+  ]
+},
+db: {
+  code: 'Topic 9', name: 'Databases and SQL',
+  lede: 'Tables, records and fields, and the SQL commands SELECT, FROM, WHERE, ORDER BY, COUNT and SUM.',
+  learn: [
+    { h: 'Tables, records and fields', list: ['A ==database== is an organised collection of data. A ==table== is made of ==records (rows)== and ==fields (columns)==.', 'A ==record== holds all the data about ==one item== (one student). A ==field== holds one ==type of data== (Name).', 'The ==primary key== is a field that ==uniquely identifies== each record, for example StudentID.', 'Field data types: ==text==, ==integer==, ==real==, ==Boolean== and ==date/time==.', 'A database can be queried to find data quickly, avoid duplicates and allow many users at once.'] },
+    { h: 'SQL queries', list: ['==SELECT== the fields, ==FROM== the table, ==WHERE== the condition, ==ORDER BY== the field.', 'SELECT * FROM Student  (all fields)', 'SELECT Name, Age FROM Student WHERE House = "Red"', 'Comparisons: =, <>, <, >, <=, >=. Combine with ==AND== and ==OR==.', '==ORDER BY Age ASC== (smallest first) or ==DESC== (largest first).', '==COUNT(*)== counts records. ==SUM(Age)== adds the values in a field. ==LIKE "A%"== matches text that starts with A.'], f: ['SELECT Name FROM Student WHERE Age > 13 ORDER BY Name ASC'] }
+  ],
+  mistakes: ['Putting ==WHERE before FROM==. The order is SELECT, FROM, WHERE, ORDER BY.', 'Forgetting ==quotation marks== around text values.', 'Mixing up ==AND== (both true) and ==OR== (either true).', 'Using ==SUM== to count records. Use COUNT.', 'Forgetting that the ==primary key== must be unique.'],
+  diagrams: [{ svg: svgDBTable, cap: 'A table has ==fields== (columns) and ==records== (rows). The ==primary key== is unique.' }],
+  worked: [
+    W('Look at the Student table (StudentID, Name, Age, House). State (a) the number of fields (b) the number of records (c) the primary key, if the table has 4 columns and 4 rows of data.', 'Fields are ==columns==; records are ==rows==.', 'The header row is not a record.', 'Columns v rows',
+      [['(a) Fields', '4 (StudentID, Name, Age, House)', 'The columns.'], ['(b) Records', '4', 'The rows of data (not counting the field names).'], ['(c) Primary key', 'StudentID', 'It is different for every student, so it identifies each record.']],
+      [['Fields', '4', 0], ['Records', '4', 1], ['Primary key', 'StudentID', 2]]),
+    W('Write an SQL query to display the Name and Age of all students in the Red house.', 'SELECT, FROM, WHERE in that order.', 'Text values go in quotation marks.', 'SELECT … FROM … WHERE …',
+      [['Choose the fields', 'SELECT Name, Age', ''], ['Choose the table', 'FROM Student', ''], ['Add the condition', 'WHERE House = "Red"', 'Text in quotation marks.'], ['Full query', 'SELECT Name, Age FROM Student WHERE House = "Red"', 'Result: Asha 14 and Meena 14.']],
+      [['SELECT', 'Name, Age', 0], ['FROM', 'Student', 1], ['WHERE', 'House = "Red"', 2], ['Result', 'Asha 14, Meena 14', 3]]),
+    W('Write an SQL query to list the names of students older than 13, in alphabetical order.', 'Add ==ORDER BY== at the end.', 'ASC is the default order.', 'WHERE then ORDER BY',
+      [['Fields and table', 'SELECT Name FROM Student', ''], ['Condition', 'WHERE Age > 13', 'Older than 13 means more than 13.'], ['Order', 'ORDER BY Name ASC', 'Alphabetical order.'], ['Result', 'Asha, Kabir, Meena', 'The students aged 14 and 15, in A–Z order.']],
+      [['Query', 'SELECT Name FROM Student', 0], ['Condition', 'WHERE Age > 13', 1], ['Order', 'ORDER BY Name ASC', 2], ['Result', 'Asha, Kabir, Meena', 3]]),
+    W('Write a query to find the number of students in the Red house.', 'Use ==COUNT(*)==.', 'COUNT counts records; SUM adds values.', 'COUNT(*)',
+      [['Count records', 'SELECT COUNT(*)', ''], ['Table and condition', 'FROM Student WHERE House = "Red"', ''], ['Result', '2', 'Asha and Meena.']],
+      [['Query', 'SELECT COUNT(*) FROM Student WHERE House = "Red"', 1], ['Result', '2', 2]]),
+    W('Write a query to find the total of all the ages.', 'Use ==SUM(Age)==.', 'SUM only works on numeric fields.', 'SUM(field)',
+      [['Add the field', 'SELECT SUM(Age)', ''], ['From the table', 'FROM Student', ''], ['Result', '14 + 13 + 14 + 15 = 56', '']],
+      [['Query', 'SELECT SUM(Age) FROM Student', 1], ['Result', '56', 2]]),
+    W('Explain why a primary key is needed in a database table.', 'Link ==unique== to ==finding the right record==.', 'Two students can have the same name.', 'Unique identifier',
+      [['What it is', 'A field whose value is different for every record', ''], ['Why it is needed', 'Two records could share a name, age or house, so another field cannot identify them', ''], ['The benefit', 'Each record can be found, edited or deleted without mistakes', '']],
+      [['Primary key', 'unique value', 0], ['Needed because', 'names can repeat', 1], ['Benefit', 'find the right record', 2]], true)
+  ],
+  drill: 'db',
+  quiz: [
+    { q: 'A row in a table is called a…', o: ['field', 'record', 'key', 'query'], a: 1, w: 'A ==record==.' },
+    { q: 'The primary key…', o: ['can be repeated', 'uniquely identifies each record', 'is always a name', 'is the last field'], a: 1, w: 'It ==uniquely identifies each record==.' },
+    { q: 'Which SQL word chooses the table?', o: ['SELECT', 'FROM', 'WHERE', 'ORDER'], a: 1, w: '==FROM==.' },
+    { q: 'Which counts the records?', o: ['SUM', 'COUNT', 'TOTAL', 'ADD'], a: 1, w: '==COUNT==.' },
+    { q: 'ORDER BY Age DESC puts…', o: ['the youngest first', 'the oldest first', 'names in order', 'nothing'], a: 1, w: '==Largest first==.' },
+    { q: 'Which operator means “not equal to” in SQL?', o: ['!', '<>', '==', '=>'], a: 1, w: '==<>==.' }
+  ],
+  exam: [
+    { q: 'State what is meant by a field and a record in a database.', m: 2,
+      p: ['A ==field== is one column holding one type of data (e.g. Name)', 'A ==record== is one row containing all the data about one item'] },
+    { q: 'Write an SQL query to display all the fields of students whose age is 14 or more, in descending order of age.', m: 4,
+      p: ['==SELECT *== (all fields) ==FROM Student==', '==WHERE Age >= 14==', '==ORDER BY Age DESC=='] },
+    { q: 'A table Book(BookID, Title, Price) is used. Write a query to find how many books cost more than 500.', m: 3,
+      p: ['==SELECT COUNT(*)==', '==FROM Book==', '==WHERE Price > 500=='] }
+  ]
 }
 };
 
@@ -984,6 +1351,68 @@ const DRILLS = {
         [['Rule', `${t}: output is ${GDESC[t]}`],['Answer', t]]); },
     () => { const t = pick(Object.keys(GDESC));
       return choiceItem(`Which gate gives an output that is ${GDESC[t]}?`, t, shuffle(Object.keys(GDESC).filter(x => x !== t)).slice(0,3), [['Answer', t]]); }
+  ],
+  hw: [
+    () => { const it = pick([['holds the address of the next instruction', 'PC'], ['holds the instruction being decoded', 'CIR'], ['holds the address being read or written in memory', 'MAR'], ['holds the data being read from or written to memory', 'MDR'], ['stores the results of calculations', 'ACC'], ['carries out arithmetic and logic', 'ALU'], ['controls and decodes instructions', 'CU']]);
+      return choiceItem(`Which part of the CPU ${it[0]}?`, it[1], ['PC', 'CIR', 'MAR', 'MDR', 'ACC', 'ALU', 'CU'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['loses its contents when the power is off', 'RAM'], ['holds the boot-up instructions', 'ROM'], ['has no moving parts and stores files', 'SSD'], ['uses a laser to read pits and lands', 'optical disc'], ['has spinning platters', 'hard disk drive'], ['is read only', 'ROM'], ['holds running programs and data', 'RAM']]);
+      return choiceItem(`Which type of storage or memory ${it[0]}?`, it[1], ['RAM', 'ROM', 'SSD', 'optical disc', 'hard disk drive'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['detects a person walking up to a door', 'infrared (motion) sensor'], ['switches on a heater when a room is cold', 'temperature sensor'], ['switches on street lights at dusk', 'light sensor'], ['watering a plant when the soil is dry', 'moisture sensor'], ['detects someone standing on a mat', 'pressure sensor'], ['detects an open window in an alarm system', 'magnetic sensor']]);
+      return choiceItem(`Which sensor ${it[0].startsWith('detects') || it[0].startsWith('switches') || it[0].startsWith('watering') ? 'is best for' : 'is best for'} “${it[0]}”?`, it[1], ['infrared (motion) sensor', 'temperature sensor', 'light sensor', 'moisture sensor', 'pressure sensor', 'magnetic sensor'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const o = ['fetch', 'decode', 'execute'], k = rint(0, 1); return choiceItem(`In the fetch–decode–execute cycle, which stage comes after ${o[k]}?`, o[k + 1], o.filter((x, i) => i !== k + 1).slice(0, 2).concat(['store']), [['Order', 'fetch, decode, execute'],['Answer', o[k + 1]]]); }
+  ],
+  sw: [
+    () => { const it = pick([['antivirus software', 'finds and removes malware'], ['a firewall', 'blocks unauthorised network traffic'], ['backup software', 'copies files in case the originals are lost'], ['compression software', 'makes files smaller'], ['a disk defragmenter', 'rearranges file parts on a hard disk drive'], ['a device driver', 'lets the OS control a hardware device']]);
+      return choiceItem(`What does ${it[0]} do?`, it[1], ['finds and removes malware', 'blocks unauthorised network traffic', 'copies files in case the originals are lost', 'makes files smaller', 'rearranges file parts on a hard disk drive', 'lets the OS control a hardware device'].filter(x => x !== it[1]).slice(0, 3), [['Utility', it[0] + ' ' + it[1]]]); },
+    () => { const it = pick([['translates the whole program at once', 'compiler'], ['translates and runs one line at a time', 'interpreter'], ['translates assembly language into machine code', 'assembler'], ['produces an executable file', 'compiler'], ['stops at the first error it finds', 'interpreter']]);
+      return choiceItem(`Which translator ${it[0]}?`, it[1], ['compiler', 'interpreter', 'assembler'].filter(x => x !== it[1]), [['Match', it[0] + ' = ' + it[1]]]); },
+    () => { const it = pick([['Python', 'high-level'], ['assembly language', 'low-level'], ['machine code', 'low-level'], ['Java', 'high-level'], ['binary instructions for one type of CPU', 'low-level']]);
+      return choiceItem(`Is ${it[0]} a high-level or low-level language?`, it[1], [it[1] === 'high-level' ? 'low-level' : 'high-level'], [['Rule', 'high-level is English-like and portable; low-level is close to the hardware'],['Answer', it[1]]]); }
+  ],
+  net: [
+    () => { const d = pick([['www', 'school', 'com'], ['www', 'shop', 'org'], ['mail', 'club', 'net']]), p = pick(['maths', 'help', 'news']), pr = pick(['http', 'https']), part = pick(['protocol', 'domain name', 'path']);
+      const url = `${pr}://${d.join('.')}/${p}.html`; const right = part === 'protocol' ? pr : part === 'domain name' ? d.join('.') : `/${p}.html`;
+      const wr = [pr === 'http' ? 'https' : 'http', d.join('.'), `/${p}.html`, `${d[1]}`].filter(x => x !== right).slice(0, 3);
+      return choiceItem(`In the URL ${url}, which part is the ${part}?`, right, wr, [['URL', 'protocol://domain name/path'],['Answer', right]]); },
+    () => { const it = pick([['a fake email that tricks you into giving your password', 'phishing'], ['a fake website reached after the DNS is changed', 'pharming'], ['a flood of requests that crashes a server', 'DDoS attack'], ['software that locks your files and demands money', 'ransomware'], ['software that secretly records what you type', 'spyware'], ['trying every possible password', 'brute-force attack']]);
+      return choiceItem(`Which threat is this: ${it[0]}?`, it[1], ['phishing', 'pharming', 'DDoS attack', 'ransomware', 'spyware', 'brute-force attack'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ' = ' + it[1]]]); },
+    () => { const it = pick([['deleted when the browser closes', 'session cookie'], ['stored until an expiry date', 'persistent cookie'], ['keeps items in a shopping basket for one visit', 'session cookie'], ['remembers your login for next week', 'persistent cookie']]);
+      return choiceItem(`Which type of cookie is ${it[0]}?`, it[1], [it[1] === 'session cookie' ? 'persistent cookie' : 'session cookie'], [['Rule', 'session = deleted at close; persistent = kept until it expires']]); }
+  ],
+  algo: [
+    () => { const n = rint(3, 6), a = rint(1, 4), step = rint(1, 3); let total = 0, vals = []; for (let i = 0; i < n; i++) { total += a + i * step; vals.push(a + i * step); }
+      return { kind:'num', q:`total = 0. For each of the values ${vals.join(', ')}, total = total + value. What is the final total?`, ans:total, tol:0, s:[['Add each value', vals.join(' + ')],['Answer', String(total)]] }; },
+    () => { const L = Array.from({length:5}, () => rint(1, 9)), t = pick(L), k = L.indexOf(t) + 1;
+      return { kind:'num', q:`A linear search looks for ${t} in the list ${L.join(', ')}. How many items are checked before it is found (counting the item that matches)?`, ans:k, tol:0, s:[['Check from the start', L.slice(0, k).join(', ')],['Answer', String(k)]] }; },
+    () => { const L = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 5); const A = L.slice(); let swaps = 0; for (let i = 0; i < A.length - 1; i++) if (A[i] > A[i + 1]) { [A[i], A[i + 1]] = [A[i + 1], A[i]]; swaps++; }
+      return { kind:'num', q:`One pass of a bubble sort (ascending) is done on ${L.join(', ')}. How many swaps are made in that pass?`, ans:swaps, tol:0, s:[['Compare neighbours and swap if the left is bigger', `after the pass: ${A.join(', ')}`],['Swaps', String(swaps)]] }; },
+    () => { const lo = rint(1, 10), hi = lo + rint(5, 20), t = pick([['lo', lo], ['hi', hi]]);
+      return choiceItem(`Valid ages are ${lo} to ${hi} inclusive. Which is extreme (boundary) test data?`, String(t[1]), [String(lo + Math.floor((hi - lo) / 2)), String(lo - 3), String(hi + 4)], [['Boundary values', `${lo} and ${hi}`],['Answer', String(t[1])]]); },
+    () => { const it = pick([['a field must not be empty', 'presence check'], ['a password must have at least 8 characters', 'length check'], ['age must be between 11 and 16', 'range check'], ['quantity must be a whole number', 'type check'], ['the last digit of a barcode is calculated from the others', 'check digit']]);
+      return choiceItem(`Which validation check is used when ${it[0]}?`, it[1], ['presence check', 'length check', 'range check', 'type check', 'check digit'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ' = ' + it[1]]]); }
+  ],
+  prog: [
+    () => { const a = rint(10, 99), b = rint(2, 9), op = pick([['//', Math.floor(a / b)], ['%', a % b], ['*', a * b], ['+', a + b], ['-', a - b]]);
+      return { kind:'num', q:`What does the Python expression ${a} ${op[0]} ${b} give?`, ans:op[1], tol:0, s:[['Evaluate', `${a} ${op[0]} ${b}`],['Answer', String(op[1])]] }; },
+    () => { const a = rint(0, 3), b = rint(a + 4, a + 12), st = rint(1, 3), n = Math.ceil((b - a) / st);
+      return { kind:'num', q:`How many times does this loop run?  for i in range(${a}, ${b}, ${st}):  print(i)`, ans:n, tol:0, s:[['Values', Array.from({length:n}, (_, i) => a + i * st).join(', ')],['Count', String(n)]] }; },
+    () => { const w = pick(['computer', 'python', 'school', 'program', 'binary', 'keyboard']), i = rint(0, w.length - 1);
+      return { kind:'text', q:`What does  "${w}"[${i}]  give? (type the letter)`, ans:w[i], s:[['Index counts from 0', `characters: ${[...w].map((c, k) => k + ':' + c).join(' ')}`],['Answer', w[i]]] }; },
+    () => { const L = Array.from({length:4}, () => rint(1, 9)), k = rint(0, 3), w = rint(0, 2);
+      return w === 0 ? { kind:'num', q:`nums = [${L.join(', ')}].  What is nums[${k}]?`, ans:L[k], tol:0, s:[['Index counts from 0', `nums[${k}] is the ${k + 1}${['st', 'nd', 'rd', 'th'][k]} item`],['Answer', String(L[k])]] }
+        : w === 1 ? { kind:'num', q:`nums = [${L.join(', ')}].  What does sum(nums) give?`, ans:L.reduce((a, b) => a + b, 0), tol:0, s:[['Add', L.join(' + ')],['Answer', String(L.reduce((a, b) => a + b, 0))]] }
+        : { kind:'num', q:`nums = [${L.join(', ')}].  What does len(nums) give?`, ans:4, tol:0, s:[['Count the items', '4'],['Answer', '4']] }; },
+    () => { const x = rint(1, 20), lim = pick([5, 10, 15]), out = x > lim ? 'big' : x === lim ? 'equal' : 'small';
+      return { kind:'text', q:`x = ${x}.  if x > ${lim}: print("big")  elif x == ${lim}: print("equal")  else: print("small").  What is printed?`, ans:out, s:[['Test in order', `x > ${lim}: ${x > lim}`],['Output', out]] }; }
+  ],
+  db: [
+    () => { const H = ['Red', 'Blue', 'Green'], N = ['Asha', 'Ravi', 'Meena', 'Kabir', 'Divya', 'Omar'], rows = N.map((n, i) => [100 + i, n, rint(12, 15), pick(H)]); const h = pick(H), age = rint(12, 14); const t = rows.map(r => `${r[0]} ${r[1]} ${r[2]} ${r[3]}`).join('<br>'); const k = rows.filter(r => r[3] === h && r[2] > age).length;
+      return { kind:'num', q:`Table Student (ID, Name, Age, House):<br><span class="mono">${t}</span><br>How many records does  SELECT * FROM Student WHERE House = "${h}" AND Age > ${age}  return?`, ans:k, tol:0, s:[['Find House = ' + h, rows.filter(r => r[3] === h).map(r => r[1] + ' ' + r[2]).join(', ') || 'none'],['Keep Age > ' + age, `${k} record(s)`]] }; },
+    () => { const rows = Array.from({length:5}, (_, i) => [200 + i, pick(['Pen', 'Book', 'Bag', 'Ruler', 'Box']), rint(2, 9) * 10]); const t = rows.map(r => `${r[0]} ${r[1]} ${r[2]}`).join('<br>'); const w = rint(0, 1);
+      return w ? { kind:'num', q:`Table Item (ID, Name, Price):<br><span class="mono">${t}</span><br>What does  SELECT SUM(Price) FROM Item  return?`, ans:rows.reduce((a, r) => a + r[2], 0), tol:0, s:[['Add all prices', rows.map(r => r[2]).join(' + ')],['Answer', String(rows.reduce((a, r) => a + r[2], 0))]] }
+        : { kind:'num', q:`Table Item (ID, Name, Price):<br><span class="mono">${t}</span><br>What does  SELECT COUNT(*) FROM Item  return?`, ans:5, tol:0, s:[['Count the records', '5'],['Answer', '5']] }; },
+    () => { const it = pick([['SELECT Name FROM Student', 'chooses the Name field from every record'], ['SELECT * FROM Student', 'chooses all fields from every record'], ['SELECT Name FROM Student WHERE Age > 13', 'chooses Name only for students older than 13'], ['SELECT Name FROM Student ORDER BY Name ASC', 'lists the names in alphabetical order'], ['SELECT COUNT(*) FROM Student', 'counts the records']]);
+      return choiceItem(`What does  ${it[0]}  do?`, it[1], ['chooses the Name field from every record', 'chooses all fields from every record', 'chooses Name only for students older than 13', 'lists the names in alphabetical order', 'counts the records'].filter(x => x !== it[1]).slice(0, 3), [['Query', it[0]],['Meaning', it[1]]]); }
   ]
 };
 
@@ -1146,7 +1575,7 @@ function drawMock(){
 if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['data','Ch 1','Data'],['trans','Ch 2','Transmission'],['logic','Ch 10','Logic'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['data','Ch 1','Data'],['trans','Ch 2','Transmission'],['logic','Ch 10','Logic'],['hw','Topic 3','Hardware'],['sw','Topic 4','Software'],['net','Topic 5','Internet'],['algo','Topic 7','Algorithms'],['prog','Topic 8','Python'],['db','Topic 9','Databases'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1164,7 +1593,7 @@ function render(){
   bindView();
 }
 function renderStart(){
-  const rows = ['data','trans','logic'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+  const rows = ['data','trans','logic','hw','sw','net','algo','prog','db'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Computer Science: the whole syllabus</h2>
@@ -1200,6 +1629,8 @@ function cardHTML(card){
   const tbl = card.table ? `<div class="tbl"><table><thead><tr>${card.table[0].map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${card.table.slice(1).map(r => `<tr>${r.map(c => `<td>${fmt(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '';
   return `<div class="card"><h3>${card.h}</h3>${(card.p||[]).map(p=>`<p>${fmt(p)}</p>`).join('')}${card.f?`<div class="formula">${card.f.map(x=>`<span>${x}</span>`).join('')}</div>`:''}${card.list?`<ul>${card.list.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul>`:''}${tbl}</div>`;
 }
+for (const key in CH) CH[key].worked.forEach(w => { if (w.r && !w.board0) { w.board0 = () => wkBoard(w, -1); w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); }); } });
+
 function renderChapter(k){
   const c = CH[k];
   const subs = [['learn','Learn'],['diagrams','Diagrams'],...(c.lab?[['lab','Try it']]:[]),['worked','Worked'],['drill','Drill'],['quiz','Quiz'],['exam','Exam Qs']];
