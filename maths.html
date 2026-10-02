@@ -438,6 +438,51 @@ function svgParabola(){
   ${T(360, 50, 'y = x² − 4x + 3', 'mono acct')}${T(360, 82, 'roots: graph crosses the x-axis', 'mono')}${T(360, 108, 'x² − 4x + 3 = (x − 1)(x − 3) = 0', 'mono')}${T(360, 134, 'line of symmetry x = 2', 'mono')}${T(360, 170, 'x² positive: U-shaped (minimum)', 'mut')}${T(360, 192, 'x² negative: ∩-shaped (maximum)', 'mut')}</svg>`;
 }
 
+function svgVenn(){
+  return `<svg viewBox="0 0 700 250" role="img" aria-label="Venn diagram of football and cricket">
+  <rect x="20" y="20" width="360" height="210" rx="8" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/>
+  <circle cx="145" cy="125" r="80" class="accf" style="fill-opacity:.25;stroke:var(--accent);stroke-width:2"/><circle cx="255" cy="125" r="80" class="hotf" style="fill-opacity:.25;stroke:var(--hot);stroke-width:2"/>
+  ${T(110, 130, '17', 'mid mono lbl')}${T(200, 130, '8', 'mid mono lbl')}${T(290, 130, '10', 'mid mono lbl')}${T(360, 215, '5', 'end mono lbl')}${T(34, 218, 'ε = 40', 'lbl')}
+  ${T(100, 36, 'F (football)', 'mid acct')}${T(300, 36, 'C (cricket)', 'mid hott')}
+  ${T(400, 60, 'n(F) = 25, n(C) = 18, both = 8', 'mono')}${T(400, 92, 'Start with the middle: both = 8', 'acct')}${T(400, 118, 'F only = 25 − 8 = 17', 'mono')}${T(400, 142, 'C only = 18 − 8 = 10', 'mono')}${T(400, 172, 'Neither = 40 − 35 = 5', 'mono hott')}${T(400, 204, 'n(F ∪ C) = 25 + 18 − 8 = 35', 'mono')}</svg>`;
+}
+function svgVector(){
+  const X = x => 60 + 50 * x, Y = y => 200 - 40 * y;
+  const arr = (x1, y1, x2, y2, cls, id) => `<line x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}" class="${cls}" marker-end="url(#${id})"/>`;
+  return `<svg viewBox="0 0 700 240" role="img" aria-label="Adding vectors a and b by the triangle rule">${arrowDefs('v')}
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(5)}" y2="${Y(0)}" class="thin"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(4.5)}" class="thin"/>
+  ${arr(0, 0, 3, 1, 'acc', 'b-v')}${arr(3, 1, 4, 4, 'acc', 'b-v')}${arr(0, 0, 4, 4, 'hotl', 'a-v')}
+  ${T(X(1.4), Y(0.5) + 18, 'a = (3, 1)', 'mid acct')}${T(X(3.5) + 24, Y(2.4), 'b = (1, 3)', 'acct')}${T(X(2) - 14, Y(2.2), 'a + b', 'end hott')}
+  ${T(380, 60, 'Add the tops, add the bottoms', 'lbl')}${T(380, 92, '(3, 1) + (1, 3) = (4, 4)', 'mono acct')}${T(380, 128, 'Multiply: 2a = (6, 2)', 'mono')}${T(380, 154, 'Subtract: b − a = (−2, 2)', 'mono')}${T(380, 190, 'length |a + b| = √(4² + 4²) = √32', 'mono hott')}</svg>`;
+}
+function svgCumFreq(){
+  const X = x => 60 + 8 * x, Y = y => 210 - 4.5 * y; const pts = [[0, 0], [10, 4], [20, 13], [30, 28], [40, 36], [50, 40]];
+  const guide = (cf, x, lab, dy) => `<polyline points="${X(0)},${Y(cf)} ${X(x)},${Y(cf)} ${X(x)},${Y(0)}" class="hotl" fill="none" stroke-dasharray="5 4"/>${T(X(x), Y(0) + dy, lab, 'mid mono hott')}`;
+  return `<svg viewBox="0 0 760 260" role="img" aria-label="Cumulative frequency curve with median and quartiles">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(52)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(42)}" class="ln"/>
+  ${[0, 10, 20, 30, 40, 50].map(v => T(X(v), Y(0) + 16, v, 'mid mono mut')).join('')}${[10, 20, 30, 40].map(v => T(X(0) - 8, Y(v) + 4, v, 'end mono mut')).join('')}
+  ${guide(10, 16.67, 'LQ 16.7', 32)}${guide(20, 24.67, 'med 24.7', 48)}${guide(30, 32.5, 'UQ 32.5', 32)}
+  <polyline points="${pts.map(([a, b]) => X(a) + ',' + Y(b)).join(' ')}" class="acc" fill="none"/>${pts.map(([a, b]) => `<circle cx="${X(a)}" cy="${Y(b)}" r="4" class="accf"/>`).join('')}
+  ${T(500, 50, 'n = 40', 'mono lbl')}${T(500, 80, 'LQ at n/4 = 10th value', 'mono')}${T(500, 104, 'Median at n/2 = 20th value', 'mono')}${T(500, 128, 'UQ at 3n/4 = 30th value', 'mono')}${T(500, 158, 'IQR = 32.5 − 16.7 = 15.8', 'mono hott')}${T(500, 190, 'Plot at the UPPER boundary.', 'mut')}</svg>`;
+}
+function svgCircle(){
+  const cx = 140, cy = 125, r = 85, P = a => [cx + r * Math.cos(a * Math.PI / 180), cy - r * Math.sin(a * Math.PI / 180)];
+  const A = P(210), B = P(330), C = P(90), f = p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`;
+  return `<svg viewBox="0 0 720 250" role="img" aria-label="Angle at the centre is twice the angle at the circumference">
+  <circle cx="${cx}" cy="${cy}" r="${r}" class="metal" style="stroke:var(--ink);stroke-width:2"/>
+  <polyline points="${f(A)} ${cx},${cy} ${f(B)}" class="hotl" fill="none"/><polyline points="${f(A)} ${f(C)} ${f(B)}" class="acc" fill="none"/>
+  <circle cx="${cx}" cy="${cy}" r="3" class="inkf"/>${T(cx + 8, cy - 6, 'O', 'lbl')}${T(cx, cy + 34, '2x', 'mid hott')}${T(cx, cy - r + 36, 'x', 'mid acct')}
+  ${T(A[0] - 14, A[1] + 14, 'A', 'lbl')}${T(B[0] + 8, B[1] + 14, 'B', 'lbl')}${T(C[0] + 10, C[1] - 4, 'P', 'lbl')}
+  ${T(300, 44, 'Centre angle = 2 × circumference angle', 'mono acct')}${T(300, 76, 'Angle in a semicircle = 90°', 'mono')}${T(300, 102, 'Tangent ⟂ radius (90°)', 'mono')}${T(300, 128, 'Cyclic quad: opposite angles = 180°', 'mono')}
+  ${T(300, 160, 'Angles in the same segment are equal', 'mono')}${T(300, 196, 'Arc = θ/360 × 2πr     Sector = θ/360 × πr²', 'mono hott')}</svg>`;
+}
+function svgComposite(){
+  const box = (x, t) => `<rect x="${x}" y="50" width="130" height="48" rx="8" class="metal" style="stroke:var(--accent);stroke-width:2"/>${T(x + 65, 80, t, 'mid mono lbl')}`;
+  return `<svg viewBox="0 0 700 230" role="img" aria-label="Composite function fg(x)">${arrowDefs('f')}
+  ${T(30, 80, 'x', 'mid mono lbl')}<line x1="44" y1="74" x2="96" y2="74" class="ln" marker-end="url(#a-f)"/>${box(100, 'g(x) = x − 3')}<line x1="230" y1="74" x2="276" y2="74" class="ln" marker-end="url(#a-f)"/>${box(280, 'f(x) = 2x + 1')}<line x1="410" y1="74" x2="456" y2="74" class="ln" marker-end="url(#a-f)"/>${T(470, 80, 'fg(x) = 2x − 5', 'mono lbl')}
+  ${T(30, 140, 'fg(x): do g FIRST, then f.', 'lbl')}${T(30, 168, 'Inverse f⁻¹: swap x and y, then make y the subject.', 'mono acct')}${T(30, 196, 'f(x) = 3x − 4  →  x = 3y − 4  →  f⁻¹(x) = (x + 4) ÷ 3', 'mono')}</svg>`;
+}
+
 /* ---------- content ---------- */
 const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
 const CH = {
@@ -1332,6 +1377,231 @@ quad: {
     { q: 'Use the quadratic formula to solve x² − 6x + 2 = 0. Give your answers correct to 2 decimal places.', m: 4,
       p: ['b² − 4ac = 36 − 8 = ==28==', 'x = (6 ± √28) ÷ 2', '==x = 5.65==', '==x = 0.35=='] }
   ]
+},
+sets: {
+  code: 'Number', name: 'Sets and Venn diagrams',
+  lede: 'Learn the symbols, then fill Venn diagrams from the middle outwards.',
+  learn: [
+    { h: 'Set notation', table: [['Symbol', 'Meaning'], ['ε', 'universal set (everything being considered)'], ['A ∪ B', 'union: in A or B or both'], ['A ∩ B', 'intersection: in both A and B'], ['A′', 'complement: in ε but not in A'], ['n(A)', 'number of elements in A'], ['∈', 'is an element of'], ['∅', 'the empty set'], ['A ⊂ B', 'A is a subset of B']] },
+    { h: 'Venn diagrams', list: ['Draw a ==rectangle== for ε and a ==circle== for each set.', 'Fill the ==intersection (middle) first==.', 'Then subtract the middle from each total to get the ==“only”== regions.', 'The numbers inside the rectangle (including outside the circles) add up to ==n(ε)==.', '==Neither== = n(ε) − n(A ∪ B).'], f: ['n(A ∪ B) = n(A) + n(B) − n(A ∩ B)'] }
+  ],
+  mistakes: ['Writing the ==total of a set== in its “only” region (you must subtract the middle).', 'Forgetting the ==outside== region (neither).', 'Mixing up ==∪ and ∩==. ∪ looks like a cup that collects everything.', 'Counting the ==middle twice==.', 'Using ==( )== instead of ==( }== for lists: sets use curly brackets {2, 4, 6}.'],
+  diagrams: [{ svg: svgVenn, cap: 'Fill the ==middle first==, then the “only” parts, then ==neither==.' }],
+  worked: [
+    W('ε = {1, 2, …, 10}, A = {2, 4, 6, 8, 10} and B = {1, 2, 3, 4, 5}. List A ∩ B, A ∪ B and A′.', 'A ==∩== B has elements in ==both==. A ∪ B has elements in ==either==. A′ is ==everything not in A==.', 'Do not list a repeated element twice in a union.', 'Compare the lists',
+      [['A ∩ B: in both sets', '{2, 4}', 'Only 2 and 4 appear in both lists.'], ['A ∪ B: in either set', '{1, 2, 3, 4, 5, 6, 8, 10}', 'List every element once.'], ['A′: in ε but not in A', '{1, 3, 5, 7, 9}', 'The odd numbers, since A is the even numbers.']],
+      [['A ∩ B', '{2, 4}', 0], ['A ∪ B', '{1,2,3,4,5,6,8,10}', 1], ['A′', '{1,3,5,7,9}', 2]]),
+    W('In a group of 40 students, 25 play football (F), 18 play cricket (C) and 8 play both. How many play neither? How many play football only?', 'Start with the ==middle==, then work outwards.', 'Check: all the regions add up to 40.', 'Middle first',
+      [['Both', '8', 'This goes in the middle of the Venn diagram.'], ['Football only', '25 − 8 = 17', 'Take the middle away from the football total.'], ['Cricket only', '18 − 8 = 10', ''], ['Neither', '40 − (17 + 8 + 10) = 5', 'Everyone not in either circle.']],
+      [['Both', '8', 0], ['F only', '17', 1], ['C only', '10', 2], ['Neither', '5', 3]]),
+    W('n(A) = 20, n(B) = 15 and n(A ∩ B) = 6. Find n(A ∪ B). If n(ε) = 35, find n((A ∪ B)′).', 'Use ==n(A ∪ B) = n(A) + n(B) − n(A ∩ B)==. The middle was counted twice, so take it away once.', 'Check with a quick Venn diagram.', 'n(A ∪ B) = n(A) + n(B) − n(A ∩ B)',
+      [['Write the formula', 'n(A ∪ B) = n(A) + n(B) − n(A ∩ B)', ''], ['Substitute', '20 + 15 − 6', ''], ['Answer', 'n(A ∪ B) = 29', ''], ['Outside both circles', '35 − 29 = 6', 'n(ε) minus n(A ∪ B).']],
+      [['n(A ∪ B)', '20 + 15 − 6 = 29', 2], ['Outside', '35 − 29 = 6', 3]]),
+    W('From the survey of 40 students above, one student is chosen at random. Find the probability that the student plays football only.', 'A Venn diagram gives probabilities: ==the number in the region ÷ the total==.', 'Write the probability as a simplified fraction or decimal.', 'P = region ÷ n(ε)',
+      [['Number who play football only', '17', 'From the Venn diagram.'], ['Total number of students', '40', 'n(ε).'], ['Probability', 'P = 17/40', 'It cannot be simplified: 17 is prime.']],
+      [['Football only', '17', 0], ['Total', '40', 1], ['P', '17/40', 2]]),
+    W('A = {x : x is a multiple of 3, x < 20}. List A and find n(A).', 'Read the notation: ==x such that x is a multiple of 3 and less than 20==.', 'Start at 3 and stop before 20.', 'List, then count',
+      [['List the multiples of 3 below 20', '3, 6, 9, 12, 15, 18', '3 × 1, 3 × 2, … 3 × 6. The next one is 21, which is too big.'], ['Write as a set', 'A = {3, 6, 9, 12, 15, 18}', 'Use curly brackets.'], ['Count', 'n(A) = 6', '']],
+      [['Multiples', '3 6 9 12 15 18', 0], ['A', '{3, 6, 9, 12, 15, 18}', 1], ['n(A)', '6', 2]])
+  ],
+  drill: 'sets',
+  quiz: [
+    { q: 'A ∩ B means…', o: ['in A or B', 'in both A and B', 'in A only', 'not in A'], a: 1, w: '==Intersection==: in both.' },
+    { q: 'n(A) = 12, n(B) = 9 and n(A ∩ B) = 4. Find n(A ∪ B).', o: ['25', '21', '17', '13'], a: 2, w: '12 + 9 − 4 = ==17==.' },
+    { q: 'The symbol ε stands for…', o: ['the empty set', 'the universal set', 'an element', 'a subset'], a: 1, w: '==The universal set==.' },
+    { q: 'A′ is the set of elements that are…', o: ['in A', 'not in A', 'in A and B', 'in B only'], a: 1, w: 'The ==complement==: in ε but not in A.' },
+    { q: 'Which symbol means the empty set?', o: ['ε', '∅', '∩', '∪'], a: 1, w: '==∅==.' },
+    { q: 'n(ε) = 30 and n(A ∪ B) = 22. How many are outside both sets?', o: ['8', '22', '52', '30'], a: 0, w: '30 − 22 = ==8==.' }
+  ],
+  exam: [
+    { q: 'ε = {1, 2, …, 12}, A = {even numbers} and B = {multiples of 3}. List (a) A ∩ B (b) A ∪ B (c) (A ∪ B)′.', m: 3,
+      p: ['A ∩ B = =={6, 12}==', 'A ∪ B = =={2, 3, 4, 6, 8, 9, 10, 12}==', '(A ∪ B)′ = =={1, 5, 7, 11}=='] },
+    { q: 'In a class of 30 students, 18 study French, 14 study Spanish and 6 study both. Complete a Venn diagram. How many study neither?', m: 4,
+      p: ['Both = ==6==', 'French only = 18 − 6 = ==12==', 'Spanish only = 14 − 6 = ==8==', 'Neither = 30 − (12 + 6 + 8) = ==4=='] },
+    { q: 'n(A) = 25, n(B) = 17 and n(A ∪ B) = 36. Find n(A ∩ B).', m: 2,
+      p: ['n(A ∩ B) = n(A) + n(B) − n(A ∪ B)', '25 + 17 − 36 = ==6=='] }
+  ]
+},
+vect: {
+  code: 'Geometry', name: 'Vectors',
+  lede: 'A vector has size and direction. In this pack a column vector is written (x, y): x across, y up.',
+  learn: [
+    { h: 'Column vectors', list: ['(x, y) means ==x across== (right is positive) and ==y up== (up is positive).', '==Add==: add the tops and add the bottoms. (3, 1) + (1, 3) = (4, 4).', '==Multiply by a number==: multiply both parts. 2(3, 1) = (6, 2).', '==Subtract==: subtract the parts.', '==Magnitude== (length) of (x, y) = ==√(x² + y²)== (Pythagoras).'] },
+    { h: 'Vectors between points', list: ['The vector from A to B is ==AB = B − A== (end minus start).', '==Parallel== vectors are ==multiples== of each other: (2, −3) and (6, −9).', 'Going the other way gives the ==negative==: BA = −AB.', 'For vector geometry, ==write a path== and add the vectors on the way: AB = AO + OB = −a + b.'] }
+  ],
+  mistakes: ['Subtracting the ==wrong way round==: AB is B − A, not A − B.', 'Forgetting the ==direction== when writing BA.', 'Multiplying only ==one part== of the vector.', 'Writing the magnitude as ==x + y== instead of √(x² + y²).', 'Not showing ==the path== in a vector proof.'],
+  diagrams: [{ svg: svgVector, cap: 'The ==triangle rule==: go along a, then along b. a + b is the direct route.' }],
+  worked: [
+    W('a = (2, 3) and b = (4, −1). Find a + b and 2a − b.', 'Work with the ==top and bottom parts separately==.', 'Multiply first, then subtract.', 'Add or subtract each part',
+      [['Add the tops and bottoms', 'a + b = (2 + 4, 3 + (−1)) = (6, 2)', ''], ['Work out 2a', '2a = (4, 6)', 'Double each part.'], ['Subtract b', '2a − b = (4 − 4, 6 − (−1)) = (0, 7)', 'Minus a negative is plus.']],
+      [['a + b', '(6, 2)', 0], ['2a', '(4, 6)', 1], ['2a − b', '(0, 7)', 2]]),
+    W('Find the magnitude of (3, 4), and of (−6, 8).', '==Magnitude = √(x² + y²)==. Ignore the signs: they vanish when you square.', 'The magnitude is never negative.', '|(x, y)| = √(x² + y²)',
+      [['(3, 4): square and add', '3² + 4² = 9 + 16 = 25', ''], ['Square root', '√25 = 5', ''], ['(−6, 8): square and add', '(−6)² + 8² = 36 + 64 = 100', 'A negative squared is positive.'], ['Square root', '√100 = 10', '']],
+      [['|(3, 4)|', '5', 1], ['|(−6, 8)|', '10', 3]]),
+    W('A is (1, 2) and B is (5, 5). Find the vector AB and its length.', '==AB = B − A==: end point minus start point.', 'Check the direction: AB goes from A to B.', 'AB = B − A',
+      [['Subtract the coordinates', 'AB = (5 − 1, 5 − 2)', 'End minus start.'], ['Vector', 'AB = (4, 3)', ''], ['Length', '√(4² + 3²) = √25 = 5', '']],
+      [['A, B', '(1, 2) and (5, 5)', -1], ['AB', '(4, 3)', 1], ['Length', '5', 2]]),
+    W('Are (6, −9) and (2, −3) parallel?', '==Parallel== vectors are ==multiples== of each other.', 'Find the multiplier for the top, then check the bottom.', 'Parallel: one is k times the other',
+      [['Compare the tops', '6 ÷ 2 = 3', 'What multiplies 2 to give 6?'], ['Check the bottoms', '3 × (−3) = −9 ✓', 'The same multiplier works.'], ['Conclusion', 'Yes, (6, −9) = 3(2, −3), so they are parallel', '']],
+      [['Top', '6 = 3 × 2', 0], ['Bottom', '−9 = 3 × (−3) ✓', 1], ['Parallel?', 'Yes', 2]]),
+    W('OA = a and OB = b. M is the midpoint of AB. Find AB and OM in terms of a and b.', 'Write a ==path== from the start to the end, using the vectors you know.', 'AO is the opposite of OA, so AO = −a.', 'AB = AO + OB',
+      [['Path A to B via O', 'AB = AO + OB = −a + b', 'Going from A back to O is −a.'], ['Write neatly', 'AB = b − a', ''], ['Path O to M via A', 'OM = OA + ½AB = a + ½(b − a)', 'M is halfway along AB.'], ['Simplify', 'OM = a + ½b − ½a = ½(a + b)', '']],
+      [['AB', 'b − a', 1], ['OM', 'a + ½(b − a)', 2], ['OM simplified', '½(a + b)', 3]])
+  ],
+  drill: 'vect',
+  quiz: [
+    { q: '(2, 3) + (1, 4) = ?', o: ['(3, 7)', '(2, 12)', '(1, −1)', '(3, 12)'], a: 0, w: 'Add the parts: ==(3, 7)==.' },
+    { q: 'The magnitude of (6, 8) is…', o: ['14', '10', '48', '2'], a: 1, w: '√(36 + 64) = √100 = ==10==.' },
+    { q: 'A is (1, 1) and B is (4, 5). Vector AB is…', o: ['(3, 4)', '(5, 6)', '(−3, −4)', '(4, 5)'], a: 0, w: 'B − A = (4 − 1, 5 − 1) = ==(3, 4)==.' },
+    { q: '2(3, −1) = ?', o: ['(6, −1)', '(5, 1)', '(6, −2)', '(3, −2)'], a: 2, w: 'Multiply both parts: ==(6, −2)==.' },
+    { q: 'Parallel vectors are…', o: ['equal', 'multiples of each other', 'perpendicular', 'opposite only'], a: 1, w: '==Multiples== of each other.' },
+    { q: 'a = (5, 2) and b = (1, 3). a − b = ?', o: ['(6, 5)', '(4, −1)', '(4, 1)', '(−4, 1)'], a: 1, w: '(5 − 1, 2 − 3) = ==(4, −1)==.' }
+  ],
+  exam: [
+    { q: 'a = (3, −2) and b = (−1, 4). Find (a) a + b [1] (b) 2a − b [2] (c) the magnitude of a, correct to 2 decimal places [2].', m: 5,
+      p: ['a + b = ==(2, 2)==', '2a = (6, −4)', '2a − b = ==(7, −8)==', '|a| = √(9 + 4) = √13', '==3.61=='] },
+    { q: 'A is (2, 1) and B is (6, 4). Find the vector AB and its magnitude.', m: 3,
+      p: ['AB = (6 − 2, 4 − 1) = ==(4, 3)==', '√(4² + 3²)', '==5=='] },
+    { q: 'OA = a and OB = b. M is the midpoint of AB. Write AB and OM in terms of a and b.', m: 3,
+      p: ['AB = AO + OB = −a + b', '==AB = b − a==', '==OM = ½(a + b)=='] }
+  ]
+},
+cumf: {
+  code: 'Statistics', name: 'Cumulative frequency and box plots',
+  lede: 'Read the median and quartiles from a cumulative frequency curve and compare data sets.',
+  learn: [
+    { h: 'Cumulative frequency', list: ['==Cumulative frequency== is a ==running total== of the frequencies.', 'Plot each total against the ==upper class boundary== and join the points with a smooth curve.', 'Read off ==median== at ==n/2==, ==lower quartile (LQ)== at ==n/4==, ==upper quartile (UQ)== at ==3n/4==.', '==IQR (interquartile range) = UQ − LQ==.'], f: ['n = 40', 'median at 20th, LQ at 10th, UQ at 30th'] },
+    { h: 'Box plots and comparing', list: ['A ==box plot== shows five numbers: ==minimum, LQ, median, UQ, maximum==.', 'Compare two sets using an average (==median==) and a spread (==IQR== or range).', 'Say what it means: “higher median, so typically higher”, “smaller IQR, so more consistent”.'] },
+    { h: 'Histograms', list: ['In a histogram with unequal classes, the ==area of each bar = frequency==.', '==Frequency density = frequency ÷ class width==.', 'The vertical axis shows ==frequency density==, not frequency.'] }
+  ],
+  mistakes: ['Plotting at the ==middle== of the class instead of the ==upper boundary==.', 'Using ==n/2 on the horizontal axis== instead of the vertical axis.', 'Writing the quartile as a position instead of ==the value read from the axis==.', 'Comparing without a ==context== sentence.', 'Forgetting to ==divide by class width== for frequency density.'],
+  diagrams: [{ svg: svgCumFreq, cap: 'Cumulative frequency curve: ==median at n/2==, quartiles at n/4 and 3n/4.' }],
+  worked: [
+    W('Journey times: 0 < t ≤ 10: 4, 10 < t ≤ 20: 9, 20 < t ≤ 30: 15, 30 < t ≤ 40: 8, 40 < t ≤ 50: 4. Work out the cumulative frequencies.', 'Add each frequency to ==all the ones before it==. The last total must equal ==n==.', 'The last cumulative frequency is the total number of values.', 'Running total',
+      [['First class', '4', 'Nothing before it.'], ['Second class', '4 + 9 = 13', ''], ['Third class', '13 + 15 = 28', ''], ['Fourth and fifth', '28 + 8 = 36,  36 + 4 = 40', 'The total is 40, so n = 40.']],
+      [['≤ 10', '4', 0], ['≤ 20', '13', 1], ['≤ 30', '28', 2], ['≤ 40', '36', 3], ['≤ 50', '40', 3]]),
+    W('Use the same data (n = 40) to estimate the median, lower quartile and upper quartile.', 'Find the ==position== (n/2, n/4, 3n/4), then read across the curve. Here we estimate by working inside the class.', 'These are estimates from the grouped data.', 'Positions: n/4, n/2, 3n/4',
+      [['Positions', 'LQ: 10th, median: 20th, UQ: 30th', '40 ÷ 4 = 10, 40 ÷ 2 = 20, 3 × 10 = 30.'], ['Median: in the 20 < t ≤ 30 class', '20 + (20 − 13) ÷ 15 × 10 ≈ 24.7', '13 values are below 20, so we need 7 more out of 15 in this class.'], ['LQ: in the 10 < t ≤ 20 class', '10 + (10 − 4) ÷ 9 × 10 ≈ 16.7', ''], ['UQ: in the 30 < t ≤ 40 class', '30 + (30 − 28) ÷ 8 × 10 = 32.5', ''], ['IQR', '32.5 − 16.7 = 15.8', 'UQ minus LQ.']],
+      [['LQ', '≈ 16.7', 2], ['Median', '≈ 24.7', 1], ['UQ', '32.5', 3], ['IQR', '≈ 15.8', 4]]),
+    W('A box plot has minimum 12, LQ 20, median 26, UQ 35 and maximum 50. Find the range and the IQR.', 'The ==five numbers== of a box plot give the range and IQR directly.', 'Range uses the ends; IQR uses the box.', 'Range = max − min, IQR = UQ − LQ',
+      [['Range', '50 − 12 = 38', 'Maximum minus minimum.'], ['IQR', '35 − 20 = 15', 'Upper quartile minus lower quartile.'], ['What the IQR means', 'The middle half of the data lies within 15 units', '']],
+      [['Range', '50 − 12 = 38', 0], ['IQR', '35 − 20 = 15', 1]]),
+    W('Class A has median 62 and IQR 10. Class B has median 58 and IQR 18. Compare the two classes.', 'Compare an ==average== and a ==spread==, and explain what each means.', 'Always give a conclusion in words about the context.', 'Median = average, IQR = spread',
+      [['Compare the medians', '62 > 58', 'Class A has the higher median.'], ['What it means', 'Class A scored higher typically', ''], ['Compare the IQRs', '10 < 18', 'Class A has the smaller IQR.'], ['What it means', 'Class A’s marks are more consistent', 'A smaller spread means more consistent results.']],
+      [['Medians', 'A 62 > B 58', 0], ['Average', 'A higher', 1], ['IQRs', 'A 10 < B 18', 2], ['Spread', 'A more consistent', 3]]),
+    W('A histogram has a class 10 < x ≤ 20 with frequency 30 and a class 20 < x ≤ 40 with frequency 50. Find both frequency densities.', '==Frequency density = frequency ÷ class width==.', 'The class width is the upper boundary minus the lower boundary.', 'fd = frequency ÷ class width',
+      [['Class width of the first class', '20 − 10 = 10', ''], ['Frequency density', '30 ÷ 10 = 3', ''], ['Class width of the second class', '40 − 20 = 20', ''], ['Frequency density', '50 ÷ 20 = 2.5', 'The bar heights are 3 and 2.5.']],
+      [['Width 1', '10', 0], ['fd 1', '3', 1], ['Width 2', '20', 2], ['fd 2', '2.5', 3]])
+  ],
+  drill: 'cumf',
+  quiz: [
+    { q: 'Cumulative frequency is…', o: ['the frequency in each class', 'a running total of frequencies', 'the middle value', 'the class width'], a: 1, w: 'A ==running total==.' },
+    { q: 'For n = 60 the median is at the…', o: ['15th value', '30th value', '45th value', '60th value'], a: 1, w: 'n/2 = ==30th==.' },
+    { q: 'The interquartile range is…', o: ['max − min', 'UQ − LQ', 'median − LQ', 'UQ + LQ'], a: 1, w: '==UQ − LQ==.' },
+    { q: 'A box plot shows…', o: ['mean, mode, range', 'minimum, LQ, median, UQ, maximum', 'only the median', 'only the range'], a: 1, w: 'The ==five-number summary==.' },
+    { q: 'Frequency density is…', o: ['frequency × width', 'frequency ÷ class width', 'width ÷ frequency', 'cumulative frequency'], a: 1, w: '==Frequency ÷ class width==.' },
+    { q: 'On a cumulative frequency graph, points are plotted at…', o: ['class midpoints', 'lower class boundaries', 'upper class boundaries', 'any point'], a: 2, w: 'The ==upper class boundary==.' }
+  ],
+  exam: [
+    { q: 'Heights (cm) of 50 students: 140 < h ≤ 150: 6, 150 < h ≤ 160: 14, 160 < h ≤ 170: 20, 170 < h ≤ 180: 8, 180 < h ≤ 190: 2. (a) Write down the cumulative frequencies. [2] (b) In which class is the median? Estimate the median. [2]', m: 4,
+      p: ['==6, 20, 40, 48, 50==', 'Median is the 25th value (50 ÷ 2)', 'It lies in the ==160 < h ≤ 170== class', 'Median ≈ 160 + (25 − 20) ÷ 20 × 10 = ==162.5 cm=='] },
+    { q: 'A box plot has minimum 12, lower quartile 20, median 26, upper quartile 35 and maximum 50. Find (a) the range (b) the interquartile range.', m: 2,
+      p: ['Range = 50 − 12 = ==38==', 'IQR = 35 − 20 = ==15=='] },
+    { q: 'Class A: median 62, IQR 10. Class B: median 58, IQR 18. Compare the two classes.', m: 3,
+      p: ['A has the ==higher median==, so typically higher marks', 'A has the ==smaller IQR==', 'so A’s marks are ==more consistent=='] }
+  ]
+},
+circ: {
+  code: 'Geometry', name: 'Circles: arcs, sectors and angle facts',
+  lede: 'Arc length and sector area are fractions of the whole circle. Circle theorems always need a reason.',
+  learn: [
+    { h: 'Parts of a circle and sectors', list: ['==Radius==, ==diameter==, ==chord== (joins two points on the circle), ==tangent== (touches once), ==arc==, ==sector== (pie slice), ==segment==.', 'A sector with angle θ is the fraction ==θ/360== of the circle.', '==Arc length = θ/360 × 2πr==.', '==Sector area = θ/360 × πr²==.', 'Use π = 3.14 unless told otherwise.'] },
+    { h: 'Circle theorems', list: ['The angle in a ==semicircle== is ==90°==.', 'The angle at the ==centre== is ==twice== the angle at the circumference (same arc).', 'Angles in the ==same segment== are ==equal==.', '==Opposite angles of a cyclic quadrilateral add to 180°==.', 'A ==tangent== meets the radius at ==90°==.', 'Two ==radii== make an ==isosceles== triangle.'] }
+  ],
+  mistakes: ['Using the ==diameter== in the formula where ==radius== is needed.', 'Forgetting the ==θ/360== fraction.', 'Giving an angle with ==no reason== (name the circle theorem).', 'Mixing up ==arc length== (cm) and ==sector area== (cm²).', 'Missing the ==isosceles triangle== made by two radii.'],
+  diagrams: [{ svg: svgCircle, cap: 'The angle at the centre (2x) is ==twice== the angle at the circumference (x).' }],
+  worked: [
+    W('A sector has radius 6 cm and angle 60°. Find the arc length. Use π = 3.14.', 'The arc is ==60/360 = 1/6== of the whole circumference.', 'Units: cm for a length.', 'arc = θ/360 × 2πr',
+      [['Whole circumference', '2 × 3.14 × 6 = 37.68 cm', '2πr.'], ['Fraction of the circle', '60 ÷ 360 = 1/6', ''], ['Arc length', '37.68 ÷ 6 = 6.28 cm', 'Divide by 6.']],
+      [['Circumference', '37.68 cm', 0], ['Fraction', '1/6', 1], ['Arc length', '6.28 cm', 2]]),
+    W('For the same sector (r = 6 cm, θ = 60°) find the area. Use π = 3.14.', 'The sector is 1/6 of the circle’s ==area==.', 'Units: cm² for an area.', 'sector = θ/360 × πr²',
+      [['Whole circle area', '3.14 × 6² = 3.14 × 36 = 113.04 cm²', 'πr².'], ['Fraction', '60 ÷ 360 = 1/6', ''], ['Sector area', '113.04 ÷ 6 = 18.84 cm²', '']],
+      [['Circle area', '113.04 cm²', 0], ['Fraction', '1/6', 1], ['Sector area', '18.84 cm²', 2]]),
+    W('AB is a diameter of a circle and C is a point on the circle. Angle CAB = 35°. Find angle ACB and angle ABC.', 'The angle in a ==semicircle== is ==90°==.', 'Name the theorem as your reason.', 'Angle in a semicircle = 90°',
+      [['Angle ACB', '90°', 'Reason: angle in a semicircle.'], ['Angles in a triangle', '180 − 90 − 35', 'Triangle ABC has angles adding to 180°.'], ['Angle ABC', '55°', '']],
+      [['ACB', '90°', 0], ['Sum', '180 − 90 − 35', 1], ['ABC', '55°', 2]]),
+    W('The angle at the centre of a circle is 100°. Find the angle at the circumference on the same arc.', 'The angle at the ==centre== is ==twice== the angle at the ==circumference==.', 'Never the other way round.', 'centre = 2 × circumference',
+      [['State the theorem', 'angle at centre = 2 × angle at circumference', ''], ['Divide by 2', '100 ÷ 2', ''], ['Answer', '50°', 'Reason: the angle at the centre is twice the angle at the circumference.']],
+      [['At centre', '100°', -1], ['At circumference', '100 ÷ 2 = 50°', 1]]),
+    W('ABCD is a cyclic quadrilateral. Angle A = 80° and angle B = 110°. Find angles C and D.', 'Opposite angles of a ==cyclic quadrilateral== add to ==180°==.', 'Opposite means A and C, B and D.', 'Opposite angles add to 180°',
+      [['Angle C is opposite A', '180 − 80 = 100°', ''], ['Angle D is opposite B', '180 − 110 = 70°', ''], ['Check: all four angles', '80 + 110 + 100 + 70 = 360° ✓', 'The angles in any quadrilateral add to 360°.']],
+      [['C', '180 − 80 = 100°', 0], ['D', '180 − 110 = 70°', 1], ['Check', '360° ✓', 2]]),
+    W('A tangent from T touches a circle at A. The centre is O, OA = 5 cm and OT = 13 cm. Find the length of the tangent AT.', 'A ==tangent== meets the ==radius at 90°==, so triangle OAT is right-angled at A. Use ==Pythagoras==.', 'The hypotenuse is OT, opposite the right angle.', 'Radius ⟂ tangent',
+      [['The angle at A', 'OAT = 90°', 'The tangent is perpendicular to the radius.'], ['Pythagoras', 'AT² = 13² − 5² = 169 − 25', 'OT is the hypotenuse, so subtract.'], ['Square root', 'AT = √144 = 12 cm', '5, 12, 13 triple.']],
+      [['Angle at A', '90°', 0], ['AT²', '169 − 25 = 144', 1], ['AT', '12 cm', 2]])
+  ],
+  drill: 'circ',
+  quiz: [
+    { q: 'The angle in a semicircle is…', o: ['45°', '60°', '90°', '180°'], a: 2, w: '==90°==.' },
+    { q: 'The angle at the centre is ___ the angle at the circumference.', o: ['half', 'twice', 'equal to', 'three times'], a: 1, w: '==Twice==.' },
+    { q: 'A tangent meets the radius at…', o: ['45°', '60°', '90°', '180°'], a: 2, w: '==90°==.' },
+    { q: 'Opposite angles of a cyclic quadrilateral add to…', o: ['90°', '180°', '270°', '360°'], a: 1, w: '==180°==.' },
+    { q: 'Arc length is…', o: ['θ/360 × πr²', 'θ/360 × 2πr', 'θ × 2πr', '2πr²'], a: 1, w: '==θ/360 × 2πr==.' },
+    { q: 'A sector has r = 10 cm and θ = 90°. Using π = 3.14, its area is…', o: ['78.5 cm²', '157 cm²', '31.4 cm²', '314 cm²'], a: 0, w: '1/4 × 3.14 × 100 = ==78.5 cm²==.' }
+  ],
+  exam: [
+    { q: 'A sector has radius 9 cm and angle 120°. Using π = 3.14, find (a) the arc length [2] (b) the area of the sector [2].', m: 4,
+      p: ['120/360 = 1/3 and 2 × 3.14 × 9 = 56.52', 'Arc length = ==18.84 cm==', '3.14 × 9² = 254.34', 'Area = ==84.78 cm²=='] },
+    { q: 'A, B and P are points on a circle with centre O. Angle AOB = 130° and P is on the major arc. Find angle APB and give a reason.', m: 2,
+      p: ['==65°==', 'Reason: the angle at the ==centre is twice== the angle at the circumference'] },
+    { q: 'ABCD is a cyclic quadrilateral. Angle ABC = 105°. Find angle ADC and give a reason.', m: 2,
+      p: ['180 − 105 = ==75°==', 'Reason: ==opposite angles of a cyclic quadrilateral add to 180°=='] }
+  ]
+},
+func: {
+  code: 'Algebra', name: 'Functions',
+  lede: 'Function notation, composite functions and inverses. A function is just a rule with a name.',
+  learn: [
+    { h: 'Function notation', list: ['f(x) = 2x + 3 is a ==rule== called f.', '==f(4)== means ==put x = 4==: 2 × 4 + 3 = 11.', '==Solve f(x) = k== by writing the rule equal to k and solving.', 'Different letters are different rules: f, g, h.'] },
+    { h: 'Composite functions', list: ['==fg(x)== means ==do g first, then f== (work from the right).', 'Replace x in f with the whole of g(x).', 'fg(x) and gf(x) are usually ==different==.'] },
+    { h: 'Inverse functions', list: ['The ==inverse== f⁻¹ ==undoes== f.', 'Write y = f(x), ==swap x and y==, make y the subject.', 'Check: f⁻¹(f(x)) = x.', 'The graph of f⁻¹ is the reflection of f in ==y = x==.'] }
+  ],
+  mistakes: ['Doing ==f first== in fg(x).', 'Writing f⁻¹(x) as ==1/f(x)==. It is not.', 'Forgetting ==brackets== when substituting g(x) into f.', 'Not ==swapping x and y== when finding an inverse.', 'Sign errors with ==negative inputs==: f(−2) needs brackets.'],
+  diagrams: [{ svg: svgComposite, cap: '==fg(x)==: g first, then f. The ==inverse== undoes the rule.' }],
+  worked: [
+    W('f(x) = 3x + 2. Find f(4) and f(−1).', '==f(4)== means replace every x by 4.', 'Use brackets for negative inputs.', 'Substitute',
+      [['f(4)', '3 × 4 + 2', 'x = 4.'], ['Answer', 'f(4) = 14', '12 + 2.'], ['f(−1)', '3 × (−1) + 2 = −3 + 2', 'Use brackets for the negative.'], ['Answer', 'f(−1) = −1', '']],
+      [['f(4)', '3 × 4 + 2 = 14', 1], ['f(−1)', '3 × (−1) + 2 = −1', 3]]),
+    W('g(x) = x² − 1. Find g(3) and solve g(x) = 15.', 'For ==g(x) = 15==, set the rule equal to 15. A squared letter gives ==two solutions==.', 'Check both solutions: (−4)² = 16 too.', 'Evaluate, then solve',
+      [['g(3)', '3² − 1 = 9 − 1 = 8', ''], ['Set the rule equal to 15', 'x² − 1 = 15', ''], ['Add 1', 'x² = 16', ''], ['Square root: two answers', 'x = 4 or x = −4', 'Both 4² and (−4)² equal 16.']],
+      [['g(3)', '8', 0], ['Equation', 'x² − 1 = 15', 1], ['x²', '16', 2], ['x', '4 or −4', 3]]),
+    W('f(x) = 2x + 1 and g(x) = x − 3. Find fg(x), gf(x) and fg(4).', '==fg(x)== means ==g first==, then f. Put the whole of g(x) into f.', 'fg and gf are different here.', 'fg(x) = f(g(x))',
+      [['fg(x) = f(x − 3)', '2(x − 3) + 1', 'Replace x in f by (x − 3).'], ['Simplify', '2x − 6 + 1 = 2x − 5', ''], ['gf(x) = g(2x + 1)', '(2x + 1) − 3 = 2x − 2', 'f first, then g.'], ['fg(4)', '2 × 4 − 5 = 3', 'Check: g(4) = 1 and f(1) = 3 ✓.']],
+      [['fg(x)', '2x − 5', 1], ['gf(x)', '2x − 2', 2], ['fg(4)', '3', 3]]),
+    W('f(x) = 3x − 4. Find f⁻¹(x) and f⁻¹(5).', 'To find the ==inverse==: write y = f(x), ==swap x and y==, then make y the subject.', 'Check: f(3) = 5, so f⁻¹(5) = 3 ✓.', 'Swap and rearrange',
+      [['Write y = f(x)', 'y = 3x − 4', ''], ['Swap x and y', 'x = 3y − 4', 'The inverse takes the output back to the input.'], ['Make y the subject', '3y = x + 4, so y = (x + 4) ÷ 3', 'Add 4, then divide by 3.'], ['Inverse and a check', 'f⁻¹(x) = (x + 4) ÷ 3,  f⁻¹(5) = 9 ÷ 3 = 3', 'f(3) = 9 − 4 = 5 ✓.']],
+      [['Swap', 'x = 3y − 4', 1], ['f⁻¹(x)', '(x + 4) ÷ 3', 2], ['f⁻¹(5)', '3', 3]]),
+    W('f(x) = (x + 1) ÷ 2. Find f⁻¹(x).', '==Swap x and y==, then make y the subject.', 'The inverse of dividing by 2 is multiplying by 2.', 'Swap and rearrange',
+      [['Write y = f(x)', 'y = (x + 1) ÷ 2', ''], ['Swap', 'x = (y + 1) ÷ 2', ''], ['Multiply by 2', '2x = y + 1', ''], ['Make y the subject', 'f⁻¹(x) = 2x − 1', 'Check: f(3) = 2, and f⁻¹(2) = 3 ✓.']],
+      [['Swap', 'x = (y + 1) ÷ 2', 1], ['2x', 'y + 1', 2], ['f⁻¹(x)', '2x − 1', 3]])
+  ],
+  drill: 'func',
+  quiz: [
+    { q: 'f(x) = 2x + 5. f(3) = ?', o: ['8', '11', '16', '6'], a: 1, w: '2 × 3 + 5 = ==11==.' },
+    { q: 'In fg(x), which function is done first?', o: ['f', 'g', 'both at once', 'neither'], a: 1, w: '==g first==, then f.' },
+    { q: 'The inverse of f(x) = x + 4 is…', o: ['x − 4', '4 − x', '1/(x + 4)', 'x + 4'], a: 0, w: 'Undo adding 4: ==x − 4==.' },
+    { q: 'f(x) = x². f(−3) = ?', o: ['−9', '9', '6', '−6'], a: 1, w: '(−3)² = ==9==.' },
+    { q: 'g(x) = 3x. g⁻¹(x) = ?', o: ['3x', 'x − 3', 'x ÷ 3', '1/(3x)'], a: 2, w: '==x ÷ 3==.' },
+    { q: 'f(x) = 2x and g(x) = x + 1. fg(2) = ?', o: ['5', '6', '4', '3'], a: 1, w: 'g(2) = 3, then f(3) = ==6==.' }
+  ],
+  exam: [
+    { q: 'f(x) = 4x − 3 and g(x) = x². Find (a) f(2) [1] (b) g(−3) [1] (c) fg(x) [2].', m: 4,
+      p: ['f(2) = ==5==', 'g(−3) = ==9==', 'fg(x) = f(x²)', '==4x² − 3=='] },
+    { q: 'f(x) = 3x + 1. Find f⁻¹(x) and hence f⁻¹(10).', m: 3,
+      p: ['x = 3y + 1', '==f⁻¹(x) = (x − 1) ÷ 3==', 'f⁻¹(10) = ==3=='] },
+    { q: 'f(x) = 2x + 3 and g(x) = x − 1. Solve fg(x) = 9.', m: 3,
+      p: ['fg(x) = 2(x − 1) + 3 = ==2x + 1==', '2x + 1 = 9', '==x = 4=='] }
+  ]
 }
 };
 /* ---------- drill generators ---------- */
@@ -1616,10 +1886,70 @@ const DRILLS = {
     () => { const a = rint(1, 3), b = rint(-6, 6), c = rint(-4, 5), d = b * b - 4 * a * c; const right = d > 0 ? 'two solutions' : d === 0 ? 'one solution' : 'no real solutions';
       return choiceItem(`How many real solutions does ${quadStr(a, b, c)} = 0 have?`, right, ['two solutions', 'one solution', 'no real solutions'].filter(x => x !== right),
         [['Discriminant', `${b}² − 4 × ${a} × ${c < 0 ? '(' + c + ')' : c} = ${d}`],['Meaning', d > 0 ? 'positive: two solutions' : d === 0 ? 'zero: one solution' : 'negative: no real solutions']]); }
+  ],
+  sets: [
+    () => { const a = rint(10, 30), b = rint(8, 25), both = rint(2, Math.min(a, b) - 2);
+      return { kind:'num', q:`n(A) = ${a}, n(B) = ${b} and n(A ∩ B) = ${both}. Find n(A ∪ B).`, ans:a + b - both, tol:0, s:[['Formula', 'n(A ∪ B) = n(A) + n(B) − n(A ∩ B)'],['Substitute', `${a} + ${b} − ${both}`],['Answer', String(a + b - both)]] }; },
+    () => { const a = rint(10, 30), b = rint(8, 25), both = rint(2, Math.min(a, b) - 2), which = rint(0, 1);
+      return { kind:'num', q:`In a group, ${a} students play hockey and ${b} play tennis. ${both} play both. How many play ${which ? 'tennis' : 'hockey'} only?`, ans:(which ? b : a) - both, tol:0, s:[['Middle first', `both = ${both}`],['Only = total − both', `${which ? b : a} − ${both} = ${(which ? b : a) - both}`]] }; },
+    () => { const a = rint(10, 20), b = rint(8, 18), both = rint(2, 6), tot = a + b - both + rint(2, 12);
+      return { kind:'num', q:`In a class of ${tot}, ${a} play chess, ${b} play draughts and ${both} play both. How many play neither?`, ans:tot - (a + b - both), tol:0, s:[['Union', `${a} + ${b} − ${both} = ${a + b - both}`],['Neither', `${tot} − ${a + b - both} = ${tot - (a + b - both)}`]] }; },
+    () => { const [sym, mean] = pick([['∩', 'in both sets'], ['∪', 'in either set (or both)'], ['′', 'not in the set (the complement)'], ['ε', 'the universal set'], ['∅', 'the empty set']]);
+      return choiceItem(`What does the symbol ${sym === '′' ? 'A′' : sym} mean?`, mean, ['in both sets', 'in either set (or both)', 'not in the set (the complement)', 'the universal set', 'the empty set'].filter(x => x !== mean).slice(0, 3), [['Meaning', mean]]); },
+    () => { const p = pick([2, 3, 4, 5]), q = pick([2, 3, 4, 5, 6].filter(x => x !== p)); const A = [], B = []; for (let i = 1; i <= 30; i++) { if (i % p === 0) A.push(i); if (i % q === 0) B.push(i); } const both = A.filter(x => B.includes(x));
+      return { kind:'num', q:`ε = {1, 2, …, 30}. A = multiples of ${p} and B = multiples of ${q}. Find n(A ∩ B).`, ans:both.length, tol:0, s:[['A', A.join(', ')],['B', B.join(', ')],['In both', both.length ? both.join(', ') : 'none']] }; }
+  ],
+  vect: [
+    () => { const a = [rint(-6, 8), rint(-6, 8)], b = [rint(-6, 8), rint(-6, 8)], sub = Math.random() < .5;
+      return { kind:'pair', q:`a = (${a[0]}, ${a[1]}) and b = (${b[0]}, ${b[1]}). Find a ${sub ? '−' : '+'} b. Type it like 3,5.`, ans:sub ? [a[0] - b[0], a[1] - b[1]] : [a[0] + b[0], a[1] + b[1]], s:[['Top parts', `${a[0]} ${sub ? '−' : '+'} (${b[0]})`],['Bottom parts', `${a[1]} ${sub ? '−' : '+'} (${b[1]})`]] }; },
+    () => { const a = [rint(-5, 6), rint(-5, 6)], k = pick([2, 3, 4, -1, -2, 5]);
+      return { kind:'pair', q:`a = (${a[0]}, ${a[1]}). Find ${k}a. Type it like 3,5.`, ans:[k * a[0], k * a[1]], s:[['Multiply both parts', `(${k} × ${a[0]}, ${k} × ${a[1]})`]] }; },
+    () => { const [x, y, c] = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [7, 24, 25]]); const sx = pick([-1, 1]), sy = pick([-1, 1]);
+      return { kind:'num', q:`Find the magnitude of the vector (${sx * x}, ${sy * y}).`, ans:c, tol:0, s:[['Square and add', `${x * x} + ${y * y} = ${c * c}`],['Square root', String(c)]] }; },
+    () => { const A = [rint(-4, 5), rint(-4, 5)], B = [rint(-4, 8), rint(-4, 8)];
+      return { kind:'pair', q:`A is (${A[0]}, ${A[1]}) and B is (${B[0]}, ${B[1]}). Find the vector AB. Type it like 3,5.`, ans:[B[0] - A[0], B[1] - A[1]], s:[['AB = B − A', `(${B[0]} − ${A[0]}, ${B[1]} − ${A[1]})`]] }; },
+    () => { const v = [rint(1, 5), rint(-5, 5) || 2], k = pick([2, 3, -2]), par = Math.random() < .5; const w = par ? [k * v[0], k * v[1]] : [k * v[0], k * v[1] + pick([1, 2, -1])];
+      return choiceItem(`Are the vectors (${v[0]}, ${v[1]}) and (${w[0]}, ${w[1]}) parallel?`, par ? 'Yes' : 'No', [par ? 'No' : 'Yes'], [['Compare the tops', `${v[0]} → ${w[0]}, multiplier ${k}`],['Check the bottoms', `${v[1]} × ${k} = ${k * v[1]}${par ? ' ✓' : ', but the bottom is ' + w[1]}`]]); }
+  ],
+  cumf: [
+    () => { const f = Array.from({length:5}, () => rint(2, 15)); const k = rint(2, 5); const cf = f.slice(0, k).reduce((a, b) => a + b, 0);
+      return { kind:'num', q:`Class frequencies are ${f.join(', ')}. What is the cumulative frequency at the end of class ${k}?`, ans:cf, tol:0, s:[['Add the first ' + k, f.slice(0, k).join(' + ')],['Answer', String(cf)]] }; },
+    () => { const n = pick([40, 60, 80, 100, 120, 200]), w = pick([['median', 2], ['lower quartile', 4], ['upper quartile', 4]]); const ans = w[0] === 'median' ? n / 2 : w[0] === 'lower quartile' ? n / 4 : 3 * n / 4;
+      return { kind:'num', q:`A cumulative frequency graph has n = ${n}. At which value (position) do you read the ${w[0]}?`, ans, tol:0, s:[['Rule', w[0] === 'median' ? 'n ÷ 2' : w[0] === 'lower quartile' ? 'n ÷ 4' : '3n ÷ 4'],['Answer', String(ans)]] }; },
+    () => { const lq = rint(10, 40), iqr = rint(5, 30);
+      return { kind:'num', q:`The lower quartile is ${lq} and the upper quartile is ${lq + iqr}. Find the interquartile range.`, ans:iqr, tol:0, s:[['IQR = UQ − LQ', `${lq + iqr} − ${lq} = ${iqr}`]] }; },
+    () => { const f = rint(2, 10) * 6, w = pick([2, 3, 4, 5, 6]);
+      return { kind:'num', q:`A histogram class has frequency ${f * w} and class width ${w}. Find the frequency density.`, ans:f, tol:0, s:[['fd = frequency ÷ width', `${f * w} ÷ ${w} = ${f}`]] }; },
+    () => { const mn = rint(2, 20), r = rint(20, 50);
+      return { kind:'num', q:`A box plot has minimum ${mn} and maximum ${mn + r}. Find the range.`, ans:r, tol:0, s:[['Range = max − min', `${mn + r} − ${mn} = ${r}`]] }; }
+  ],
+  circ: [
+    () => { const r = rint(2, 12), t = pick([30, 45, 60, 90, 120, 180]), ans = Math.round(t / 360 * 2 * 3.14 * r * 100) / 100;
+      return { kind:'num', q:`Find the arc length of a sector with radius ${r} cm and angle ${t}°. Use π = 3.14.`, ans, tol:0.011, s:[['Circumference', `2 × 3.14 × ${r} = ${num(2 * 3.14 * r)}`],['Fraction', `${t}/360`],['Arc length', `${num(ans)} cm`]] }; },
+    () => { const r = rint(2, 12), t = pick([30, 45, 60, 90, 120, 180]), ans = Math.round(t / 360 * 3.14 * r * r * 100) / 100;
+      return { kind:'num', q:`Find the area of a sector with radius ${r} cm and angle ${t}°. Use π = 3.14.`, ans, tol:0.011, s:[['Circle area', `3.14 × ${r}² = ${num(3.14 * r * r)}`],['Fraction', `${t}/360`],['Sector area', `${num(ans)} cm²`]] }; },
+    () => { const c = rint(2, 17) * 10, up = Math.random() < .5;
+      return { kind:'num', q:up ? `The angle at the centre of a circle is ${c * 2}°. Find the angle at the circumference on the same arc.` : `The angle at the circumference is ${c}°. Find the angle at the centre on the same arc.`, ans:up ? c : c * 2, tol:0, s:[['Centre = 2 × circumference', up ? `${c * 2} ÷ 2` : `${c} × 2`],['Answer', String(up ? c : c * 2)]] }; },
+    () => { const A = rint(50, 130);
+      return { kind:'num', q:`ABCD is a cyclic quadrilateral. Angle A = ${A}°. Find the angle at C.`, ans:180 - A, tol:0, s:[['Opposite angles add to 180°', `180 − ${A}`],['Answer', `${180 - A}°`]] }; },
+    () => { const [r, t, h] = pick([[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [7, 24, 25], [9, 12, 15]]);
+      return { kind:'num', q:`A tangent from T touches a circle with centre O at A. OA = ${r} cm and OT = ${h} cm. Find the length of the tangent AT.`, ans:t, tol:0, s:[['Right angle at A', 'tangent ⟂ radius'],['AT² = OT² − OA²', `${h * h} − ${r * r} = ${t * t}`],['AT', `${t} cm`]] }; }
+  ],
+  func: [
+    () => { const a = rint(2, 6), b = rint(-5, 8), k = rint(-4, 6), ans = a * k + b;
+      return { kind:'num', q:`f(x) = ${lin(a, b)}. Find f(${k}).`, ans, tol:0, s:[['Substitute', `${a} × ${k < 0 ? '(' + k + ')' : k} ${sgn(b)}`],['Answer', String(ans)]] }; },
+    () => { const c = rint(-6, 8), k = rint(-5, 5), ans = k * k + c;
+      return { kind:'num', q:`g(x) = x² ${sgn(c)}. Find g(${k}).`, ans, tol:0, s:[['Square first', `(${k})² = ${k * k}`],['Answer', `${k * k} ${sgn(c)} = ${ans}`]] }; },
+    () => { const a = rint(2, 5), b = rint(-4, 6), c = rint(2, 4), d = rint(-5, 5), k = rint(-3, 5), g = c * k + d, ans = a * g + b;
+      return { kind:'num', q:`f(x) = ${lin(a, b)} and g(x) = ${lin(c, d)}. Find fg(${k}).`, ans, tol:0, s:[['g first', `g(${k}) = ${g}`],['Then f', `f(${g}) = ${a} × ${g < 0 ? '(' + g + ')' : g} ${sgn(b)} = ${ans}`]] }; },
+    () => { const a = rint(2, 6), b = rint(-5, 8), x0 = rint(-3, 7), k = a * x0 + b;
+      return { kind:'num', q:`f(x) = ${lin(a, b)}. Find f⁻¹(${k}).`, ans:x0, tol:0, s:[['Solve f(x) = ' + k, `${lin(a, b)} = ${k}`],['x', String(x0)]] }; },
+    () => { const a = rint(2, 6), b = rint(-5, 8), x0 = rint(-3, 7), k = a * x0 + b;
+      return { kind:'num', q:`f(x) = ${lin(a, b)}. Solve f(x) = ${k}.`, ans:x0, tol:0, s:[['Subtract ' + b, `${a}x = ${k - b}`],['Divide by ' + a, `x = ${x0}`]] }; }
   ]
 };
 
-let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1]];
+let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -1635,7 +1965,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1652,13 +1982,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad'];
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
-  <p class="lede">Eighteen topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Twenty-three topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
