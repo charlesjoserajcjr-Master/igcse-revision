@@ -613,6 +613,26 @@ function svgRecurring(){
   ${T(60, 90, 'Let  x = 0.262626…', 'mono')}${T(60, 122, '100x = 26.262626…', 'mono')}${T(60, 154, '100x − x = 26', 'mono acct')}${T(60, 186, '99x = 26', 'mono acct')}${T(60, 218, 'x = 26 ÷ 99', 'mono hott')}
   ${T(430, 122, '× 100 because TWO digits repeat', 'hott')}${T(430, 154, 'Subtract: the repeating tails cancel.', 'mut')}${T(430, 186, 'One digit repeating: × 10, then 9x.', 'mut')}</svg>`;
 }
+function svgNets(){
+  const u = 28, R = (x, y, w, h, cls = 'cardf') => `<rect x="${x}" y="${y}" width="${w}" height="${h}" class="${cls}" style="stroke:var(--ink);stroke-width:1.6"/>`;
+  const tri = (a, b, c) => `<polygon points="${a} ${b} ${c}" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/>`;
+  return `<svg viewBox="0 0 860 320" role="img" aria-label="Nets of a cuboid and a square-based pyramid">
+  ${R(30, 20, 4 * u, 3 * u, 'metal')}${R(30, 104, 4 * u, 2 * u)}${R(30 + 4 * u, 104, 3 * u, 2 * u, 'metal')}${R(30 + 7 * u, 104, 4 * u, 2 * u)}${R(30 + 11 * u, 104, 3 * u, 2 * u, 'metal')}${R(30, 160, 4 * u, 3 * u, 'metal')}
+  ${T(30 + 2 * u, 20 + 1.5 * u + 5, '4 × 3', 'mid mono')}${T(30 + 2 * u, 104 + u + 5, '4 × 2', 'mid mono')}${T(30 + 5.5 * u, 104 + u + 5, '3 × 2', 'mid mono')}${T(30 + 9 * u, 104 + u + 5, '4 × 2', 'mid mono')}${T(30 + 12.5 * u, 104 + u + 5, '3 × 2', 'mid mono')}${T(30 + 2 * u, 160 + 1.5 * u + 5, '4 × 3', 'mid mono')}
+  ${T(30, 270, 'Cuboid 4 × 3 × 2: 6 rectangles, opposite faces equal.', 'lbl')}${T(30, 294, 'Total surface area = 2(12 + 8 + 6) = 52.', 'mut')}
+  ${R(580, 100, 70, 70, 'metal')}${tri('580,100', '650,100', '615,40')}${tri('580,170', '650,170', '615,230')}${tri('580,100', '580,170', '520,135')}${tri('650,100', '650,170', '710,135')}
+  ${T(615, 142, 'square', 'mid mut')}${T(615, 270, 'Square-based pyramid:', 'mid lbl')}${T(615, 294, '1 square + 4 triangles', 'mid mut')}</svg>`;
+}
+function svgSolids(){
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="A sphere, a cone and a pyramid with their formulae">
+  <circle cx="140" cy="100" r="64" class="nonmetal" style="stroke:var(--ink);stroke-width:2"/><ellipse cx="140" cy="100" rx="64" ry="16" class="thin" fill="none" stroke-dasharray="4 4"/><line x1="140" y1="100" x2="204" y2="100" class="hotl"/>${T(172, 92, 'r', 'mid hott')}
+  ${T(140, 196, 'Sphere', 'mid lbl')}${T(140, 220, 'V = 4/3 π r³', 'mid mono acct')}${T(140, 246, 'S = 4 π r²', 'mid mono acct')}
+  <polygon points="430,30 360,150 500,150" class="nonmetal" style="stroke:var(--ink);stroke-width:2"/><ellipse cx="430" cy="150" rx="70" ry="16" class="cardf" style="stroke:var(--ink);stroke-width:2"/><line x1="430" y1="30" x2="430" y2="150" class="hotl" stroke-dasharray="5 4"/><line x1="430" y1="150" x2="500" y2="150" class="hotl"/>${T(442, 94, 'h', 'hott')}${T(466, 144, 'r', 'mid hott')}${T(484, 82, 'l', 'hott')}
+  ${T(430, 196, 'Cone', 'mid lbl')}${T(430, 220, 'V = 1/3 π r² h', 'mid mono acct')}${T(430, 246, 'curved surface = π r l', 'mid mono acct')}${T(430, 272, 'l² = r² + h²', 'mid mono hott')}
+  <polygon points="720,30 650,150 740,170 800,130" class="nonmetal" style="stroke:var(--ink);stroke-width:2"/><polygon points="720,30 650,150 740,170" class="cardf" style="stroke:var(--ink);stroke-width:2"/><line x1="720" y1="30" x2="720" y2="150" class="hotl" stroke-dasharray="5 4"/>${T(732, 94, 'h', 'hott')}
+  ${T(725, 196, 'Pyramid', 'mid lbl')}${T(725, 220, 'V = 1/3 × base area × h', 'mid mono acct')}
+  ${T(430, 312, 'These are on the formula sheet. Learn to USE them, and to find l with Pythagoras.', 'mid mut')}</svg>`;
+}
 const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
 const CH = {
 eq: {
@@ -2099,6 +2119,60 @@ numb2: {
     { q: 'Write these fractions in order, smallest first: 2/3, 5/8, 7/12.', m: 2,
       p: ['common denominator 24: ==16/24, 15/24, 14/24==', '==7/12, 5/8, 2/3=='] }
   ]
+},
+solid: {
+  code: 'Measure', name: '3D shapes: nets, symmetry, surface area and volume',
+  lede: 'Count faces, draw nets, find planes of symmetry, and use the formulae for the sphere, cone and pyramid.',
+  learn: [
+    { h: 'Faces, edges and vertices', table: [['Solid', 'Faces', 'Edges', 'Vertices'], ['cube / cuboid', '6', '12', '8'], ['triangular prism', '5', '9', '6'], ['square-based pyramid', '5', '8', '5'], ['cylinder', '3 (2 flat, 1 curved)', '2', '0'], ['cone', '2 (1 flat, 1 curved)', '1', '1'], ['sphere', '1 curved', '0', '0']], list: ['A ==face== is a flat or curved surface. An ==edge== is where two faces meet. A ==vertex== is a corner.', '==Euler’s formula== for solids with flat faces: ==V + F − E = 2==. Cuboid: 8 + 6 − 12 = 2.'] },
+    { h: 'Nets', list: ['A ==net== is a 2D shape that folds up to make a solid.', '==Cuboid==: 6 rectangles. ==Opposite faces are equal==, so there are ==three pairs==.', '==Triangular prism==: 2 triangles and 3 rectangles.', '==Square-based pyramid==: 1 square and 4 triangles.', '==Cylinder==: 2 circles and 1 rectangle. The rectangle’s ==width is the circumference== (2πr).', '==Cone==: 1 circle and 1 sector.', 'Total ==surface area== = the ==area of the whole net==.', 'Check a net: ==faces that meet along an edge must be joined==, and no two faces may overlap when folded.'] },
+    { h: 'Planes of symmetry', list: ['A ==plane of symmetry== cuts a solid into two ==mirror-image halves==.', '==Cuboid with 3 different edges==: ==3== planes. ==Cuboid with a square end==: ==5== planes. ==Cube==: ==9== planes.', '==Square-based pyramid==: ==4== planes. ==Equilateral triangular prism==: ==4== planes.', '==Cylinder, cone and sphere== have ==infinitely many== (cone: all through the axis).', 'An ==axis of rotational symmetry== is a line the solid can turn about and look the same: a square-based pyramid has ==order 4== about its vertical axis.'] },
+    { h: 'Sphere, cone and pyramid', list: ['==Sphere==: volume = ==4/3 π r³==, surface area = ==4 π r²==.', '==Cone==: volume = ==1/3 π r² h==, curved surface = ==π r l==, where ==l is the slant height==: l² = r² + h². Total surface = π r² + π r l.', '==Pyramid==: volume = ==1/3 × base area × h==.', 'A ==hemisphere== is half a sphere. Its total surface = 2 π r² + π r² = ==3 π r²==.', '1 litre = 1000 cm³. Give answers to ==3 significant figures== unless told otherwise, or leave in terms of ==π==.'] }
+  ],
+  mistakes: ['Using the ==slant height as the vertical height== in the cone volume.', 'Forgetting the ==1/3== in the cone and pyramid volumes.', 'Writing ==4/3 π r² (r squared)== for the sphere volume: it is r cubed.', 'Using the ==diameter== where r is needed.', 'Saying a cuboid with a square end has ==3 planes== (it has 5).'],
+  diagrams: [
+    { svg: svgNets, cap: 'A ==net of a cuboid== and a ==net of a square-based pyramid==.' },
+    { svg: svgSolids, cap: '==Sphere, cone and pyramid==: the volume formulae.' }
+  ],
+  worked: [
+    W('A triangular prism has 5 faces and 9 edges. How many vertices does it have? Check with Euler’s formula.', 'Count the ==corners== of the two triangles: 3 + 3.', 'Euler’s formula: V + F − E = 2.', 'V + F − E = 2',
+      [['Count', 'Two triangular ends have 3 corners each: V = 6', ''], ['Euler', 'V + F − E = 6 + 5 − 9', ''], ['Check', '= 2 ✓', 'The formula works for every solid with flat faces.']],
+      [['F', '5', -1], ['E', '9', -1], ['V', '6', 0], ['V + F − E', '2', 2]]),
+    W('Find the volume and surface area of a sphere with radius 6 cm. Give the answers to 3 significant figures.', 'Write the formula, substitute r = 6, and calculate.', 'Cube r first: 6³ = 216.', 'V = 4/3 π r³, S = 4π r²',
+      [['Volume formula', 'V = 4/3 × π × r³', ''], ['Substitute', 'V = 4/3 × π × 6³ = 4/3 × π × 216 = 288π', '4/3 × 216 = 288.'], ['Volume', '904.78… = 905 cm³ (3 s.f.)', ''], ['Surface area', 'S = 4π r² = 4 × π × 36 = 144π = 452 cm² (3 s.f.)', 'r squared this time.']],
+      [['r', '6 cm', -1], ['V', '288π = 905 cm³', 2], ['S', '144π = 452 cm²', 3]]),
+    W('A cone has base radius 7 cm and vertical height 24 cm. Find (a) the slant height (b) the volume (c) the total surface area.', 'Find the ==slant height== with Pythagoras first.', 'Leave in terms of π until the last step.', 'l² = r² + h²',
+      [['(a) Slant height', 'l² = 7² + 24² = 49 + 576 = 625, so l = 25 cm', 'A 7, 24, 25 triple.'], ['(b) Volume', 'V = 1/3 π r² h = 1/3 × π × 49 × 24 = 392π', ''], ['(b) Answer', 'V = 1230 cm³ (3 s.f.)', '392π = 1231.5…'], ['(c) Curved surface', 'π r l = π × 7 × 25 = 175π', ''], ['(c) Base circle', 'π r² = 49π', ''], ['(c) Total', '175π + 49π = 224π = 704 cm² (3 s.f.)', '']],
+      [['l', '25 cm', 0], ['V', '392π = 1230 cm³', 2], ['Curved', '175π', 3], ['Total', '224π = 704 cm²', 5]]),
+    W('A pyramid has a square base of side 6 cm and a vertical height of 10 cm. Find its volume.', 'Find the ==base area== first.', 'Then use 1/3 × base area × h.', 'V = 1/3 × A × h',
+      [['Base area', '6 × 6 = 36 cm²', ''], ['Formula', 'V = 1/3 × base area × h', ''], ['Substitute', 'V = 1/3 × 36 × 10 = 120', ''], ['Answer', '120 cm³', '']],
+      [['Base area', '36 cm²', 0], ['V', '1/3 × 36 × 10', 2], ['Answer', '120 cm³', 3]]),
+    W('An ice-cream is a cone of radius 3 cm and height 8 cm, with a hemisphere of radius 3 cm on top. Find the total volume.', 'Add the volume of the ==cone== and the ==hemisphere== (half a sphere).', 'Both radii are 3 cm.', 'cone + hemisphere',
+      [['Cone', '1/3 × π × 3² × 8 = 24π', ''], ['Hemisphere', '1/2 × 4/3 × π × 3³ = 1/2 × 36π = 18π', 'Half of a sphere.'], ['Total', '24π + 18π = 42π', ''], ['Answer', '132 cm³ (3 s.f.)', '42π = 131.9…']],
+      [['Cone', '24π', 0], ['Hemisphere', '18π', 1], ['Total', '42π = 132 cm³', 3]]),
+    W('How many planes of symmetry does a cuboid with a square end (4 cm by 4 cm by 10 cm) have?', 'Count by type: planes ==parallel to a face== and ==diagonal== planes.', 'A drawing helps.', '5',
+      [['Through the middle, parallel to the square ends', '1 plane (cuts the length in half)', ''], ['Vertical, parallel to the sides', '2 planes', 'Each cuts the square end in half.'], ['Vertical, through opposite edges', '2 planes', 'The diagonal planes of the square end.'], ['Total', '1 + 2 + 2 = 5', 'A cube has 9; a cuboid with 3 different edges has 3.']],
+      [['Parallel to ends', '1', 0], ['Parallel to sides', '2', 1], ['Diagonal', '2', 2], ['Total', '5', 3]], true)
+  ],
+  drill: 'solid',
+  quiz: [
+    { q: 'A square-based pyramid has how many edges?', o: ['5', '8', '12', '4'], a: 1, w: '==8== edges (4 on the base, 4 up to the top).' },
+    { q: 'Euler: a solid has 6 faces and 8 vertices. Its edges are…', o: ['10', '12', '14', '16'], a: 1, w: 'V + F − E = 2, so E = 8 + 6 − 2 = ==12==.' },
+    { q: 'The volume of a cone is…', o: ['π r² h', '1/3 π r² h', '4/3 π r³', '1/2 π r² h'], a: 1, w: '==1/3 π r² h==.' },
+    { q: 'The net of a cylinder has…', o: ['2 circles and 1 rectangle', '1 circle and 2 rectangles', '3 circles', '2 circles and 2 rectangles'], a: 0, w: '==2 circles and 1 rectangle==.' },
+    { q: 'How many planes of symmetry has a cube?', o: ['3', '6', '9', '12'], a: 2, w: '==9==.' },
+    { q: 'A cone has r = 3 and h = 4. The slant height is…', o: ['5', '7', '12', '25'], a: 0, w: '√(9 + 16) = ==5==.' }
+  ],
+  exam: [
+    { q: 'Draw an accurate net of a cuboid 4 cm by 3 cm by 2 cm on squared paper. [3]', m: 3,
+      p: ['==six rectangles== drawn', 'correct dimensions: ==two 4 × 3, two 4 × 2, two 3 × 2==', 'faces ==connected so the net folds== without overlap'] },
+    { q: 'A sphere has radius 5 cm. Calculate the volume. Give your answer correct to 3 significant figures.', m: 3,
+      p: ['V = ==4/3 × π × 5³==', '==523.6…==', '==524 cm³=='] },
+    { q: 'A cone has radius 5 cm and vertical height 12 cm. Calculate its curved surface area.', m: 3,
+      p: ['slant height ==√(5² + 12²) = 13==', '==π × 5 × 13==', '==204 cm²== (3 s.f.)'] },
+    { q: 'A pyramid has a rectangular base 8 cm by 5 cm and height 9 cm. Calculate its volume.', m: 2,
+      p: ['1/3 × ==8 × 5== × 9', '==120 cm³=='] }
+  ]
 }
 
 };
@@ -2581,10 +2655,34 @@ const DRILLS = {
       return { kind:'num', q:`£1 = $${r}. Convert $${d} to pounds.`, ans:p, tol:0.005, s:[['Divide by the rate', `${d} ÷ ${r} = ${p}`]] }; },
     () => { const it = pick([['£ to $', 'multiply by the rate'], ['$ to £', 'divide by the rate']]);
       return choiceItem(`The rate is £1 = $1.25. To change ${it[0]} you…`, it[1], ['multiply by the rate', 'divide by the rate'].filter(x => x !== it[1]), [['Rule', 'the currency with the 1: multiply to get the other']]); }
+  ],
+  solid: [
+    () => { const it = pick([['cuboid', 12], ['triangular prism', 9], ['square-based pyramid', 8], ['cube', 12], ['triangular pyramid (tetrahedron)', 6]]);
+      return { kind:'num', q:`How many edges has a ${it[0]}?`, ans:it[1], tol:0, s:[['Count', `${it[0]}: ${it[1]} edges`]] }; },
+    () => { const sol = pick([['cuboid', 8, 6, 12], ['triangular prism', 6, 5, 9], ['square-based pyramid', 5, 5, 8], ['hexagonal prism', 12, 8, 18]]), w = rint(0, 2), name = ['vertices', 'faces', 'edges'][w], known = [0, 1, 2].filter(i => i !== w);
+      const V = sol[1], F = sol[2], E = sol[3], ans = [V, F, E][w], lab = ['V', 'F', 'E'];
+      return { kind:'num', q:`A ${sol[0]} has ${[V, F, E][known[0]]} ${['vertices', 'faces', 'edges'][known[0]]} and ${[V, F, E][known[1]]} ${['vertices', 'faces', 'edges'][known[1]]}. Use V + F − E = 2 to find the number of ${name}.`, ans, tol:0, s:[['Euler', 'V + F − E = 2'], ['Solve', `${lab[w]} = ${ans}`]] }; },
+    () => { const r = rint(2, 12), ans = 4 / 3 * Math.PI * r ** 3;
+      return { kind:'num', q:`Find the volume of a sphere of radius ${r} cm (3 significant figures).`, ans:Math.round(ans * 100) / 100, tol:ans * 0.006, s:[['Formula', 'V = 4/3 π r³'], ['Substitute', `4/3 × π × ${r}³ = ${num(ans)} cm³`]] }; },
+    () => { const r = rint(2, 12), ans = 4 * Math.PI * r * r;
+      return { kind:'num', q:`Find the surface area of a sphere of radius ${r} cm (3 significant figures).`, ans:Math.round(ans * 100) / 100, tol:ans * 0.006, s:[['Formula', 'S = 4π r²'], ['Substitute', `4 × π × ${r}² = ${num(ans)} cm²`]] }; },
+    () => { const [r, h, l] = pick([[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [7, 24, 25], [9, 12, 15]]);
+      return Math.random() < 0.5 ? { kind:'num', q:`A cone has base radius ${r} cm and vertical height ${h} cm. Find its slant height.`, ans:l, tol:0, s:[['Pythagoras', `l² = ${r}² + ${h}² = ${r * r + h * h}`], ['Answer', `l = ${l} cm`]] }
+        : { kind:'num', q:`A cone has base radius ${r} cm and vertical height ${h} cm. Find its volume (3 significant figures).`, ans:Math.round(Math.PI * r * r * h / 3 * 100) / 100, tol:Math.PI * r * r * h / 3 * 0.006, s:[['Formula', 'V = 1/3 π r² h'], ['Substitute', `1/3 × π × ${r}² × ${h} = ${num(Math.PI * r * r * h / 3)} cm³`]] }; },
+    () => { const [r, h, l] = pick([[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [7, 24, 25]]), a = Math.PI * r * l;
+      return { kind:'num', q:`A cone has base radius ${r} cm and vertical height ${h} cm. Find the area of its curved surface (3 significant figures).`, ans:Math.round(a * 100) / 100, tol:a * 0.006, s:[['Slant height', `l = ${l} cm`], ['Curved surface', `π r l = π × ${r} × ${l} = ${num(a)} cm²`]] }; },
+    () => { const b = rint(3, 12), h = rint(3, 12) * 3, ans = b * b * h / 3;
+      return { kind:'num', q:`A pyramid has a square base of side ${b} cm and a vertical height of ${h} cm. Find its volume (cm³).`, ans, tol:0, s:[['Base area', `${b} × ${b} = ${b * b}`], ['Volume', `1/3 × ${b * b} × ${h} = ${ans} cm³`]] }; },
+    () => { const v = rint(2, 90) * 100, ans = v / 1000;
+      return { kind:'num', q:`A tank holds ${v} cm³ of water. How many litres is this?`, ans, tol:0.0001, s:[['1 litre = 1000 cm³', `${v} ÷ 1000 = ${ans} litres`]] }; },
+    () => { const it = pick([['a cube', '9'], ['a cuboid with a square end', '5'], ['a square-based pyramid', '4'], ['a cuboid with three different edge lengths', '3']]);
+      return choiceItem(`How many planes of symmetry has ${it[0]}?`, it[1], ['3', '4', '5', '9'].filter(x => x !== it[1]).slice(0, 3), [['Facts', 'cube 9, square-end cuboid 5, square pyramid 4, general cuboid 3']]); },
+    () => { const it = pick([['2 triangles and 3 rectangles', 'triangular prism'], ['1 square and 4 triangles', 'square-based pyramid'], ['6 rectangles', 'cuboid'], ['2 circles and 1 rectangle', 'cylinder'], ['1 circle and 1 sector', 'cone']]);
+      return choiceItem(`Which solid has a net made of ${it[0]}?`, it[1], ['triangular prism', 'square-based pyramid', 'cuboid', 'cylinder', 'cone'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ': ' + it[0]]]); }
   ]
 };
 
-let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0],['ineq',0],['loci',0],['matx',0],['round',0],['numb2',0]];
+let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0],['ineq',0],['loci',0],['matx',0],['round',0],['numb2',0],['solid',0]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -2600,7 +2698,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['ineq','Graphs','Inequality regions'],['loci','Geometry','Loci'],['matx','Number','Matrices'],['round','Number','Rounding & bounds'],['numb2','Number','Recurring & rates'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['ineq','Graphs','Inequality regions'],['loci','Geometry','Loci'],['matx','Number','Matrices'],['round','Number','Rounding & bounds'],['numb2','Number','Recurring & rates'],['solid','Measure','3D shapes'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2617,13 +2715,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func','bear','graph','tree','ineq','loci','matx','round','numb2'];
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func','bear','graph','tree','ineq','loci','matx','round','numb2','solid'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
-  <p class="lede">Thirty-one topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Thirty-two topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
