@@ -3,7 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}.intro{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:.98rem;margin:0}
+.steps .why2{grid-column:2;font-family:var(--body);font-size:.93rem;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.steps li.now .st{color:var(--ink)}
+.tip{background:var(--kw-bg);color:var(--kw-ink);border-radius:8px;padding:10px 14px;font-size:.95rem;margin:0}
+.tip mark.kw{background:transparent;padding:0;text-decoration:underline}
+.wk-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,330px);grid-template-areas:"steps board";gap:18px;align-items:start}
+.wk-split .steps{grid-area:steps}
+.wk-split .board{grid-area:board;position:sticky;top:150px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;overflow-x:auto}
+@media (max-width:700px){.wk-split{grid-template-columns:minmax(0,1fr);grid-template-areas:"board" "steps"}.wk-split .board{top:118px;z-index:2}}
+.wb{border-collapse:collapse;font-size:.88rem;width:100%}
+.wb th,.wb td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;background:var(--card)}
+.wb th{color:var(--muted);font-weight:400;white-space:nowrap;width:1%}
+.wb td{font-family:var(--mono);overflow-wrap:anywhere}
+.wb td.q{color:var(--muted);font-weight:400}
+.wb td.fill{background:var(--good-soft);color:var(--good);font-weight:700}
+.wb tr.cur th,.wb tr.cur td{outline:2px solid var(--hot);outline-offset:-2px}
+.bnote{font-size:.9rem;margin:0}
+</style>
 <title>Physics Term Exam Pack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -624,6 +641,95 @@ function renderStart(){
   </div>`;
 }
 
+/* ---------- explanatory worked examples: Key idea, why lines, exam tip, live working table ---------- */
+/* e.r rows: [label, value, step]. step -1 = given in the question; otherwise the step at which the row fills in. */
+function wkBoard(e, k){
+  const rows = e.r.map(([lab, val, at]) => { const on = at <= k;
+    return `<tr class="${at === k && k >= 0 ? 'cur' : ''}"><th>${lab}</th><td class="${on ? (at >= 0 ? 'fill' : '') : 'q'}">${on ? fmt(val) : '?'}</td></tr>`; }).join('');
+  return `<table class="wb">${rows}</table>${e.f ? `<p class="bnote">${fmt(e.f)}</p>` : ''}`;
+}
+function enhance(ENH){
+  for (const key in ENH) CH[key].worked.forEach((w, i) => { const e = ENH[key][i];
+    if (!e || e.why.length !== w.s.length) throw new Error('worked note mismatch: ' + key + ' ' + i);
+    w.intro = e.intro; w.tip = e.tip; w.board0 = () => wkBoard(e, -1);
+    w.s.forEach((st, j) => { st[2] = e.why[j]; st[3] = () => wkBoard(e, j); }); });
+}
+function updateBoard(wk, items){
+  const bi = wk.querySelector('.board-in'); if (!bi) return;
+  const w = CH[cur].worked[+wk.dataset.worked]; let html = w.board0();
+  items.forEach((li, j) => { if (!li.hidden && w.s[j][3]) html = w.s[j][3](); });
+  bi.innerHTML = html;
+  items.forEach(li => li.classList.remove('now')); const vis = items.filter(li => !li.hidden); if (vis.length) vis[vis.length-1].classList.add('now');
+}
+enhance({
+density: [
+  { intro: 'Density tells you how much ==mass== is packed into each unit of ==volume==. Use ==ρ = m ÷ V== and keep the units matched (g with cm³).', f: 'ρ = m ÷ V',
+    r: [['Mass m','120 g',-1],['Volume V','5.0 × 4.0 × 2.0 = 40 cm³',1],['Density ρ','120 ÷ 40 = 3.0 g/cm³',3]],
+    why: ['Always write the formula first. It earns a mark and stops you guessing.','A block is a cuboid, so volume = length × width × height. Multiply all three, not just two.','Put the numbers in place of the letters. Mass on top, volume underneath.','Divide, then add the unit. Grams and cm³ give ==g/cm³==.'],
+    tip: 'Write the ==unit== in the final answer. A correct number with no unit often loses a mark.' },
+  { intro: 'For an ==irregular== solid, use the ==displacement method==: volume = ==final reading − initial reading==.', f: 'ρ = m ÷ V',
+    r: [['Initial level','50 cm³',-1],['Final level','72 cm³',-1],['Volume V','72 − 50 = 22 cm³',0],['Mass m','59.4 g',-1],['Density ρ','59.4 ÷ 22 = 2.7 g/cm³',3]],
+    why: ['A stone has no regular shape, so length × width × height will not work. The rise in water level is its volume.','The density formula is the same for every question.','Mass on top, the volume we just found underneath.','59.4 ÷ 22 = 2.7. The unit is g/cm³.'],
+    tip: 'Write ==final − initial==. Do not give the final reading (72 cm³) as the volume of the stone.' },
+  { intro: 'Given ==density== and ==volume==, you can find ==mass==. Rearrange the formula to ==m = ρ × V==.', f: 'm = ρ × V',
+    r: [['Density ρ','0.92 g/cm³',-1],['Volume V','500 cm³',-1],['Mass m','0.92 × 500 = 460 g',2]],
+    why: ['We want mass, so rearrange. In the formula triangle, cover m: ρ × V is left.','Replace ρ and V with the numbers. The units already match (g/cm³ and cm³).','0.92 × 500 = 460. The cm³ cancel, so the answer is in ==grams==.'],
+    tip: 'Use the ==formula triangle==: cover the quantity you want and read off the calculation.' },
+  { intro: 'The balance reads the ==container== too. Subtract the ==empty container== first. To change ==g/cm³ to kg/m³==, multiply by 1000.', f: 'ρ = m ÷ V',
+    r: [['Cylinder + liquid','132 g',-1],['Empty cylinder','92 g',-1],['Liquid only','132 − 92 = 40 g',0],['Volume V','50 cm³',-1],['ρ in g/cm³','40 ÷ 50 = 0.80',2],['ρ in kg/m³','0.80 × 1000 = 800',3]],
+    why: ['The balance weighed the cylinder AND the liquid. Take away the empty cylinder to get the liquid alone.','Same formula again, using the mass of the liquid only.','40 ÷ 50 = 0.80 g/cm³.','1 g/cm³ = 1000 kg/m³, so multiply by 1000. 0.80 × 1000 = 800.'],
+    tip: 'Sense check: water is 1000 kg/m³, so a liquid of 800 kg/m³ is a little lighter than water. Plausible for an oil.' },
+  { intro: 'To decide ==float or sink==, compare ==densities==. Less dense than the liquid: ==floats==. More dense: ==sinks==.', f: 'ρ = m ÷ V',
+    r: [['Mass m','1.8 kg',-1],['Volume V','0.0020 m³',-1],['Density ρ','1.8 ÷ 0.0020 = 900 kg/m³',2],['Water','1000 kg/m³',-1],['Verdict','900 < 1000: floats',3]],
+    why: ['Same formula. Mass is in kg and volume in m³, so the answer comes out in kg/m³.','Put the numbers in. 1.8 ÷ 0.0020 is the same as 1800 ÷ 2.','900 kg/m³. The unit follows from kg and m³.','Compare with water. 900 is smaller than 1000, so the plastic is less dense and floats.'],
+    tip: 'Do not just say "it is lighter". Say it is ==less dense== than water.' }
+],
+thermal: [
+  { intro: 'Conduction answers get marks for ==free electrons== (metals) and ==vibrating particles== passing energy on. Always ==compare== the two materials.', f: 'One keyword = one mark.',
+    r: [['Metal','has free electrons',0],['Electrons','gain energy, move through the metal',1],['Plastic','no free electrons: slow vibrations only',2],['Conclusion','conductor v insulator',3]],
+    why: ['This is the key difference between metals and plastic, so say it first.','Say what the electrons do. Examiners look for "move through the metal".','Now compare with plastic. It can only pass energy on from particle to particle.','Finish with the two keywords: conductor and insulator.'],
+    tip: 'Do not write "heat travels up the spoon". Write that ==thermal energy is transferred by free electrons==.' },
+  { intro: 'Convection is a ==chain==: heated, ==expands==, ==less dense==, ==rises==, then cooler ==denser== fluid ==sinks==. Learn the order.', f: 'Keep the chain in order.',
+    r: [['1','air heated and expands',0],['2','less dense, so it rises',1],['3','cooler, denser air sinks',2],['Result','convection current',3]],
+    why: ['Start where the heat is. The air particles move faster and spread out.','Spread-out air is less dense than the air around it, so it rises.','Cooler air is denser. It sinks and takes the place of the rising air.','Name the process. Examiners want the words ==convection current==.'],
+    tip: 'Never write "heat rises". Write that ==hot air is less dense so it rises==.' },
+  { intro: 'A vacuum flask is built to stop ==all three== transfers: ==conduction==, ==convection== and ==radiation==. Match each part to one transfer.', f: 'One feature + one reason each time.',
+    r: [['Vacuum','no particles: no conduction or convection',0],['Silvered walls','reflect IR: less radiation',1],['Stopper','insulator, stops convection',2],['Case / support','poor conductors',3]],
+    why: ['Conduction and convection both need particles. A vacuum has none.','A vacuum cannot stop radiation, so shiny walls reflect the infrared back.','The top is the weak point. The stopper is an insulator and blocks air moving out.','Parts that touch the flask are poor conductors, so little energy leaks through them.'],
+    tip: 'Write the feature and ==its reason== together: "silvered walls ==reflect infrared=="' },
+  { intro: '==Light, shiny== surfaces ==reflect== infrared. ==Dull black== surfaces ==absorb== (and emit) it well.', f: 'Use the word infrared.',
+    r: [['White surface','poor absorber, good reflector of IR',0],['Walls','absorb less energy from the Sun',1],['Inside','stays cooler',2]],
+    why: ['Use the exact words: poor absorber, good reflector.','Link it to the Sun. Less infrared radiation is taken in by the walls.','End by answering the question that was asked.'],
+    tip: 'Say ==infrared radiation==, not just "heat" or "light".' }
+],
+sound: [
+  { intro: 'An echo is sound that ==travels there and back==. So the distance the sound travels is ==2 × the distance to the wall==.', f: 'v = d ÷ t',
+    r: [['Distance to wall','170 m',-1],['Time','1.0 s',-1],['Total distance','2 × 170 = 340 m',0],['Speed v','340 ÷ 1.0 = 340 m/s',3]],
+    why: ['The sound goes to the wall and comes back, so it travels twice the distance.','Speed is distance divided by time.','Use the total 340 m, not 170 m.','340 ÷ 1.0 = 340. Metres divided by seconds gives m/s.'],
+    tip: 'Underline "echo" in the question. It is the signal to ==double (or halve)== the distance.' },
+  { intro: 'Sonar is an echo, so the pulse goes ==down and back==. The distance you calculate is ==twice== the depth.', f: 'd = v × t',
+    r: [['Speed v','1500 m/s',-1],['Time t','0.40 s',-1],['Total distance','1500 × 0.40 = 600 m',1],['Depth','600 ÷ 2 = 300 m',2]],
+    why: ['We know speed and time and want distance, so d = v × t.','1500 × 0.40 = 600. But that is the whole journey.','The pulse went down AND back up. The sea depth is one way only, so divide by 2.','State the unit: metres.'],
+    tip: 'This is the most common lost mark in the chapter. Always ==halve== for an echo.' },
+  { intro: 'We ==see== lightning almost instantly but ==hear== thunder later. The delay is the time the ==sound== takes.', f: 'd = v × t',
+    r: [['Speed of sound','340 m/s',-1],['Time','3.0 s',-1],['Distance','340 × 3.0 = 1020 m',3]],
+    why: ['Light is nearly a million times faster than sound, so the time you measure is just the sound.','We want distance from speed and time.','340 × 3.0 = 1020.','1020 m is about 1 km. The storm is quite far away.'],
+    tip: 'Do not halve here. There is ==no echo==, so the sound travels one way only.' },
+  { intro: 'The ==wave equation== links three things: ==v = f × λ==. Speed (m/s), frequency (Hz), wavelength (m).', f: 'λ = v ÷ f',
+    r: [['Speed v','340 m/s',-1],['Frequency f','680 Hz',-1],['Wavelength λ','340 ÷ 680 = 0.50 m',2]],
+    why: ['v = f × λ. To get λ on its own, divide both sides by f.','Speed on top, frequency underneath.','340 ÷ 680 = 0.5. The unit is metres.'],
+    tip: 'Write the rearranged formula ==λ = v ÷ f== before substituting.' },
+  { intro: 'The ==period== T is the time for ==one== complete wave. The frequency is ==f = 1 ÷ T==.', f: 'f = 1 ÷ T',
+    r: [['Squares per wave','4',-1],['Time-base','1 ms per square',-1],['Period T','4 × 1 = 4 ms = 0.004 s',0],['Frequency f','1 ÷ 0.004 = 250 Hz',2]],
+    why: ['Time for one wave = squares × time per square. Change ms to s by dividing by 1000.','Frequency is waves per second, which is 1 divided by the time for one wave.','1 ÷ 0.004 = 250. The unit is hertz.'],
+    tip: 'Convert ==ms to s== before you divide.' },
+  { intro: 'Humans hear ==20 Hz to 20 000 Hz==. Anything above that is ==ultrasound==.', f: '1 kHz = 1000 Hz',
+    r: [['Whistle','25 kHz',-1],['In hertz','25 × 1000 = 25 000 Hz',0],['Hearing range','20 Hz to 20 000 Hz',-1],['Verdict','above range: cannot hear',2]],
+    why: ['1 kHz = 1000 Hz. Multiply by 1000 so the units match the hearing range.','Now both numbers are in hertz, so compare them. 25 000 is bigger than 20 000.','Name it: sound above 20 000 Hz is ultrasound.'],
+    tip: 'Use the word ==ultrasound== in your answer.' }
+]
+});
+
 function renderChapter(k){
   const c = CH[k];
   const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],...(c.drill?[['drill','Drill']]:[]),['quiz','Quiz'],['exam','Exam Qs']];
@@ -632,8 +738,9 @@ function renderChapter(k){
   if (sub === 'learn') body = c.learn.map(card => `<div class="card"><h3>${card.h}</h3>${(card.p||[]).map(p=>`<p>${fmt(p)}</p>`).join('')}${card.list?`<ul>${card.list.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul>`:''}${card.f?`<div class="formula">${card.f}</div>`:''}</div>`).join('')
       + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
   if (sub === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
-  if (sub === 'worked') body = c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>
-      <ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(st[1])}</span></li>`).join('')}</ol>
+  if (sub === 'worked') body = `<div class="card"><h3>How to use these</h3><p class="note">Read the question and try it on paper. Then tap <b>Next step</b>. Each step shows the working, and the line underneath explains <b>why</b>. The table beside it fills in as you go. The exam tip appears at the end.</p></div>` + c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>${w.intro ? `<p class="intro"><b>Key idea:</b> ${fmt(w.intro)}</p>` : ''}
+      ${w.board0 ? '<div class="wk-split"><div class="board"><span class="eyebrow">Working table</span><div class="board-in">' + w.board0() + '</div></div>' : ''}<ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(st[1])}</span>${st[2] ? `<span class="why2">${fmt(st[2])}</span>` : ''}</li>`).join('')}</ol>${w.board0 ? '</div>' : ''}
+      ${w.tip ? `<p class="tip" hidden><b>Exam tip:</b> ${fmt(w.tip)}</p>` : ''}
       <div class="row"><button class="btn primary" data-next>Next step</button><button class="btn ghost" data-all>Show all</button><button class="btn ghost" data-hide>Hide</button></div></div>`).join('');
   if (sub === 'drill') body = `<div class="card" id="drill"></div>`;
   if (sub === 'quiz') body = renderQuiz(k);
@@ -706,7 +813,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (t.closest('[data-next]')) { const n = items.find(li => li.hidden); if (n) n.hidden = false; }
     if (t.closest('[data-all]')) items.forEach(li => li.hidden = false);
     if (t.closest('[data-hide]')) items.forEach(li => li.hidden = true);
-    const nb = wk.querySelector('[data-next]'); nb.disabled = !items.some(li => li.hidden);
+    const nb = wk.querySelector('[data-next]'); nb.disabled = !items.some(li => li.hidden); const tp = wk.querySelector('.tip'); if (tp) tp.hidden = items.some(li => li.hidden); updateBoard(wk, items);
     return;
   }
 
