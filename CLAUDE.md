@@ -12,6 +12,7 @@ Live site (GitHub Pages, branch `main`, root): https://charlesjoserajcjr-master.
 | `physics.html` | Physics pack: Ch 9 Density, Ch 10 Thermal energy transfer, Ch 11 Sound. Oldest engine (see below). |
 | `chemistry.html` | Chemistry pack: Ch 4 Atoms and periodic table, Ch 5 Bonding, Ch 6 Displacement, Ch 7 Salts. |
 | `maths.html` | Maths pack (0580): equations, angles, statistics, shapes, fractions, sequences, ratio, probability. Built on the chemistry engine plus `text`/`frac` drill kinds. Worked examples carry `intro`, `tip`, `f`, per-step why and `r` rows for the side table. |
+| `physics-year.html`, `chemistry-year.html`, `cs-year.html` | Full-year packs. Start as copies of the Term 1 packs (own progress keys `physyear-v1`, `chemyear-v1`, `csyear-v1`) and grow chapter by chapter in syllabus order. |
 | `cs.html` | Computer Science pack (0478): Ch 1 Data representation, Ch 2 Data transmission, Ch 10 Boolean logic. Newest engine. |
 | `tools/check.py` | Headless-browser test: clicks every tab, self-checks every drill generator, screenshots diagrams. Run it before every push. |
 | `HANDOVER.md` | Project history, decisions, status and the to-do list. Read it first. |
@@ -33,6 +34,9 @@ Each pack is **one self-contained HTML file**: inline CSS + inline JS + inline S
 - **Theme**: CSS tokens on `:root` with a `prefers-color-scheme: dark` block. Every colour must come from a token (diagrams included) so both themes work.
 
 Engine differences: `physics.html` is the first version (variable `sub`, numeric-only drills, steps without `why`/boards, artifact-style head). `chemistry.html` added drill kinds, tables in cards, the `sub_` variable. `cs.html` added `bits`/`text`/`table` drills, the logic lab (`renderLab`/`drawLab`), explanatory worked examples and side boards. When upgrading physics/chemistry, port features from `cs.html`.
+
+## Term 1 freeze
+`physics.html`, `chemistry.html` and `cs.html` are the Term 1 Preparation packs. Do **not** edit them until the Term 1 exams are over (Science Mon 5 Oct, CS Fri 9 Oct 2026). All new chapters go into `maths.html` and the `*-year.html` files.
 
 ## Content rules
 - Syllabus: Cambridge IGCSE (Physics 0625, Chemistry 0620, Computer Science 0478). Match Cambridge wording and mark-scheme style. The CS paper is **non-calculator**.

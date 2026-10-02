@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chemistry Full-Year Pack</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: lab-notebook study app — sticky chapter bar, one column of working cards on a faint graph-paper ground (shared with the Physics pack) */
+:root{
+  --paper:#EEF3F6; --card:#FFFFFF; --ink:#132235; --muted:#56687C; --line:#D3DDE6; --grid:rgba(19,34,53,.045);
+  --accent:#0A6C96; --accent-soft:#E1F0F7; --hot:#D2470E; --hot-soft:#FCE9E0;
+  --kw-bg:#FFE45C; --kw-ink:#132235;
+  --good:#2B8A3E; --good-soft:#E3F4E6; --bad:#C92A2A; --bad-soft:#FBE4E4;
+  --water:#DCEEF6; --cu:#4A9BD8; --copper:#B4602B; --zinc:#A3ADB8; --ppt:#F2E6A0; --noble:#E6F2E0;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#0E1620; --card:#16212D; --ink:#E5EDF4; --muted:#93A4B6; --line:#2A3949; --grid:rgba(229,237,244,.035);
+  --accent:#5DB8E2; --accent-soft:#16344A; --hot:#FF8C55; --hot-soft:#3E2216;
+  --kw-bg:#6B5A00; --kw-ink:#FFF3B0;
+  --good:#69DB7C; --good-soft:#173322; --bad:#FF8787; --bad-soft:#3D1C1C;
+  --water:#1B3A4D; --cu:#2F7DBA; --copper:#D07A40; --zinc:#6C7884; --ppt:#6B6232; --noble:#1D3322; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:0 64px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.6rem;font-weight:800}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+mark.kw{background:var(--kw-bg);color:var(--kw-ink);padding:0 .2em;border-radius:3px;font-weight:700;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--line)}
+.top .wrap{padding-block:12px 10px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+.brand h1 span{color:var(--accent)}
+.examdate{font-family:var(--mono);font-size:.78rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;font-weight:700;font-size:.95rem}
+.tab small{font-family:var(--mono);font-weight:400;color:var(--muted);margin-right:6px;font-size:.75rem}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tab[aria-selected="true"] small{color:inherit;opacity:.7}
+.sub{display:flex;gap:4px;flex-wrap:wrap;margin-block:20px 18px;border-bottom:2px solid var(--line)}
+.subtab{border:0;background:none;padding:10px 12px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px}
+.subtab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.chhead{display:flex;flex-direction:column;gap:6px;margin-top:22px}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lede{color:var(--muted);max-width:62ch}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.formula{font-family:var(--mono);font-size:1.05rem;font-weight:600;background:var(--accent-soft);color:var(--ink);border-radius:8px;padding:10px 14px;align-self:flex-start;max-width:100%;overflow-x:auto;display:flex;flex-direction:column;gap:4px}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse;font-size:.95rem;min-width:100%}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 12px 7px 0;text-align:left;vertical-align:top}
+.tbl th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.mistakes{background:var(--hot-soft);border-color:transparent}
+.mistakes h3{color:var(--hot)}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+figure .svgbox{overflow-x:auto}
+figure svg{display:block;width:100%;min-width:440px;height:auto}
+figcaption{font-size:.95rem}
+svg .ln{stroke:var(--ink);stroke-width:2;fill:none}
+svg .thin{stroke:var(--muted);stroke-width:1;fill:none}
+svg .glass{stroke:var(--ink);stroke-width:2;fill:none}
+svg .acc{stroke:var(--accent);stroke-width:2.5;fill:none}
+svg .hotl{stroke:var(--hot);stroke-width:2.5;fill:none}
+svg .accf{fill:var(--accent)}
+svg .hotf{fill:var(--hot)}
+svg .inkf{fill:var(--ink)}
+svg .cardf{fill:var(--card)}
+svg .shell{fill:none;stroke:var(--muted);stroke-width:1.4}
+svg .atom{fill:var(--card);stroke:var(--ink);stroke-width:1.8}
+svg .nuc{fill:var(--accent-soft);stroke:var(--ink);stroke-width:1.4}
+svg .cross{stroke:var(--hot);stroke-width:2.4}
+svg .metal{fill:var(--accent-soft);stroke:var(--line)}
+svg .nonmetal{fill:var(--card);stroke:var(--line)}
+svg .noble{fill:var(--noble);stroke:var(--line)}
+svg .cuf{fill:var(--cu)}
+svg .waterf{fill:var(--water)}
+svg .copperf{fill:var(--copper)}
+svg .zincf{fill:var(--zinc);stroke:var(--ink);stroke-width:1.2}
+svg .pptf{fill:var(--ppt);stroke:var(--ink);stroke-width:1}
+svg text{fill:var(--ink);font-family:var(--body);font-size:13px}
+svg .lbl{font-weight:700}
+svg .sym{font-family:var(--display);font-weight:800;font-size:22px;text-anchor:middle}
+svg .mid{text-anchor:middle}
+svg .end{text-anchor:end}
+svg .mut{fill:var(--muted)}
+svg .acct{fill:var(--accent);font-weight:700}
+svg .hott{fill:var(--hot);font-weight:700}
+svg .mono{font-family:var(--mono)}
+.q{font-weight:700}
+.steps{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--mono);font-size:.8rem;font-weight:600;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;grid-row:span 2}
+.steps .sl{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.steps .st{font-family:var(--mono);font-size:1rem;min-width:0;overflow-wrap:anywhere}
+.steps li.final .st{font-weight:700;color:var(--good)}
+.steps .prose{font-family:var(--body)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:9px 16px;font-weight:700}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+.drillq{font-size:1.1rem}
+.answer{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.answer input{font:inherit;font-family:var(--mono);font-size:1.1rem;padding:9px 12px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:12ch}
+.unit{font-family:var(--mono);color:var(--muted)}
+.fb{border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.fb.ok{background:var(--good-soft)}
+.fb.no{background:var(--bad-soft)}
+.fb .verdict{font-weight:700}
+.fb.ok .verdict{color:var(--good)}
+.fb.no .verdict{color:var(--bad)}
+.stat{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 14px;font-weight:400}
+.opt.right{border-color:var(--good);background:var(--good-soft);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.why{font-size:.95rem;border-left:3px solid var(--accent);padding-left:12px}
+.scorebar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.big-score{font-family:var(--display);font-size:1.8rem;font-weight:800}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.marks{font-family:var(--mono);font-size:.85rem;color:var(--muted);white-space:nowrap}
+.ms{display:flex;flex-direction:column;gap:6px}
+.ms-intro{font-size:.9rem;color:var(--muted)}
+.point{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 12px;font-weight:400}
+.point .box{width:24px;height:24px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;font-weight:700;color:var(--card)}
+.point[aria-pressed="true"]{border-color:var(--good)}
+.point[aria-pressed="true"] .box{background:var(--good);border-color:var(--good)}
+.got{font-family:var(--mono);font-weight:600}
+.note{font-size:.9rem;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.prog{display:flex;flex-direction:column;gap:6px}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.pl{display:flex;justify-content:space-between;font-size:.9rem;gap:8px}
+.pl span:last-child{font-family:var(--mono);color:var(--muted);white-space:nowrap}
+.cw{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.cw dt{font-weight:700;color:var(--accent)}
+.cw dd{margin:0}
+.plan{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.plan div{position:relative;padding:0 0 12px 18px}
+.plan div::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--accent)}
+.plan b{font-family:var(--mono);font-size:.82rem;color:var(--muted);display:block;font-weight:600}
+.timer{font-family:var(--mono);font-size:2.2rem;font-weight:600;font-variant-numeric:tabular-nums}
+.timer.low{color:var(--hot)}
+a{color:var(--accent)}
+@media (prefers-reduced-motion: no-preference){.fadein{animation:fi .25s ease-out}@keyframes fi{from{transform:translateY(4px)}to{transform:none}}}
+.intro{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:.98rem;margin:0}
+.steps .why2{grid-column:2;font-family:var(--body);font-size:.93rem;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.steps li.now .st{color:var(--ink)}
+.tip{background:var(--kw-bg);color:var(--kw-ink);border-radius:8px;padding:10px 14px;font-size:.95rem;margin:0}
+.tip mark.kw{background:transparent;padding:0;text-decoration:underline}
+.wk-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,330px);grid-template-areas:"steps board";gap:18px;align-items:start}
+.wk-split .steps{grid-area:steps}
+.wk-split .board{grid-area:board;position:sticky;top:150px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;overflow-x:auto}
+@media (max-width:700px){.wk-split{grid-template-columns:minmax(0,1fr);grid-template-areas:"board" "steps"}.wk-split .board{top:118px;z-index:2}}
+.wb{border-collapse:collapse;font-size:.88rem;width:100%}
+.wb th,.wb td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;background:var(--card)}
+.wb th{color:var(--muted);font-weight:400;white-space:nowrap;width:1%}
+.wb td{font-family:var(--mono);overflow-wrap:anywhere}
+.wb td.q{color:var(--muted);font-weight:400}
+.wb td.fill{background:var(--good-soft);color:var(--good);font-weight:700}
+.wb tr.cur th,.wb tr.cur td{outline:2px solid var(--hot);outline-offset:-2px}
+.bnote{font-size:.9rem;margin:0}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>Chemistry <span>Full-Year</span> Pack</h1>
+      <a href="./" class="examdate">← All subjects</a>
+      <div class="examdate">Grade 8 · Whole syllabus</div>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+<main class="wrap" id="view"></main>
+
+<script>
+/* ---------- helpers ---------- */
+const fmt = s => String(s).replace(/==(.+?)==/g,'<mark class="kw">$1</mark>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const rint = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const shuffle = a => { const b = a.slice(); for (let i = b.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]] = [b[j],b[i]]; } return b; };
+const num = x => String(Math.round(x*100)/100);
+const SUBS = '₀₁₂₃₄₅₆₇₈₉';
+const sub = f => f.replace(/\d/g, d => SUBS[d]);
+const unsub = f => f.replace(/[₀-₉]/g, d => String(d.charCodeAt(0) - 8320));
+let store = {};
+try { store = JSON.parse(localStorage.getItem('chemyear-v1') || '{}') || {}; } catch(e) { store = {}; }
+store.ticks = store.ticks || {}; store.quiz = store.quiz || {}; store.drill = store.drill || {};
+const save = () => { try { localStorage.setItem('chemyear-v1', JSON.stringify(store)); } catch(e) {} };
+
+/* ---------- element data ---------- */
+const EL = [[1,'H','hydrogen',1],[2,'He','helium',4],[3,'Li','lithium',7],[4,'Be','beryllium',9],[5,'B','boron',11],[6,'C','carbon',12],[7,'N','nitrogen',14],[8,'O','oxygen',16],[9,'F','fluorine',19],[10,'Ne','neon',20],[11,'Na','sodium',23],[12,'Mg','magnesium',24],[13,'Al','aluminium',27],[14,'Si','silicon',28],[15,'P','phosphorus',31],[16,'S','sulfur',32],[17,'Cl','chlorine',35],[18,'Ar','argon',40],[19,'K','potassium',39],[20,'Ca','calcium',40]];
+const config = Z => { const r = []; let n = Z; for (const cap of [2,8,8,8]) { if (n <= 0) break; const t = Math.min(cap, n); r.push(t); n -= t; } return r; };
+const ROMAN = ['','I','II','III','IV','V','VI','VII','VIII'];
+
+/* ---------- diagram helpers ---------- */
+function eDot(x, y){ return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.6" class="accf"/>`; }
+function eCross(x, y){ const d = 3.6; return `<path d="M${(x-d).toFixed(1)} ${(y-d).toFixed(1)}L${(x+d).toFixed(1)} ${(y+d).toFixed(1)}M${(x-d).toFixed(1)} ${(y+d).toFixed(1)}L${(x+d).toFixed(1)} ${(y-d).toFixed(1)}" class="cross"/>`; }
+const mark = (m, x, y) => m === 'x' ? eCross(x, y) : eDot(x, y);
+/* Bohr diagram: conf like [2,8,1]; marks(k,i) returns 'x' or 'o' */
+function bohr(cx, cy, conf, sym, marks, r0 = 24, dr = 20){
+  let s = `<circle cx="${cx}" cy="${cy}" r="14" class="nuc"/><text x="${cx}" y="${cy+5}" class="mid lbl" style="font-size:12px">${sym}</text>`;
+  conf.forEach((n, k) => {
+    const r = r0 + k*dr; s += `<circle cx="${cx}" cy="${cy}" r="${r}" class="shell"/>`;
+    for (let i = 0; i < n; i++) {
+      let a;
+      if (n <= 2) a = i === 0 ? 180 : 0;
+      else { const pair = Math.floor(i/2), side = i % 2; a = -90 + pair*90 + (side ? 12 : -12); if (n % 2 && i === n-1) a = -90 + pair*90; }
+      const rad = a*Math.PI/180; s += mark(marks(k,i), cx + r*Math.cos(rad), cy + r*Math.sin(rad));
+    }
+  });
+  return s;
+}
+/* covalent outer-shell diagram */
+function covalent(cx, cy, c, others){
+  const P = (x,y,a,r) => [x + r*Math.cos(a*Math.PI/180), y + r*Math.sin(a*Math.PI/180)];
+  let s = '';
+  others.forEach(o => { const [ox,oy] = P(cx,cy,o.ang,o.d); s += `<circle cx="${ox.toFixed(1)}" cy="${oy.toFixed(1)}" r="${o.r}" class="atom" fill-opacity=".85"/>`; o._x = ox; o._y = oy; });
+  s += `<circle cx="${cx}" cy="${cy}" r="${c.r}" class="atom" fill-opacity=".85"/>`;
+  others.forEach(o => { s += `<circle cx="${o._x.toFixed(1)}" cy="${o._y.toFixed(1)}" r="${o.r}" fill="none" class="ln" stroke-width="1.8"/>`; });
+  const pair = (x,y,a,r,m1,m2) => { const [px,py] = P(x,y,a,r); const t = (a+90)*Math.PI/180; return mark(m1, px+6*Math.cos(t), py+6*Math.sin(t)) + mark(m2, px-6*Math.cos(t), py-6*Math.sin(t)); };
+  others.forEach(o => {
+    const overlap = c.r + o.r - o.d; const m = c.r - overlap/2;
+    s += pair(cx, cy, o.ang, m, c.mark, o.mark);
+    (o.lone || []).forEach(a => s += pair(o._x, o._y, a, o.r, o.mark, o.mark));
+    s += `<text x="${o._x.toFixed(1)}" y="${(o._y+7).toFixed(1)}" class="sym" style="font-size:18px">${o.sym}</text>`;
+  });
+  (c.lone || []).forEach(a => s += pair(cx, cy, a, c.r, c.mark, c.mark));
+  s += `<text x="${cx}" y="${cy+8}" class="sym">${c.sym}</text>`;
+  return s;
+}
+const legendDX = (x, y, a, b) => `${eCross(x, y-4)}<text x="${x+10}" y="${y}">${a}</text>${eDot(x+190, y-4)}<text x="${x+200}" y="${y}">${b}</text>`;
+function arrowDefs(id){
+  return `<defs><marker id="a-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="inkf"/></marker>
+  <marker id="b-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="accf"/></marker></defs>`;
+}
+
+/* ---------- diagrams ---------- */
+function svgNotation(){
+  return `<svg viewBox="0 0 480 190" role="img" aria-label="Nuclide notation">${arrowDefs('n')}
+  <text x="200" y="66" class="end mono" style="font-size:26px;font-weight:600">23</text>
+  <text x="200" y="150" class="end mono" style="font-size:26px;font-weight:600">11</text>
+  <text x="206" y="124" style="font-family:var(--display);font-size:80px;font-weight:800">Na</text>
+  <line x1="160" y1="56" x2="70" y2="40" class="thin"/><text x="66" y="30" class="end lbl">nucleon number</text><text x="66" y="46" class="end mut">(mass number) = protons + neutrons</text>
+  <line x1="160" y1="142" x2="70" y2="160" class="thin"/><text x="66" y="160" class="end lbl">proton number</text><text x="66" y="176" class="end mut">(atomic number)</text>
+  <text x="330" y="60" class="lbl">Sodium-23</text>
+  <text x="330" y="84" class="mono">protons  = 11</text>
+  <text x="330" y="106" class="mono">neutrons = 23 − 11 = 12</text>
+  <text x="330" y="128" class="mono">electrons = 11</text>
+  <text x="330" y="150" class="mono acct">config   = 2,8,1</text></svg>`.replace('viewBox="0 0 480 190"','viewBox="-180 0 720 190"');
+}
+function svgBohr(){
+  return `<svg viewBox="0 0 560 230" role="img" aria-label="Electron shell diagrams of sodium and chlorine">
+  ${bohr(130, 110, [2,8,1], 'Na', () => 'o')}${bohr(400, 110, [2,8,7], 'Cl', () => 'o')}
+  <text x="130" y="218" class="mid lbl">sodium 2,8,1 · Group I · Period 3</text>
+  <text x="400" y="218" class="mid lbl">chlorine 2,8,7 · Group VII · Period 3</text></svg>`;
+}
+function svgTable(){
+  const W = 62, H = 56, x0 = 50, y0 = 34;
+  let s = `<svg viewBox="0 0 580 330" role="img" aria-label="First 20 elements of the periodic table">`;
+  for (let g = 1; g <= 8; g++) s += `<text x="${x0 + (g-1)*W + W/2}" y="24" class="mid lbl">${g === 8 ? 'VIII/0' : ROMAN[g]}</text>`;
+  for (let p = 1; p <= 4; p++) s += `<text x="${x0-12}" y="${y0 + (p-1)*H + H/2 + 5}" class="end mut">P${p}</text>`;
+  const metals = new Set([3,4,11,12,13,19,20]), noble = new Set([2,10,18]);
+  EL.forEach(([Z, symb]) => {
+    const c = config(Z); const period = c.length; let g = c[c.length-1];
+    if (noble.has(Z)) g = 8; if (Z === 1) g = 1;
+    const x = x0 + (g-1)*W, y = y0 + (period-1)*H;
+    const cls = noble.has(Z) ? 'noble' : metals.has(Z) ? 'metal' : 'nonmetal';
+    s += `<rect x="${x+2}" y="${y+2}" width="${W-4}" height="${H-4}" rx="5" class="${cls}" ${Z===1?'stroke-dasharray="4 3" style="stroke:var(--muted)"':''}/>
+      <text x="${x+8}" y="${y+16}" class="mut" style="font-size:11px">${Z}</text><text x="${x+W/2}" y="${y+40}" class="sym">${symb}</text>`;
+  });
+  s += `<rect x="${x0 + 2*W + 2}" y="${y0 + 3*H + 2}" width="${6*W - 4}" height="${H-4}" rx="5" fill="none" class="thin" stroke-dasharray="4 4"/>
+    <text x="${x0 + 5*W}" y="${y0 + 3*H + 33}" class="mid mut">transition elements (Fe, Cu, Zn…) start here</text>
+    <rect x="50" y="270" width="16" height="16" rx="3" class="metal"/><text x="72" y="283">metals</text>
+    <rect x="150" y="270" width="16" height="16" rx="3" class="nonmetal" style="stroke:var(--muted)"/><text x="172" y="283">non-metals</text>
+    <rect x="270" y="270" width="16" height="16" rx="3" class="noble"/><text x="292" y="283">noble gases</text>
+    <text x="50" y="312" class="acct">Group number = outer electrons · Period number = number of shells</text></svg>`;
+  return s;
+}
+function svgNaCl(){
+  const br = (x, y, w, h) => `<path d="M${x+10} ${y} H${x} V${y+h} H${x+10}M${x+w-10} ${y} H${x+w} V${y+h} H${x+w-10}" class="ln"/>`;
+  return `<svg viewBox="0 0 560 250" role="img" aria-label="Dot and cross diagram of sodium chloride">
+  ${br(52,30,156,160)}${bohr(130, 110, [2,8], 'Na', () => 'x')}<text x="216" y="40" class="lbl" style="font-size:20px">+</text>
+  ${br(296,22,208,176)}${bohr(400, 110, [2,8,8], 'Cl', (k,i) => (k === 2 && i === 7) ? 'x' : 'o')}<text x="512" y="32" class="lbl" style="font-size:22px">−</text>
+  <text x="130" y="214" class="mid lbl">Na⁺  (2,8)</text><text x="400" y="222" class="mid lbl">Cl⁻  (2,8,8)</text>
+  ${legendDX(120, 244, 'electron from sodium', 'electron from chlorine')}</svg>`;
+}
+function svgCov1(){
+  return `<svg viewBox="0 0 600 270" role="img" aria-label="Dot and cross diagrams of chlorine and water">
+  ${covalent(110, 120, {sym:'Cl', r:52, mark:'o', lone:[180,90,270]}, [{ang:0, d:84, r:52, sym:'Cl', mark:'x', lone:[0,90,270]}])}
+  ${covalent(440, 130, {sym:'O', r:52, mark:'o', lone:[230,310]}, [{ang:140, d:70, r:30, sym:'H', mark:'x'},{ang:40, d:70, r:30, sym:'H', mark:'x'}])}
+  <text x="152" y="210" class="mid lbl">chlorine, Cl₂: 1 shared pair</text>
+  <text x="440" y="246" class="mid lbl">water, H₂O: 2 shared pairs, 2 lone pairs</text>
+  ${legendDX(120, 264, 'from one atom', 'from the other atom')}</svg>`;
+}
+function svgCov2(){
+  return `<svg viewBox="0 0 600 280" role="img" aria-label="Dot and cross diagrams of methane and ammonia">
+  ${covalent(150, 130, {sym:'C', r:50, mark:'o'}, [0,90,180,270].map(a => ({ang:a, d:72, r:30, sym:'H', mark:'x'})))}
+  ${covalent(450, 120, {sym:'N', r:50, mark:'o', lone:[270]}, [180,0,90].map(a => ({ang:a, d:72, r:30, sym:'H', mark:'x'})))}
+  <text x="150" y="268" class="mid lbl">methane, CH₄: 4 shared pairs</text>
+  <text x="450" y="268" class="mid lbl">ammonia, NH₃: 3 shared pairs, 1 lone pair</text></svg>`;
+}
+function svgCarbon(){
+  const hexRow = (y, x0) => { let d = ''; const r = 14, w = r*Math.sqrt(3); for (let i = 0; i < 7; i++) { const cx = x0 + i*w; for (let k = 0; k < 6; k++) { const a1 = (60*k - 90)*Math.PI/180; d += (k ? 'L' : 'M') + (cx + r*Math.cos(a1)).toFixed(1) + ' ' + (y + r*Math.sin(a1)).toFixed(1); } d += 'Z'; } return `<path d="${d}" class="ln" stroke-width="1.6"/>`; };
+  let dia = '';
+  const pts = []; for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) pts.push([360 + c*44 + (r%2)*22, 50 + r*40]);
+  pts.forEach(([x,y]) => pts.forEach(([x2,y2]) => { const d = Math.hypot(x2-x, y2-y); if (d > 1 && d < 46 && (x2 > x || (x2 === x && y2 > y))) dia += `<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" class="ln" stroke-width="1.6"/>`; }));
+  pts.forEach(([x,y]) => dia += `<circle cx="${x}" cy="${y}" r="6" class="atom"/>`);
+  return `<svg viewBox="0 0 600 268" role="img" aria-label="Graphite and diamond structures">
+  ${hexRow(50, 40)}${hexRow(120, 52)}${hexRow(190, 40)}
+  <line x1="140" y1="66" x2="140" y2="104" class="thin" stroke-dasharray="3 3"/><line x1="200" y1="136" x2="200" y2="174" class="thin" stroke-dasharray="3 3"/>
+  <text x="150" y="90" class="mut">weak forces</text>
+  <text x="130" y="228" class="mid lbl">graphite</text><text x="130" y="244" class="mid">layers; each C bonded to 3</text><text x="130" y="260" class="mid">layers slide · conducts</text>
+  ${dia}
+  <text x="425" y="222" class="mid lbl">diamond</text><text x="425" y="240" class="mid">each C bonded to 4 others</text><text x="425" y="256" class="mid">very hard · does not conduct</text></svg>`;
+}
+function svgSeries(){
+  const M = [['K','potassium'],['Na','sodium'],['Ca','calcium'],['Mg','magnesium'],['Al','aluminium'],['(C)','carbon'],['Zn','zinc'],['Fe','iron'],['(H)','hydrogen'],['Cu','copper'],['Ag','silver'],['Au','gold']];
+  let s = `<svg viewBox="0 0 640 480" role="img" aria-label="Reactivity series">${arrowDefs('r')}
+  <line x1="40" y1="440" x2="40" y2="30" class="ln" stroke-width="3" marker-end="url(#a-r)"/><text x="30" y="250" class="lbl" transform="rotate(-90 30 250)" style="text-anchor:middle">more reactive</text>`;
+  M.forEach(([sy, nm], i) => { const y = 24 + i*36; const ref = sy.startsWith('(');
+    s += `<rect x="60" y="${y}" width="190" height="30" rx="5" class="${ref ? 'nonmetal' : 'metal'}" ${ref ? 'stroke-dasharray="4 3" style="stroke:var(--muted)"' : ''}/>
+    <text x="72" y="${y+20}" class="lbl mono">${sy}</text><text x="120" y="${y+20}" ${ref ? 'class="mut"' : ''}>${nm}</text>`; });
+  const brace = (y1, y2, t1, t2, cls, bx = 262) => `<path d="M${bx} ${y1} h8 V${y2} h-8" class="thin" style="stroke-width:1.6"/><text x="${bx+18}" y="${(y1+y2)/2}" class="${cls||'lbl'}">${t1}</text><text x="${bx+18}" y="${(y1+y2)/2+16}">${t2}</text>`;
+  s += brace(26, 130, 'react with cold water', 'K, Na very vigorous', 'lbl');
+  s += brace(138, 192, 'extracted by electrolysis', '(more reactive than carbon)', 'acct');
+  s += brace(242, 314, 'extracted by heating', 'the oxide with carbon', 'acct');
+  s += brace(138, 312, 'fizz with', 'dilute acid (H₂)', 'lbl', 470);
+  s += brace(350, 456, 'no reaction with', 'dilute acid', 'lbl');
+  s += `<text x="20" y="474" class="hott" style="font-size:12px">Memory aid: Please Send Charlie’s Monkeys And Cute Zebras Into Hot Countries Signed Gorillas</text></svg>`;
+  return s;
+}
+function svgDisplace(){
+  const beaker = (x, solCls, coated, label) => `<rect x="${x+2}" y="80" width="116" height="118" class="${solCls}"/>
+    <rect x="${x+50}" y="20" width="20" height="170" class="zincf"/>${coated ? `<rect x="${x+48}" y="82" width="24" height="108" rx="3" class="copperf"/><rect x="${x+50}" y="20" width="20" height="62" class="zincf"/>` : ''}
+    <path d="M${x} 40 V200 H${x+120} V40" class="glass"/><text x="${x+60}" y="222" class="mid lbl">${label}</text>`;
+  return `<svg viewBox="0 0 560 280" role="img" aria-label="Zinc in copper(II) sulfate solution">${arrowDefs('z')}
+  ${beaker(40,'cuf',false,'start')}${beaker(330,'waterf',true,'after a few minutes')}
+  <line x1="190" y1="120" x2="310" y2="120" class="ln" marker-end="url(#a-z)"/>
+  <text x="250" y="108" class="mid">zinc displaces copper</text>
+  <text x="100" y="244" class="mid">blue copper(II) sulfate</text><text x="100" y="262" class="mid">+ grey zinc strip</text>
+  <text x="390" y="244" class="mid">blue colour fades; red-brown</text><text x="390" y="262" class="mid">copper coats the zinc; gets warm</text></svg>`;
+}
+function svgPH(){
+  const C = ['#D62828','#E04B1F','#EA6A15','#F28C0F','#F5A90F','#F2C511','#C9CF1E','#5DB34B','#2FA58C','#2B8FC0','#2D6FC5','#3F55B8','#5B45A8','#6E3A99','#7A2F86'];
+  let s = `<svg viewBox="0 0 600 200" role="img" aria-label="pH scale with universal indicator colours">`;
+  C.forEach((c, i) => { s += `<rect x="${20 + i*37}" y="40" width="37" height="44" fill="${c}"/><text x="${38 + i*37}" y="102" class="mid mono">${i}</text>`; });
+  s += `<rect x="20" y="40" width="555" height="44" class="ln" stroke-width="1.5"/>
+  <text x="20" y="28" class="lbl">ACID (H⁺ ions)</text><text x="297" y="28" class="mid lbl">NEUTRAL</text><text x="575" y="28" class="end lbl">ALKALI (OH⁻ ions)</text>
+  <text x="38" y="128" class="mid" style="font-size:12px">strong</text><text x="168" y="128" class="mid" style="font-size:12px">weak</text><text x="427" y="128" class="mid" style="font-size:12px">weak</text><text x="556" y="128" class="mid" style="font-size:12px">strong</text>
+  <text x="38" y="152" class="mid mut" style="font-size:12px">HCl</text><text x="131" y="152" class="mid mut" style="font-size:12px">vinegar</text><text x="297" y="152" class="mid mut" style="font-size:12px">pure water</text><text x="353" y="172" class="mid mut" style="font-size:12px">baking soda</text><text x="556" y="152" class="mid mut" style="font-size:12px">NaOH</text>
+  <text x="297" y="194" class="mid">Universal indicator: red → orange → yellow → green → blue → purple</text></svg>`;
+  return s;
+}
+const ICON = {
+  acid: x => `<rect x="${x+12}" y="60" width="76" height="50" class="waterf"/><path d="M${x+30} 110 q20 -16 40 0z" class="inkf"/><path d="M${x+10} 30 V112 H${x+90} V30" class="glass"/><line x1="${x+60}" y1="10" x2="${x+44}" y2="96" class="ln"/>`,
+  filter: x => `<path d="M${x+14} 20 H${x+86} L${x+56} 60 V80 H${x+44} V60Z" class="glass"/><path d="M${x+22} 26 L${x+50} 58 L${x+78} 26" class="thin" stroke-dasharray="3 3"/><path d="M${x+38} 28 h24 l-12 10z" class="inkf"/><path d="M${x+30} 84 L${x+18} 116 H${x+82} L${x+70} 84Z" class="glass"/><rect x="${x+28}" y="100" width="44" height="14" class="cuf" opacity=".8"/>`,
+  evap: x => `<path d="M${x+14} 40 Q${x+50} 82 ${x+86} 40Z" class="cuf"/><path d="M${x+10} 40 Q${x+50} 86 ${x+90} 40" class="glass"/><path d="M${x+20} 62 L${x+14} 116 M${x+80} 62 L${x+86} 116 M${x+10} 62 H${x+90}" class="ln"/><path d="M${x+42} 112 q4 -18 8 -22 q0 10 4 12 q2 -6 1 -12 q8 8 6 22z" class="hotf"/>`,
+  crystals: x => [[30,70],[50,82],[66,66],[44,96],[64,98]].map(([a,b]) => `<path d="M${x+a} ${b-12} l10 12 l-10 12 l-10 -12z" class="cuf" stroke="var(--ink)" stroke-width="1.2"/>`).join('') + `<ellipse cx="${x+50}" cy="112" rx="40" ry="6" class="thin"/>`,
+  mix: x => `<rect x="${x+12}" y="56" width="76" height="54" class="waterf"/>${[22,34,46,58,70,28,52,64,40].map((a,i) => `<circle cx="${x+a+4}" cy="${104 - (i>4?6:0)}" r="4" class="pptf"/>`).join('')}<path d="M${x+10} 30 V112 H${x+90} V30" class="glass"/><path d="M${x+18} 6 l20 20 M${x+82} 6 l-20 20" class="ln"/>`,
+  wash: x => `<path d="M${x+14} 30 H${x+70} L${x+48} 64 V90 H${x+38} V64Z" class="glass"/><path d="M${x+32} 34 h20 l-10 12z" class="pptf"/><rect x="${x+68}" y="56" width="26" height="50" rx="6" class="waterf" stroke="var(--ink)" stroke-width="1.6"/><path d="M${x+81} 56 V42 L${x+60} 30" class="ln"/>`,
+  dry: x => `<circle cx="${x+50}" cy="76" r="38" class="nonmetal" style="stroke:var(--ink)"/><path d="M${x+36} 80 q14 -18 28 0 q-14 10 -28 0z" class="pptf"/><path d="M${x+30} 22 q6 -8 0 -16 M${x+50} 22 q6 -8 0 -16 M${x+70} 22 q6 -8 0 -16" class="hotl" stroke-width="1.8"/>`
+};
+function flow(id, steps){
+  let s = `<svg viewBox="0 0 600 220" role="img" aria-label="Method steps">${arrowDefs(id)}`;
+  steps.forEach(([ic, title, l1, l2], i) => { const x = 10 + i*150;
+    s += `<g>${ICON[ic](x+15)}</g><text x="${x+65}" y="150" class="mid lbl">${i+1}. ${title}</text><text x="${x+65}" y="170" class="mid" style="font-size:12px">${l1}</text><text x="${x+65}" y="186" class="mid" style="font-size:12px">${l2||''}</text>`;
+    if (i < steps.length-1) s += `<line x1="${x+128}" y1="70" x2="${x+152}" y2="70" class="ln" marker-end="url(#a-${id})"/>`; });
+  return s + `</svg>`;
+}
+const svgSoluble = () => flow('sp', [['acid','Excess solid','add CuO to warm acid','until in excess'],['filter','Filter','remove the','excess solid'],['evap','Evaporate','heat filtrate until','crystals start to form'],['crystals','Crystallise','cool; filter crystals,','dry on filter paper']]);
+const svgPrecip = () => flow('pp', [['mix','Mix solutions','two soluble salts','→ precipitate forms'],['filter','Filter','precipitate stays','on filter paper'],['wash','Wash','with distilled','water'],['dry','Dry','in a warm oven or','between filter papers']]);
+
+/* ---------- content ---------- */
+const CH = {
+atoms: {
+  code: 'Ch 4', name: 'Atoms and the periodic table',
+  lede: 'Counting particles and writing electron shells are quick, reliable marks. Then learn the trends for Groups I, VII and VIII.',
+  learn: [
+    { h: 'Inside an atom', p: ['The ==nucleus== at the centre contains ==protons== and ==neutrons==. ==Electrons== move around the nucleus in ==shells== (energy levels).'],
+      table: [['Particle','Relative charge','Relative mass','Where'],['proton','+1','1','nucleus'],['neutron','0','1','nucleus'],['electron','−1','1/1840 (negligible)','shells']] },
+    { h: 'Proton number and nucleon number', list: ['==Proton number (atomic number)== = number of ==protons==.', '==Nucleon number (mass number)== = number of ==protons + neutrons==.', 'In a neutral atom, ==number of electrons = number of protons==.', 'The bigger number in the symbol is always the nucleon number.'], f: ['neutrons = nucleon number − proton number'] },
+    { h: 'Isotopes', list: ['Isotopes are ==atoms of the same element== with the ==same number of protons== but a ==different number of neutrons==.', 'Example: chlorine-35 (18 neutrons) and chlorine-37 (20 neutrons).', 'Isotopes have the ==same chemical properties== because they have the ==same number of outer-shell electrons== (same electronic configuration).', 'Relative atomic mass (Ar) is the average mass of the isotopes, using their percentages.'], f: ['Ar = (mass₁ × %₁ + mass₂ × %₂) ÷ 100'] },
+    { h: 'Electronic configuration', list: ['Electrons fill shells from the inside: ==1st shell holds 2==, ==2nd holds 8==, ==3rd holds 8== (for the first 20 elements).', 'Examples: Na = ==2,8,1== · Cl = ==2,8,7== · K = ==2,8,8,1== · Ca = ==2,8,8,2==.'] },
+    { h: 'The periodic table', list: ['Elements are arranged in order of increasing ==proton number==.', '==Groups== are vertical columns. ==Group number = number of outer-shell electrons==.', '==Periods== are horizontal rows. ==Period number = number of occupied shells==.', 'Elements in the same group have ==similar chemical properties== because they have the ==same number of outer electrons==.', '==Metals== are on the ==left==, ==non-metals== on the ==right==.'] },
+    { h: 'Group I: alkali metals (Li, Na, K)', list: ['Soft (can be cut with a knife), low density, stored under oil.', 'React with ==water== to form a ==metal hydroxide + hydrogen==; the solution is ==alkaline==.', 'Sodium: fizzes, floats, moves around, melts into a ball. Potassium: also burns with a ==lilac flame==.', '==Reactivity increases down the group==. Melting point ==decreases== down the group.'] },
+    { h: 'Group VII: halogens (Cl, Br, I)', list: ['Exist as ==diatomic molecules==: Cl₂, Br₂, I₂.', 'Chlorine: ==pale yellow-green gas==. Bromine: ==red-brown liquid==. Iodine: ==grey-black solid==.', '==Reactivity decreases down the group==. Colour gets darker and melting point increases down the group.', 'A ==more reactive halogen displaces== a less reactive one from its compound: chlorine + potassium bromide → potassium chloride + bromine.'] },
+    { h: 'Group VIII (0): noble gases', list: ['Have a ==full outer shell==, so they are ==unreactive (inert)==.', 'Exist as single atoms (==monatomic==).', 'Uses: ==helium== in balloons (low density, unreactive); ==argon== in light bulbs (unreactive, filament does not burn).'] },
+    { h: 'Transition elements', list: ['High density and high melting points.', 'Form ==coloured compounds== (e.g. copper(II) sulfate is blue).', 'Act as ==catalysts== (e.g. iron in making ammonia).', 'Can form ions with different charges: Fe²⁺ and Fe³⁺.'] }
+  ],
+  mistakes: ['Mixing up the two numbers: the ==larger== number is the ==nucleon number==.', 'Saying isotopes have different numbers of ==protons== or ==electrons==. Only the ==neutrons== differ.', 'Writing potassium as 2,8,9. It is ==2,8,8,1==.', 'Taking the group number from the number of shells. ==Shells → period; outer electrons → group==.', 'Saying noble gases are unreactive “because they are gases”. Say ==full outer shell==.', 'Getting halogen displacement backwards: only a ==more reactive== halogen displaces a less reactive one.'],
+  diagrams: [
+    { svg: svgNotation, cap: 'Reading the symbol: top = nucleon number, bottom = proton number.' },
+    { svg: svgBohr, cap: 'Electron shell diagrams. Count the outer electrons for the group and the shells for the period.' },
+    { svg: svgTable, cap: 'The first 20 elements. Learn the order up to calcium.' }
+  ],
+  worked: [
+    { q: 'An atom of sodium is written ²³₁₁Na. How many protons, neutrons and electrons does it have? Write its electronic configuration.',
+      s: [['Protons = proton number','11'],['Neutrons = nucleon − proton','23 − 11 = 12'],['Electrons = protons (neutral atom)','11'],['Fill the shells: 2, then 8, then the rest','2,8,1']] },
+    { q: 'Aluminium has proton number 13. Write its electronic configuration and state its group and period.',
+      s: [['Electrons = 13','fill 2, then 8, then 3'],['Configuration','2,8,3'],['Outer electrons = 3','Group III'],['Shells = 3','Period 3']] },
+    { q: 'A magnesium ion is Mg²⁺. Magnesium has proton number 12. How many electrons does the ion have, and what is its configuration?',
+      s: [['Atom','12 electrons, 2,8,2'],['2+ means 2 electrons lost','12 − 2 = 10 electrons'],['Configuration of ion','2,8 (full outer shell)']] },
+    { q: 'Chlorine is 75% chlorine-35 and 25% chlorine-37. Calculate the relative atomic mass of chlorine.',
+      s: [['Write the formula','Ar = (35 × 75 + 37 × 25) ÷ 100'],['Multiply','(2625 + 925) ÷ 100'],['Add and divide','3550 ÷ 100'],['Answer (no unit)','Ar = 35.5']] },
+    { q: 'Rubidium is below potassium in Group I. Predict how it reacts with water.', prose: true,
+      s: [['Same group','Rubidium has ==1 outer electron==, so it reacts in the ==same way==.'],['Products','rubidium + water → ==rubidium hydroxide + hydrogen=='],['Trend','==Reactivity increases down Group I==, so it reacts ==more violently== than potassium.']] },
+    { q: 'Bromine water is added to potassium iodide solution. Does a reaction happen?', prose: true,
+      s: [['Compare reactivity','Bromine is ==above== iodine in Group VII, so it is ==more reactive=='],['Conclusion','Bromine ==displaces== iodine'],['Equation','Br₂ + 2KI → 2KBr + I₂'],['Observation','The solution turns ==brown== (iodine)']] }
+  ],
+  drill: 'atoms',
+  quiz: [
+    { q: 'Which particles are found in the nucleus?', o: ['protons and electrons', 'protons and neutrons', 'neutrons and electrons', 'electrons only'], a: 1, w: 'The nucleus contains ==protons and neutrons==. Electrons are in shells.' },
+    { q: 'What is the relative charge of an electron?', o: ['+1', '0', '−1', '1/1840'], a: 2, w: 'Electron: charge ==−1==. 1/1840 is its relative mass, not its charge.' },
+    { q: 'How many neutrons are in ³⁹₁₉K?', o: ['19', '39', '58', '20'], a: 3, w: 'Neutrons = 39 − 19 = ==20==.' },
+    { q: 'Isotopes of an element have different numbers of…', o: ['protons', 'neutrons', 'electrons', 'outer electrons'], a: 1, w: 'Same protons and electrons, different ==neutrons==.' },
+    { q: 'What is the electronic configuration of magnesium (proton number 12)?', o: ['2,8,2', '2,10', '2,2,8', '8,2,2'], a: 0, w: '12 electrons: 2 + 8 + 2 = ==2,8,2==.' },
+    { q: 'An element has the configuration 2,8,6. Which group is it in?', o: ['Group II', 'Group III', 'Group VI', 'Group VIII'], a: 2, w: '6 outer electrons → ==Group VI== (it is sulfur).' },
+    { q: 'Going down Group I, the reactivity…', o: ['increases', 'decreases', 'stays the same', 'goes up then down'], a: 0, w: 'Group I: ==reactivity increases down the group==.' },
+    { q: 'Going down Group VII, the reactivity…', o: ['increases', 'decreases', 'stays the same', 'goes up then down'], a: 1, w: 'Halogens: ==reactivity decreases down the group==. Opposite to Group I.' },
+    { q: 'Argon is used in light bulbs because it is…', o: ['very dense', 'a good conductor', 'unreactive', 'coloured'], a: 2, w: 'Noble gases are ==unreactive==, so the hot filament does not burn.' },
+    { q: 'Sodium reacts with water. The products are…', o: ['sodium oxide + hydrogen', 'sodium hydroxide + hydrogen', 'sodium hydroxide + oxygen', 'sodium chloride + water'], a: 1, w: 'Group I metal + water → ==metal hydroxide + hydrogen==.' }
+  ],
+  exam: [
+    { q: 'Give the relative mass and relative charge of a proton, a neutron and an electron.', m: 4,
+      p: ['Proton: mass ==1==, charge ==+1==', 'Neutron: mass ==1==, charge ==0==', 'Electron: charge ==−1==', 'Electron: mass ==1/1840 (negligible)=='] },
+    { q: 'What are isotopes? Explain why isotopes of an element have the same chemical properties.', m: 3,
+      p: ['Atoms with the ==same number of protons== (same element)…', '…but a ==different number of neutrons==.', 'Same ==number of outer electrons== / same electronic configuration, so same chemical properties.'] },
+    { q: 'An atom of sulfur is ³²₁₆S. State the number of protons, neutrons and electrons, and give its electronic configuration.', m: 4,
+      p: ['Protons = ==16==', 'Neutrons = 32 − 16 = ==16==', 'Electrons = ==16==', 'Configuration ==2,8,6=='] },
+    { q: 'Boron is 20% boron-10 and 80% boron-11. Calculate the relative atomic mass of boron.', m: 3,
+      p: ['Ar = ==(10 × 20 + 11 × 80) ÷ 100==', '= 1080 ÷ 100', '= ==10.8=='] },
+    { q: 'Chlorine gas is bubbled through potassium bromide solution. Describe what is seen, explain why, and write a word or symbol equation.', m: 3,
+      p: ['Solution turns ==orange / brown== (bromine forms).', 'Chlorine is ==more reactive== than bromine, so it ==displaces== it.', 'chlorine + potassium bromide → potassium chloride + bromine (==Cl₂ + 2KBr → 2KCl + Br₂==)'] },
+    { q: 'Explain why noble gases are unreactive.', m: 2,
+      p: ['They have a ==full outer shell== of electrons.', 'They do ==not need to lose, gain or share== electrons.'] },
+    { q: 'Potassium reacts more vigorously with water than sodium. Explain why, using the structure of the atoms.', m: 3,
+      p: ['Potassium atom has ==more shells== (is larger).', 'The outer electron is ==further from the nucleus== (more shielding).', '==Weaker attraction==, so the outer electron is ==lost more easily==.'] }
+  ]
+},
+
+bonding: {
+  code: 'Ch 5', name: 'Chemical bonding and structure',
+  lede: 'Two big ideas: ionic (transfer of electrons) and covalent (sharing). Then link each structure to its properties.',
+  learn: [
+    { h: 'Forming ions', list: ['Atoms ==lose or gain electrons== to get a ==full outer shell==.', '==Metals lose== electrons and form ==positive ions==. ==Non-metals gain== electrons and form ==negative ions==.', 'Ion charge from the group:'],
+      table: [['Group','I','II','III','V','VI','VII'],['Electrons','lose 1','lose 2','lose 3','gain 3','gain 2','gain 1'],['Ion charge','+1','+2','+3','−3','−2','−1']] },
+    { h: 'Ionic bonding', list: ['Between a ==metal and a non-metal==.', 'Electrons are ==transferred== from the metal atom to the non-metal atom.', 'The oppositely charged ions are held together by ==strong electrostatic attraction==. This is the ionic bond.', 'Forms a ==giant ionic lattice==: a regular arrangement of positive and negative ions.'] },
+    { h: 'Properties of ionic compounds', list: ['==High melting and boiling points==: ==lots of energy== is needed to overcome the ==strong electrostatic forces== between ions.', '==Conduct electricity when molten or dissolved in water==: the ==ions are free to move==.', '==Do not conduct when solid==: the ions are ==held in fixed positions==.', 'Usually soluble in water.'] },
+    { h: 'Covalent bonding', list: ['Between ==non-metal atoms==.', 'Atoms ==share pairs of electrons== so each gets a full outer shell.', 'A covalent bond is a ==shared pair of electrons==.', 'Single bonds: H₂, Cl₂, HCl, H₂O, CH₄, NH₃. Double bonds: O₂ (O=O), CO₂ (O=C=O).'] },
+    { h: 'Simple molecular substances', list: ['==Low melting and boiling points==: only ==weak intermolecular forces== between molecules need to be overcome. The covalent bonds inside the molecules do ==not== break.', '==Do not conduct electricity==: ==no ions and no free electrons==.', 'Usually gases or liquids at room temperature (water, methane, chlorine).'] },
+    { h: 'Giant covalent structures', list: ['==Diamond==: each carbon atom is ==covalently bonded to 4 others==. ==Very hard==, very high melting point, ==does not conduct==. Used in ==cutting tools==.', '==Graphite==: each carbon is bonded to ==3 others== in ==layers==. ==Weak forces between layers== let them ==slide==: soft and slippery, used as a ==lubricant== and in pencils.', 'Graphite has one ==delocalised (free) electron== per carbon atom, so it ==conducts electricity==. Used for ==electrodes==.', '==Silicon(IV) oxide (sand)== has a structure like diamond: hard, high melting point.'] },
+    { h: 'Metallic bonding', list: ['A lattice of ==positive metal ions== in a ==“sea” of delocalised electrons==.', 'Electrons are ==free to move==, so metals are ==good conductors== of electricity and heat.', 'Layers of ions can ==slide== over each other, so metals are ==malleable== and ==ductile==.'] },
+    { h: 'Writing formulae of ionic compounds', list: ['Total ==positive charge must equal total negative charge==.', 'Use ==brackets== when you need more than one polyatomic ion: Ca(OH)₂, (NH₄)₂SO₄.'],
+      table: [['Polyatomic ion','Formula'],['hydroxide','OH⁻'],['nitrate','NO₃⁻'],['sulfate','SO₄²⁻'],['carbonate','CO₃²⁻'],['ammonium','NH₄⁺']], f: ['Mg²⁺ + Cl⁻  →  MgCl₂', 'Al³⁺ + O²⁻  →  Al₂O₃'] }
+  ],
+  mistakes: ['Saying ionic compounds conduct when ==solid==. Only when ==molten or dissolved==.', 'Saying simple molecules melt easily because “covalent bonds are weak”. It is the ==intermolecular forces== that are weak.', 'Forgetting the ==square brackets and charges== on ions in dot-and-cross diagrams.', 'Saying graphite conducts because of “free ions”. It has ==delocalised electrons==.', 'Writing CaOH₂ instead of ==Ca(OH)₂==.', 'Drawing shared electrons outside the overlap. Shared pairs go ==in the overlap==.'],
+  diagrams: [
+    { svg: svgNaCl, cap: 'Ionic bonding in sodium chloride. Sodium’s outer electron (×) moves to chlorine. Each ion now has a full outer shell.' },
+    { svg: svgCov1, cap: 'Covalent bonding: shared pairs sit where the shells overlap. Draw outer shells only.' },
+    { svg: svgCov2, cap: 'Methane and ammonia. Hydrogen holds 2 electrons; the central atom holds 8.' },
+    { svg: svgCarbon, cap: 'Two giant covalent forms of carbon.' }
+  ],
+  worked: [
+    { q: 'Describe, in terms of electrons, how magnesium oxide is formed.', prose: true,
+      s: [['Magnesium (2,8,2)','==Loses 2 electrons== → ==Mg²⁺== (2,8)'],['Oxygen (2,6)','==Gains 2 electrons== → ==O²⁻== (2,8)'],['Bond','Oppositely charged ions are held by ==strong electrostatic attraction=='],['Formula','MgO']] },
+    { q: 'Work out the formula of aluminium oxide.',
+      s: [['Ions','Al³⁺ and O²⁻'],['Balance the charges','2 × Al³⁺ = +6 and 3 × O²⁻ = −6'],['Formula','Al₂O₃']] },
+    { q: 'Work out the formula of calcium hydroxide.',
+      s: [['Ions','Ca²⁺ and OH⁻'],['Balance the charges','1 × Ca²⁺ = +2, needs 2 × OH⁻ = −2'],['Brackets round the polyatomic ion','Ca(OH)₂']] },
+    { q: 'Sodium chloride melts at 801 °C but hydrogen chloride melts at −114 °C. Explain the difference.', prose: true,
+      s: [['Sodium chloride','==Giant ionic lattice== with ==strong electrostatic forces== between ions'],['…so','==Lots of energy== needed to break them: high melting point'],['Hydrogen chloride','==Simple molecules== with ==weak intermolecular forces=='],['…so','==Little energy== needed: low melting point']] },
+    { q: 'Explain why graphite conducts electricity but diamond does not.', prose: true,
+      s: [['Graphite','Each carbon uses ==3 electrons== in bonds; the 4th is ==delocalised=='],['…so','These electrons are ==free to move== and carry charge'],['Diamond','Each carbon uses ==all 4 outer electrons== in covalent bonds'],['…so','==No free electrons==: it does not conduct']] },
+    { q: 'Substance X melts at 1080 °C. It does not conduct as a solid, but conducts when molten. What type of structure does it have?', prose: true,
+      s: [['High melting point','strong forces: a ==giant structure=='],['Conducts only when molten','==ions== become free to move'],['Conclusion','==Giant ionic lattice==']] }
+  ],
+  drill: 'bonding',
+  quiz: [
+    { q: 'Ionic bonding happens between…', o: ['two non-metals', 'a metal and a non-metal', 'two metals', 'noble gases'], a: 1, w: 'Ionic: ==metal + non-metal==. Covalent: non-metals only.' },
+    { q: 'Which ion does sodium form?', o: ['Na⁺', 'Na⁻', 'Na²⁺', 'Na²⁻'], a: 0, w: 'Group I: loses 1 electron → ==Na⁺==.' },
+    { q: 'A covalent bond is…', o: ['a transfer of electrons', 'a shared pair of electrons', 'an attraction between ions', 'a sea of electrons'], a: 1, w: 'Covalent bond = ==shared pair of electrons==.' },
+    { q: 'Ionic compounds conduct electricity when…', o: ['solid', 'molten or dissolved', 'cold', 'never'], a: 1, w: 'Ions must be ==free to move==: ==molten or in solution==.' },
+    { q: 'Simple molecular substances have low boiling points because…', o: ['covalent bonds are weak', 'intermolecular forces are weak', 'they have no electrons', 'ions are free'], a: 1, w: 'Only the ==weak intermolecular forces== are overcome. The covalent bonds stay intact.' },
+    { q: 'The formula of magnesium chloride is…', o: ['MgCl', 'Mg₂Cl', 'MgCl₂', 'Mg₂Cl₃'], a: 2, w: 'Mg²⁺ needs two Cl⁻ → ==MgCl₂==.' },
+    { q: 'Graphite is used as a lubricant because…', o: ['it conducts', 'its layers slide over each other', 'it is very hard', 'it has a high melting point'], a: 1, w: '==Weak forces between layers== let them ==slide==.' },
+    { q: 'How many covalent bonds are in one methane (CH₄) molecule?', o: ['1', '2', '4', '8'], a: 2, w: 'Carbon shares one pair with each of ==4== hydrogen atoms.' },
+    { q: 'The formula of sodium sulfate is…', o: ['NaSO₄', 'Na₂SO₄', 'Na(SO₄)₂', 'Na₂S'], a: 1, w: 'Na⁺ and SO₄²⁻ → two Na⁺ needed → ==Na₂SO₄==. Na₂S is sodium sulfide.' }
+  ],
+  exam: [
+    { q: 'Describe, in terms of electrons, how sodium and chlorine atoms form sodium chloride.', m: 4,
+      p: ['The sodium atom ==loses one electron== (its outer electron).', 'The chlorine atom ==gains one electron==.', 'Forms ==Na⁺== and ==Cl⁻== ions with ==full outer shells==.', 'Oppositely charged ions are held by ==strong electrostatic attraction==.'] },
+    { q: 'Solid sodium chloride does not conduct electricity, but molten sodium chloride does. Explain why.', m: 3,
+      p: ['In the solid, ions are in ==fixed positions== / cannot move.', 'When molten, the ==ions are free to move==.', 'Moving ions ==carry the charge== (current).'] },
+    { q: 'Draw a dot-and-cross diagram for a water molecule, showing outer shells only.', m: 3,
+      p: ['==Two shared pairs==: one between O and each H.', '==Two lone pairs== on the oxygen (8 electrons around O in total).', 'Each hydrogen has ==2 electrons== in its shell.'] },
+    { q: 'Diamond and graphite are both made of carbon. Explain why diamond is very hard and why graphite conducts electricity.', m: 4,
+      p: ['Diamond: each carbon forms ==4 strong covalent bonds==…', '…in a ==giant structure==, so it is very hard.', 'Graphite: each carbon bonded to ==3==, leaving ==1 delocalised electron==.', 'Delocalised electrons are ==free to move==, so graphite conducts.'] },
+    { q: 'Write the formulae of: potassium oxide, aluminium chloride, ammonium sulfate.', m: 3,
+      p: ['==K₂O==', '==AlCl₃==', '==(NH₄)₂SO₄=='] },
+    { q: 'Methane is a gas at room temperature. Explain why, in terms of its structure.', m: 2,
+      p: ['Methane is made of ==simple molecules== with ==weak intermolecular forces==.', '==Little energy== is needed to overcome them, so the boiling point is low.'] }
+  ]
+},
+
+displace: {
+  code: 'Ch 6', name: 'Displacement reactions',
+  lede: 'One rule does most of the work: a more reactive metal pushes a less reactive metal out of its compound. Learn the series in order.',
+  learn: [
+    { h: 'The reactivity series', p: ['From most to least reactive. Carbon and hydrogen are included for comparison:'], f: ['K > Na > Ca > Mg > Al > (C) > Zn > Fe > (H) > Cu > Ag > Au'], list: ['Memory aid: ==P==lease ==S==end ==C==harlie’s ==M==onkeys ==A==nd ==C==ute ==Z==ebras ==I==nto ==H==ot ==C==ountries ==S==igned ==G==orillas.'] },
+    { h: 'The displacement rule', list: ['A ==more reactive metal== will ==displace== a ==less reactive metal== from a ==solution of its salt== (or from its ==oxide==).', 'If the metal added is ==less reactive==, there is ==no reaction==.', 'Displacement reactions are ==exothermic==: the temperature ==rises==.'] },
+    { h: 'Zinc in copper(II) sulfate', f: ['zinc + copper(II) sulfate → zinc sulfate + copper', 'Zn + CuSO₄ → ZnSO₄ + Cu'], list: ['Observations: the ==blue colour fades== (becomes colourless).', 'A ==red-brown (pink) solid==, copper, forms on the zinc.', 'The mixture ==gets warmer==.', 'Iron + copper(II) sulfate → iron(II) sulfate + copper: the solution turns from blue to ==pale green==.'] },
+    { h: 'Displacing metals from oxides', list: ['==Thermite reaction==: aluminium + iron(III) oxide → aluminium oxide + iron. Very ==exothermic==; the molten iron is used to ==weld railway lines==.', '==Carbon== can displace (reduce) metals ==below it== from their oxides. Iron, zinc and copper are extracted this way.', 'Metals ==above carbon== (K, Na, Ca, Mg, Al) are extracted by ==electrolysis==.'] },
+    { h: 'Putting metals in order by experiment', list: ['==With cold water==: K and Na react vigorously; Ca steadily; Mg very slowly (but quickly with ==steam==).', '==With dilute acid==: Mg fizzes fast, Zn steadily, Fe slowly; ==Cu, Ag, Au do not react==.', '==Displacement table==: the metal that displaces the ==most== others is the ==most reactive==.'] },
+    { h: 'Redox and ionic equations', list: ['Ionic equation: Zn + Cu²⁺ → Zn²⁺ + Cu (the sulfate ions do not change, so they are left out).', 'Zinc ==loses electrons==: it is ==oxidised==. Copper ions ==gain electrons==: they are ==reduced==.', 'Remember ==OIL RIG==: Oxidation Is Loss, Reduction Is Gain (of electrons).', 'The more reactive metal ==forms ions more easily== (loses electrons more easily).'] },
+    { h: 'Halogen displacement', list: ['Same idea with Group VII: ==chlorine > bromine > iodine==.', 'chlorine + potassium iodide → potassium chloride + iodine (solution turns ==brown==).', 'Iodine cannot displace chlorine or bromine: ==no reaction==.'] }
+  ],
+  mistakes: ['Writing a reaction the wrong way: ==copper + zinc sulfate → no reaction==.', 'Writing “copper is formed” as an observation. Describe what you ==see==: ==red-brown solid==, ==blue colour fades==.', 'Forgetting that iron forms ==iron(II)== sulfate, which is ==pale green==.', 'Forgetting the temperature rise. Displacement is ==exothermic==.', 'Mixing up oxidation and reduction. ==OIL RIG==.'],
+  diagrams: [
+    { svg: svgSeries, cap: 'The reactivity series with the key facts for each part of it.' },
+    { svg: svgDisplace, cap: 'Zinc displacing copper from copper(II) sulfate solution.' }
+  ],
+  worked: [
+    { q: 'A piece of zinc is placed in copper(II) sulfate solution. Predict whether a reaction happens and describe what is seen.', prose: true,
+      s: [['Compare','Zinc is ==above== copper in the reactivity series'],['Prediction','Zinc is ==more reactive==, so it ==displaces copper=='],['Word equation','zinc + copper(II) sulfate → zinc sulfate + copper'],['Observations','==Blue colour fades==; ==red-brown solid== forms on zinc; ==gets warm==']] },
+    { q: 'A piece of copper is placed in zinc sulfate solution. What happens?', prose: true,
+      s: [['Compare','Copper is ==below== zinc'],['Conclusion','Copper is ==less reactive== and ==cannot displace== zinc'],['Result','==No reaction==; no change seen']] },
+    { q: 'Magnesium ribbon is added to silver nitrate solution. Write the word and symbol equations.',
+      s: [['Compare','Mg is far above Ag, so Mg displaces silver'],['Word equation','magnesium + silver nitrate → magnesium nitrate + silver'],['Formulae','Mg²⁺ with NO₃⁻ → Mg(NO₃)₂'],['Balanced','Mg + 2AgNO₃ → Mg(NO₃)₂ + 2Ag']] },
+    { q: 'Metals X, Y and Z are tested. X displaces Y and Z from their salt solutions. Y displaces Z only. Z displaces neither. Put them in order of reactivity.', prose: true,
+      s: [['Most displacements','X displaces 2 metals → ==most reactive=='],['Middle','Y displaces 1 metal'],['None','Z displaces none → ==least reactive=='],['Order','X > Y > Z']] },
+    { q: 'Write the ionic equation for iron reacting with copper(II) sulfate, and say which substance is oxidised.',
+      s: [['Full equation','Fe + CuSO₄ → FeSO₄ + Cu'],['Remove the sulfate (spectator ion)','Fe + Cu²⁺ → Fe²⁺ + Cu'],['Iron loses 2 electrons','Fe is OXIDISED'],['Copper ions gain 2 electrons','Cu²⁺ is REDUCED']] },
+    { q: 'The thermite reaction is used to weld railway lines. Write the equation and explain why it works.', prose: true,
+      s: [['Equation','2Al + Fe₂O₃ → Al₂O₃ + 2Fe'],['Why it happens','Aluminium is ==more reactive== than iron, so it ==displaces iron== from its oxide'],['Why it welds','Very ==exothermic==: the iron produced is ==molten== and fills the gap']] }
+  ],
+  drill: 'displace',
+  quiz: [
+    { q: 'Which metal is the most reactive?', o: ['magnesium', 'zinc', 'potassium', 'copper'], a: 2, w: '==Potassium== is at the top of the series.' },
+    { q: 'An iron nail is put in blue copper(II) sulfate solution. What is seen?', o: ['no change', 'red-brown coating forms; solution turns pale green', 'nail dissolves; solution turns red', 'bubbles of oxygen'], a: 1, w: 'Iron displaces copper (==red-brown== solid); iron(II) sulfate is ==pale green==.' },
+    { q: 'Which pair will NOT react?', o: ['zinc + copper(II) sulfate', 'magnesium + zinc sulfate', 'copper + zinc sulfate', 'iron + copper(II) sulfate'], a: 2, w: 'Copper is ==less reactive== than zinc, so it ==cannot displace== it.' },
+    { q: 'zinc + copper(II) sulfate → ?', o: ['zinc sulfate + copper', 'copper sulfate + zinc', 'zinc oxide + copper', 'no reaction'], a: 0, w: 'The more reactive zinc takes the sulfate: ==zinc sulfate + copper==.' },
+    { q: 'Displacement reactions between metals and salt solutions are usually…', o: ['endothermic', 'exothermic', 'very slow', 'reversible'], a: 1, w: 'They give out heat: ==exothermic==.' },
+    { q: 'In Zn + Cu²⁺ → Zn²⁺ + Cu, zinc is…', o: ['reduced', 'oxidised', 'neutralised', 'unchanged'], a: 1, w: 'Zinc ==loses electrons== → ==oxidised== (OIL RIG).' },
+    { q: 'Which metal can be extracted by heating its oxide with carbon?', o: ['sodium', 'aluminium', 'iron', 'magnesium'], a: 2, w: 'Only metals ==below carbon==, like ==iron==.' },
+    { q: 'Metal X displaces copper from copper(II) sulfate but does not displace zinc from zinc sulfate. X could be…', o: ['magnesium', 'iron', 'silver', 'potassium'], a: 1, w: 'X is between zinc and copper: ==iron==.' },
+    { q: 'Chlorine water is added to potassium iodide solution. The solution…', o: ['stays colourless', 'turns brown', 'turns blue', 'turns green'], a: 1, w: 'Chlorine displaces ==iodine==, which makes the solution ==brown==.' }
+  ],
+  exam: [
+    { q: 'Zinc powder is added to blue copper(II) sulfate solution. (a) Give two observations. (b) Write a word equation. (c) Explain why the reaction happens.', m: 4,
+      p: ['The ==blue colour fades== / solution becomes colourless.', '==Red-brown solid== forms / the mixture ==gets warm==.', 'zinc + copper(II) sulfate → ==zinc sulfate + copper==', 'Zinc is ==more reactive== than copper, so it ==displaces== it.'] },
+    { q: 'Metal P displaces Q and R from their salt solutions. Metal Q displaces R but not P. Metal R displaces neither. Put P, Q and R in order of reactivity and explain your order.', m: 3,
+      p: ['Order: ==P > Q > R==', 'P displaces ==both others==, so it is the ==most reactive==.', 'R displaces ==neither==, so it is the ==least reactive==.'] },
+    { q: 'Explain why copper does not react with iron(II) sulfate solution.', m: 2,
+      p: ['Copper is ==less reactive== than iron (lower in the series).', 'A less reactive metal ==cannot displace== a more reactive one.'] },
+    { q: 'Iron reacts with copper(II) sulfate. Write the balanced equation and the ionic equation. State which species is oxidised and which is reduced.', m: 4,
+      p: ['==Fe + CuSO₄ → FeSO₄ + Cu==', '==Fe + Cu²⁺ → Fe²⁺ + Cu==', 'Iron ==loses electrons==: ==oxidised==.', 'Cu²⁺ ==gains electrons==: ==reduced==.'] },
+    { q: 'In the thermite reaction, aluminium reacts with iron(III) oxide. Explain why the reaction happens and give one use.', m: 3,
+      p: ['Aluminium is ==more reactive== than iron…', '…so it ==displaces / removes oxygen from== iron(III) oxide.', 'Use: ==welding railway lines== (produces molten iron).'] }
+  ]
+},
+
+salts: {
+  code: 'Ch 7', name: 'Salts',
+  lede: 'Learn the four general equations, the solubility rules and the two preparation methods. Method questions carry big marks.',
+  learn: [
+    { h: 'Acids, bases and alkalis', list: ['==Acids== have ==pH below 7== and produce ==H⁺ ions== in water.', '==Alkalis== have ==pH above 7== and produce ==OH⁻ ions== in water. pH 7 is ==neutral==.', 'A ==base== is a metal oxide or hydroxide that reacts with an acid. An ==alkali is a soluble base==.', 'Indicators: ==litmus== red in acid, blue in alkali. ==Methyl orange== red in acid, yellow in alkali. ==Phenolphthalein== colourless in acid, pink in alkali.'] },
+    { h: 'What is a salt?', list: ['A salt forms when the ==hydrogen of an acid== is ==replaced by a metal== (or ammonium).', 'The first part of the name comes from the metal; the second from the acid:'],
+      table: [['Acid','Formula','Salt name'],['hydrochloric acid','HCl','…chloride'],['sulfuric acid','H₂SO₄','…sulfate'],['nitric acid','HNO₃','…nitrate']] },
+    { h: 'The four general equations', f: ['acid + metal → salt + hydrogen', 'acid + base → salt + water', 'acid + alkali → salt + water', 'acid + carbonate → salt + water + carbon dioxide'], list: ['Neutralisation as an ionic equation: ==H⁺ + OH⁻ → H₂O==.'] },
+    { h: 'Gas tests', list: ['==Hydrogen==: a ==lighted splint== gives a ==squeaky pop==.', '==Carbon dioxide==: bubble through ==limewater==, which turns ==milky (cloudy)==.'] },
+    { h: 'Solubility rules', table: [['Type of salt','Soluble?'],['sodium, potassium, ammonium salts','all soluble'],['nitrates','all soluble'],['chlorides','soluble, except silver and lead'],['sulfates','soluble, except barium, calcium and lead'],['carbonates','insoluble, except sodium, potassium, ammonium'],['hydroxides','insoluble, except sodium, potassium, ammonium (calcium slightly)']] },
+    { h: 'Method A: soluble salt from an insoluble solid', p: ['Use when the solid is a ==metal, insoluble base or carbonate== (e.g. copper(II) oxide + sulfuric acid → copper(II) sulfate).'],
+      list: ['Add the solid to ==warm acid== and stir until it is ==in excess== (no more dissolves). This makes sure ==all the acid is used up==.', '==Filter== to remove the excess solid.', '==Heat the filtrate== to evaporate some water until it is ==saturated== (crystals start to form on a cold glass rod).', 'Leave to ==cool and crystallise==.', '==Filter== off the crystals, ==wash== with a little cold water and ==dry== between filter papers.'] },
+    { h: 'Method B: soluble salt from acid + alkali (titration)', p: ['Use for ==sodium, potassium and ammonium== salts, where both reactants are ==solutions==. An excess cannot be filtered off.'],
+      list: ['Put a measured volume of alkali in a ==conical flask== with an ==indicator==.', 'Add acid from a ==burette== until the indicator ==just changes colour==. Record the volume.', 'Repeat with the ==same volumes without the indicator==.', '==Evaporate and crystallise== as in Method A.'] },
+    { h: 'Method C: insoluble salt by precipitation', list: ['==Mix solutions of two soluble salts== that contain the ions you need.', 'The insoluble salt forms as a ==precipitate==.', '==Filter==, ==wash== the residue with ==distilled water==, then ==dry== it.', 'Example: silver nitrate + sodium chloride → ==silver chloride== (white precipitate) + sodium nitrate.', 'Example: barium chloride + sodium sulfate → ==barium sulfate== (white precipitate) + sodium chloride.'] },
+    { h: 'Hydrated salts', list: ['Crystals contain ==water of crystallisation== (e.g. CuSO₄·5H₂O).', 'Heating ==blue hydrated copper(II) sulfate== gives ==white anhydrous copper(II) sulfate== + water.', 'Adding water turns it ==blue again==: this is a ==test for water==.'] }
+  ],
+  mistakes: ['Not adding the solid ==in excess==, so acid is left in the salt.', '==Heating to dryness==. Stop when crystals start to form, then cool.', 'Mixing up ==filtrate== (liquid through the paper) and ==residue== (solid left on it).', 'Naming the salt wrongly: sulfuric acid gives a ==sulfate== (not a sulfide).', 'Forgetting ==carbon dioxide== in acid + carbonate reactions.', 'Using the limewater test for hydrogen. Hydrogen = ==squeaky pop==.'],
+  diagrams: [
+    { svg: svgPH, cap: 'The pH scale and universal indicator colours.' },
+    { svg: svgSoluble, cap: 'Method A: making copper(II) sulfate crystals from copper(II) oxide and sulfuric acid.' },
+    { svg: svgPrecip, cap: 'Method C: making an insoluble salt by precipitation.' }
+  ],
+  worked: [
+    { q: 'Zinc reacts with hydrochloric acid. Name the products and describe a test for the gas.',
+      s: [['Type','acid + metal → salt + hydrogen'],['Salt name','hydrochloric → chloride: zinc chloride'],['Word equation','zinc + hydrochloric acid → zinc chloride + hydrogen'],['Gas test','lighted splint → squeaky pop']] },
+    { q: 'Write the word and symbol equations for copper(II) oxide reacting with sulfuric acid.',
+      s: [['Type','acid + base → salt + water'],['Word equation','copper(II) oxide + sulfuric acid → copper(II) sulfate + water'],['Symbol equation','CuO + H₂SO₄ → CuSO₄ + H₂O']] },
+    { q: 'Calcium carbonate reacts with nitric acid. Write the balanced equation and describe what is seen.',
+      s: [['Type','acid + carbonate → salt + water + CO₂'],['Word equation','calcium carbonate + nitric acid → calcium nitrate + water + carbon dioxide'],['Balanced','CaCO₃ + 2HNO₃ → Ca(NO₃)₂ + H₂O + CO₂'],['Observation','fizzing; solid disappears; gas turns limewater milky']] },
+    { q: 'Describe how to make pure, dry crystals of copper(II) sulfate from copper(II) oxide and dilute sulfuric acid.', prose: true,
+      s: [['Step 1','Warm the acid; add copper(II) oxide and stir until ==in excess== (some solid stays)'],['Step 2','==Filter== to remove the excess copper(II) oxide'],['Step 3','==Heat the filtrate== until ==crystals start to form=='],['Step 4','Leave to ==cool==; ==filter== off the crystals and ==dry== between filter papers']] },
+    { q: 'Which method would you use to make barium sulfate? Describe it.', prose: true,
+      s: [['Solubility','Barium sulfate is ==insoluble== (sulfate exception)'],['Method','==Precipitation=='],['Reactants','Mix ==barium chloride solution== with ==sodium sulfate solution=='],['Then','==Filter==, ==wash== with distilled water, ==dry==']] },
+    { q: 'Why is titration used to make sodium chloride from sodium hydroxide and hydrochloric acid?', prose: true,
+      s: [['Both are solutions','The alkali is ==soluble=='],['Problem','An ==excess cannot be removed by filtering=='],['Solution','Titration finds the ==exact volumes== that ==just neutralise== each other']] }
+  ],
+  drill: 'salts',
+  quiz: [
+    { q: 'Which salt forms when magnesium reacts with sulfuric acid?', o: ['magnesium sulfide', 'magnesium sulfate', 'magnesium sulfite', 'magnesium hydroxide'], a: 1, w: 'Sulfuric acid → ==sulfate==.' },
+    { q: 'Which gas is produced when an acid reacts with a metal?', o: ['oxygen', 'carbon dioxide', 'hydrogen', 'chlorine'], a: 2, w: 'acid + metal → salt + ==hydrogen==.' },
+    { q: 'What is the test for carbon dioxide?', o: ['lighted splint pops', 'glowing splint relights', 'limewater turns milky', 'litmus turns blue'], a: 2, w: 'CO₂ turns ==limewater milky==.' },
+    { q: 'acid + carbonate →', o: ['salt + water', 'salt + hydrogen', 'salt + water + carbon dioxide', 'salt + oxygen'], a: 2, w: 'Carbonates also give ==carbon dioxide==.' },
+    { q: 'Why is excess copper(II) oxide added to the acid when making copper(II) sulfate?', o: ['to make it faster', 'to make sure all the acid is used up', 'to change the colour', 'to make bigger crystals'], a: 1, w: 'Excess solid makes sure ==all the acid reacts==; the excess is filtered off.' },
+    { q: 'Which salt is insoluble in water?', o: ['sodium chloride', 'copper(II) sulfate', 'silver chloride', 'potassium nitrate'], a: 2, w: 'Chlorides are soluble ==except silver and lead==.' },
+    { q: 'What could the pH of sodium hydroxide solution be?', o: ['1', '5', '7', '13'], a: 3, w: 'Strong alkali: ==pH 13–14==.' },
+    { q: 'Which ion makes a solution acidic?', o: ['OH⁻', 'H⁺', 'Na⁺', 'Cl⁻'], a: 1, w: 'Acids produce ==H⁺ ions==.' },
+    { q: 'Nitric acid makes salts called…', o: ['nitrides', 'nitrites', 'nitrates', 'nitrogens'], a: 2, w: 'Nitric acid → ==nitrates==.' },
+    { q: 'Water is added to white anhydrous copper(II) sulfate. It turns…', o: ['blue', 'pink', 'green', 'colourless'], a: 0, w: 'White → ==blue==: the test for water.' }
+  ],
+  exam: [
+    { q: 'Describe how you would make pure, dry crystals of zinc sulfate from zinc oxide and dilute sulfuric acid.', m: 5,
+      p: ['Add zinc oxide to ==warm== sulfuric acid until it is ==in excess== (no more dissolves).', '==Filter== to remove the excess zinc oxide.', '==Heat the filtrate== to evaporate water until ==crystals start to form== (saturated).', 'Leave to ==cool== so crystals form.', '==Filter== off the crystals and ==dry== them between filter papers.'] },
+    { q: 'Complete the word equations: (a) magnesium + hydrochloric acid → (b) sodium hydroxide + nitric acid → (c) copper(II) carbonate + sulfuric acid →', m: 3,
+      p: ['==magnesium chloride + hydrogen==', '==sodium nitrate + water==', '==copper(II) sulfate + water + carbon dioxide=='] },
+    { q: 'Describe the tests for hydrogen and for carbon dioxide, with the results.', m: 2,
+      p: ['Hydrogen: ==lighted splint== → ==squeaky pop==.', 'Carbon dioxide: ==limewater== turns ==milky==.'] },
+    { q: 'Lead(II) iodide is insoluble in water. Describe how you would make a dry sample of it.', m: 4,
+      p: ['Mix solutions of ==lead(II) nitrate== and ==potassium iodide== (two soluble salts).', 'A ==yellow precipitate== of lead(II) iodide forms.', '==Filter== the mixture.', '==Wash== the residue with ==distilled water== and ==dry== it.'] },
+    { q: 'Sodium sulfate is made from sodium hydroxide and sulfuric acid by titration. Explain why the excess-solid method cannot be used.', m: 3,
+      p: ['Sodium hydroxide is ==soluble== (both reactants are solutions).', 'An ==excess cannot be removed by filtering==.', 'Titration finds the ==exact volumes== for ==neutralisation==.'] },
+    { q: 'Write the ionic equation for neutralisation and say which ion comes from the acid and which from the alkali.', m: 2,
+      p: ['==H⁺ + OH⁻ → H₂O==', 'H⁺ from the ==acid==; OH⁻ from the ==alkali=='] }
+  ]
+}
+};
+
+/* ---------- drill generators ---------- */
+const sup = q => (q === 1 ? '' : '⁰¹²³⁴⁵⁶⁷⁸⁹'[q]);
+const CAT = [['Na','sodium',1],['K','potassium',1],['Li','lithium',1],['Mg','magnesium',2],['Ca','calcium',2],['Zn','zinc',2],['Cu','copper(II)',2],['Al','aluminium',3],['Fe','iron(III)',3],['NH4','ammonium',1,true]];
+const AN = [['Cl','chloride',1],['Br','bromide',1],['O','oxide',2],['S','sulfide',2],['OH','hydroxide',1,true],['NO3','nitrate',1,true],['SO4','sulfate',2,true],['CO3','carbonate',2,true]];
+const gcd = (a,b) => b ? gcd(b, a % b) : a;
+const part = (sym, n, poly) => n === 1 ? sym : (poly ? `(${sym})${n}` : sym + n);
+const ionStr = (sym, q, sign) => sub(sym) + sup(q) + sign;
+const METALS = [['Mg','magnesium','magnesium'],['Zn','zinc','zinc'],['Fe','iron','iron(II)'],['Pb','lead','lead(II)'],['Cu','copper','copper(II)'],['Ag','silver','silver']];
+const SALTOF = { Mg:'magnesium sulfate', Zn:'zinc sulfate', Fe:'iron(II) sulfate', Pb:'lead(II) nitrate', Cu:'copper(II) sulfate', Ag:'silver nitrate' };
+const ANIONOF = { Mg:'sulfate', Zn:'sulfate', Fe:'sulfate', Pb:'nitrate', Cu:'sulfate', Ag:'nitrate' };
+const choiceItem = (q, correct, wrongs, s) => { const o = shuffle([correct, ...wrongs]); return { kind:'choice', q, choices:o, ans:o.indexOf(correct), s }; };
+
+const DRILLS = {
+  atoms: [
+    () => { const [Z,S,name,A] = pick(EL.slice(1)); const what = pick(['protons','neutrons','electrons']); const ans = what === 'neutrons' ? A - Z : Z;
+      return { kind:'num', q:`An atom of ${name} (${S}) has proton number ${Z} and nucleon number ${A}. How many ${what} does it have?`, ans, tol:0,
+        s:[['Protons = proton number', String(Z)],['Neutrons = nucleon − proton', `${A} − ${Z} = ${A-Z}`],['Electrons = protons (neutral atom)', String(Z)],['Answer', `${ans} ${what}`]] }; },
+    () => { const [S,name,Z,q,sign] = pick([['Na','sodium',11,1,'⁺'],['Mg','magnesium',12,2,'⁺'],['Al','aluminium',13,3,'⁺'],['K','potassium',19,1,'⁺'],['Ca','calcium',20,2,'⁺'],['Li','lithium',3,1,'⁺'],['O','oxide',8,2,'⁻'],['F','fluoride',9,1,'⁻'],['S','sulfide',16,2,'⁻'],['Cl','chloride',17,1,'⁻'],['N','nitride',7,3,'⁻']]);
+      const ans = sign === '⁺' ? Z - q : Z + q;
+      return { kind:'num', q:`How many electrons are in the ${name} ion ${S}${sup(q)}${sign}? (proton number ${Z})`, ans, tol:0,
+        s:[['Atom', `${Z} electrons`],[sign === '⁺' ? `Positive ion: lost ${q}` : `Negative ion: gained ${q}`, sign === '⁺' ? `${Z} − ${q}` : `${Z} + ${q}`],['Answer', `${ans} electrons (configuration ${config(ans).join(',')})`]] }; },
+    () => { const [Z,S,name] = pick(EL); const c = config(Z).join(',');
+      return { kind:'config', q:`Write the electronic configuration of ${name} (proton number ${Z}). Type it like 2,8,1.`, ans:c,
+        s:[['Electrons', String(Z)],['Fill shells: 2, then 8, then 8', c]] }; },
+    () => { const [Z,S,name] = pick(EL.filter(e => e[0] >= 3 && ![10,18].includes(e[0]))); const c = config(Z); const askG = Math.random() < .5; const ans = askG ? c[c.length-1] : c.length;
+      return { kind:'num', q:`${name[0].toUpperCase()+name.slice(1)} has proton number ${Z}. Which ${askG ? 'group' : 'period'} is it in? (type a number)`, ans, tol:0,
+        s:[['Configuration', c.join(',')],['Outer electrons → group', `Group ${ROMAN[c[c.length-1]]} (${c[c.length-1]})`],['Shells → period', `Period ${c.length}`]] }; },
+    () => { const A1 = rint(6,60); const A2 = A1 + pick([1,2]); const p1 = rint(2,18)*5; const ans = (A1*p1 + A2*(100-p1))/100;
+      return { kind:'num', q:`Element X has two isotopes: X-${A1} (${p1}%) and X-${A2} (${100-p1}%). Calculate the relative atomic mass of X.`, ans, tol:0.051,
+        s:[['Formula', `Ar = (${A1} × ${p1} + ${A2} × ${100-p1}) ÷ 100`],['Multiply', `(${A1*p1} + ${A2*(100-p1)}) ÷ 100`],['Answer', `Ar = ${num(ans)}`]] }; }
+  ],
+  bonding: [
+    () => { let c, a; do { c = pick(CAT); a = pick(AN); } while ((c[3] && ['O','S','OH'].includes(a[0])) || (c[2] === 3 && a[0] === 'CO3') || (c[0] === 'Cu' && a[0] === 'S'));
+      const l = c[2]*a[2]/gcd(c[2],a[2]); const nc = l/c[2], na = l/a[2]; const f = part(c[0], nc, c[3]) + part(a[0], na, a[3]);
+      return { kind:'formula', q:`Write the formula of ${c[1]} ${a[1]}. (Type numbers normally, e.g. MgCl2)`, ans:f,
+        s:[['Ions', `${ionStr(c[0],c[2],'⁺')} and ${ionStr(a[0],a[2],'⁻')}`],['Balance the charges', `${nc} × (+${c[2]}) = +${l}   and   ${na} × (−${a[2]}) = −${l}`],['Formula', sub(f)]] }; },
+    () => { const [nm,g] = pick([['lithium',1],['sodium',1],['potassium',1],['magnesium',2],['calcium',2],['aluminium',3],['nitrogen',5],['oxygen',6],['sulfur',6],['fluorine',7],['chlorine',7],['bromine',7]]);
+      const metal = g <= 3; const q = metal ? g : 8 - g; const correct = q + (metal ? '+' : '−');
+      const all = ['1+','2+','3+','1−','2−','3−'].filter(x => x !== correct);
+      return choiceItem(`What is the charge on the ion formed by ${nm} (Group ${ROMAN[g]})?`, correct, shuffle(all).slice(0,3),
+        [['Outer electrons', String(g)],[metal ? 'Metal: loses them' : 'Non-metal: gains to reach 8', metal ? `loses ${g}` : `gains ${8-g}`],['Charge', correct]]); },
+    () => { const [nm,t] = pick([['sodium chloride','ionic'],['water','covalent'],['magnesium oxide','ionic'],['methane','covalent'],['copper','metallic'],['carbon dioxide','covalent'],['calcium chloride','ionic'],['ammonia','covalent'],['iron','metallic'],['potassium bromide','ionic'],['hydrogen chloride','covalent'],['aluminium','metallic'],['lithium oxide','ionic'],['chlorine','covalent']]);
+      const why = { ionic:'metal + non-metal → electrons transferred', covalent:'non-metals only → electrons shared', metallic:'metal only → positive ions in a sea of electrons' };
+      return choiceItem(`What type of bonding is found in ${nm}?`, t, ['ionic','covalent','metallic'].filter(x => x !== t),
+        [['Look at the elements', why[t]],['Answer', t]]); },
+    () => { const [d,t,why] = pick([
+        ['melts at 801 °C; conducts when molten or dissolved, but not when solid','giant ionic','high mp + conducts only when ions can move'],
+        ['melts at −182 °C; does not conduct in any state','simple molecular','low mp: weak intermolecular forces; no ions or free electrons'],
+        ['melts at over 3500 °C; does not conduct; insoluble; very hard','giant covalent','very high mp: many strong covalent bonds; no free electrons'],
+        ['melts at 1085 °C; conducts when solid and liquid; malleable','metallic','conducts as a solid: delocalised electrons'],
+        ['boils at 100 °C; does not conduct (pure)','simple molecular','low bp: weak intermolecular forces'],
+        ['melts at 2852 °C; conducts only when molten','giant ionic','very high mp + conducts only when molten']]);
+      return choiceItem(`A substance ${d}. What is its structure?`, t, ['giant ionic','simple molecular','giant covalent','metallic'].filter(x => x !== t),
+        [['Clues', why],['Answer', t]]); }
+  ],
+  displace: [
+    () => { const i = rint(0, METALS.length-1); let j; do { j = rint(0, METALS.length-1); } while (j === i);
+      const [S, nm] = METALS[i]; const salt = SALTOF[METALS[j][0]]; const yes = i < j;
+      const prod = `${METALS[i][2]} ${ANIONOF[METALS[j][0]]} + ${METALS[j][1]}`;
+      return choiceItem(`Will ${nm} react with ${salt} solution?`, yes ? 'Yes' : 'No', [yes ? 'No' : 'Yes'],
+        [['Order', 'Mg > Zn > Fe > Pb > Cu > Ag'],['Compare', `${nm} is ${yes ? 'MORE' : 'LESS'} reactive than ${METALS[j][1]}`],[yes ? 'Reaction' : 'Result', yes ? `${nm} + ${salt} → ${prod}` : 'No reaction: cannot displace a more reactive metal']]); },
+    () => { let i, j; do { i = rint(0, METALS.length-2); j = rint(i+1, METALS.length-1); } while (false);
+      const nm = METALS[i][1], salt = SALTOF[METALS[j][0]]; const an = ANIONOF[METALS[j][0]];
+      const correct = `${METALS[i][2]} ${an} + ${METALS[j][1]}`;
+      return choiceItem(`Complete: ${nm} + ${salt} → ?`, correct, [`${salt} + ${nm}`, `${METALS[i][2]} oxide + ${METALS[j][1]}`, 'no reaction'],
+        [['Compare', `${nm} is more reactive than ${METALS[j][1]}`],['The more reactive metal takes the ' + an, correct]]); },
+    () => { const H = [['chlorine','chloride'],['bromine','bromide'],['iodine','iodide']]; const i = rint(0,2); let j; do { j = rint(0,2); } while (j === i);
+      const yes = i < j; const col = { bromine:'orange', iodine:'brown' };
+      return choiceItem(`${H[i][0][0].toUpperCase()+H[i][0].slice(1)} is added to potassium ${H[j][1]} solution. Is there a reaction?`, yes ? 'Yes' : 'No', [yes ? 'No' : 'Yes'],
+        [['Order in Group VII', 'chlorine > bromine > iodine'],['Compare', `${H[i][0]} is ${yes ? 'MORE' : 'LESS'} reactive than ${H[j][0]}`],[yes ? 'Reaction' : 'Result', yes ? `${H[i][0]} + potassium ${H[j][1]} → potassium ${H[i][1]} + ${H[j][0]} (solution turns ${col[H[j][0]]})` : 'No reaction']]); },
+    () => { const [m, ox] = pick([['sodium','sodium oxide'],['aluminium','aluminium oxide'],['magnesium','magnesium oxide'],['zinc','zinc oxide'],['iron','iron(III) oxide'],['copper','copper(II) oxide'],['calcium','calcium oxide']]);
+      const carbon = ['zinc','iron','copper'].includes(m); const correct = carbon ? 'heating with carbon' : 'electrolysis';
+      return choiceItem(`How is ${m} extracted from ${ox}?`, correct, [carbon ? 'electrolysis' : 'heating with carbon'],
+        [['Position', `${m} is ${carbon ? 'BELOW' : 'ABOVE'} carbon in the series`],['Answer', correct]]); }
+  ],
+  salts: [
+    () => { const [acid, an] = pick([['hydrochloric acid','chloride'],['sulfuric acid','sulfate'],['nitric acid','nitrate']]);
+      const [re, cat] = pick([['magnesium','magnesium'],['zinc','zinc'],['copper(II) oxide','copper(II)'],['sodium hydroxide','sodium'],['calcium carbonate','calcium'],['zinc oxide','zinc'],['potassium hydroxide','potassium'],['magnesium carbonate','magnesium']]);
+      const wrongAn = { chloride:'chlorate', sulfate:'sulfide', nitrate:'nitride' }[an];
+      const otherAn = ['chloride','sulfate','nitrate'].filter(x => x !== an);
+      return choiceItem(`Name the salt formed when ${re} reacts with ${acid}.`, `${cat} ${an}`, [`${cat} ${wrongAn}`, `${cat} ${pick(otherAn)}`, `hydrogen ${an}`],
+        [['Metal part', cat],['Acid part', `${acid} → ${an}`],['Salt', `${cat} ${an}`]]); },
+    () => { const [re, kind] = pick([['magnesium','metal'],['zinc','metal'],['iron','metal'],['copper(II) oxide','base'],['zinc oxide','base'],['sodium hydroxide','alkali'],['potassium hydroxide','alkali'],['calcium carbonate','carbonate'],['sodium carbonate','carbonate'],['copper(II) carbonate','carbonate']]);
+      const acid = pick(['hydrochloric acid','sulfuric acid','nitric acid']);
+      const map = { metal:'hydrogen', base:'water', alkali:'water', carbonate:'water + carbon dioxide' };
+      const correct = map[kind];
+      return choiceItem(`${re[0].toUpperCase()+re.slice(1)} reacts with ${acid}. Apart from the salt, what is produced?`, correct, ['hydrogen','water','water + carbon dioxide','oxygen'].filter(x => x !== correct).slice(0,3),
+        [['Type', `${re} is a ${kind}`],['General equation', `acid + ${kind} → salt + ${correct}`]]); },
+    () => { const [s, sol, rule] = pick([['sodium carbonate',true,'all sodium salts are soluble'],['calcium carbonate',false,'carbonates are insoluble (except Na, K, NH₄)'],['silver chloride',false,'chlorides are soluble except silver and lead'],['barium sulfate',false,'sulfates are soluble except barium, calcium, lead'],['copper(II) sulfate',true,'most sulfates are soluble'],['potassium nitrate',true,'all nitrates are soluble'],['zinc nitrate',true,'all nitrates are soluble'],['magnesium carbonate',false,'carbonates are insoluble (except Na, K, NH₄)'],['ammonium chloride',true,'all ammonium salts are soluble'],['lead(II) chloride',false,'chlorides are soluble except silver and lead'],['copper(II) hydroxide',false,'hydroxides are insoluble (except Na, K, NH₄)'],['lead(II) nitrate',true,'all nitrates are soluble'],['calcium sulfate',false,'sulfates are soluble except barium, calcium, lead'],['sodium hydroxide',true,'sodium compounds are soluble']]);
+      return choiceItem(`Is ${s} soluble or insoluble in water?`, sol ? 'soluble' : 'insoluble', [sol ? 'insoluble' : 'soluble'],
+        [['Rule', rule],['Answer', sol ? 'soluble' : 'insoluble']]); },
+    () => { const A = 'excess solid + acid, filter, crystallise', T = 'titration', P = 'precipitation';
+      const [s, m, why] = pick([['copper(II) sulfate from copper(II) oxide', A, 'soluble salt; insoluble base can be added in excess'],['zinc chloride from zinc', A, 'soluble salt; metal added in excess'],['magnesium sulfate from magnesium carbonate', A, 'soluble salt; insoluble carbonate in excess'],['sodium chloride', T, 'sodium salt: acid + alkali, both solutions'],['potassium nitrate', T, 'potassium salt: acid + alkali, both solutions'],['ammonium sulfate', T, 'ammonium salt: acid + alkali solution'],['barium sulfate', P, 'insoluble salt'],['silver chloride', P, 'insoluble salt'],['lead(II) iodide', P, 'insoluble salt']]);
+      return choiceItem(`Which method would you use to make ${s}?`, m, [A,T,P].filter(x => x !== m),
+        [['Reason', why],['Method', m]]); }
+  ]
+};
+
+let MOCK = [['atoms',2],['atoms',4],['atoms',5],['bonding',0],['bonding',1],['bonding',4],['displace',0],['displace',1],['salts',0],['salts',1]];
+const MOCK_N = MOCK.length;
+function drawMock(){
+  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
+  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
+  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
+  store.mock = MOCK; save();
+}
+if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+
+/* ---------- state & rendering ---------- */
+const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['mock','','Mini mock']];
+let cur = 'start', sub_ = 'learn';
+try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(([k,c,n]) => `<button class="tab" role="tab" aria-selected="${k===cur}" data-tab="${k}">${c ? `<small>${c}</small>` : ''}${n}</button>`).join('');
+}
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]'); if (!b) return;
+  cur = b.dataset.tab; sub_ = 'learn'; renderTabs(); render(); window.scrollTo(0,0);
+});
+function examScore(key, list){ let got = 0, tot = 0; list.forEach((q,i) => { tot += q.m; got += Math.min(q.m, (store.ticks[key+'-'+i] || []).length); }); return [got, tot]; }
+function render(){
+  const v = document.getElementById('view');
+  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
+  bindView();
+}
+function renderStart(){
+  const rows = ['atoms','bonding','displace','salts'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+    return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
+      <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Chemistry: the whole syllabus</h2>
+  <p class="lede">The Term 1 chapters are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the mini mock.</p></div>
+  <div class="stack" style="margin-top:20px">
+  <div class="card"><h3>How to use each chapter</h3><div class="plan">
+    <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords examiners look for. Use them in your answers.</div>
+    <div><b>2 · Diagrams</b>Practise drawing these from memory, especially dot-and-cross diagrams.</div>
+    <div><b>3 · Worked</b>Try the question first, then tap <i>Next step</i> to check each line.</div>
+    <div><b>4 · Drill</b>Fresh questions every time: particles, formulae, reactions, salts. Aim for 5 in a row.</div>
+    <div><b>5 · Quiz</b>Quick multiple-choice checks with instant feedback.</div>
+    <div><b>6 · Exam Qs</b>Write your answer on paper first. Then open the mark scheme and tick the points you wrote.</div></div></div>
+  <div class="grid2">
+    <div class="card"><h3>Your progress</h3>${rows}<p class="note">Saved on this device only.</p></div>
+    <div class="card"><h3>Command words</h3><dl class="cw">
+      <dt>State</dt><dd>A short fact. No explanation needed.</dd>
+      <dt>Describe</dt><dd>Say what you see or the steps, in order.</dd>
+      <dt>Explain</dt><dd>Say <b>why</b>. Use “because” and keywords.</dd>
+      <dt>Predict</dt><dd>Use a pattern or rule (e.g. the reactivity series).</dd>
+      <dt>Suggest</dt><dd>Apply what you know to a new situation.</dd></dl></div></div>
+  <div class="card"><h3>Equations: rules that save marks</h3><ul>
+    <li>Write the ==word equation== first, then the formulae.</li>
+    <li>Never change a formula to balance. Only put ==big numbers in front==.</li>
+    <li>Observations are what you ==see==: colour change, fizzing, solid forms, temperature rise.</li></ul></div>
+  <div class="card"><h3>Real past papers</h3><p>After finishing a chapter, try real Cambridge questions from the Chemistry 0620 papers and check the mark schemes:
+    <a href="https://pastpapers.papacambridge.com/papers/caie/igcse-chemistry-0620" target="_blank" rel="noopener">PapaCambridge 0620</a> ·
+    <a href="https://pastpapersacademy.com/past-papers/" target="_blank" rel="noopener">Past Papers Academy</a>.</p></div>
+  </div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
+}
+function cardHTML(card){
+  const tbl = card.table ? `<div class="tbl"><table><thead><tr>${card.table[0].map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${card.table.slice(1).map(r => `<tr>${r.map(c => `<td>${fmt(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '';
+  return `<div class="card"><h3>${card.h}</h3>${(card.p||[]).map(p=>`<p>${fmt(p)}</p>`).join('')}${card.f?`<div class="formula">${card.f.map(x=>`<span>${x}</span>`).join('')}</div>`:''}${card.list?`<ul>${card.list.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul>`:''}${tbl}</div>`;
+}
+/* ---------- explanatory worked examples: Key idea, why lines, exam tip, live working table ---------- */
+/* e.r rows: [label, value, step]. step -1 = given in the question; otherwise the step at which the row fills in. */
+function wkBoard(e, k){
+  const rows = e.r.map(([lab, val, at]) => { const on = at <= k;
+    return `<tr class="${at === k && k >= 0 ? 'cur' : ''}"><th>${lab}</th><td class="${on ? (at >= 0 ? 'fill' : '') : 'q'}">${on ? fmt(val) : '?'}</td></tr>`; }).join('');
+  return `<table class="wb">${rows}</table>${e.f ? `<p class="bnote">${fmt(e.f)}</p>` : ''}`;
+}
+function enhance(ENH){
+  for (const key in ENH) CH[key].worked.forEach((w, i) => { const e = ENH[key][i];
+    if (!e || e.why.length !== w.s.length) throw new Error('worked note mismatch: ' + key + ' ' + i);
+    w.intro = e.intro; w.tip = e.tip; w.board0 = () => wkBoard(e, -1);
+    w.s.forEach((st, j) => { st[2] = e.why[j]; st[3] = () => wkBoard(e, j); }); });
+}
+function updateBoard(wk, items){
+  const bi = wk.querySelector('.board-in'); if (!bi) return;
+  const w = CH[cur].worked[+wk.dataset.worked]; let html = w.board0();
+  items.forEach((li, j) => { if (!li.hidden && w.s[j][3]) html = w.s[j][3](); });
+  bi.innerHTML = html;
+  items.forEach(li => li.classList.remove('now')); const vis = items.filter(li => !li.hidden); if (vis.length) vis[vis.length-1].classList.add('now');
+}
+enhance({
+atoms: [
+  { intro: 'In ²³₁₁Na the ==bottom== number is the ==proton number== and the ==top== number is the ==nucleon number== (protons + neutrons).', f: 'neutrons = nucleon number − proton number',
+    r: [['Protons','11',0],['Neutrons','23 − 11 = 12',1],['Electrons','11',2],['Configuration','2,8,1',3]],
+    why: ['The bottom number is the proton number.','The top number counts protons plus neutrons, so neutrons = top − bottom.','A neutral atom has the same number of electrons as protons.','Shell 1 holds up to 2, shell 2 up to 8, and the rest go in shell 3. 2 + 8 + 1 = 11.'],
+    tip: 'Check your configuration ==adds up to the number of electrons==.' },
+  { intro: 'The ==outer electrons== give the ==group==. The ==number of shells== gives the ==period==.', f: 'Group = outer electrons. Period = shells.',
+    r: [['Electrons','13',0],['Configuration','2,8,3',1],['Group','III (3 outer electrons)',2],['Period','3 (3 shells)',3]],
+    why: ['A neutral atom has as many electrons as protons.','Fill from the inside: 2, then 8, and what is left goes in the third shell.','The number of outer-shell electrons is the group number.','The number of shells used is the period number.'],
+    tip: 'Group = ==outer electrons==. Period = ==shells==. Do not mix them up.' },
+  { intro: 'A ==positive ion== has ==lost== electrons. The number of ==protons does not change==.', f: 'Mg²⁺ = 2 electrons lost',
+    r: [['Mg atom','12 electrons: 2,8,2',0],['Electrons lost','2',1],['Mg²⁺ electrons','12 − 2 = 10',1],['Ion configuration','2,8',2]],
+    why: ['Start with the neutral atom. Its configuration is 2,8,2.','The 2+ charge means 2 electrons were lost. Subtract. The protons stay at 12.','The outer shell of 2 has gone, leaving a full 2,8 shell like neon.'],
+    tip: 'Metals ==lose== electrons to become positive. Non-metals ==gain== electrons to become negative.' },
+  { intro: 'The ==relative atomic mass== is the ==average== mass of the atoms, ==weighted== by how common each ==isotope== is.', f: 'Ar = (mass × % + mass × %) ÷ 100',
+    r: [['75% × 35','2625',1],['25% × 37','925',1],['Total','2625 + 925 = 3550',2],['Ar','3550 ÷ 100 = 35.5',3]],
+    why: ['Multiply each mass by how much there is of it, add, then divide by 100.','Work out each product: 35 × 75 = 2625 and 37 × 25 = 925.','Add them: 3550. Divide by 100 because the percentages add up to 100.','Ar has no unit. It is not a whole number because it is an average.'],
+    tip: 'The answer is usually ==not a whole number==. 35.5 is correct and expected.' },
+  { intro: 'Elements in the ==same group== have the ==same number of outer electrons==, so they react in a ==similar way==.', f: 'Same group, same reaction.',
+    r: [['Group','I: 1 outer electron',0],['Products','rubidium hydroxide + hydrogen',1],['Trend','more violent than potassium',2]],
+    why: ['Elements in a group react alike because they have the same number of outer electrons.','Group I metals with water always give a metal hydroxide and hydrogen.','Reactivity goes up as you go down Group I, and rubidium is below potassium.'],
+    tip: 'To predict: say ==same group, same reaction==, then use the trend.' },
+  { intro: 'In ==Group VII== reactivity ==decreases== down the group. A more reactive halogen ==displaces== a less reactive one.', f: 'Br₂ is above I₂',
+    r: [['Compare','Br more reactive than I',0],['Result','Br displaces I',1],['Equation','Br₂ + 2KI → 2KBr + I₂',2],['Colour','brown',3]],
+    why: ['Halogens get less reactive down the group. Bromine is above iodine.','A more reactive halogen pushes out a less reactive one from its salt.','Bromine takes the potassium. Iodine is left on its own.','Free iodine in solution is brown.'],
+    tip: 'Group I reactivity goes ==up== down the group. Group VII goes ==down==. They are opposite.' }
+],
+bonding: [
+  { intro: 'In ionic bonding electrons are ==transferred== from the ==metal== to the ==non-metal==, forming ==ions== with full outer shells.', f: 'Transfer = ionic. Share = covalent.',
+    r: [['Mg (2,8,2)','loses 2 e⁻ → Mg²⁺ (2,8)',0],['O (2,6)','gains 2 e⁻ → O²⁻ (2,8)',1],['Bond','electrostatic attraction',2],['Formula','MgO',3]],
+    why: ['Metals lose their outer electrons. Losing 2 leaves a full shell of 2,8.','Non-metals gain electrons to fill their outer shell. 6 + 2 = 8.','The ions have opposite charges, so they attract strongly.','One 2+ and one 2− cancel exactly, so the ratio is 1 : 1.'],
+    tip: 'Say ==transfer== for ionic and ==share== for covalent.' },
+  { intro: 'A compound has ==no overall charge==. Choose numbers of each ion so the ==positive and negative charges cancel==.', f: 'Total + charge = total − charge',
+    r: [['Ions','Al³⁺ and O²⁻',0],['Balance','2 × (+3) = +6, 3 × (−2) = −6',1],['Formula','Al₂O₃',2]],
+    why: ['Write the ion charges first. They come from the group number.','Find the smallest numbers that make the charges equal and opposite: 6 and 6.','The numbers of ions become the small subscripts.'],
+    tip: 'Quick method: ==swap the charges== and write them as subscripts. Then check by adding up.' },
+  { intro: '==Polyatomic ions== such as ==OH⁻, NO₃⁻, SO₄²⁻, CO₃²⁻== stay together. Use ==brackets== if you need more than one.', f: 'Brackets only for 2 or more',
+    r: [['Ions','Ca²⁺ and OH⁻',0],['Balance','+2 needs 2 × (−1)',1],['Formula','Ca(OH)₂',2]],
+    why: ['OH⁻ is a group of atoms that stays together with a single − charge.','One Ca²⁺ needs two OH⁻ to balance.','Brackets show that the 2 applies to both the O and the H.'],
+    tip: 'No brackets when you need just one: ==NaOH==, not Na(OH).' },
+  { intro: 'Melting point questions: name the ==structure==, name the ==forces==, say how much ==energy== is needed.', f: 'Structure, forces, energy.',
+    r: [['NaCl','giant ionic lattice, strong forces',0],['Energy','lots needed: high m.p.',1],['HCl','simple molecules, weak forces',2],['Energy','little needed: low m.p.',3]],
+    why: ['Name the structure first, then the force that holds it together.','Melting means overcoming those forces. Strong forces need lots of energy.','Name the second structure. Between molecules the forces are weak.','Little energy is needed, so it melts at a very low temperature.'],
+    tip: 'Do not say the covalent bonds break when a molecular substance melts. Only the ==weak intermolecular forces== do.' },
+  { intro: 'To conduct, a substance needs ==charged particles that are free to move==: ==electrons== or ==ions==.', f: 'Free to move = conducts.',
+    r: [['Graphite','3 bonds; 4th electron delocalised',0],['So','free electrons carry charge',1],['Diamond','4 bonds; no free electrons',2],['So','does not conduct',3]],
+    why: ['Count how each carbon uses its four outer electrons.','Electrons that are free to move carry the charge, so graphite conducts.','All four are held in bonds.','No free charged particles means no conduction.'],
+    tip: 'Use ==delocalised electrons== for graphite. "Free electrons" also earns the mark.' },
+  { intro: 'Use the ==clues== in the question one at a time: ==melting point==, then ==conductivity==.', f: 'Clue by clue.',
+    r: [['Clue 1','high m.p.: giant structure',0],['Clue 2','conducts only when molten: ions',1],['Answer','giant ionic lattice',2]],
+    why: ['Simple molecules melt at low temperatures, so this must be a giant structure.','Solid: ions are locked in place. Molten: they can move and carry charge.','Giant, with ions that only move when molten, means ionic.'],
+    tip: 'Make a small table of m.p., solid conductivity and molten conductivity. Each structure has a ==different pattern==.' }
+],
+displace: [
+  { intro: 'A ==more reactive== metal ==displaces== a less reactive metal from its compound. Check the ==reactivity series== first.', f: 'More reactive displaces less reactive.',
+    r: [['Position','Zn is above Cu',0],['Prediction','Zn displaces Cu',1],['Products','zinc sulfate + copper',2],['Observations','blue fades; red-brown solid; warm',3]],
+    why: ['Look at the reactivity series. A metal can only displace a metal below it.','The more reactive metal takes the place of the less reactive one in the compound.','The new salt is zinc sulfate. The copper is left as a metal.','Copper(II) ions are blue, and the colour fades as they are used up. Copper metal is red-brown. Displacement gives out heat.'],
+    tip: 'Give ==two observations==: a colour change and a solid forming. "It reacts" earns nothing.' },
+  { intro: 'If the metal on its own is ==less reactive== than the metal in the solution, there is ==no reaction==.', f: 'Lower in the series: no reaction.',
+    r: [['Position','Cu is below Zn',0],['Conclusion','Cu cannot displace Zn',1],['Result','no reaction',2]],
+    why: ['Find both metals in the series. Which one is higher?','A metal cannot push out one that is more reactive than itself.','Nothing happens, so the answer is no reaction. Do not invent observations.'],
+    tip: 'Write ==no reaction== and the reason. Do not make up colour changes.' },
+  { intro: 'Write the ==word equation== first, then the ==formulae==, then ==balance== by counting atoms on each side.', f: 'Count every atom on both sides.',
+    r: [['Position','Mg is far above Ag',0],['Products','magnesium nitrate + silver',1],['Salt formula','Mg²⁺ + 2 NO₃⁻ = Mg(NO₃)₂',2],['Balanced','Mg + 2AgNO₃ → Mg(NO₃)₂ + 2Ag',3]],
+    why: ['Magnesium is much higher in the series than silver.','The magnesium swaps places with the silver. Nitrate stays as the negative part.','Mg²⁺ needs two NO₃⁻ to balance the charge, so we use brackets and a 2.','Two nitrates on the right need two AgNO₃ on the left, which makes two Ag.'],
+    tip: 'After balancing, ==count each atom== on both sides: Mg 1/1, Ag 2/2, N 2/2, O 6/6.' },
+  { intro: 'Count how many metals each one ==displaces==. More displacements means ==more reactive==.', f: 'Most displacements = most reactive.',
+    r: [['X','displaces 2 metals',0],['Y','displaces 1 metal',1],['Z','displaces none',2],['Order','X > Y > Z',3]],
+    why: ['The most reactive metal can push out the most others.','The middle metal pushes out only the less reactive one.','The least reactive metal pushes out nothing.','Write the order from most to least reactive.'],
+    tip: 'Write the answer as ==X > Y > Z== and say which end is the most reactive.' },
+  { intro: 'In an ==ionic equation== leave out the ==spectator ions== that do not change. ==OIL RIG==: Oxidation Is Loss, Reduction Is Gain (of electrons).', f: 'OIL RIG',
+    r: [['Full','Fe + CuSO₄ → FeSO₄ + Cu',0],['Ionic','Fe + Cu²⁺ → Fe²⁺ + Cu',1],['Fe','loses 2 e⁻: oxidised',2],['Cu²⁺','gains 2 e⁻: reduced',3]],
+    why: ['Start with the ordinary balanced equation.','Sulfate ions are unchanged on both sides (spectator ions). Cross them out.','Fe becomes Fe²⁺ by losing 2 electrons. Loss of electrons is oxidation.','Cu²⁺ becomes Cu by gaining 2 electrons. Gain of electrons is reduction.'],
+    tip: 'Check the ==charges balance== on both sides: 2+ on the left and 2+ on the right.' },
+  { intro: 'The ==thermite== reaction is a ==displacement== reaction using a ==solid oxide==. ==Aluminium== is more reactive than ==iron==.', f: 'Al displaces Fe from its oxide.',
+    r: [['Equation','2Al + Fe₂O₃ → Al₂O₃ + 2Fe',0],['Why','Al is more reactive: displaces Fe',1],['Why it welds','very exothermic: molten Fe',2]],
+    why: ['Aluminium takes the oxygen from iron(III) oxide. Check: 2 Al, 2 Fe and 3 O on each side.','The rule is the same as for any displacement: the more reactive metal wins.','So much heat is released that the iron is molten and runs into the gap between the rails.'],
+    tip: 'Give two linked reasons: ==more reactive== and ==exothermic==.' }
+],
+salts: [
+  { intro: 'Every acid reaction follows a ==pattern==. Learn the pattern and you can write any equation.', f: 'acid + metal → salt + hydrogen',
+    r: [['Type','acid + metal',0],['Salt','zinc chloride',1],['Products','zinc chloride + hydrogen',2],['Gas test','lighted splint: squeaky pop',3]],
+    why: ['Learn the pattern: acid + metal gives a salt and hydrogen.','The salt name is the metal name plus the acid ending. Hydrochloric acid gives chlorides.','Put the pattern together with the real names.','Hold a lighted splint at the mouth of the tube. Hydrogen burns with a squeaky pop.'],
+    tip: '==Hydrochloric → chloride, sulfuric → sulfate, nitric → nitrate.==' },
+  { intro: '==Metal oxides== and ==hydroxides== are ==bases==. ==acid + base → salt + water==.', f: 'acid + base → salt + water',
+    r: [['Type','acid + base',0],['Products','copper(II) sulfate + water',1],['Symbols','CuO + H₂SO₄ → CuSO₄ + H₂O',2]],
+    why: ['A metal oxide is a base. Acid + base gives salt + water only. No gas.','Sulfuric acid gives a sulfate. Copper oxide gives the copper part.','Check it balances: Cu 1/1, S 1/1, O 5/5, H 2/2.'],
+    tip: 'Copper(II) sulfate is ==blue==. Mention the colour if the question asks what you see.' },
+  { intro: 'Carbonates make ==carbon dioxide== as well. You see ==fizzing== (effervescence).', f: 'acid + carbonate → salt + water + CO₂',
+    r: [['Type','acid + carbonate',0],['Products','calcium nitrate + water + CO₂',1],['Balanced','CaCO₃ + 2HNO₃ → Ca(NO₃)₂ + H₂O + CO₂',2],['Seen','fizzing; solid disappears',3]],
+    why: ['Carbonates give a third product: carbon dioxide.','Nitric acid gives a nitrate. Calcium carbonate gives calcium.','Ca(NO₃)₂ has two nitrates, so we need 2HNO₃. Count: H 2/2, N 2/2, O 9/9, C 1/1.','The gas escapes as bubbles. Through limewater it turns milky.'],
+    tip: 'Test for CO₂: ==limewater turns milky (cloudy)==.' },
+  { intro: 'To make a ==soluble salt== from an ==insoluble base==, use ==excess solid==, then ==filter==, ==evaporate== and let it ==crystallise==.', f: 'Excess, filter, heat, cool, dry.',
+    r: [['1 Add','oxide in excess to warm acid',0],['2 Filter','removes excess oxide',1],['3 Heat','filtrate until crystals start',2],['4 Cool','filter off crystals; dry',3]],
+    why: ['Excess means some solid is left over, so all the acid has reacted. Warming speeds it up.','The excess oxide is insoluble, so it stays on the filter paper. The filtrate is the salt solution.','Evaporate some water so the solution is saturated. Stop when crystals begin to form.','Cooling lets crystals grow. Pat them dry between filter papers.'],
+    tip: 'Do not boil to dryness. ==Stop when crystals start to form== and leave to cool.' },
+  { intro: 'To make an ==insoluble salt==, mix two ==solutions==. The salt forms as a ==precipitate==.', f: 'Precipitation',
+    r: [['Solubility','BaSO₄ is insoluble',0],['Method','precipitation',1],['Reactants','BaCl₂(aq) + Na₂SO₄(aq)',2],['Then','filter, wash, dry',3]],
+    why: ['Check the solubility rules: sulfates are soluble except barium, calcium and lead.','An insoluble salt appears as a solid when two solutions are mixed. This is precipitation.','Choose one soluble barium salt and one soluble sulfate. The ions swap partners.','Filter to collect the solid, wash off the soluble salt with distilled water, then dry.'],
+    tip: 'The solid is collected by ==filtering==, not by evaporating.' },
+  { intro: 'When both reactants are ==soluble==, you cannot use ==excess and filter==. Use a ==titration==.', f: 'Titration finds the exact volumes.',
+    r: [['Reactants','both are solutions',0],['Problem','excess cannot be filtered off',1],['Method','titration: exact volumes',2]],
+    why: ['Sodium hydroxide dissolves in water, and so does hydrochloric acid.','Filtering removes only solids. A dissolved excess cannot be taken out.','Use an indicator to find the exact volumes that just neutralise. Repeat without the indicator, then crystallise.'],
+    tip: 'Give the reason: ==an excess soluble reactant cannot be removed by filtering==.' }
+]
+});
+
+function renderChapter(k){
+  const c = CH[k];
+  const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],['drill','Drill'],['quiz','Quiz'],['exam','Exam Qs']];
+  let body = '';
+  if (sub_ === 'learn') body = c.learn.map(cardHTML).join('') + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
+  if (sub_ === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
+  if (sub_ === 'worked') body = `<div class="card"><h3>How to use these</h3><p class="note">Read the question and try it on paper. Then tap <b>Next step</b>. Each step shows the working, and the line underneath explains <b>why</b>. The table beside it fills in as you go. The exam tip appears at the end.</p></div>` + c.worked.map((w,i) => `<div class="card" data-worked="${i}"><span class="eyebrow">Example ${i+1}</span><p class="q">${w.q}</p>${w.intro ? `<p class="intro"><b>Key idea:</b> ${fmt(w.intro)}</p>` : ''}
+      ${w.board0 ? '<div class="wk-split"><div class="board"><span class="eyebrow">Working table</span><div class="board-in">' + w.board0() + '</div></div>' : ''}<ol class="steps">${w.s.map((st,j) => `<li ${j===w.s.length-1?'class="final"':''} hidden><span class="sl">${st[0]}</span><span class="st${w.prose?' prose':''}">${fmt(st[1])}</span>${st[2] ? `<span class="why2">${fmt(st[2])}</span>` : ''}</li>`).join('')}</ol>${w.board0 ? '</div>' : ''}
+      ${w.tip ? `<p class="tip" hidden><b>Exam tip:</b> ${fmt(w.tip)}</p>` : ''}
+      <div class="row"><button class="btn primary" data-next>Next step</button><button class="btn ghost" data-all>Show all</button><button class="btn ghost" data-hide>Hide</button></div></div>`).join('');
+  if (sub_ === 'drill') body = `<div class="card" id="drill"></div>`;
+  if (sub_ === 'quiz') body = `<div class="card"><div class="scorebar"><div><h3>Quick quiz</h3><p class="note">Tap an answer. Best score is saved.</p></div><div class="big-score"><span id="qs">0</span>/${c.quiz.length}</div></div><div class="row"><button class="btn ghost" data-reset>Start again</button></div></div>`
+    + c.quiz.map((q,i) => `<div class="card" data-quiz="${i}"><span class="eyebrow">Q${i+1}</span><p class="q">${q.q}</p><div class="opts">${q.o.map((o,j) => `<button class="opt" data-o="${j}">${o}</button>`).join('')}</div><p class="why" hidden>${fmt(q.w)}</p></div>`).join('');
+  if (sub_ === 'exam') { const [g,t] = examScore(k, c.exam);
+    body = `<div class="card"><div class="scorebar"><div><h3>Exam-style questions</h3><p class="note">Answer on paper first. Then open the mark scheme and tick each point you wrote. Each tick = 1 mark.</p></div><div class="big-score" id="exscore">${g}/${t}</div></div></div>` + c.exam.map((q,i) => examCard(k+'-'+i, q, i)).join(''); }
+  return `<div class="chhead fadein"><span class="eyebrow">${c.code} · Chemistry</span><h2>${c.name}</h2><p class="lede">${c.lede}</p></div>
+  <nav class="sub" role="tablist">${subs.map(([s,n]) => `<button class="subtab" role="tab" aria-selected="${s===sub_}" data-sub="${s}">${n}</button>`).join('')}</nav>
+  <div class="stack fadein">${body}</div>`;
+}
+function examCard(key, q, i){
+  const ticks = store.ticks[key] || []; const open = store.ticks['open-'+key];
+  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${i+1}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
+    <p class="q">${q.q}</p>
+    <div class="row"><button class="btn primary" data-ms>${open?'Hide mark scheme':'Show mark scheme'}</button><span class="got">${ticks.length?Math.min(ticks.length,q.m)+'/'+q.m:''}</span></div>
+    <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
+    ${q.p.map((p,j) => `<button class="point" aria-pressed="${ticks.includes(j)}" data-pt="${j}"><span class="box">✓</span><span>${fmt(p)}</span></button>`).join('')}</div></div>`;
+}
+let timer = null, left = 40*60;
+const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+function renderMock(){
+  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
+  return `<div class="chhead fadein"><span class="eyebrow">All four chapters</span><h2>Mini mock</h2>
+    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
+      <p class="note">40 minutes. About 1 minute per mark, plus time to check.</p></div>
+    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+}
+let quizScore = 0;
+function bindView(){
+  quizScore = 0;
+  if (cur !== 'start' && cur !== 'mock' && sub_ === 'drill') newDrill();
+  if (cur === 'mock') {
+    document.getElementById('tgo').onclick = () => {
+      if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
+      document.getElementById('tgo').textContent = 'Pause';
+      timer = setInterval(() => { left = Math.max(0, left-1); const c = document.getElementById('clock');
+        if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
+        if (!left) { clearInterval(timer); timer = null; } }, 1000);
+    };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 40*60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
+  }
+}
+document.getElementById('view').addEventListener('click', e => {
+  const t = e.target;
+  const st = t.closest('[data-sub]'); if (st) { sub_ = st.dataset.sub; render(); return; }
+  const wk = t.closest('[data-worked]');
+  if (wk) { const items = [...wk.querySelectorAll('.steps li')];
+    if (t.closest('[data-next]')) { const n = items.find(li => li.hidden); if (n) n.hidden = false; }
+    if (t.closest('[data-all]')) items.forEach(li => li.hidden = false);
+    if (t.closest('[data-hide]')) items.forEach(li => li.hidden = true);
+    wk.querySelector('[data-next]').disabled = !items.some(li => li.hidden); const tp = wk.querySelector('.tip'); if (tp) tp.hidden = items.some(li => li.hidden); updateBoard(wk, items); return; }
+  const qz = t.closest('[data-quiz]');
+  if (qz && t.closest('[data-o]') && !qz.dataset.done) {
+    const q = CH[cur].quiz[+qz.dataset.quiz]; const j = +t.closest('[data-o]').dataset.o; qz.dataset.done = '1';
+    qz.querySelectorAll('.opt').forEach((b,bi) => { b.disabled = true; if (bi === q.a) b.classList.add('right'); else if (bi === j) b.classList.add('wrong'); });
+    qz.querySelector('.why').hidden = false; if (j === q.a) quizScore++;
+    document.getElementById('qs').textContent = quizScore;
+    if (quizScore > (store.quiz[cur] || 0)) { store.quiz[cur] = quizScore; save(); } return; }
+  if (t.closest('[data-reset]')) { render(); return; }
+  const ex = t.closest('[data-exam]');
+  if (ex) { const key = ex.dataset.exam, max = +ex.dataset.max;
+    if (t.closest('[data-ms]')) { const ms = ex.querySelector('.ms'); ms.hidden = !ms.hidden; store.ticks['open-'+key] = !ms.hidden; save(); t.closest('[data-ms]').textContent = ms.hidden ? 'Show mark scheme' : 'Hide mark scheme'; return; }
+    const pt = t.closest('[data-pt]');
+    if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
+      store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
+      ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
+      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
+});
+
+/* ---------- drill engine ---------- */
+let drillCur = null, streak = 0;
+function judge(raw){
+  const d = drillCur;
+  if (d.kind === 'num') { const x = parseFloat(raw.replace(',', '.')); if (isNaN(x)) return null; return { ok: Math.abs(x - d.ans) <= (d.tol != null ? d.tol : Math.abs(d.ans)*0.02) + 1e-9 }; }
+  if (d.kind === 'config') { const m = raw.match(/\d+/g); if (!m) return null; return { ok: m.join(',') === d.ans }; }
+  if (d.kind === 'formula') { const r = unsub(raw.replace(/\s+/g, '')); if (!r) return null;
+    if (r === d.ans) return { ok:true }; if (r.toLowerCase() === d.ans.toLowerCase()) return { ok:true, note:`Watch the capital letters: ${sub(d.ans)}` }; return { ok:false }; }
+  return null;
+}
+const answerText = d => d.kind === 'choice' ? d.choices[d.ans] : d.kind === 'formula' ? sub(d.ans) : d.kind === 'num' ? num(d.ans) : d.ans;
+function showResult(ok, note){
+  streak = ok ? streak + 1 : 0;
+  if (streak > (store.drill[cur] || 0)) { store.drill[cur] = streak; save(); }
+  const d = drillCur;
+  document.getElementById('dfb').innerHTML = `<div class="fb ${ok?'ok':'no'}"><span class="verdict">${ok ? 'Correct!' : 'Not quite. The answer is ' + answerText(d) + '.'}${note ? ' ' + note : ''}</span>
+    <ol class="steps">${d.s.map((s,j)=>`<li ${j===d.s.length-1?'class="final"':''}><span class="sl">${s[0]}</span><span class="st">${s[1]}</span></li>`).join('')}</ol>
+    <div class="row"><button class="btn primary" type="button" id="dnext">Next question</button></div></div>`;
+  document.getElementById('dnext').onclick = newDrill;
+  document.querySelector('#drill .stat').textContent = `streak ${streak} · best ${store.drill[cur] || 0}`;
+}
+function newDrill(){
+  const box = document.getElementById('drill'); if (!box) return;
+  drillCur = pick(DRILLS[CH[cur].drill])();
+  const d = drillCur;
+  const input = d.kind === 'choice'
+    ? `<div class="opts" id="dch">${d.choices.map((o,j) => `<button class="opt" type="button" data-dc="${j}">${o}</button>`).join('')}</div>`
+    : `<form class="answer" id="dform"><label for="dans" class="note">Your answer</label><input id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" ${d.kind==='num'?'inputmode="decimal"':''} placeholder="${d.kind==='config'?'2,8,1':d.kind==='formula'?'e.g. MgCl2':'number'}"><button class="btn primary" type="submit">Check</button></form>`;
+  box.innerHTML = `<div class="scorebar"><span class="eyebrow">Practice drill</span><span class="stat">streak ${streak} · best ${store.drill[cur] || 0}</span></div>
+    <p class="drillq">${d.q}</p>${input}<div id="dfb"></div>
+    <div class="row"><button class="btn ghost" type="button" id="dskip">Skip to a new question</button></div>`;
+  if (d.kind === 'choice') {
+    document.getElementById('dch').onclick = ev => { const b = ev.target.closest('[data-dc]'); if (!b || d.done) return; d.done = true; const j = +b.dataset.dc;
+      document.querySelectorAll('#dch .opt').forEach((o,oi) => { o.disabled = true; if (oi === d.ans) o.classList.add('right'); else if (oi === j) o.classList.add('wrong'); });
+      showResult(j === d.ans); };
+  } else {
+    document.getElementById('dform').onsubmit = ev => { ev.preventDefault(); if (d.done) return;
+      const r = judge(document.getElementById('dans').value.trim());
+      if (!r) { document.getElementById('dfb').innerHTML = `<div class="fb no"><span class="verdict">Type an answer first.</span></div>`; return; }
+      d.done = true; showResult(r.ok, r.note); };
+  }
+  document.getElementById('dskip').onclick = () => { streak = 0; newDrill(); };
+}
+renderTabs(); render();
+</script>
+</body>
+</html>

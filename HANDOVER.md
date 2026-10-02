@@ -31,6 +31,9 @@ Handed over from a Claude chat session on 2 Oct 2026. Read `CLAUDE.md` for how t
 - [x] Maths pack `maths.html` (18 topics: 8 from the term 1 portion list plus primes, powers, percentages, algebra skills, Pythagoras, straight lines, transformations, similar shapes, simultaneous equations, quadratics. 106 worked examples, 85 drill generators). Drill kinds `text` and `frac` added.
 - [x] Drill generators self-checked (Chemistry 5,100 items, CS 7,200 items: every answer key accepted)
 
+## Layout decision (parent, 2 Oct 2026)
+Term 1 packs (`physics.html`, `chemistry.html`, `cs.html`) are frozen and labelled **Term 1 Preparation** on the home page. The whole-year syllabus lives in `maths.html`, `physics-year.html`, `chemistry-year.html`, `cs-year.html` (and a Biology pack later). Term 2 and 3 portion sheets are still awaited; until then chapters follow the Cambridge syllabus order.
+
 ## Open tasks (suggested order)
 1. **DONE (2 Oct 2026): Physics and Chemistry worked examples → CS style.** Notes live in an `enhance({...})` block before `renderChapter` in each file (intro, why per step, tip, side-table rows). Original brief: add `intro`, `why` lines, `tip`, and side boards where a table helps (e.g. density formula triangle filling in; particle-count table for atoms; ion-charge balancing for formulae; reactivity-series pointer for displacement). Port `updateBoard`, `attach`, the board CSS and the worked-example renderer from `cs.html`. Priority if before Mon 5 Oct.
 2. Bring `physics.html` onto the newer engine (proper `<head>`, `sub_`, `judge()` with kinds) so all three share one engine.
