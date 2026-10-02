@@ -445,6 +445,51 @@ function svgMoleTriangle(){
   ${T(300, 56, 'moles = mass ÷ Mr', 'mono acct')}${T(300, 84, 'mass = moles × Mr', 'mono acct')}${T(300, 120, 'gas: moles = volume (dm³) ÷ 24', 'mono')}${T(300, 148, 'solution: moles = c × V (dm³)', 'mono')}
   ${T(300, 184, 'cm³ ÷ 1000 = dm³', 'mono hott')}${T(300, 214, 'yield % = actual ÷ theoretical × 100', 'mono hott')}</svg>`;
 }
+function svgElectrolysis(){
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Electrolysis cell">${arrowDefs('e')}
+  <rect x="120" y="120" width="240" height="120" class="metal" style="stroke:var(--ink);stroke-width:2"/>
+  <line x1="170" y1="90" x2="170" y2="220" class="ln" style="stroke-width:7"/><line x1="310" y1="90" x2="310" y2="220" class="ln" style="stroke-width:7"/>
+  <polyline points="170,90 170,40 215,40" class="ln" fill="none"/><polyline points="310,90 310,40 265,40" class="ln" fill="none"/>
+  <line x1="215" y1="26" x2="215" y2="54" class="ln"/><line x1="225" y1="34" x2="225" y2="46" class="ln" style="stroke-width:5"/><line x1="255" y1="26" x2="255" y2="54" class="ln"/><line x1="265" y1="34" x2="265" y2="46" class="ln" style="stroke-width:5"/>
+  ${T(170, 258, 'cathode (−)', 'mid lbl')}${T(310, 258, 'anode (+)', 'mid lbl')}
+  <line x1="245" y1="170" x2="190" y2="170" class="hotl" marker-end="url(#h-e)"/>${T(222, 160, 'cations +', 'mid hott')}<line x1="235" y1="200" x2="290" y2="200" class="acc" marker-end="url(#b-e)"/>${T(262, 218, 'anions −', 'mid acct')}
+  ${T(400, 60, 'Electrolysis: breaking down an ionic', 'lbl')}${T(400, 82, 'compound (molten or dissolved) with electricity.', 'lbl')}
+  ${T(400, 118, 'Cathode (−): positive ions GAIN electrons', 'mono')}${T(400, 142, '   REDUCTION   Pb²⁺ + 2e⁻ → Pb', 'mono hott')}${T(400, 176, 'Anode (+): negative ions LOSE electrons', 'mono')}${T(400, 200, '   OXIDATION    2Br⁻ → Br₂ + 2e⁻', 'mono acct')}${T(400, 236, 'Remember: OIL RIG, and PANIC', 'mut')}${T(400, 256, '(Positive Anode, Negative Is Cathode)', 'mut')}</svg>`;
+}
+function svgBlast(){
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="Blast furnace">${arrowDefs('b')}
+  <polygon points="130,40 250,40 280,140 240,260 140,260 100,140" class="metal" style="stroke:var(--ink);stroke-width:2"/>
+  <line x1="190" y1="22" x2="190" y2="40" class="ln" marker-end="url(#a-b)"/>${T(190, 16, 'iron ore, coke, limestone', 'mid lbl')}
+  <line x1="40" y1="230" x2="100" y2="230" class="acc" marker-end="url(#b-b)"/>${T(30, 220, 'hot air', 'mid acct')}
+  <line x1="190" y1="262" x2="190" y2="292" class="hotl" marker-end="url(#h-b)"/>${T(240, 284, 'molten iron and slag', 'hott')}
+  ${T(330, 50, 'C + O₂ → CO₂   (coke burns, heat)', 'mono')}${T(330, 82, 'CO₂ + C → 2CO', 'mono')}${T(330, 114, 'Fe₂O₃ + 3CO → 2Fe + 3CO₂', 'mono hott')}
+  ${T(330, 146, '   (iron(III) oxide is reduced)', 'mut')}${T(330, 182, 'CaCO₃ → CaO + CO₂', 'mono')}${T(330, 210, 'CaO + SiO₂ → CaSiO₃  (slag)', 'mono')}${T(330, 238, 'Limestone removes the sand impurity.', 'mut')}</svg>`;
+}
+function svgAirBar(){
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="Composition of dry air">
+  <rect x="40" y="60" width="${780 * .78}" height="50" class="metal" style="stroke:var(--ink);stroke-width:1.6"/><rect x="${40 + 780 * .78}" y="60" width="${780 * .21}" height="50" class="accf" style="fill-opacity:.35;stroke:var(--ink);stroke-width:1.6"/><rect x="${40 + 780 * .99}" y="60" width="${780 * .01}" height="50" class="hotf" style="stroke:var(--ink);stroke-width:1"/>
+  ${T(40 + 780 * .39, 92, 'nitrogen, N₂   78%', 'mid mono lbl')}${T(40 + 780 * .885, 92, 'O₂ 21%', 'mid mono lbl')}${T(820, 140, 'argon 0.9%, CO₂ 0.04%, others', 'end mut')}
+  ${T(40, 180, 'Fractional distillation of liquid air gives nitrogen, oxygen and argon.', 'lbl')}${T(40, 206, 'The gases have different boiling points: N₂ −196 °C, Ar −186 °C, O₂ −183 °C.', 'mut')}</svg>`;
+}
+function svgColumn(){
+  const rows = [['refinery gas', 'fuel for heating, bottled gas'], ['petrol', 'car fuel'], ['naphtha', 'making chemicals, plastics'], ['kerosene', 'jet fuel'], ['diesel', 'lorry and train fuel'], ['bitumen', 'road surfaces']];
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="Fractional distillation of crude oil">${arrowDefs('c')}
+  <rect x="80" y="20" width="110" height="250" rx="10" class="metal" style="stroke:var(--ink);stroke-width:2"/>${rows.map((r, i) => `<line x1="80" y1="${50 + i * 40}" x2="190" y2="${50 + i * 40}" class="thin"/><line x1="190" y1="${38 + i * 40}" x2="240" y2="${38 + i * 40}" class="ln"/>${T(250, 42 + i * 40, r[0], 'lbl')}${T(380, 42 + i * 40, r[1], 'mut')}`).join('')}
+  <line x1="20" y1="200" x2="80" y2="200" class="hotl" marker-end="url(#h-c)"/>${T(14, 222, 'hot crude oil', 'lbl')}
+  ${T(660, 40, 'top: cool', 'acct')}${T(660, 262, 'bottom: hot', 'hott')}${T(660, 100, 'Going down the column:', 'lbl')}${T(660, 124, 'longer molecules', 'mut')}${T(660, 144, 'higher boiling points', 'mut')}${T(660, 164, 'more viscous', 'mut')}${T(660, 184, 'harder to ignite', 'mut')}${T(660, 204, 'darker colour', 'mut')}</svg>`;
+}
+function svgPolymer(){
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="Addition polymerisation of ethene">
+  ${T(40, 60, 'n  CH₂=CH₂', 'mono lbl')}${T(40, 82, '   ethene (monomer)', 'mut')}${T(250, 60, '→', 'mono lbl')}${T(290, 60, '[ –CH₂–CH₂– ]ₙ', 'mono lbl')}${T(290, 82, 'poly(ethene) (polymer)', 'mut')}
+  ${T(40, 126, 'Addition polymerisation:', 'lbl')}${T(40, 150, 'many small unsaturated monomers (with C=C)', 'mut')}${T(40, 170, 'join to make one long saturated chain.', 'mut')}${T(40, 192, 'The double bond opens up. Only ONE product.', 'mut')}
+  ${T(500, 126, 'Examples', 'lbl')}${T(500, 150, 'ethene → poly(ethene)', 'mono')}${T(500, 172, 'propene → poly(propene)', 'mono')}${T(500, 194, 'chloroethene → poly(chloroethene) (PVC)', 'mono')}</svg>`;
+}
+function svgGasTests(){
+  const rows = [['hydrogen, H₂', 'lighted splint', 'squeaky pop'], ['oxygen, O₂', 'glowing splint', 'relights'], ['carbon dioxide, CO₂', 'limewater', 'turns milky'], ['chlorine, Cl₂', 'damp litmus paper', 'bleached white'], ['ammonia, NH₃', 'damp red litmus', 'turns blue']];
+  return `<svg viewBox="0 0 860 260" role="img" aria-label="Tests for gases">
+  ${T(40, 30, 'Gas', 'lbl')}${T(300, 30, 'Test', 'lbl')}${T(560, 30, 'Result', 'lbl')}<line x1="30" y1="40" x2="820" y2="40" class="thin"/>
+  ${rows.map((r, i) => `${T(40, 70 + i * 40, r[0], 'mono')}${T(300, 70 + i * 40, r[1], '')}${T(560, 70 + i * 40, r[2], 'mono acct')}<line x1="30" y1="${82 + i * 40}" x2="820" y2="${82 + i * 40}" class="thin" style="opacity:.4"/>`).join('')}</svg>`;
+}
 
 const CH = {
 atoms: {
@@ -937,6 +982,294 @@ energ: {
     { q: 'Draw and label an energy level diagram for an endothermic reaction.', m: 3,
       p: ['==Products higher== than reactants', '==Activation energy== shown as the hump', '==ΔH positive== arrow upwards'] }
   ]
+},
+electro: {
+  code: 'Topic 4', name: 'Electrolysis',
+  lede: 'Use electricity to split ionic compounds. Predict what forms at each electrode.',
+  learn: [
+    { h: 'What happens', list: ['==Electrolysis== is the ==breaking down of an ionic compound (molten or in solution) using electricity==.', 'The electrolyte must have ==free ions== (molten or dissolved). ==Solid ionic compounds do not conduct==.', '==Cathode (−)==: ==positive ions (cations)== move here and ==gain electrons== (==reduction==).', '==Anode (+)==: ==negative ions (anions)== move here and ==lose electrons== (==oxidation==).', 'Inert electrodes are ==graphite== or ==platinum==.'], f: ['Pb²⁺ + 2e⁻ → Pb  (cathode)', '2Br⁻ → Br₂ + 2e⁻  (anode)'] },
+    { h: 'Predicting the products', table: [['Electrolyte', 'Cathode (−)', 'Anode (+)'], ['molten lead(II) bromide', 'lead', 'bromine'], ['molten sodium chloride', 'sodium', 'chlorine'], ['concentrated NaCl(aq) (brine)', 'hydrogen', 'chlorine (NaOH is left)'], ['CuSO₄(aq), graphite electrodes', 'copper', 'oxygen'], ['dilute H₂SO₄(aq)', 'hydrogen', 'oxygen']] },
+    { h: 'Rules and uses', list: ['In a ==solution==: at the cathode, if the metal is ==more reactive than hydrogen==, ==hydrogen== forms. If the metal is ==less reactive== (like copper or silver), the ==metal== forms.', 'At the anode: ==halide ions (Cl⁻, Br⁻, I⁻) form the halogen==. Otherwise ==oxygen== forms from hydroxide ions or water.', '==Copper electrodes in copper(II) sulfate==: the anode ==dissolves==, copper is ==deposited== on the cathode. Used to ==purify copper== and for ==electroplating==.', '==Aluminium== is extracted by electrolysing ==aluminium oxide dissolved in molten cryolite== (lowers the melting point). Oxygen at the carbon anodes burns them away, so they must be replaced.', 'Tests: ==H₂ squeaky pop==, ==Cl₂ bleaches damp litmus==, ==O₂ relights a glowing splint==.'] }
+  ],
+  mistakes: ['Saying ==electrons flow through the electrolyte==. Ions carry the charge in the liquid; electrons flow in the wires.', 'Mixing up ==anode== and ==cathode==. Positive Anode, Negative Is Cathode (PANIC).', 'Forgetting ==hydrogen== forms at the cathode for reactive metals in solution.', 'Writing the ==wrong charge== on the electrons: they are on the ==left== for reduction, ==right== for oxidation.', 'Saying ==solid== ionic compounds conduct. The ions cannot move.'],
+  diagrams: [{ svg: svgElectrolysis, cap: '==Cations → cathode (−)==, ==anions → anode (+)==.' }],
+  worked: [
+    W('Molten lead(II) bromide, PbBr₂, is electrolysed using graphite electrodes. State the products and write the half-equations.', 'Positive ions go to the ==cathode==, negative ions to the ==anode==.', 'The electrons go on the left for reduction and on the right for oxidation.', 'Cathode: gain electrons. Anode: lose electrons.',
+      [['Ions present', 'Pb²⁺ and Br⁻', 'The compound is molten, so the ions are free to move.'], ['Cathode (−)', 'Pb²⁺ + 2e⁻ → Pb', 'Lead forms. This is reduction (gain of electrons).'], ['Anode (+)', '2Br⁻ → Br₂ + 2e⁻', 'Bromine forms. This is oxidation (loss of electrons).'], ['Products', 'Lead at the cathode and bromine at the anode', 'Bromine is a red-brown gas.']],
+      [['Ions', 'Pb²⁺, Br⁻', 0], ['Cathode', 'lead', 1], ['Anode', 'bromine', 2]]),
+    W('Concentrated sodium chloride solution is electrolysed with inert electrodes. Name the products at each electrode and the substance left in the solution.', 'Sodium is ==more reactive than hydrogen==, so ==hydrogen== forms at the cathode.', 'Chloride ions form chlorine at the anode.', 'Reactive metal: hydrogen',
+      [['Ions present', 'Na⁺, Cl⁻, H⁺ and OH⁻ (from water)', 'Water gives a few H⁺ and OH⁻ ions.'], ['Cathode', 'Hydrogen', 'Na⁺ is more reactive than H⁺, so H⁺ is discharged: 2H⁺ + 2e⁻ → H₂.'], ['Anode', 'Chlorine', 'Cl⁻ is a halide ion: 2Cl⁻ → Cl₂ + 2e⁻.'], ['Left in solution', 'Sodium hydroxide', 'Na⁺ and OH⁻ remain, so the solution is alkaline.']],
+      [['Cathode', 'hydrogen', 1], ['Anode', 'chlorine', 2], ['Left', 'NaOH(aq)', 3]]),
+    W('Copper(II) sulfate solution is electrolysed. Compare the products using (a) graphite electrodes (b) copper electrodes.', 'Look at ==what the anode is made of==.', 'Copper is below hydrogen, so copper forms at the cathode either way.', 'Inert anode v copper anode',
+      [['Cathode (both cases)', 'Copper is deposited', 'Cu²⁺ + 2e⁻ → Cu. Copper is less reactive than hydrogen.'], ['(a) Graphite anode', 'Oxygen is given off', 'There is no halide, so OH⁻ forms oxygen. The blue colour fades as Cu²⁺ is used up.'], ['(b) Copper anode', 'The anode dissolves: Cu → Cu²⁺ + 2e⁻', 'The anode gets smaller.'], ['(b) Result', 'Copper moves from the anode to the cathode; the solution stays blue', 'This is how copper is purified.']],
+      [['Cathode', 'copper', 0], ['(a) Anode', 'oxygen', 1], ['(b) Anode', 'dissolves', 2], ['(b) Result', 'copper transferred', 3]]),
+    W('Describe how a metal spoon can be electroplated with silver.', 'The object to be plated is the ==cathode==. The ==plating metal is the anode==.', 'Use a solution containing ions of the plating metal.', 'Spoon at cathode',
+      [['Cathode', 'The spoon', 'It must be connected to the negative terminal.'], ['Anode', 'A piece of silver', 'It dissolves: Ag → Ag⁺ + e⁻.'], ['Electrolyte', 'A solution of silver nitrate', 'It contains Ag⁺ ions.'], ['Result', 'Silver ions are reduced to a layer of silver on the spoon', 'Ag⁺ + e⁻ → Ag.']],
+      [['Cathode', 'the spoon', 0], ['Anode', 'silver', 1], ['Solution', 'silver nitrate', 2], ['Result', 'silver layer', 3]], true),
+    W('Explain how aluminium is extracted from aluminium oxide.', 'Mention ==molten cryolite==, ==graphite electrodes== and the products.', 'Aluminium is too reactive to be reduced by carbon.', 'Electrolysis of Al₂O₃ in cryolite',
+      [['Why electrolysis', 'Aluminium is more reactive than carbon', 'Carbon cannot reduce its oxide.'], ['The electrolyte', 'Aluminium oxide dissolved in molten cryolite', 'Cryolite lowers the melting point, saving energy.'], ['Cathode', 'Aluminium forms: Al³⁺ + 3e⁻ → Al', 'It collects as molten metal at the bottom.'], ['Anode', 'Oxygen forms and burns the carbon anodes to CO₂', 'The anodes wear away and are replaced.']],
+      [['Why', 'above carbon', 0], ['Electrolyte', 'Al₂O₃ in cryolite', 1], ['Cathode', 'aluminium', 2], ['Anode', 'oxygen', 3]], true),
+    W('What is the test for the gas given off at the anode in the electrolysis of brine?', 'The gas is ==chlorine==.', 'Damp litmus paper, not dry.', 'Bleaches damp litmus',
+      [['Gas', 'Chlorine', ''], ['Test', 'Hold damp blue litmus paper in the gas', ''], ['Result', 'The paper turns red then is bleached white', 'Chlorine is a bleach.']],
+      [['Gas', 'chlorine', 0], ['Test', 'damp litmus paper', 1], ['Result', 'bleached white', 2]], true)
+  ],
+  drill: 'electro',
+  quiz: [
+    { q: 'At the cathode, positive ions…', o: ['lose electrons', 'gain electrons', 'stay the same', 'dissolve'], a: 1, w: '==Gain electrons== (reduction).' },
+    { q: 'Which product forms at the cathode in dilute sulfuric acid?', o: ['oxygen', 'hydrogen', 'sulfur', 'water'], a: 1, w: '==Hydrogen==.' },
+    { q: 'Why must an ionic compound be molten or dissolved for electrolysis?', o: ['to make it hot', 'so the ions are free to move', 'to make electrons', 'to dissolve the electrodes'], a: 1, w: 'The ==ions must be free to move==.' },
+    { q: 'Which electrode is positive?', o: ['cathode', 'anode', 'both', 'neither'], a: 1, w: 'The ==anode== (PANIC).' },
+    { q: 'Cryolite is used in aluminium extraction to…', o: ['lower the melting point', 'react with oxygen', 'make a catalyst', 'form a slag'], a: 0, w: 'It ==lowers the melting point==.' },
+    { q: 'In electroplating, the object to be plated is the…', o: ['anode', 'cathode', 'electrolyte', 'battery'], a: 1, w: 'The ==cathode==.' }
+  ],
+  exam: [
+    { q: 'Describe what you would see when concentrated sodium chloride solution is electrolysed using inert electrodes, and name the gases formed.', m: 4,
+      p: ['Bubbles of gas at ==both electrodes==', '==Hydrogen== at the cathode', '==Chlorine== at the anode', 'The remaining solution is ==sodium hydroxide== (alkaline)'] },
+    { q: 'Molten lead(II) bromide is electrolysed. Write the half-equation for the reaction at (a) the cathode (b) the anode.', m: 2,
+      p: ['==Pb²⁺ + 2e⁻ → Pb==', '==2Br⁻ → Br₂ + 2e⁻=='] },
+    { q: 'Explain how impure copper can be purified by electrolysis.', m: 3,
+      p: ['The impure copper is the ==anode== and pure copper is the ==cathode==, in copper(II) sulfate solution', 'Copper atoms at the anode ==lose electrons== and dissolve as Cu²⁺', 'Cu²⁺ ions ==gain electrons== at the cathode and pure copper is deposited'] }
+  ]
+},
+metals: {
+  code: 'Topic 9', name: 'Metals and extraction',
+  lede: 'The reactivity series decides how a metal is extracted, how it reacts and how it is protected.',
+  learn: [
+    { h: 'The reactivity series', list: ['In order: ==potassium, sodium, calcium, magnesium, aluminium, (carbon), zinc, iron, (hydrogen), copper, silver, gold==.', 'Metals above ==hydrogen== react with ==dilute acids== to give ==hydrogen==. Those above ==calcium== react with cold water; magnesium reacts with steam.', 'A more reactive metal ==displaces== a less reactive one from its compound.', '==Reactivity series check==: the more reactive the metal, the more easily it forms a ==positive ion== (loses electrons).'] },
+    { h: 'Extraction of metals', list: ['Most metals are found as ==ores== (compounds). ==Gold== is found as the ==element==.', 'Metals ==below carbon== (zinc, iron, copper) are extracted by ==reduction with carbon==.', 'Metals ==above carbon== (aluminium, magnesium, sodium) are extracted by ==electrolysis==.', '==Blast furnace (iron)==: coke burns to give CO₂; CO₂ + C → 2CO; ==Fe₂O₃ + 3CO → 2Fe + 3CO₂==. Limestone removes ==sand (SiO₂)== as ==slag (CaSiO₃)==.'], f: ['Fe₂O₃ + 3CO → 2Fe + 3CO₂'] },
+    { h: 'Alloys, uses and rusting', list: ['An ==alloy== is a ==mixture of a metal with another element==. Alloys are ==harder== than pure metals because the different-sized atoms ==distort the layers==, so they cannot slide.', '==Steel==: iron + carbon. ==Brass==: copper + zinc. ==Bronze==: copper + tin.', '==Aluminium==: low density, does not corrode (oxide layer): aircraft, cans. ==Copper==: good conductor, malleable: wires, pipes.', '==Rusting== needs ==oxygen and water==. Prevent with ==painting, oiling, plating, galvanising==.', '==Sacrificial protection==: zinc is more reactive than iron, so the zinc corrodes instead of the iron.'] }
+  ],
+  mistakes: ['Saying ==iron is extracted by electrolysis==. It is reduced by carbon.', 'Saying ==rusting needs only water==. It needs oxygen as well.', 'Saying ==carbon is more reactive than iron and all metals==. It sits between aluminium and zinc.', 'Forgetting that ==limestone removes impurities== (slag), it does not make iron.', 'Saying alloys are ==pure metals==. They are mixtures.'],
+  diagrams: [{ svg: svgBlast, cap: 'The blast furnace: ==carbon monoxide reduces iron(III) oxide==.' }],
+  worked: [
+    W('Choose a method of extraction for (a) iron (b) aluminium (c) gold. Explain your choices.', 'Use the position relative to ==carbon== in the reactivity series.', 'Gold is so unreactive it is found as the metal.', 'Below carbon: reduce. Above: electrolyse.',
+      [['(a) Iron', 'Reduction with carbon (or carbon monoxide)', 'Iron is below carbon in the series.'], ['(b) Aluminium', 'Electrolysis of molten aluminium oxide', 'Aluminium is above carbon, so carbon cannot reduce its oxide.'], ['(c) Gold', 'It is found as the uncombined metal', 'Gold is very unreactive.']],
+      [['Iron', 'reduction with carbon', 0], ['Aluminium', 'electrolysis', 1], ['Gold', 'found native', 2]], true),
+    W('Write the equation for the reduction of iron(III) oxide by carbon monoxide in the blast furnace. State what is oxidised and what is reduced.', '==Reduction is loss of oxygen==. Write the equation, then say which substance loses oxygen.', 'Iron(III) oxide loses oxygen; carbon monoxide gains oxygen.', 'Reduction = loss of oxygen',
+      [['Equation', 'Fe₂O₃ + 3CO → 2Fe + 3CO₂', 'Check: 2 Fe, 3 C, 6 O on each side ✓.'], ['Reduced', 'Iron(III) oxide', 'It loses oxygen to become iron.'], ['Oxidised', 'Carbon monoxide', 'It gains oxygen to become carbon dioxide.']],
+      [['Equation', 'Fe₂O₃ + 3CO → 2Fe + 3CO₂', 0], ['Reduced', 'Fe₂O₃', 1], ['Oxidised', 'CO', 2]]),
+    W('Explain why limestone is added to the blast furnace.', 'Limestone removes the ==silica (sand)== impurity as ==slag==.', 'Give the two equations.', 'Limestone makes slag',
+      [['Thermal decomposition', 'CaCO₃ → CaO + CO₂', 'The limestone breaks down in the heat.'], ['Calcium oxide reacts with sand', 'CaO + SiO₂ → CaSiO₃', 'Sand is an acidic impurity, CaO is a base.'], ['The product', 'Calcium silicate is slag', 'It melts, floats on the iron and is run off.']],
+      [['Decomposition', 'CaCO₃ → CaO + CO₂', 0], ['Reaction', 'CaO + SiO₂ → CaSiO₃', 1], ['Product', 'slag', 2]], true),
+    W('State the conditions needed for iron to rust and give two methods of preventing rusting.', 'Rusting needs ==oxygen== (air) and ==water==.', 'Prevention keeps air or water away, or uses a more reactive metal.', 'Oxygen + water',
+      [['Conditions', 'Oxygen and water', 'Both are needed.'], ['Method 1: barrier', 'Painting, oiling or plastic coating', 'Keeps air and water away from the iron.'], ['Method 2: galvanising', 'Coating with zinc', 'Zinc is more reactive, so it corrodes first (sacrificial protection).']],
+      [['Conditions', 'oxygen and water', 0], ['Barrier', 'paint or oil', 1], ['Galvanising', 'zinc coating', 2]], true),
+    W('Explain why steel is harder than pure iron.', 'Link the ==atoms== to the ==layers== and how they ==slide==.', 'Name the added element.', 'Different-sized atoms distort the layers',
+      [['Steel', 'An alloy of iron with a little carbon', ''], ['Pure iron', 'Layers of identical atoms can slide over each other easily', 'This makes it soft.'], ['In steel', 'The carbon atoms are a different size and distort the layers', ''], ['Result', 'The layers cannot slide, so steel is harder', '']],
+      [['Steel', 'iron + carbon', 0], ['Pure iron', 'layers slide', 1], ['In steel', 'distorted layers', 2], ['Result', 'harder', 3]], true),
+    W('A magnesium ribbon is placed in dilute hydrochloric acid and a copper strip in another tube. Predict what happens in each.', 'Magnesium is ==above hydrogen==, copper is ==below==.', 'Name the gas and the salt.', 'Above hydrogen reacts with acid',
+      [['Magnesium', 'Fizzes and dissolves, hydrogen is given off', 'Mg + 2HCl → MgCl₂ + H₂'], ['Copper', 'No reaction', 'Copper is below hydrogen in the reactivity series.'], ['Test', 'The gas from the magnesium gives a squeaky pop with a lighted splint', 'This confirms hydrogen.']],
+      [['Mg', 'fizzes, H₂', 0], ['Cu', 'no reaction', 1], ['Test', 'squeaky pop', 2]], true)
+  ],
+  drill: 'metals',
+  quiz: [
+    { q: 'Which metal is extracted by electrolysis?', o: ['iron', 'zinc', 'aluminium', 'copper'], a: 2, w: '==Aluminium== is above carbon.' },
+    { q: 'Rusting needs…', o: ['water only', 'oxygen only', 'oxygen and water', 'carbon dioxide'], a: 2, w: '==Oxygen and water==.' },
+    { q: 'The main reducing agent in the blast furnace is…', o: ['limestone', 'carbon monoxide', 'oxygen', 'slag'], a: 1, w: '==Carbon monoxide==.' },
+    { q: 'Brass is an alloy of…', o: ['copper and zinc', 'iron and carbon', 'copper and tin', 'aluminium and iron'], a: 0, w: '==Copper and zinc==.' },
+    { q: 'Which metal does NOT react with dilute hydrochloric acid?', o: ['zinc', 'magnesium', 'copper', 'iron'], a: 2, w: '==Copper== is below hydrogen.' },
+    { q: 'Galvanising protects iron using…', o: ['paint', 'oil', 'zinc', 'plastic'], a: 2, w: '==Zinc== (sacrificial protection).' }
+  ],
+  exam: [
+    { q: 'State the order of reactivity of these metals, most reactive first: copper, zinc, magnesium, iron.', m: 2,
+      p: ['==magnesium== is most reactive', '==magnesium, zinc, iron, copper== (correct order)'] },
+    { q: 'Describe the extraction of iron in the blast furnace. Include one equation.', m: 4,
+      p: ['==Coke burns== in hot air, making carbon dioxide and heat', 'CO₂ reacts with more carbon to make ==carbon monoxide==', '==Fe₂O₃ + 3CO → 2Fe + 3CO₂== (iron oxide is reduced)', '==Limestone== removes sand as slag'] },
+    { q: 'Explain why aluminium, a reactive metal, is used for aircraft and food cans.', m: 3,
+      p: ['Aluminium has a ==low density==', 'It has a thin ==oxide layer== on its surface', 'which ==protects it from corrosion=='] }
+  ]
+},
+air: {
+  code: 'Topic 10', name: 'Air, water and the environment',
+  lede: 'What air is made of, how pollutants form, and how water is made safe.',
+  learn: [
+    { h: 'Air', list: ['Dry air: ==nitrogen 78%, oxygen 21%, argon 0.9%, carbon dioxide 0.04%==, plus small amounts of other gases.', 'Air is separated by ==fractional distillation of liquid air== because the gases have ==different boiling points==.', 'To find the percentage of oxygen: heat ==copper== in a fixed volume of air. The copper takes oxygen, the volume ==falls by about one fifth== (21%).', 'Uses: ==nitrogen== (making ammonia, food packaging), ==oxygen== (hospitals, steelmaking), ==argon== (in light bulbs, welding).'], f: ['2Cu + O₂ → 2CuO'] },
+    { h: 'Pollution', table: [['Pollutant', 'Source', 'Problem'], ['carbon monoxide', 'incomplete combustion of fuels', 'toxic: stops blood carrying oxygen'], ['sulfur dioxide', 'burning fossil fuels containing sulfur', 'acid rain, breathing problems'], ['oxides of nitrogen', 'car engines (nitrogen and oxygen react at high temperature)', 'acid rain, breathing problems'], ['carbon dioxide and methane', 'burning fuels, cattle, rice fields', 'greenhouse effect, global warming'], ['particulates (soot)', 'incomplete combustion', 'lung damage']] },
+    { h: 'Greenhouse effect, catalytic converters, water', list: ['==Greenhouse gases== (CO₂, CH₄) ==absorb infrared== radiation from the Earth and keep it in the atmosphere, causing ==global warming==.', '==Catalytic converters== change harmful gases to harmless ones: ==2CO + 2NO → 2CO₂ + N₂==.', '==Acid rain== is caused by ==SO₂== and ==NOₓ== dissolving in rain. It damages buildings, kills trees and fish.', '==Water treatment==: ==filter== (remove solids), add ==carbon== (remove tastes), add ==chlorine== (kill bacteria).', 'Test for water: ==anhydrous copper(II) sulfate turns from white to blue==, ==cobalt chloride paper turns from blue to pink==.'] }
+  ],
+  mistakes: ['Saying ==carbon dioxide is the main gas in air== (nitrogen is).', 'Saying the ==greenhouse effect is bad==. Without it the Earth would be frozen; the problem is the ==enhanced== effect.', 'Confusing ==acid rain== (SO₂, NOₓ) with ==global warming== (CO₂, CH₄).', 'Saying ==carbon monoxide== forms from complete combustion. It forms from ==incomplete== combustion.', 'Saying chlorine is added to water to ==remove solids==. It kills bacteria.'],
+  diagrams: [{ svg: svgAirBar, cap: 'Dry air: ==78% nitrogen==, ==21% oxygen==.' }],
+  worked: [
+    W('100 cm³ of air is passed over hot copper until no more gas is absorbed. The remaining volume is 79 cm³. Calculate the percentage of oxygen in the air.', 'The ==volume that disappears== is the oxygen taken by the copper.', 'The remaining 79 cm³ is mostly nitrogen.', 'Volume lost ÷ starting volume × 100',
+      [['Volume of oxygen used', '100 − 79 = 21 cm³', 'Copper reacts with the oxygen: 2Cu + O₂ → 2CuO.'], ['Percentage', '21 ÷ 100 × 100', ''], ['Answer', '21% oxygen', '']],
+      [['Start', '100 cm³', -1], ['End', '79 cm³', -1], ['Oxygen used', '21 cm³', 0], ['Percentage', '21%', 2]]),
+    W('Explain how carbon monoxide forms in a car engine and why it is dangerous.', 'It is formed by ==incomplete combustion== when there is ==not enough oxygen==.', 'Say what the gas does in the body.', 'Incomplete combustion',
+      [['How it forms', 'Incomplete combustion of the fuel', 'There is not enough oxygen for all the carbon to form CO₂.'], ['Why it is dangerous', 'It is toxic', ''], ['What it does', 'It combines with haemoglobin in the blood so the blood cannot carry oxygen', 'This can cause unconsciousness and death.']],
+      [['Formed by', 'incomplete combustion', 0], ['Danger', 'toxic', 1], ['Effect', 'blood cannot carry O₂', 2]], true),
+    W('Explain how oxides of nitrogen form in a car engine and how a catalytic converter reduces the problem.', 'Nitrogen and oxygen from the air react at ==high temperature== in the engine.', 'Give the converter equation.', 'High temperature in the engine',
+      [['Formation', 'Nitrogen and oxygen in the air react at the high temperature in the engine', 'N₂ + O₂ → 2NO'], ['Problem', 'NOₓ causes acid rain and breathing problems', ''], ['The converter', 'It uses a catalyst (platinum or rhodium) to convert harmful gases into harmless ones', ''], ['Equation', '2CO + 2NO → 2CO₂ + N₂', 'Carbon monoxide and nitrogen monoxide become carbon dioxide and nitrogen.']],
+      [['Formation', 'N₂ + O₂ → NO', 0], ['Problem', 'acid rain', 1], ['Converter', 'platinum catalyst', 2], ['Equation', '2CO + 2NO → 2CO₂ + N₂', 3]], true),
+    W('Explain how the greenhouse effect causes global warming.', 'Use the keywords: ==infrared==, ==absorb==, ==atmosphere==.', 'The Earth emits infrared; greenhouse gases trap it.', 'Absorb and re-emit infrared',
+      [['The Sun warms the Earth', 'The Earth emits infrared radiation', ''], ['Greenhouse gases', 'CO₂ and CH₄ in the atmosphere absorb some of this infrared', ''], ['They radiate it back', 'Some energy returns to the Earth', 'So less escapes to space.'], ['More greenhouse gases', 'The atmosphere traps more energy and the Earth warms up', 'This is global warming.']],
+      [['Earth', 'emits infrared', 0], ['Gases', 'absorb infrared', 1], ['Back to Earth', 're-emitted', 2], ['More gases', 'global warming', 3]], true),
+    W('Describe how water from a river is made safe to drink.', 'Think: ==filter==, ==carbon==, ==chlorine==.', 'Say the purpose of each step.', 'Filter, carbon, chlorine',
+      [['Filter', 'Passed through sand and gravel beds to remove solid particles', ''], ['Carbon', 'Passed through carbon to remove unwanted tastes and odours', ''], ['Chlorine', 'Added to kill bacteria', ''], ['Result', 'Safe drinking water (not pure: it still has dissolved substances)', '']],
+      [['Filter', 'removes solids', 0], ['Carbon', 'removes tastes', 1], ['Chlorine', 'kills bacteria', 2]], true),
+    W('Describe a test to show that a liquid is water.', 'Use ==anhydrous copper(II) sulfate== or ==cobalt chloride paper==.', 'This only shows water is present; it does not prove it is pure.', 'White to blue',
+      [['Add the liquid to anhydrous copper(II) sulfate', 'It is a white powder', ''], ['If water is present', 'The powder turns blue', 'Hydrated copper(II) sulfate is blue.'], ['Alternative', 'Cobalt chloride paper turns from blue to pink', ''], ['Pure water', 'Boils at exactly 100 °C and freezes at 0 °C', 'The test for purity.']],
+      [['Test', 'anhydrous copper(II) sulfate', 0], ['Result', 'white to blue', 1], ['Alternative', 'blue to pink', 2], ['Purity', 'b.p. 100 °C', 3]], true)
+  ],
+  drill: 'air',
+  quiz: [
+    { q: 'What is the most abundant gas in air?', o: ['oxygen', 'nitrogen', 'carbon dioxide', 'argon'], a: 1, w: '==Nitrogen== (78%).' },
+    { q: 'Acid rain is caused by…', o: ['carbon dioxide', 'sulfur dioxide', 'argon', 'oxygen'], a: 1, w: '==Sulfur dioxide== (and oxides of nitrogen).' },
+    { q: 'Carbon monoxide is formed by…', o: ['complete combustion', 'incomplete combustion', 'photosynthesis', 'evaporation'], a: 1, w: '==Incomplete combustion==.' },
+    { q: 'Which gas contributes to global warming?', o: ['nitrogen', 'argon', 'methane', 'helium'], a: 2, w: '==Methane== (and carbon dioxide).' },
+    { q: 'Chlorine is added to drinking water to…', o: ['remove solids', 'kill bacteria', 'remove taste', 'add oxygen'], a: 1, w: 'To ==kill bacteria==.' },
+    { q: 'Anhydrous copper(II) sulfate turns ___ in the presence of water.', o: ['white to blue', 'blue to white', 'pink to blue', 'green'], a: 0, w: '==White to blue==.' }
+  ],
+  exam: [
+    { q: 'State the approximate percentages of nitrogen and oxygen in dry air.', m: 2,
+      p: ['Nitrogen ==78%== (about four fifths)', 'Oxygen ==21%== (about one fifth)'] },
+    { q: 'Describe how liquid air is separated into nitrogen, oxygen and argon.', m: 3,
+      p: ['The air is ==cooled and compressed== to a liquid', '==Fractional distillation==: the liquid air is warmed slowly', 'Gases ==boil off at different temperatures== (nitrogen first, then argon, then oxygen)'] },
+    { q: 'Explain how a catalytic converter reduces air pollution from cars.', m: 3,
+      p: ['It contains a ==catalyst== such as platinum', '==2CO + 2NO → 2CO₂ + N₂==', 'Harmful gases (CO and NO) are converted into ==harmless carbon dioxide and nitrogen=='] }
+  ]
+},
+hydro: {
+  code: 'Topic 11', name: 'Crude oil, alkanes and alkenes',
+  lede: 'Hydrocarbons: fractions of crude oil, the two families, cracking and tests.',
+  learn: [
+    { h: 'Crude oil and its fractions', list: ['Crude oil is a ==mixture of hydrocarbons== (compounds of hydrogen and carbon only). It is separated by ==fractional distillation== because the fractions have ==different boiling points==.', 'Going ==down== the column the molecules are ==longer==, with ==higher boiling points== and ==higher viscosity==, and are ==harder to ignite==.', 'Fractions: ==refinery gas, petrol (gasoline), naphtha, kerosene (paraffin), diesel, bitumen==.', 'Burning fossil fuels releases ==carbon dioxide== and, if incomplete, ==carbon monoxide== and ==soot==. Sulfur in fuels makes ==sulfur dioxide==.'] },
+    { h: 'Alkanes and alkenes', table: [['', 'Alkanes', 'Alkenes'], ['General formula', 'CₙH₂ₙ₊₂', 'CₙH₂ₙ'], ['Bonds', 'all single (saturated)', 'one C=C double bond (unsaturated)'], ['Examples', 'methane CH₄, ethane C₂H₆, propane C₃H₈, butane C₄H₁₀', 'ethene C₂H₄, propene C₃H₆, butene C₄H₈'], ['Reactions', 'burn; substitution with chlorine in UV light', 'burn; addition reactions; polymerise'], ['Test', 'no change with bromine water', 'bromine water turns from orange-brown to colourless']] },
+    { h: 'Cracking and addition reactions', list: ['==Cracking==: breaking ==long alkane molecules== into ==shorter, more useful alkanes and alkenes==. Conditions: ==high temperature== and a ==catalyst== (or steam). Example: C₁₀H₂₂ → C₈H₁₈ + C₂H₄.', 'Alkenes undergo ==addition reactions== (the C=C bond opens): with ==hydrogen== (nickel catalyst, 150 °C) → alkane; with ==bromine== → a dibromoalkane (decolourises bromine water); with ==steam== (phosphoric acid catalyst, 300 °C, high pressure) → ==alcohol==.', 'A ==homologous series== is a family with the ==same general formula==, similar chemical properties and ==a gradual change in physical properties==.', '==Substitution==: CH₄ + Cl₂ → CH₃Cl + HCl (UV light).'], f: ['alkane: CₙH₂ₙ₊₂      alkene: CₙH₂ₙ'] }
+  ],
+  mistakes: ['Saying crude oil is a ==compound==. It is a mixture.', 'Writing the alkene formula as ==CₙH₂ₙ₊₂==.', 'Saying an alkane ==decolourises bromine water==. Only alkenes do.', 'Saying cracking ==joins== small molecules. It breaks them.', 'Forgetting the ==catalyst and temperature== for cracking.'],
+  diagrams: [{ svg: svgColumn, cap: 'Fractional distillation of crude oil: ==longer molecules== are lower in the column.' }],
+  worked: [
+    W('Write the molecular formulae of the alkane and the alkene that each contain 4 carbon atoms.', 'Use ==CₙH₂ₙ₊₂== and ==CₙH₂ₙ== with n = 4.', 'The alkene has two fewer hydrogens.', 'Alkane 2n + 2, alkene 2n',
+      [['Alkane: CₙH₂ₙ₊₂', 'n = 4: H = 2 × 4 + 2 = 10', 'C₄H₁₀ (butane).'], ['Alkene: CₙH₂ₙ', 'n = 4: H = 2 × 4 = 8', 'C₄H₈ (butene).'], ['Compare', 'The alkene has 2 fewer hydrogen atoms', 'It has a C=C double bond.']],
+      [['Alkane', 'C₄H₁₀', 0], ['Alkene', 'C₄H₈', 1]]),
+    W('Write a balanced equation for the complete combustion of ethane, C₂H₆.', 'Complete combustion gives ==carbon dioxide and water==.', 'Use whole numbers: double everything to remove the half.', 'Balance C, then H, then O',
+      [['Products', 'C₂H₆ + O₂ → CO₂ + H₂O', ''], ['Balance C and H', 'C₂H₆ + O₂ → 2CO₂ + 3H₂O', '2 C gives 2CO₂, 6 H gives 3H₂O.'], ['Balance O', 'Right side has 7 O, so 3½O₂', '2 × 2 + 3 = 7.'], ['Remove the fraction', '2C₂H₆ + 7O₂ → 4CO₂ + 6H₂O', 'Check: 4 C, 12 H, 14 O on each side ✓.']],
+      [['Products', 'CO₂ and H₂O', 0], ['C and H', '2CO₂ + 3H₂O', 1], ['Balanced', '2C₂H₆ + 7O₂ → 4CO₂ + 6H₂O', 3]]),
+    W('Dodecane, C₁₂H₂₆, is cracked into octane, C₈H₁₈, and one other product. Identify the other product.', 'Subtract the atoms: ==C₁₂H₂₆ − C₈H₁₈==.', 'The other product has the same atoms left over.', 'Atoms must balance',
+      [['Carbon atoms left', '12 − 8 = 4', ''], ['Hydrogen atoms left', '26 − 18 = 8', ''], ['The other product', 'C₄H₈', 'This has the general formula CₙH₂ₙ, so it is an alkene (butene).'], ['Equation', 'C₁₂H₂₆ → C₈H₁₈ + C₄H₈', 'Conditions: high temperature and a catalyst.']],
+      [['Carbon left', '4', 0], ['Hydrogen left', '8', 1], ['Product', 'C₄H₈, an alkene', 2], ['Equation', 'C₁₂H₂₆ → C₈H₁₈ + C₄H₈', 3]]),
+    W('Describe a test to show that a hydrocarbon is an alkene, not an alkane.', 'Use ==bromine water==.', 'Give the colour change.', 'Orange to colourless',
+      [['Add bromine water', 'and shake', 'Bromine water is orange-brown.'], ['Alkene', 'Turns from orange-brown to colourless', 'The bromine adds across the C=C double bond.'], ['Alkane', 'Stays orange-brown', 'There is no double bond, so no reaction.']],
+      [['Reagent', 'bromine water', 0], ['Alkene', 'goes colourless', 1], ['Alkane', 'no change', 2]], true),
+    W('State the trends in boiling point and viscosity going down the fractionating column, and explain why the fractions separate.', 'Link ==chain length== to ==boiling point==.', 'Longer chains have stronger forces between molecules.', 'Longer chains, higher boiling point',
+      [['Trend going down', 'The molecules get longer', ''], ['Boiling point and viscosity', 'Both increase', 'Longer chains have stronger forces between the molecules.'], ['Why they separate', 'The column is hot at the bottom and cool at the top', 'Each fraction condenses where the temperature is just below its boiling point.']],
+      [['Chain length', 'longer', 0], ['Boiling point', 'higher', 1], ['Separation', 'condenses at its boiling point', 2]], true),
+    W('Write the equation for ethene reacting with hydrogen and name the conditions and the product.', 'This is an ==addition reaction==.', 'The double bond becomes a single bond.', 'Addition across C=C',
+      [['Equation', 'C₂H₄ + H₂ → C₂H₆', ''], ['Conditions', 'Nickel catalyst, about 150 °C', ''], ['Product', 'Ethane, an alkane', 'The C=C double bond has become a C–C single bond.']],
+      [['Equation', 'C₂H₄ + H₂ → C₂H₆', 0], ['Conditions', 'nickel, 150 °C', 1], ['Product', 'ethane', 2]])
+  ],
+  drill: 'hydro',
+  quiz: [
+    { q: 'Crude oil is a…', o: ['compound', 'mixture of hydrocarbons', 'single element', 'pure alkane'], a: 1, w: 'A ==mixture of hydrocarbons==.' },
+    { q: 'The general formula of an alkane is…', o: ['CₙH₂ₙ', 'CₙH₂ₙ₊₂', 'CₙH₂ₙ₋₂', 'CₙHₙ'], a: 1, w: '==CₙH₂ₙ₊₂==.' },
+    { q: 'Which decolourises bromine water?', o: ['ethane', 'methane', 'ethene', 'propane'], a: 2, w: '==Ethene== (an alkene).' },
+    { q: 'Cracking produces…', o: ['only alkanes', 'shorter alkanes and alkenes', 'longer chains', 'only water'], a: 1, w: '==Shorter alkanes and alkenes==.' },
+    { q: 'Which fraction has the highest boiling point?', o: ['refinery gas', 'petrol', 'diesel', 'bitumen'], a: 3, w: '==Bitumen==.' },
+    { q: 'Ethene has the formula…', o: ['C₂H₆', 'C₂H₄', 'CH₄', 'C₃H₆'], a: 1, w: '==C₂H₄==.' }
+  ],
+  exam: [
+    { q: 'Explain how crude oil is separated into fractions.', m: 3,
+      p: ['Crude oil is heated and the ==vapours enter a fractionating column==', 'The column is ==hotter at the bottom== and cooler at the top', 'Each fraction ==condenses at its boiling point==; the longest molecules at the bottom'] },
+    { q: 'Describe a chemical test to distinguish ethane from ethene. State the result for each.', m: 3,
+      p: ['Add ==bromine water== (shake)', 'Ethene: ==orange-brown to colourless==', 'Ethane: ==stays orange-brown== (no change)'] },
+    { q: 'Decane, C₁₀H₂₂, is cracked to make an alkane with 6 carbon atoms, C₆H₁₄, and one other product. Write an equation and name the type of the other product.', m: 3,
+      p: ['==C₁₀H₂₂ → C₆H₁₄ + C₄H₈==', 'C₄H₈ has the general formula CₙH₂ₙ', 'It is an ==alkene== (butene)'] }
+  ]
+},
+organics: {
+  code: 'Topic 11', name: 'Alcohols, acids and polymers',
+  lede: 'Ethanol, ethanoic acid and plastics: how they are made, what they do and why plastics are a problem.',
+  learn: [
+    { h: 'Alcohols (ethanol)', list: ['Ethanol is C₂H₅OH. It is used as a ==fuel==, a ==solvent== and in alcoholic drinks.', '==Fermentation==: ==C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂==. Uses ==yeast==, ==no oxygen (anaerobic)==, about ==25–35 °C==. Cheap, renewable, slow, impure.', '==Hydration of ethene==: ==C₂H₄ + H₂O ⇌ C₂H₅OH==. Uses ==steam==, ==phosphoric acid catalyst==, about ==300 °C== and ==high pressure==. Fast, pure, uses non-renewable crude oil.', 'Ethanol burns: ==C₂H₅OH + 3O₂ → 2CO₂ + 3H₂O==.'] },
+    { h: 'Carboxylic acids', list: ['Ethanoic acid is ==CH₃COOH==. It is a ==weak acid== (only partly ionised in water).', 'It reacts like other acids: with ==metals== (hydrogen), ==carbonates== (carbon dioxide) and ==bases== (a salt: ethanoates).', 'Ethanol can be ==oxidised== to ethanoic acid (vinegar forms when wine goes sour).', 'A carboxylic acid reacts with an alcohol to make an ==ester== (sweet smell), used as flavourings and perfumes.'] },
+    { h: 'Polymers', list: ['A ==polymer== is a ==long chain molecule== made by joining many small ==monomers==.', '==Addition polymerisation==: ==unsaturated monomers (with C=C)== join. The double bond opens. Only the polymer is made. Examples: ==poly(ethene)==, ==poly(propene)==, ==PVC==.', 'Many plastics are ==not biodegradable==: they stay in ==landfill== and harm ==wildlife== (animals eat or get trapped in them, litter in oceans).', '==Burning== plastics gives ==carbon dioxide== and ==toxic gases== (PVC gives hydrogen chloride). ==Recycling== saves crude oil.', '==Condensation polymers== (nylon, polyesters like PET) form with ==a small molecule (water) lost== each time two monomers join.'] }
+  ],
+  mistakes: ['Writing ==fermentation== needs oxygen. It is anaerobic.', 'Saying the monomer is the ==polymer==.', 'Forgetting the ==double bond opens== in addition polymerisation.', 'Saying plastics ==rot away==. Most are not biodegradable.', 'Saying ethanoic acid is a ==strong== acid.'],
+  diagrams: [{ svg: svgPolymer, cap: '==Addition polymerisation==: many ethene monomers become poly(ethene).' }],
+  worked: [
+    W('Describe how ethanol is made by fermentation. State the conditions and write the equation.', 'Keywords: ==yeast==, ==glucose==, ==no oxygen==, ==temperature==.', 'It produces carbon dioxide as well.', 'Yeast, 25–35 °C, no oxygen',
+      [['Starting material', 'A sugar such as glucose solution', ''], ['Add yeast', 'Yeast contains enzymes that catalyse the reaction', ''], ['Conditions', 'About 25 to 35 °C and no oxygen (anaerobic)', 'Too hot kills the yeast; too cold is too slow.'], ['Equation', 'C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂', 'Glucose gives ethanol and carbon dioxide.']],
+      [['Sugar', 'glucose', 0], ['Catalyst', 'yeast', 1], ['Conditions', '25–35 °C, no oxygen', 2], ['Equation', 'C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂', 3]], true),
+    W('Compare the manufacture of ethanol by fermentation and by the hydration of ethene.', 'Compare ==raw material==, ==speed==, ==purity== and ==conditions==.', 'Give one advantage of each.', 'Renewable v fast',
+      [['Fermentation', 'Uses sugar (renewable), yeast, low temperature', 'Slow and gives an impure, dilute product.'], ['Hydration of ethene', 'Uses ethene from crude oil (non-renewable), steam, catalyst, 300 °C, high pressure', 'Fast and gives pure ethanol.'], ['Advantage of fermentation', 'Renewable and low energy cost', ''], ['Advantage of hydration', 'Fast and continuous; pure product', '']],
+      [['Fermentation', 'renewable, slow, impure', 0], ['Hydration', 'fast, pure, non-renewable', 1], ['Advantage 1', 'renewable', 2], ['Advantage 2', 'pure and fast', 3]], true),
+    W('Write the equation for the combustion of ethanol.', 'Complete combustion gives ==carbon dioxide and water==.', 'Balance C, H, then O.', 'C, H, then O',
+      [['Products', 'C₂H₅OH + O₂ → CO₂ + H₂O', ''], ['Balance C and H', 'C₂H₅OH + O₂ → 2CO₂ + 3H₂O', '2 C and 6 H on the left.'], ['Balance O', 'Right has 7 O; left has 1 + 2x. Put 3 in front of O₂', 'C₂H₅OH + 3O₂ → 2CO₂ + 3H₂O'], ['Check', '2 C, 6 H, 7 O on each side ✓', '']],
+      [['Products', 'CO₂, H₂O', 0], ['C and H', '2CO₂ + 3H₂O', 1], ['Balanced', 'C₂H₅OH + 3O₂ → 2CO₂ + 3H₂O', 2], ['Check', '2C 6H 7O ✓', 3]]),
+    W('Chloroethene, CH₂=CHCl, is the monomer of PVC. Describe how PVC forms and how many monomer units are in a polymer of relative formula mass 25 000. (Mr of chloroethene = 62.5)', 'Many monomers join by ==addition polymerisation==: the ==C=C double bond opens==.', 'Divide the polymer Mr by the monomer Mr.', 'n = Mr of polymer ÷ Mr of monomer',
+      [['How it forms', 'The C=C bonds open and the monomers join in a long chain', 'Only one product is made.'], ['Divide the masses', 'n = 25 000 ÷ 62.5', ''], ['Answer', 'n = 400 monomer units', ''], ['Name', 'poly(chloroethene), or PVC', '']],
+      [['Mr polymer', '25 000', -1], ['Mr monomer', '62.5', -1], ['n', '400', 2]]),
+    W('Explain why disposing of plastic waste by landfill and burning causes problems.', 'Give a problem for ==each method==.', 'Say what recycling does.', 'Landfill v burning',
+      [['Landfill', 'Many plastics are not biodegradable, so they last for hundreds of years and take up space', ''], ['Burning', 'Releases carbon dioxide and toxic gases such as hydrogen chloride from PVC', ''], ['Wildlife', 'Plastics litter land and oceans and harm animals', ''], ['Recycling', 'Saves crude oil and reduces waste', '']],
+      [['Landfill', 'not biodegradable', 0], ['Burning', 'toxic gases, CO₂', 1], ['Wildlife', 'harmed', 2], ['Recycling', 'saves oil', 3]], true),
+    W('Describe two reactions of ethanoic acid that show it is an acid.', 'Use the ==reactions of acids==.', 'Name the products.', 'Metal, carbonate, base',
+      [['With magnesium', 'Hydrogen gas is given off', 'Magnesium ethanoate forms.'], ['With sodium carbonate', 'Carbon dioxide gas is given off (fizzing)', 'Sodium ethanoate and water also form.'], ['Strength', 'It is a weak acid', 'It reacts more slowly than hydrochloric acid of the same concentration.']],
+      [['With Mg', 'hydrogen', 0], ['With carbonate', 'carbon dioxide', 1], ['Strength', 'weak', 2]], true)
+  ],
+  drill: 'organics',
+  quiz: [
+    { q: 'Fermentation uses…', o: ['yeast and no oxygen', 'steam and a catalyst', 'oxygen and light', 'ethene'], a: 0, w: '==Yeast and no oxygen==.' },
+    { q: 'The formula of ethanol is…', o: ['CH₃OH', 'C₂H₅OH', 'CH₃COOH', 'C₂H₆'], a: 1, w: '==C₂H₅OH==.' },
+    { q: 'Poly(ethene) is made from…', o: ['ethane', 'ethene', 'ethanol', 'ethanoic acid'], a: 1, w: '==Ethene==.' },
+    { q: 'Ethanoic acid is a…', o: ['strong acid', 'weak acid', 'base', 'neutral compound'], a: 1, w: 'A ==weak acid==.' },
+    { q: 'Most plastics are a problem because they are…', o: ['reactive', 'not biodegradable', 'heavy', 'acidic'], a: 1, w: '==Not biodegradable==.' },
+    { q: 'A monomer is…', o: ['a long chain', 'a small molecule that joins to make a polymer', 'a mixture', 'a catalyst'], a: 1, w: 'A ==small molecule== that joins with others.' }
+  ],
+  exam: [
+    { q: 'Describe how ethanol is manufactured from ethene. Give the conditions.', m: 3,
+      p: ['Ethene reacts with ==steam== (C₂H₄ + H₂O → C₂H₅OH)', 'A ==phosphoric acid== catalyst', '==300 °C== and ==high pressure=='] },
+    { q: 'Draw or describe the formation of poly(ethene) from ethene.', m: 3,
+      p: ['Many ==ethene molecules (monomers)== join together', 'The ==C=C double bond opens==', 'To form a ==long chain polymer==, poly(ethene) (–CH₂–CH₂–)ₙ'] },
+    { q: 'Give two environmental problems caused by plastic waste.', m: 2,
+      p: ['Many plastics are ==not biodegradable==, so they remain in landfill for a long time', 'Burning plastic releases ==toxic gases== and carbon dioxide (or plastics harm wildlife)'] }
+  ]
+},
+analysis: {
+  code: 'Topic 12', name: 'Chemical analysis',
+  lede: 'Tests that identify gases, metal ions and negative ions. Learn the reagent and the result for each.',
+  learn: [
+    { h: 'Tests for gases', table: [['Gas', 'Test', 'Result'], ['hydrogen', 'lighted splint', 'squeaky pop'], ['oxygen', 'glowing splint', 'relights'], ['carbon dioxide', 'bubble through limewater', 'turns milky'], ['chlorine', 'damp litmus paper', 'bleached white'], ['ammonia', 'damp red litmus paper', 'turns blue']] },
+    { h: 'Tests for positive ions', table: [['Ion', 'Add sodium hydroxide solution', 'Excess NaOH'], ['Cu²⁺', 'light blue precipitate', 'insoluble'], ['Fe²⁺', 'green precipitate', 'insoluble'], ['Fe³⁺', 'red-brown precipitate', 'insoluble'], ['Al³⁺, Zn²⁺', 'white precipitate', 'dissolves (colourless solution)'], ['Ca²⁺', 'white precipitate', 'insoluble'], ['NH₄⁺', 'no precipitate; warm: ammonia gas', '']] },
+    { h: 'Flame tests, negative ions and water', list: ['==Flame tests==: ==lithium red==, ==sodium yellow==, ==potassium lilac==, ==calcium orange-red==, ==copper blue-green==.', '==Carbonate==: add ==dilute acid==: fizzing, ==CO₂ turns limewater milky==.', '==Chloride==: add ==dilute nitric acid then silver nitrate==: ==white precipitate==. ==Bromide==: ==cream==. ==Iodide==: ==yellow==.', '==Sulfate==: add ==dilute hydrochloric acid then barium chloride==: ==white precipitate==.', '==Nitrate==: add ==sodium hydroxide and aluminium foil==, warm: ==ammonia gas==.', '==Water==: anhydrous copper(II) sulfate (white) turns ==blue==.', 'The ==acid== is added first to remove carbonates that would also give a precipitate.'] }
+  ],
+  mistakes: ['Using a ==glowing splint== for hydrogen. Use a lighted splint.', 'Forgetting to add ==acid first== in the halide and sulfate tests.', 'Mixing up ==Al³⁺ and Ca²⁺==: both give white precipitates; only Al³⁺ dissolves in excess.', 'Saying ==Fe²⁺ gives a red-brown precipitate==. That is Fe³⁺.', 'Using ==dry== litmus paper for chlorine. It must be damp.'],
+  diagrams: [{ svg: svgGasTests, cap: 'Tests for gases: ==learn the test and the result==.' }],
+  worked: [
+    W('A gas is collected from a reaction. It relights a glowing splint. What is the gas?', 'Match the test result to the gas.', 'Oxygen relights; hydrogen pops.', 'Glowing splint relights = oxygen',
+      [['The test', 'A glowing splint', ''], ['The result', 'It relights', ''], ['The gas', 'Oxygen', 'Oxygen supports combustion.']],
+      [['Test', 'glowing splint', 0], ['Result', 'relights', 1], ['Gas', 'oxygen', 2]], true),
+    W('A solution gives a light blue precipitate with sodium hydroxide solution. Identify the positive ion and describe the flame test colour for it.', '==Light blue precipitate with NaOH== means ==Cu²⁺==.', 'Copper flame is blue-green.', 'Cu²⁺',
+      [['Light blue precipitate', 'Copper(II) ions, Cu²⁺', 'Fe²⁺ is green and Fe³⁺ is red-brown.'], ['Does it dissolve in excess NaOH?', 'No: it stays', 'Copper(II) hydroxide is insoluble.'], ['Flame test', 'Blue-green flame', 'Copper compounds colour the flame blue-green.']],
+      [['Ion', 'Cu²⁺', 0], ['Excess NaOH', 'insoluble', 1], ['Flame', 'blue-green', 2]], true),
+    W('A white solid fizzes when dilute hydrochloric acid is added and the gas turns limewater milky. It gives a lilac flame. Identify the solid.', 'Fizzing with ==limewater milky== means a ==carbonate==. Lilac flame means ==potassium==.', 'Combine the two results.', 'Carbonate plus potassium',
+      [['The negative ion', 'Fizzing and the gas turns limewater milky: carbonate', 'The gas is carbon dioxide.'], ['The positive ion', 'Lilac flame: potassium', ''], ['The solid', 'Potassium carbonate, K₂CO₃', '']],
+      [['Anion', 'carbonate', 0], ['Cation', 'potassium', 1], ['Solid', 'K₂CO₃', 2]], true),
+    W('Describe how to test for sulfate ions in a solution.', 'Add ==acid first==, then ==barium chloride==.', 'The acid removes carbonate ions.', 'HCl then BaCl₂',
+      [['Add dilute hydrochloric acid', 'to the solution', 'This removes any carbonate that would also give a precipitate.'], ['Add barium chloride solution', '', ''], ['Positive result', 'A white precipitate of barium sulfate', 'BaSO₄ is insoluble.']],
+      [['Step 1', 'dilute HCl', 0], ['Step 2', 'barium chloride', 1], ['Result', 'white precipitate', 2]], true),
+    W('Two white solutions each give a white precipitate with sodium hydroxide. Describe how to tell whether the ion is Al³⁺ or Ca²⁺.', 'Add ==excess sodium hydroxide==.', 'Aluminium hydroxide is amphoteric.', 'Al³⁺ dissolves',
+      [['Add excess NaOH', 'to each precipitate', ''], ['If it dissolves', 'The ion is Al³⁺ (a colourless solution forms)', 'Zn²⁺ would also dissolve.'], ['If it does not dissolve', 'The ion is Ca²⁺', 'A flame test would give an orange-red flame to confirm.']],
+      [['Add', 'excess NaOH', 0], ['Dissolves', 'Al³⁺', 1], ['Stays', 'Ca²⁺', 2]], true),
+    W('Describe how to test whether a solution contains chloride ions.', 'Use ==acidified silver nitrate==.', 'Use nitric acid to acidify, not hydrochloric acid.', 'HNO₃ then AgNO₃',
+      [['Add dilute nitric acid', 'to the solution', 'This removes carbonates. Do not use HCl: it contains chloride.'], ['Add silver nitrate solution', '', ''], ['Positive result', 'A white precipitate of silver chloride', 'Bromide gives cream and iodide gives yellow.']],
+      [['Step 1', 'dilute nitric acid', 0], ['Step 2', 'silver nitrate', 1], ['Result', 'white precipitate', 2]], true)
+  ],
+  drill: 'analysis',
+  quiz: [
+    { q: 'Hydrogen is tested with a…', o: ['glowing splint', 'lighted splint', 'limewater', 'damp litmus'], a: 1, w: 'A ==lighted splint==: squeaky pop.' },
+    { q: 'A red-brown precipitate with sodium hydroxide shows…', o: ['Cu²⁺', 'Fe²⁺', 'Fe³⁺', 'Ca²⁺'], a: 2, w: '==Fe³⁺==.' },
+    { q: 'A lilac flame shows…', o: ['sodium', 'potassium', 'calcium', 'lithium'], a: 1, w: '==Potassium==.' },
+    { q: 'Sulfate ions give a white precipitate with…', o: ['silver nitrate', 'barium chloride', 'limewater', 'litmus'], a: 1, w: '==Acidified barium chloride==.' },
+    { q: 'Limewater turns milky with…', o: ['oxygen', 'hydrogen', 'carbon dioxide', 'chlorine'], a: 2, w: '==Carbon dioxide==.' },
+    { q: 'A white precipitate that dissolves in excess NaOH shows…', o: ['Ca²⁺', 'Al³⁺', 'Cu²⁺', 'Fe²⁺'], a: 1, w: '==Al³⁺== (or Zn²⁺).' }
+  ],
+  exam: [
+    { q: 'Describe the test for carbon dioxide and state the positive result.', m: 2,
+      p: ['Bubble the gas through ==limewater==', 'It turns ==milky (cloudy)=='] },
+    { q: 'A student adds sodium hydroxide solution to a solution of an unknown compound and gets a green precipitate. Name the positive ion and state what would be seen in the same test for copper(II) ions.', m: 2,
+      p: ['The ion is ==Fe²⁺== (iron(II))', 'Copper(II) gives a ==light blue precipitate=='] },
+    { q: 'Describe how you would test for chloride ions in a solution of sodium chloride.', m: 3,
+      p: ['Add ==dilute nitric acid==', 'Then add ==silver nitrate== solution', 'A ==white precipitate== forms'] }
+  ]
 }
 };
 
@@ -1089,6 +1422,61 @@ const DRILLS = {
       return choiceItem(`Is ${it[0]} exothermic or endothermic?`, it[1], [it[1] === 'exothermic' ? 'endothermic' : 'exothermic'], [['Rule', 'exothermic: gives out energy (ΔH negative); endothermic: takes in energy (ΔH positive)'],['Answer', it[1]]]); },
     () => { const n = rint(2, 4), E = pick([[413, 'C–H'], [436, 'H–H'], [464, 'O–H'], [432, 'H–Cl'], [498, 'O=O'], [805, 'C=O']]);
       return { kind:'num', q:`A reaction makes ${n} ${E[1]} bonds, each releasing ${E[0]} kJ/mol. How much energy is released by making these bonds, in kJ?`, ans:n * E[0], tol:0.01, s:[['Multiply', `${n} × ${E[0]}`],['Answer', `${n * E[0]} kJ`]] }; }
+  ],
+  electro: [
+    () => { const it = pick([['molten lead(II) bromide', 'lead', 'bromine'], ['molten sodium chloride', 'sodium', 'chlorine'], ['concentrated sodium chloride solution', 'hydrogen', 'chlorine'], ['copper(II) sulfate solution (graphite electrodes)', 'copper', 'oxygen'], ['dilute sulfuric acid', 'hydrogen', 'oxygen'], ['potassium bromide solution', 'hydrogen', 'bromine'], ['copper(II) chloride solution', 'copper', 'chlorine'], ['silver nitrate solution (inert electrodes)', 'silver', 'oxygen'], ['sodium hydroxide solution', 'hydrogen', 'oxygen'], ['potassium iodide solution', 'hydrogen', 'iodine']]);
+      const where = rint(0, 1), right = it[where + 1], all = ['lead', 'bromine', 'sodium', 'chlorine', 'hydrogen', 'copper', 'oxygen', 'silver', 'iodine'];
+      return choiceItem(`What is formed at the ${where ? 'anode' : 'cathode'} when ${it[0]} is electrolysed?`, right, shuffle(all.filter(x => x !== right)).slice(0, 3), [['Cathode (−)', it[1]],['Anode (+)', it[2]],['Answer', right]]); },
+    () => { const it = pick([['cathode', 'positive ions (cations)', 'gain electrons (reduction)'], ['anode', 'negative ions (anions)', 'lose electrons (oxidation)']]);
+      return choiceItem(`Which ions move to the ${it[0]}?`, it[1], ['positive ions (cations)', 'negative ions (anions)', 'electrons', 'neutral atoms'].filter(x => x !== it[1]).slice(0, 3), [['PANIC', 'Positive Anode, Negative Is Cathode: negative ions go to the anode'],['Answer', it[1] + ', which ' + it[2]]]); },
+    () => { const g = pick([['hydrogen', 'a lighted splint gives a squeaky pop'], ['chlorine', 'damp litmus paper is bleached white'], ['oxygen', 'a glowing splint relights']]);
+      return choiceItem(`A gas is collected during electrolysis. ${g[1][0].toUpperCase() + g[1].slice(1)}. What is the gas?`, g[0], ['hydrogen', 'chlorine', 'oxygen', 'carbon dioxide'].filter(x => x !== g[0]).slice(0, 3), [['Tests', 'H₂ pop, Cl₂ bleaches damp litmus, O₂ relights a glowing splint'],['Answer', g[0]]]); }
+  ],
+  metals: [
+    () => { const it = pick([['iron', 'reduction with carbon'], ['zinc', 'reduction with carbon'], ['copper', 'reduction with carbon'], ['aluminium', 'electrolysis'], ['magnesium', 'electrolysis'], ['sodium', 'electrolysis'], ['calcium', 'electrolysis']]);
+      return choiceItem(`How is ${it[0]} usually extracted from its ore?`, it[1], ['reduction with carbon', 'electrolysis', 'heating in air', 'filtering'].filter(x => x !== it[1]).slice(0, 3), [['Position', `${it[0]} is ${it[1] === 'electrolysis' ? 'above' : 'below'} carbon in the reactivity series`],['Answer', it[1]]]); },
+    () => { const m = pick([['zinc', true], ['magnesium', true], ['iron', true], ['aluminium', true], ['copper', false], ['silver', false], ['gold', false]]);
+      return choiceItem(`Does ${m[0]} react with dilute hydrochloric acid to make hydrogen?`, m[1] ? 'Yes' : 'No', [m[1] ? 'No' : 'Yes'], [['Rule', 'only metals above hydrogen in the reactivity series react'],['Answer', m[1] ? 'yes' : 'no']]); },
+    () => { const k = rint(1, 10), ans = k * 112, m = k * 160;
+      return { kind:'num', q:`Fe₂O₃ + 3CO → 2Fe + 3CO₂. What mass of iron is made from ${m} g of iron(III) oxide? (Mr: Fe₂O₃ = 160, Fe = 56)`, ans, tol:0.5, s:[['Moles of Fe₂O₃', `${m} ÷ 160 = ${k} mol`],['Ratio 1 : 2', `${2 * k} mol Fe`],['Mass', `${2 * k} × 56 = ${ans} g`]] }; },
+    () => { const c = pick([['oxygen and water', true], ['oxygen only', false], ['water only', false], ['neither oxygen nor water', false]]);
+      return choiceItem('Which conditions make iron rust?', 'oxygen and water', ['oxygen only', 'water only', 'neither oxygen nor water'], [['Rusting needs both', 'oxygen and water'],['Answer', 'oxygen and water']]); }
+  ],
+  air: [
+    () => { const used = rint(18, 23), tot = pick([50, 100, 200]); const vo = Math.round(tot * used / 100 * 10) / 10;
+      return { kind:'num', q:`${tot} cm³ of air is passed over hot copper. The volume falls to ${num(tot - vo)} cm³. Calculate the percentage of oxygen.`, ans:used, tol:0.1, s:[['Oxygen used', `${tot} − ${num(tot - vo)} = ${num(vo)} cm³`],['Percentage', `${num(vo)} ÷ ${tot} × 100`],['Answer', `${used}%`]] }; },
+    () => { const it = pick([['carbon monoxide', 'incomplete combustion of fuels'], ['sulfur dioxide', 'burning fossil fuels containing sulfur'], ['oxides of nitrogen', 'high temperature in car engines'], ['carbon dioxide', 'complete combustion of fuels'], ['methane', 'cattle and rice fields']]);
+      return choiceItem(`What is the main source of ${it[0]} in the atmosphere?`, it[1], ['incomplete combustion of fuels', 'burning fossil fuels containing sulfur', 'high temperature in car engines', 'complete combustion of fuels', 'cattle and rice fields'].filter(x => x !== it[1]).slice(0, 3), [['Source', it[1]]]); },
+    () => { const it = pick([['sulfur dioxide', 'acid rain'], ['oxides of nitrogen', 'acid rain'], ['carbon dioxide', 'global warming'], ['methane', 'global warming'], ['carbon monoxide', 'poisoning (stops blood carrying oxygen)']]);
+      return choiceItem(`Which problem is mainly caused by ${it[0]}?`, it[1], ['acid rain', 'global warming', 'poisoning (stops blood carrying oxygen)', 'ozone depletion'].filter(x => x !== it[1]).slice(0, 3), [['Effect', it[1]]]); }
+  ],
+  hydro: [
+    () => { const n = rint(1, 12), alk = Math.random() < .5, ans = alk ? 2 * n + 2 : 2 * n; if (!alk && n === 1) return { kind:'num', q:'How many hydrogen atoms are in a molecule of the alkane with 7 carbon atoms?', ans:16, tol:0, s:[['CₙH₂ₙ₊₂', '2 × 7 + 2'],['Answer', '16']] };
+      return { kind:'num', q:`How many hydrogen atoms are in a molecule of the ${alk ? 'alkane' : 'alkene'} with ${n} carbon atoms?`, ans, tol:0, s:[[alk ? 'CₙH₂ₙ₊₂' : 'CₙH₂ₙ', alk ? `2 × ${n} + 2` : `2 × ${n}`],['Answer', String(ans)]] }; },
+    () => { const n = rint(8, 20), a = rint(4, n - 2), ans = 2 * (n - a);
+      return { kind:'num', q:`The alkane C${n}H${2 * n + 2} is cracked into the alkane C${a}H${2 * a + 2} and one alkene. How many hydrogen atoms are in the alkene?`, ans, tol:0, s:[['Carbon left', `${n} − ${a} = ${n - a}`],['Alkene CₙH₂ₙ', `2 × ${n - a} = ${ans}`],['Answer', `C${n - a}H${ans}`]] }; },
+    () => { const it = pick([['ethane', 'alkane', false], ['propane', 'alkane', false], ['ethene', 'alkene', true], ['propene', 'alkene', true], ['methane', 'alkane', false], ['butene', 'alkene', true]]);
+      return choiceItem(`What happens when ${it[0]} is shaken with bromine water?`, it[2] ? 'it turns colourless' : 'it stays orange-brown', [it[2] ? 'it stays orange-brown' : 'it turns colourless', 'it turns blue'], [['Type', `${it[0]} is an ${it[1]}`],['Rule', 'only alkenes (C=C) decolourise bromine water']]); },
+    () => { const f = pick([['refinery gas', 'lowest'], ['bitumen', 'highest'], ['petrol', 'lower than diesel'], ['diesel', 'higher than petrol']]);
+      return choiceItem(f[0] === 'refinery gas' || f[0] === 'bitumen' ? `Which fraction has the ${f[1]} boiling point: refinery gas or bitumen?` : 'Which fraction has the higher boiling point: petrol or diesel?', f[0] === 'refinery gas' || f[0] === 'bitumen' ? (f[1] === 'lowest' ? 'refinery gas' : 'bitumen') : 'diesel', f[0] === 'refinery gas' || f[0] === 'bitumen' ? [f[1] === 'lowest' ? 'bitumen' : 'refinery gas'] : ['petrol'], [['Longer molecules', 'have higher boiling points'],['Answer', 'the longer-chain fraction']]); }
+  ],
+  organics: [
+    () => { const m = pick([[28, 'ethene'], [42, 'propene'], [62.5, 'chloroethene'], [104, 'styrene']]), n = pick([100, 200, 400, 500, 1000, 2000]), P = m[0] * n;
+      return { kind:'num', q:`A polymer made from ${m[1]} (Mr = ${m[0]}) has a relative formula mass of ${num(P)}. How many monomer units does it contain?`, ans:n, tol:0.5, s:[['n = polymer Mr ÷ monomer Mr', `${num(P)} ÷ ${m[0]}`],['Answer', String(n)]] }; },
+    () => { const it = pick([['yeast, 25–35 °C, no oxygen', 'fermentation'], ['steam, phosphoric acid catalyst, 300 °C, high pressure', 'hydration of ethene'], ['uses a renewable sugar', 'fermentation'], ['gives pure ethanol quickly', 'hydration of ethene']]);
+      return choiceItem(`Which method of making ethanol: ${it[0]}?`, it[1], ['fermentation', 'hydration of ethene', 'cracking', 'distillation of crude oil'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ' = ' + it[1]]]); },
+    () => { const [a, ma] = pick([['ethene', 28], ['ethanol', 46], ['ethanoic acid', 60], ['ethane', 30], ['glucose', 180]]);
+      return { kind:'num', q:`What is the relative formula mass of ${a}? (C = 12, H = 1, O = 16)`, ans:ma, tol:0.01, s:[['Formula', { ethene: 'C₂H₄', ethanol: 'C₂H₅OH', 'ethanoic acid': 'CH₃COOH', ethane: 'C₂H₆', glucose: 'C₆H₁₂O₆' }[a]],['Add the Ar values', String(ma)]] }; }
+  ],
+  analysis: [
+    () => { const t = pick([['hydrogen', 'a lighted splint gives a squeaky pop'], ['oxygen', 'a glowing splint relights'], ['carbon dioxide', 'limewater turns milky'], ['chlorine', 'damp litmus paper is bleached'], ['ammonia', 'damp red litmus paper turns blue']]);
+      return choiceItem(`Which gas is shown when ${t[1]}?`, t[0], ['hydrogen', 'oxygen', 'carbon dioxide', 'chlorine', 'ammonia'].filter(x => x !== t[0]).slice(0, 3), [['Test result', t[1]],['Gas', t[0]]]); },
+    () => { const t = pick([['a light blue precipitate', 'Cu²⁺'], ['a green precipitate', 'Fe²⁺'], ['a red-brown precipitate', 'Fe³⁺'], ['a white precipitate that dissolves in excess', 'Al³⁺ (or Zn²⁺)'], ['a white precipitate that does not dissolve in excess', 'Ca²⁺']]);
+      return choiceItem(`Sodium hydroxide solution gives ${t[0]}. Which positive ion is present?`, t[1], ['Cu²⁺', 'Fe²⁺', 'Fe³⁺', 'Al³⁺ (or Zn²⁺)', 'Ca²⁺'].filter(x => x !== t[1]).slice(0, 3), [['Match', t[0] + ' = ' + t[1]]]); },
+    () => { const f = pick([['lithium', 'red'], ['sodium', 'yellow'], ['potassium', 'lilac'], ['calcium', 'orange-red'], ['copper', 'blue-green']]);
+      return choiceItem(`What colour is the flame for ${f[0]} ions?`, f[1], ['red', 'yellow', 'lilac', 'orange-red', 'blue-green'].filter(x => x !== f[1]).slice(0, 3), [['Flame test', f[0] + ' = ' + f[1]]]); },
+    () => { const a = pick([['carbonate', 'dilute acid: fizzing, CO₂ turns limewater milky'], ['chloride', 'dilute nitric acid then silver nitrate: white precipitate'], ['bromide', 'dilute nitric acid then silver nitrate: cream precipitate'], ['iodide', 'dilute nitric acid then silver nitrate: yellow precipitate'], ['sulfate', 'dilute hydrochloric acid then barium chloride: white precipitate']]);
+      return choiceItem(`Which test shows ${a[0]} ions?`, a[1], ['dilute acid: fizzing, CO₂ turns limewater milky', 'dilute nitric acid then silver nitrate: white precipitate', 'dilute nitric acid then silver nitrate: cream precipitate', 'dilute nitric acid then silver nitrate: yellow precipitate', 'dilute hydrochloric acid then barium chloride: white precipitate'].filter(x => x !== a[1]).slice(0, 3), [['Test', a[1]]]); }
   ]
 };
 
@@ -1103,7 +1491,7 @@ function drawMock(){
 if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['rates','Topic 6','Rates'],['energ','Topic 5','Energetics'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['rates','Topic 6','Rates'],['energ','Topic 5','Energetics'],['electro','Topic 4','Electrolysis'],['metals','Topic 9','Metals'],['air','Topic 10','Air and water'],['hydro','Topic 11','Hydrocarbons'],['organics','Topic 11','Alcohols, polymers'],['analysis','Topic 12','Analysis'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1121,7 +1509,7 @@ function render(){
   bindView();
 }
 function renderStart(){
-  const rows = ['atoms','bonding','displace','salts','sepn','eqn','mole','rates','energ'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+  const rows = ['atoms','bonding','displace','salts','sepn','eqn','mole','rates','energ','electro','metals','air','hydro','organics','analysis'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Chemistry: the whole syllabus</h2>
