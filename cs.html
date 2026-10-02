@@ -1130,7 +1130,15 @@ const gt = (n, note) => gridBoard(['A','B','X'], [['',['0','0','0']],['',['0','1
 attach(WK_LOGIC[5], () => gt(4, 'Output column: 0 1 1 0'), [
   () => gt(4, '1 when the inputs are different'), () => gt(4, '11 → 0, so not OR'), () => gt(4, '<b>XOR</b>')]);
 
-const MOCK = [['data',0],['data',3],['data',5],['data',6],['trans',0],['trans',4],['trans',7],['logic',0],['logic',1],['logic',2]];
+let MOCK = [['data',0],['data',3],['data',5],['data',6],['trans',0],['trans',4],['trans',7],['logic',0],['logic',1],['logic',2]];
+const MOCK_N = MOCK.length;
+function drawMock(){
+  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
+  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
+  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
+  store.mock = MOCK; save();
+}
+if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state & rendering ---------- */
 const TABS = [['start','','Start here'],['data','Ch 1','Data'],['trans','Ch 2','Transmission'],['logic','Ch 10','Logic'],['mock','','Mini mock']];
@@ -1223,7 +1231,7 @@ function renderMock(){
     <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
     <div class="stack" style="margin-top:20px">
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
       <p class="note">45 minutes. About 1 minute per mark, plus time to check.</p></div>
     ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
 }
@@ -1241,6 +1249,7 @@ function bindView(){
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
     document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 45*60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }

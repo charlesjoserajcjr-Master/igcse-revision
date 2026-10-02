@@ -570,7 +570,15 @@ const DRILLS = {
   ]
 };
 
-const MOCK = [['density',0],['density',1],['density',3],['thermal',1],['thermal',2],['thermal',3],['sound',1],['sound',2],['sound',3],['sound',5]];
+let MOCK = [['density',0],['density',1],['density',3],['thermal',1],['thermal',2],['thermal',3],['sound',1],['sound',2],['sound',3],['sound',5]];
+const MOCK_N = MOCK.length;
+function drawMock(){
+  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
+  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
+  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
+  store.mock = MOCK; save();
+}
+if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state ---------- */
 const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['mock','','Mini mock']];
@@ -778,7 +786,7 @@ function renderMock(){
     <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself with the mark schemes.</p></div>
     <div class="stack" style="margin-top:20px">
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
       <p class="note">35 minutes. About 1 minute per mark, plus time to check.</p></div>
     ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
 }
@@ -799,6 +807,7 @@ function bindView(){
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
     document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 35*60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
