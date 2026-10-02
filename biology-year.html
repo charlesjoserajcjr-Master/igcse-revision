@@ -388,6 +388,79 @@ function svgSmoke(){
   ${b(200, 'smoke particles', 'irritate lungs: bronchitis, emphysema', 'nonmetal')}
   ${T(20, 276, 'Smoking while pregnant: less oxygen to the foetus, low birth mass.', 'mut')}</svg>`;
 }
+function svgFlower(){
+  return `<svg viewBox="0 0 860 380" role="img" aria-label="Structure of an insect-pollinated flower">
+  <path d="M430 340 L430 230" class="ln" style="stroke-width:5"/>
+  <path d="M430 230 Q330 215 300 120 Q380 150 430 215 Z" class="nonmetal" style="stroke:var(--hot);stroke-width:2"/><path d="M430 230 Q530 215 560 120 Q480 150 430 215 Z" class="nonmetal" style="stroke:var(--hot);stroke-width:2"/>
+  <path d="M430 238 Q370 250 330 215 Q380 215 430 225 Z" class="accf" style="fill-opacity:.4;stroke:var(--accent);stroke-width:1.6"/><path d="M430 238 Q490 250 530 215 Q480 215 430 225 Z" class="accf" style="fill-opacity:.4;stroke:var(--accent);stroke-width:1.6"/>
+  <ellipse cx="430" cy="236" rx="20" ry="16" class="metal" style="stroke:var(--ink);stroke-width:1.8"/><circle cx="430" cy="236" r="6" class="hotf" style="fill-opacity:.5"/>
+  <line x1="430" y1="222" x2="430" y2="130" class="ln" style="stroke-width:3"/><ellipse cx="430" cy="122" rx="14" ry="9" class="hotf" style="fill-opacity:.5;stroke:var(--hot);stroke-width:1.8"/>
+  <line x1="405" y1="226" x2="368" y2="165" class="ln"/><ellipse cx="364" cy="157" rx="9" ry="14" class="metal" style="stroke:var(--ink);stroke-width:1.8"/>
+  <line x1="455" y1="226" x2="492" y2="165" class="ln"/><ellipse cx="496" cy="157" rx="9" ry="14" class="metal" style="stroke:var(--ink);stroke-width:1.8"/>
+  ${T(30, 62, 'petal: bright, attracts insects', 'lbl')}<line x1="150" y1="68" x2="318" y2="130" class="thin"/>
+  ${T(30, 120, 'anther (makes pollen)', 'lbl')}${T(30, 140, 'on a filament:', 'lbl')}${T(30, 160, 'STAMEN (male)', 'lbl')}<line x1="200" y1="150" x2="352" y2="158" class="thin"/>
+  ${T(560, 56, 'stigma: sticky, catches pollen', 'lbl')}<line x1="556" y1="62" x2="440" y2="118" class="thin"/>
+  ${T(580, 96, 'style', 'lbl')}<line x1="576" y1="100" x2="436" y2="170" class="thin"/>
+  ${T(580, 190, 'ovary contains ovules (female)', 'lbl')}${T(580, 208, 'ovule: contains the egg cell', 'mut')}<line x1="576" y1="194" x2="448" y2="234" class="thin"/>
+  ${T(30, 270, 'sepal: protects the bud', 'lbl')}<line x1="190" y1="264" x2="345" y2="232" class="thin"/>
+  ${T(430, 368, 'CARPEL = stigma + style + ovary (female).   STAMEN = anther + filament (male).', 'mid mut')}</svg>`;
+}
+function svgPlacenta(){
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="The placenta: exchange between mother and foetus">${arrowDefs('pl')}
+  <rect x="30" y="30" width="230" height="200" rx="10" class="metal" style="stroke:var(--ink);stroke-width:2"/>${T(145, 60, 'mother’s blood', 'mid lbl')}
+  <rect x="320" y="30" width="220" height="200" rx="10" class="nonmetal" style="stroke:var(--ink);stroke-width:2"/>${T(430, 60, 'PLACENTA', 'mid lbl')}${T(430, 82, '(thin barrier)', 'mid mut')}
+  <rect x="600" y="30" width="230" height="200" rx="10" class="metal" style="stroke:var(--ink);stroke-width:2"/>${T(715, 60, 'foetus’s blood', 'mid lbl')}
+  <line x1="262" y1="140" x2="598" y2="140" class="acc" marker-end="url(#b-pl)"/>${T(430, 112, 'oxygen, glucose,', 'mid acct')}${T(430, 128, 'amino acids, antibodies', 'mid acct')}
+  <line x1="598" y1="180" x2="262" y2="180" class="hotl" marker-end="url(#h-pl)"/>${T(430, 210, 'carbon dioxide, urea', 'mid hott')}
+  ${T(430, 262, 'The mother’s and foetus’s blood do not mix. Harmful substances (alcohol, nicotine, viruses such as HIV) can still cross.', 'mid mut')}${T(430, 284, 'Amniotic fluid in the amnion protects the foetus from shocks.', 'mid mut')}</svg>`;
+}
+function svgPunnett(){
+  const cell = (x, y, t, cls = 'cardf') => `<rect x="${x}" y="${y}" width="90" height="62" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + 45, y + 38, t, 'mid mono')}`;
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="Punnett square for Tt crossed with Tt">
+  ${T(230, 28, 'parent 1: Tt  (gametes T or t)', 'mid lbl')}${T(40, 150, 'parent 2:', 'lbl')}${T(40, 172, 'Tt', 'lbl')}
+  ${cell(180, 50, 'T', 'metal')}${cell(270, 50, 't', 'metal')}${cell(90, 112, 'T', 'metal')}${cell(90, 174, 't', 'metal')}
+  ${cell(180, 112, 'TT')}${cell(270, 112, 'Tt')}${cell(180, 174, 'Tt')}${cell(270, 174, 'tt', 'nonmetal')}
+  ${T(430, 70, 'Genotypes: 1 TT : 2 Tt : 1 tt', 'lbl')}${T(430, 104, 'Phenotypes (T = tall, dominant):', 'lbl')}${T(430, 130, '3 tall : 1 short', 'hott')}${T(430, 164, 'Probability of a short plant = 1/4 = 25 %', 'acct')}
+  ${T(430, 214, 'Steps: write the gametes, fill the square,', 'mut')}${T(430, 236, 'read off genotypes, then phenotypes.', 'mut')}
+  ${T(430, 280, 'Homozygous: two same alleles (TT, tt).', 'mut')}${T(430, 302, 'Heterozygous: two different alleles (Tt).', 'mut')}</svg>`;
+}
+function svgSelect(){
+  const b = (y, n, t) => `<rect x="20" y="${y}" width="820" height="40" rx="8" class="${n % 2 ? 'nonmetal' : 'metal'}" style="stroke:var(--ink);stroke-width:1.4"/>${T(40, y + 26, n + '.  ' + t, '')}`;
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="Steps of natural selection">
+  ${b(12, 1, 'Organisms in a population show VARIATION (different alleles).')}${b(58, 2, 'More offspring are born than can survive (overproduction).')}${b(104, 3, 'There is a STRUGGLE FOR SURVIVAL: food, mates, predators, disease.')}${b(150, 4, 'Individuals with helpful features are better ADAPTED and survive.')}${b(196, 5, 'They REPRODUCE and pass on the helpful ALLELES to offspring.')}${b(242, 6, 'Over many generations the allele becomes more common.')}
+  ${T(430, 316, 'Example: bacteria with a resistance mutation survive the antibiotic, reproduce, and the population becomes resistant.', 'mid mut')}</svg>`;
+}
+function svgFoodWeb(){
+  const n = (x, y, w, t, cls) => `<rect x="${x}" y="${y}" width="${w}" height="40" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + w / 2, y + 25, t, 'mid')}`;
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="A food web and trophic levels">${arrowDefs('fw')}
+  ${n(60, 260, 130, 'grass', 'nonmetal')}${n(260, 260, 130, 'algae', 'nonmetal')}
+  ${n(40, 160, 130, 'rabbit', 'metal')}${n(210, 160, 130, 'grasshopper', 'metal')}${n(380, 160, 130, 'small fish', 'metal')}
+  ${n(120, 60, 130, 'fox', 'cardf')}${n(300, 60, 130, 'frog', 'cardf')}${n(470, 60, 130, 'heron', 'cardf')}
+  ${[[110, 260, 105, 200], [190, 260, 255, 200], [325, 260, 430, 200], [105, 160, 170, 100], [260, 160, 345, 100], [445, 160, 520, 100], [275, 160, 190, 100]].map(l => `<line x1="${l[0]}" y1="${l[1]}" x2="${l[2]}" y2="${l[3]}" class="ln" marker-end="url(#a-fw)"/>`).join('')}
+  ${T(610, 80, 'Arrow = energy flows to', 'lbl')}${T(610, 100, 'the organism that eats.', 'lbl')}${T(610, 150, 'Producer: makes food', 'acct')}${T(610, 170, 'by photosynthesis.', 'acct')}${T(610, 210, 'Primary consumer: eats plants.', 'mut')}${T(610, 232, 'Secondary: eats animals.', 'mut')}${T(610, 254, 'Tertiary: eats secondary.', 'mut')}${T(610, 290, 'Only about 10 % of energy', 'hott')}${T(610, 310, 'passes up each level.', 'hott')}</svg>`;
+}
+function svgCarbon(){
+  const n = (x, y, w, t, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="40" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + w / 2, y + 25, t, 'mid')}`;
+  return `<svg viewBox="0 0 860 360" role="img" aria-label="The carbon cycle">${arrowDefs('cc')}
+  ${n(330, 12, 200, 'CO₂ in the air', 'nonmetal')}${n(40, 150, 150, 'plants', 'metal')}${n(330, 150, 200, 'animals', 'metal')}${n(670, 150, 150, 'fossil fuels', 'metal')}${n(330, 270, 200, 'decomposers, soil')}
+  <line x1="328" y1="40" x2="140" y2="148" class="acc" marker-end="url(#b-cc)"/>${T(70, 84, 'photosynthesis', 'acct')}
+  <line x1="190" y1="170" x2="328" y2="170" class="ln" marker-end="url(#a-cc)"/>${T(259, 160, 'eaten', 'mid mut')}
+  <line x1="430" y1="150" x2="430" y2="58" class="hotl" marker-end="url(#h-cc)"/>${T(440, 106, 'respiration', 'hott')}
+  <line x1="745" y1="148" x2="560" y2="42" class="hotl" marker-end="url(#h-cc)"/>${T(650, 86, 'combustion', 'hott')}
+  <line x1="430" y1="190" x2="430" y2="268" class="ln" marker-end="url(#a-cc)"/>${T(440, 236, 'death, waste', 'mut')}
+  <line x1="332" y1="285" x2="120" y2="194" class="ln" marker-end="url(#a-cc)"/>${T(150, 262, 'nutrients to plants', 'mut')}
+  <line x1="530" y1="290" x2="740" y2="194" class="thin" stroke-dasharray="5 4" marker-end="url(#a-cc)"/>${T(640, 262, 'over millions of years', 'mut')}
+  ${T(430, 346, 'Respiration, decay and combustion put CO₂ in the air. Photosynthesis takes it out.', 'mid mut')}</svg>`;
+}
+function svgEutro(){
+  const b = (x, t, s) => `<rect x="${x}" y="30" width="190" height="80" rx="8" class="metal" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + 95, 62, t, 'mid')}${T(x + 95, 84, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 270" role="img" aria-label="The steps of eutrophication">${arrowDefs('eu')}
+  ${b(10, 'fertiliser runs off', 'into the river')}${b(225, 'algae grow fast', 'algal bloom')}${b(440, 'light blocked', 'plants below die')}${b(655, 'bacteria decay', 'plants and algae')}
+  ${[200, 415, 630].map(x => `<line x1="${x}" y1="70" x2="${x + 22}" y2="70" class="ln" marker-end="url(#a-eu)"/>`).join('')}
+  <line x1="750" y1="112" x2="750" y2="168" class="ln" marker-end="url(#a-eu)"/>
+  <rect x="560" y="170" width="280" height="64" rx="8" class="hotf" style="fill-opacity:.25;stroke:var(--hot);stroke-width:1.6"/>${T(700, 198, 'bacteria use up the oxygen', 'mid hott')}${T(700, 220, 'fish and other animals die', 'mid hott')}
+  ${T(30, 190, 'Fertilisers contain nitrate and phosphate.', 'lbl')}${T(30, 214, 'Prevent it: use less fertiliser, treat sewage.', 'mut')}</svg>`;
+}
 /* ---------- content ---------- */
 const CH = {
 char: {
@@ -1009,6 +1082,227 @@ drugs: {
       p: ['==addiction== / withdrawal symptoms', '==slows brain activity== / overdose / risk of HIV from shared needles'] }
   ]
 }
+,
+repro: {
+  code: 'Topic 15', name: 'Reproduction',
+  lede: 'Asexual and sexual reproduction, how a flower makes seeds, and how a human baby develops.',
+  learn: [
+    { h: 'Asexual and sexual reproduction', table: [['', 'Asexual', 'Sexual'], ['parents', '==one== parent', '==two== parents'], ['gametes', 'none; no fertilisation', '==male and female gametes== fuse'], ['offspring', '==genetically identical== (clones)', '==genetically different== (variation)'], ['advantage', 'fast; only one parent; no mate needed', 'variation: some survive changes in the environment'], ['disadvantage', 'no variation: a disease can kill all', 'slower; needs a mate']], list: ['==Asexual reproduction== makes ==genetically identical== offspring from one parent. Example: bacteria dividing, plants from runners or tubers.', '==Sexual reproduction== is the ==fusion of the nuclei of two gametes== to form a ==zygote==, giving ==genetic variation==.'] },
+    { h: 'Flowering plants', list: ['The ==stamen== (male) is the ==anther== (makes ==pollen==) and the ==filament==. The ==carpel== (female) is the ==stigma==, ==style== and ==ovary== (with ==ovules==).', '==Pollination== is the ==transfer of pollen== from an anther to a stigma. ==Fertilisation== is when the male nucleus fuses with the ==female nucleus== in the ovule. The ovule becomes the ==seed== and the ovary becomes the ==fruit==.', '==Insect-pollinated== flowers: ==large, brightly coloured petals==, ==scent==, ==nectar==, sticky or spiky pollen, anthers inside the flower.', '==Wind-pollinated== flowers: ==small dull petals==, ==no nectar or scent==, ==long, feathery stigma==, anthers hang outside, ==light smooth pollen== in large amounts.', '==Self-pollination== (same plant) gives less variation; ==cross-pollination== (different plant) gives more.', '==Germination== needs ==water==, ==oxygen== and a suitable ==temperature== (warmth). Light is not needed.'] },
+    { h: 'Human reproduction', list: ['The ==testes== make ==sperm== (and testosterone). Sperm travel along the ==sperm duct== and out through the ==urethra== in the ==penis==.', 'The ==ovaries== make ==egg cells== (ova). The egg passes down the ==oviduct== (where fertilisation occurs) to the ==uterus==, where the embryo ==implants== in the lining.', '==Sperm== have a ==tail== (swim), ==many mitochondria== and ==enzymes in the head==. The ==egg== is large, with a food store and a jelly coat.', 'The ==placenta== lets ==oxygen, glucose and amino acids== pass to the foetus and ==carbon dioxide and urea== pass away. The ==umbilical cord== joins them. The ==amniotic fluid== protects the foetus.', '==HIV== is a virus that damages white blood cells. It is passed on by ==unprotected sexual intercourse==, blood and from mother to baby. A ==condom== reduces the risk.'] }
+  ],
+  mistakes: ['Saying ==pollination is the same as fertilisation==. Pollination is pollen landing on the stigma.', 'Saying ==asexual offspring are different==. They are identical clones.', 'Saying ==fertilisation happens in the uterus==. It happens in the oviduct.', 'Saying the ==ovary is where pollen is made==. Pollen is made in the anther.', 'Saying ==the mother’s blood flows into the foetus==. The two bloods do not mix.'],
+  diagrams: [{ svg: svgFlower, cap: 'An ==insect-pollinated flower==: stamen (male) and carpel (female).' }, { svg: svgPlacenta, cap: 'The ==placenta== exchanges substances but the bloods do not mix.' }],
+  worked: [
+    W('Describe two differences between a wind-pollinated and an insect-pollinated flower.', 'Compare ==petals==, ==pollen== and ==stigma==.', 'Pair up each feature.', 'Big and bright v small and dull',
+      [['Petals', 'Insect: large, brightly coloured with scent and nectar. Wind: small and dull, no nectar.', 'Insects need attracting.'], ['Pollen', 'Insect: sticky or spiky. Wind: light and smooth, in large amounts.', 'Wind carries it far.'], ['Stigma', 'Insect: sticky, inside the flower. Wind: long and feathery, outside.', 'To catch pollen from the air.']],
+      [['Petals', 'bright v dull', 0], ['Pollen', 'sticky v light', 1], ['Stigma', 'inside v feathery', 2]], true),
+    W('Distinguish between pollination and fertilisation.', 'One is the ==transfer==. One is the ==fusion==.', 'Name where each ends.', 'Pollen moves v nuclei fuse',
+      [['Pollination', 'The transfer of pollen from an anther to a stigma.', ''], ['Pollen tube', 'A pollen tube grows down the style to an ovule.', ''], ['Fertilisation', 'The male nucleus fuses with the female nucleus in the ovule.', 'This makes a zygote.'], ['After', 'The ovule becomes a seed and the ovary becomes a fruit.', '']],
+      [['Pollination', 'pollen transfer', 0], ['Tube', 'to ovule', 1], ['Fertilisation', 'nuclei fuse', 2]], true),
+    W('Explain the role of the placenta.', 'Say what goes ==in== and what goes ==out==, and why the bloods stay ==separate==.', 'Mention the barrier.', 'Exchange without mixing',
+      [['What it does', 'It lets substances pass between the mother’s blood and the foetus’s blood.', ''], ['To the foetus', 'Oxygen, glucose, amino acids and antibodies.', 'By diffusion and active transport.'], ['From the foetus', 'Carbon dioxide and urea.', ''], ['Barrier', 'The bloods do not mix. This protects the foetus from high blood pressure and many pathogens.', '']],
+      [['In', 'O₂, glucose, amino acids', 1], ['Out', 'CO₂, urea', 2], ['Barrier', 'bloods stay separate', 3]], true),
+    W('Compare asexual and sexual reproduction.', 'Compare ==parents==, ==gametes== and ==offspring==.', 'Link variation to survival.', 'One parent v two; clones v variation',
+      [['Parents', 'Asexual: one parent. Sexual: two parents.', ''], ['Gametes', 'Asexual: none. Sexual: gametes fuse.', ''], ['Offspring', 'Asexual: identical. Sexual: different, so variation.', 'Variation helps a species survive change.']],
+      [['Parents', '1 v 2', 0], ['Gametes', 'none v fuse', 1], ['Offspring', 'clones v varied', 2]], true)
+  ],
+  drill: 'repro',
+  quiz: [
+    { q: 'Where is pollen made?', o: ['stigma', 'anther', 'ovary', 'style'], a: 1, w: 'In the ==anther==.' },
+    { q: 'Fertilisation in humans happens in the…', o: ['uterus', 'ovary', 'oviduct', 'vagina'], a: 2, w: 'The ==oviduct==.' },
+    { q: 'Asexual reproduction gives offspring that are…', o: ['different', 'identical', 'sterile', 'larger'], a: 1, w: '==Genetically identical==.' },
+    { q: 'Which is NOT needed for germination?', o: ['water', 'oxygen', 'warmth', 'light'], a: 3, w: '==Light== is not needed.' },
+    { q: 'The ovary of a flower becomes the…', o: ['seed', 'fruit', 'petal', 'stigma'], a: 1, w: 'The ==fruit==.' },
+    { q: 'Which protects the foetus from shocks?', o: ['placenta', 'amniotic fluid', 'umbilical cord', 'uterus lining'], a: 1, w: '==Amniotic fluid==.' }
+  ],
+  exam: [
+    { q: 'Define sexual reproduction.', m: 2,
+      p: ['the ==fusion of the nuclei== of two ==gametes==', '(male and female) to form a zygote, producing ==genetic variation=='] },
+    { q: 'State two conditions needed for seed germination and explain why one is needed.', m: 3,
+      p: ['==water==', '==oxygen== / suitable ==temperature==', 'explanation, e.g. oxygen for aerobic respiration to release energy for growth'] },
+    { q: 'Describe how a sperm cell is adapted for its function.', m: 3,
+      p: ['==tail== to swim to the egg', '==many mitochondria== to release energy for swimming', '==enzymes in the head== to digest the egg’s outer layer'] },
+    { q: 'Explain why HIV can be passed on by sharing needles.', m: 2,
+      p: ['HIV is in the ==blood==', 'a contaminated needle can ==transfer infected blood== to another person'] }
+  ]
+},
+inherit: {
+  code: 'Topic 16', name: 'Inheritance',
+  lede: 'How genes pass from parents to children, what the words mean, and how to work out the results of a genetic cross.',
+  learn: [
+    { h: 'Genes, chromosomes and cell division', list: ['==Chromosomes== are made of ==DNA== and are found in the ==nucleus==. A ==gene== is a length of DNA that codes for a ==protein==. An ==allele== is a ==version of a gene==.', 'Human body cells have ==46 chromosomes== (23 pairs): they are ==diploid==. ==Gametes== have ==23== chromosomes: they are ==haploid==.', '==Mitosis== makes two cells that are ==genetically identical== to the parent cell, with the same number of chromosomes. It is used for ==growth==, ==repair== and ==asexual reproduction==.', '==Meiosis== makes ==gametes== with ==half== the number of chromosomes and ==genetic variation==. Fertilisation restores the full number (46).', 'The ==sex chromosomes== are ==XX== in females and ==XY== in males. Each child has a ==50 %== chance of being a boy or a girl.'] },
+    { h: 'Key words for crosses', table: [['Word', 'Meaning'], ['==genotype==', 'the combination of alleles, such as ==Tt=='], ['==phenotype==', 'the observable feature, such as ==tall=='], ['==dominant==', 'allele that shows when ==present once== (capital letter, T)'], ['==recessive==', 'allele that shows only when ==two copies== are present (small letter, t)'], ['==homozygous==', '==two identical== alleles (TT or tt)'], ['==heterozygous==', '==two different== alleles (Tt)'], ['==carrier==', 'heterozygous for a recessive disease allele; shows no symptoms']] },
+    { h: 'Monohybrid crosses', list: ['1. Choose letters (capital for dominant). 2. Write the parents’ ==genotypes==. 3. Write the ==gametes== (one allele each). 4. Fill in a ==Punnett square==. 5. Read the ==genotypes== and ==phenotypes==. 6. Give a ==ratio or probability==.', 'Tt × Tt gives ==TT : Tt : tt = 1 : 2 : 1== so ==3 dominant : 1 recessive==.', 'Tt × tt gives ==1 Tt : 1 tt== so ==1 : 1==. This is a ==test cross== to find out if a dominant parent is TT or Tt.', 'An example of an inherited disorder: ==sickle cell anaemia== (recessive). ==Cystic fibrosis== is also recessive.'], f: ['probability = number of squares ÷ total squares', 'a cross of two heterozygous parents: 25 % show the recessive feature'] }
+  ],
+  mistakes: ['Saying ==an allele is the same as a gene==. It is a version of the gene.', 'Writing ==gametes with two alleles== (each gamete has one).', 'Mixing up ==genotype and phenotype==.', 'Saying a ==recessive allele is weaker or rarer== (it just needs two copies).', 'Using ==different letters== for the same gene (use T and t).'],
+  diagrams: [{ svg: svgPunnett, cap: 'A ==Punnett square== for ==Tt × Tt==.' }],
+  worked: [
+    W('Two heterozygous tall plants (Tt) are crossed. Tall (T) is dominant over short (t). Work out the probability of a short plant.', 'Gametes first. Then ==fill the Punnett square==.', 'Write the genotype of the short plant.', 'Tt × Tt → 1 TT : 2 Tt : 1 tt',
+      [['Parents', 'Tt × Tt', 'Both are tall but carry t.'], ['Gametes', 'T or t from each parent', 'Each gamete has one allele.'], ['Square', 'TT, Tt, Tt, tt', 'Combine each gamete from the top with each from the side.'], ['Short plants', 'tt is 1 square out of 4', 'Short needs two recessive alleles.'], ['Answer', 'probability = 1/4 = 25 %', '']],
+      [['Parents', 'Tt × Tt', 0], ['Gametes', 'T, t', 1], ['Offspring', 'TT Tt Tt tt', 2], ['Short', '1 in 4', 3], ['Probability', '25 %', 4]]),
+    W('A black cat (B dominant) is crossed with a white cat (bb). Half the kittens are white. What is the genotype of the black cat?', 'White needs ==bb==. Work backwards.', 'Show the cross to prove it.', 'White kitten = bb, so both parents carry b',
+      [['White parent', 'bb, gametes b and b', ''], ['White kittens', 'bb, so each got a b from the black parent', ''], ['Black parent', 'must carry b, and is black, so Bb', 'BB would give no white kittens.'], ['Check', 'Bb × bb → 1 Bb : 1 bb = 1 black : 1 white', 'Half are white ✓.']],
+      [['White parent', 'bb', 0], ['Black parent', 'Bb', 2], ['Cross', 'Bb × bb', 3], ['Kittens', '1 black : 1 white', 3]]),
+    W('State the difference between mitosis and meiosis.', 'Compare ==number of cells==, ==chromosome number== and ==variation==.', 'Three pairs of statements.', 'Identical v varied',
+      [['Offspring cells', 'Mitosis: two identical cells. Meiosis: four different cells.', ''], ['Chromosome number', 'Mitosis: stays the same (46). Meiosis: halved (23).', ''], ['Use', 'Mitosis: growth, repair, asexual reproduction. Meiosis: makes gametes.', '']],
+      [['Cells', 'identical v different', 0], ['Chromosomes', '46 v 23', 1], ['Use', 'growth v gametes', 2]], true),
+    W('Explain why the chance of having a daughter is 50 %.', 'Draw the ==sex chromosome== square.', 'Use XX and XY.', 'XX × XY',
+      [['Parents', 'Mother XX, father XY.', ''], ['Gametes', 'Eggs all carry X. Sperm carry X or Y.', ''], ['Square', 'XX, XX, XY, XY', ''], ['Answer', 'Half the offspring are XX (girls). The chance is 50 %.', 'It is decided by the sperm.']],
+      [['Mother', 'XX', 0], ['Father', 'XY', 0], ['Offspring', 'XX XX XY XY', 2], ['Girl chance', '50 %', 3]], true)
+  ],
+  drill: 'inherit',
+  quiz: [
+    { q: 'A person with genotype Tt is…', o: ['homozygous dominant', 'homozygous recessive', 'heterozygous', 'a carrier only'], a: 2, w: '==Heterozygous== (two different alleles).' },
+    { q: 'How many chromosomes in a human gamete?', o: ['23', '46', '92', '2'], a: 0, w: '==23==.' },
+    { q: 'Mitosis makes cells that are…', o: ['genetically different', 'genetically identical', 'haploid', 'gametes'], a: 1, w: '==Genetically identical==.' },
+    { q: 'Tt × tt: what fraction show the recessive trait?', o: ['0', '1/4', '1/2', '3/4'], a: 2, w: '==1/2==.' },
+    { q: 'Which sex chromosomes does a male have?', o: ['XX', 'XY', 'YY', 'X'], a: 1, w: '==XY==.' },
+    { q: 'The observable feature is the…', o: ['genotype', 'phenotype', 'allele', 'chromosome'], a: 1, w: 'The ==phenotype==.' }
+  ],
+  exam: [
+    { q: 'Define the terms gene and allele.', m: 2,
+      p: ['gene: a length of ==DNA== that codes for a ==protein==', 'allele: a ==version== of a gene'] },
+    { q: 'In cats, long hair (l) is recessive to short hair (L). Two short-haired cats (Ll) have kittens. Draw a Punnett square and state the probability of a long-haired kitten.', m: 4,
+      p: ['gametes ==L and l== from each parent', 'correct square: ==LL, Ll, Ll, ll==', 'long hair = ==ll==', 'probability ==1/4 (25 %)=='] },
+    { q: 'State two differences between mitosis and meiosis.', m: 2,
+      p: ['mitosis: ==identical== cells; meiosis: ==genetically different== cells', 'mitosis keeps the chromosome number; meiosis ==halves== it'] },
+    { q: 'Describe how sex is inherited in humans.', m: 3,
+      p: ['females are ==XX==, males are ==XY==', 'eggs carry ==X==; sperm carry ==X or Y==', 'if a ==Y sperm== fertilises the egg, the baby is a boy (50 % chance)'] }
+  ]
+},
+select: {
+  code: 'Topic 17', name: 'Variation and selection',
+  lede: 'Why individuals differ, how natural selection changes populations, and how humans use selective breeding.',
+  learn: [
+    { h: 'Variation', list: ['==Variation== is the ==differences== between individuals of the same species.', '==Continuous variation== has a ==range== of values: height and mass. It is caused by ==genes and the environment==. A graph is a ==bell-shaped curve==.', '==Discontinuous variation== has ==distinct categories==: blood group, ability to roll the tongue. It is caused by ==genes only==. A graph is a ==bar chart==.', '==Mutation== is a ==random, spontaneous change in a gene or chromosome==. It can be caused by ==ionising radiation== (X-rays, UV) and some ==chemicals== (in tobacco smoke). Most mutations are ==harmful== or have no effect; some give a useful new allele.', '==Sickle cell anaemia== is caused by a mutation. People with one copy (carriers) are ==resistant to malaria==.'] },
+    { h: 'Natural selection', list: ['Organisms ==show variation==. They ==produce more offspring than can survive==. There is a ==struggle for survival==.', 'Those with ==alleles that suit the environment== are ==better adapted==, ==survive== and ==reproduce==, passing on those ==alleles==.', 'Over generations the ==frequency of the helpful allele increases==. This is ==evolution by natural selection==.', 'An ==adaptive feature== helps an organism ==survive and reproduce== in its environment (thick fur in Arctic fox, long roots in desert plants).', 'Antibiotic resistance in bacteria is an example. So is ==pesticide resistance== in insects.'] },
+    { h: 'Selective breeding', list: ['==Selective breeding== (artificial selection) is humans choosing individuals with ==useful features== to breed together.', 'Steps: ==select== the best parents, ==breed== them, ==select the best offspring==, and ==repeat for many generations==.', 'Examples: ==cows== for milk, ==wheat== for high yield and disease resistance, dogs.', 'Disadvantages: ==less variation== (a new disease can kill the whole population) and ==inbreeding== can bring harmful recessive alleles.', 'It is different from natural selection because ==humans choose==, not the environment.'] }
+  ],
+  mistakes: ['Saying ==organisms choose to adapt==. Variation exists first; selection acts on it.', 'Saying ==individuals evolve==. Populations evolve over generations.', 'Saying ==the strongest survive==. The best adapted survive.', 'Saying ==mutations are always harmful==.', 'Saying ==the environment causes mutations== only: it is random, radiation and chemicals increase the rate.'],
+  diagrams: [{ svg: svgSelect, cap: 'The steps of ==natural selection==.' }],
+  worked: [
+    W('Explain how bacteria become resistant to an antibiotic.', 'Use the steps of ==natural selection==.', 'Name the ==selection pressure==.', 'Variation → survive → reproduce',
+      [['Variation', 'Bacteria vary. A random mutation gives a few bacteria resistance.', ''], ['Selection pressure', 'The antibiotic kills the non-resistant bacteria.', ''], ['Survive', 'The resistant bacteria survive.', ''], ['Reproduce', 'They reproduce and pass on the resistance allele.', ''], ['Result', 'The population is now mostly resistant.', 'The allele frequency has increased.']],
+      [['Variation', 'mutation', 0], ['Pressure', 'antibiotic', 1], ['Survive', 'resistant', 2], ['Reproduce', 'pass on allele', 3], ['Result', 'resistant population', 4]], true),
+    W('Compare continuous and discontinuous variation.', 'Compare ==range==, ==cause== and ==graph==.', 'Give an example of each.', 'Range v categories',
+      [['Values', 'Continuous: a range, e.g. height. Discontinuous: distinct categories, e.g. blood group.', ''], ['Cause', 'Continuous: genes and environment. Discontinuous: genes only.', ''], ['Graph', 'Continuous: bell curve. Discontinuous: bar chart.', '']],
+      [['Values', 'range v categories', 0], ['Cause', 'both v genes', 1], ['Graph', 'curve v bars', 2]], true),
+    W('The heights of 5 plants are 12, 14, 15, 17 and 22 cm. Calculate the mean height and the range.', 'Mean = ==sum ÷ number==. Range = ==largest − smallest==.', 'Show both calculations.', 'mean = total ÷ n',
+      [['Total', '12 + 14 + 15 + 17 + 22 = 80 cm', ''], ['Mean', '80 ÷ 5 = 16 cm', ''], ['Range', '22 − 12 = 10 cm', '']],
+      [['Heights', '12, 14, 15, 17, 22', -1], ['Total', '80 cm', 0], ['Mean', '16 cm', 1], ['Range', '10 cm', 2]]),
+    W('Describe how selective breeding could be used to produce cows that give more milk.', 'Give the ==steps in order==.', 'Use the word generations.', 'Select, breed, repeat',
+      [['Select', 'Choose the cows with the highest milk yield and bulls from high-yielding mothers.', ''], ['Breed', 'Breed them together.', ''], ['Select again', 'Choose the offspring with the highest yield.', ''], ['Repeat', 'Continue for many generations.', 'Milk yield rises each time.']],
+      [['Select', 'best milk cows', 0], ['Breed', 'together', 1], ['Choose', 'best offspring', 2], ['Repeat', 'many generations', 3]], true)
+  ],
+  drill: 'select',
+  quiz: [
+    { q: 'Blood group is an example of…', o: ['continuous variation', 'discontinuous variation', 'mutation', 'adaptation'], a: 1, w: '==Discontinuous== variation.' },
+    { q: 'A mutation is…', o: ['planned change', 'random change in a gene', 'selective breeding', 'an adaptation'], a: 1, w: 'A ==random change== in a gene.' },
+    { q: 'Natural selection acts on…', o: ['variation', 'a single organism', 'only the strong', 'the environment'], a: 0, w: 'On ==variation==.' },
+    { q: 'Which can cause mutations?', o: ['oxygen', 'ionising radiation', 'vitamins', 'water'], a: 1, w: '==Ionising radiation==.' },
+    { q: 'One disadvantage of selective breeding is…', o: ['higher yield', 'less variation', 'more variation', 'faster growth'], a: 1, w: '==Less variation==.' },
+    { q: 'Height shows…', o: ['discontinuous variation', 'continuous variation', 'no variation', 'mutation only'], a: 1, w: '==Continuous== variation.' }
+  ],
+  exam: [
+    { q: 'Define natural selection.', m: 3,
+      p: ['individuals with ==alleles suited to the environment== survive better', '==reproduce== and pass on those alleles', 'so the ==frequency of the allele increases== in the next generation'] },
+    { q: 'State two causes of mutations.', m: 2,
+      p: ['==ionising radiation== (X-rays / UV)', '==chemicals== / mutagens (for example in tobacco smoke)'] },
+    { q: 'Describe two differences between natural selection and selective breeding.', m: 2,
+      p: ['natural selection is by the ==environment==; selective breeding is chosen by ==humans==', 'natural selection is for ==survival==; selective breeding is for ==useful features==, and is faster'] },
+    { q: 'Explain why a new disease could wipe out a population of selectively bred wheat.', m: 2,
+      p: ['the plants are ==genetically similar== (little variation)', 'so ==none may be resistant== to the disease'] }
+  ]
+},
+ecosys: {
+  code: 'Topic 18', name: 'Organisms and their environment',
+  lede: 'How energy flows through food chains and webs, and how carbon is recycled in the carbon cycle.',
+  learn: [
+    { h: 'Energy flow', list: ['The ==Sun== is the source of energy for most food chains. ==Producers== (green plants) trap light by ==photosynthesis==.', 'A ==food chain== shows the ==transfer of energy== from one organism to the next. The ==arrow means “is eaten by”==.', 'A ==food web== is a network of linked food chains.', '==Trophic levels==: ==producer== → ==primary consumer== (herbivore) → ==secondary consumer== (carnivore) → ==tertiary consumer==. ==Decomposers== break down dead material.', 'Only about ==10 %== of energy passes on at each level. The rest is lost as ==heat== (respiration), in ==movement==, in ==waste== and in parts not eaten. So food chains are ==short==.', 'A ==pyramid of numbers== shows the number of organisms at each level. A ==pyramid of biomass== shows the mass.'], f: ['% energy transferred = energy passed on ÷ energy received × 100'] },
+    { h: 'Carbon cycle', list: ['==Photosynthesis== removes CO₂ from the air. ==Respiration== (plants, animals, decomposers), ==decomposition== and ==combustion== of fossil fuels and wood put CO₂ back.', '==Feeding== passes carbon along the food chain. ==Death and waste== are broken down by ==decomposers==.', '==Fossil fuels== formed from dead organisms over millions of years. Burning them adds extra CO₂ faster than plants remove it.', '==Nutrient cycling==: decomposers return ==nitrates== to the soil for plants.'] },
+    { h: 'Populations and communities', list: ['A ==population== is a group of organisms of ==one species== in an area. A ==community== is all the populations in an area. An ==ecosystem== is the community plus the ==non-living environment==. A ==habitat== is where an organism lives.', 'A population grows in four phases: ==lag==, ==exponential (fast growth)==, ==stationary== (stable) and ==death==.', 'Population size is limited by ==food==, ==water==, ==predators==, ==disease==, ==competition== and space.', '==Competition== is when organisms need the same limited resource. ==Predator and prey== numbers rise and fall in linked cycles.'] }
+  ],
+  mistakes: ['Writing the ==arrow the wrong way round== in a food chain.', 'Saying ==energy is lost== when it is transferred as heat (energy is not destroyed).', 'Saying ==all energy passes along== the chain. Only about 10 %.', 'Saying ==plants only take in carbon== and do not respire.', 'Saying ==a decomposer is a consumer== in the pyramid (it is its own group).'],
+  diagrams: [{ svg: svgFoodWeb, cap: 'A ==food web==. Arrows show the direction of ==energy flow==.' }, { svg: svgCarbon, cap: 'The ==carbon cycle==.' }],
+  worked: [
+    W('Producers in a field receive 20 000 kJ of energy as grass. Rabbits eat the grass and gain 2000 kJ. Calculate the percentage transferred.', '==Passed on ÷ received × 100==.', 'The answer is about 10 %.', 'energy out ÷ energy in × 100',
+      [['Formula', '% = energy passed on ÷ energy received × 100', ''], ['Substitute', '2000 ÷ 20 000 × 100', ''], ['Answer', '10 %', 'The rest is lost as heat, in movement and waste.']],
+      [['Energy in', '20 000 kJ', -1], ['Energy out', '2000 kJ', -1], ['Percentage', '10 %', 2]]),
+    W('Explain why food chains rarely have more than five trophic levels.', 'Energy is lost at every ==transfer==.', 'Give three ways energy is lost.', 'About 10 % passes on',
+      [['Transfer', 'Only about 10 % of the energy passes to the next level.', ''], ['Losses', 'Energy is lost as heat from respiration, in movement and in waste and uneaten parts.', ''], ['Result', 'After four or five levels there is too little energy to support another.', '']],
+      [['Passed on', 'about 10 %', 0], ['Lost as', 'heat, movement, waste', 1], ['Result', 'short chains', 2]], true),
+    W('Describe how carbon dioxide is removed from and returned to the atmosphere.', 'Give ==two processes== for each direction.', 'Name the organisms.', 'Photosynthesis out; respiration, combustion in',
+      [['Removed', 'Plants take CO₂ in by photosynthesis.', 'Making glucose.'], ['Returned: respiration', 'Plants, animals and decomposers release CO₂ by respiration.', ''], ['Returned: combustion', 'Burning fossil fuels and wood releases CO₂.', ''], ['Returned: decay', 'Decomposers break down dead matter, releasing CO₂.', '']],
+      [['Out of air', 'photosynthesis', 0], ['Into air', 'respiration', 1], ['Into air', 'combustion', 2], ['Into air', 'decay', 3]], true),
+    W('From the food web: grass → rabbit → fox, and grass → grasshopper → frog. Name the producer, a primary consumer, a secondary consumer, and say what happens to the fox population if rabbits die.', 'Read ==arrows as “is eaten by”==.', 'Say what the fox eats.', 'Trophic levels',
+      [['Producer', 'Grass.', ''], ['Primary consumer', 'Rabbit (or grasshopper).', 'Eats the producer.'], ['Secondary consumer', 'Fox (or frog).', 'Eats a primary consumer.'], ['If rabbits die', 'The fox has less food, so its numbers fall unless it eats something else.', '']],
+      [['Producer', 'grass', 0], ['Primary', 'rabbit', 1], ['Secondary', 'fox', 2], ['Fox numbers', 'fall', 3]], true)
+  ],
+  drill: 'ecosys',
+  quiz: [
+    { q: 'The source of energy for most food chains is the…', o: ['soil', 'Sun', 'plants', 'water'], a: 1, w: 'The ==Sun==.' },
+    { q: 'About what percentage of energy passes to the next trophic level?', o: ['1 %', '10 %', '50 %', '90 %'], a: 1, w: 'About ==10 %==.' },
+    { q: 'In a food chain the arrow means…', o: ['eats', 'is eaten by / energy flows to', 'lives with', 'competes with'], a: 1, w: '==Is eaten by==.' },
+    { q: 'Which puts CO₂ back into the air?', o: ['photosynthesis', 'respiration', 'transpiration', 'osmosis'], a: 1, w: '==Respiration==.' },
+    { q: 'Decomposers…', o: ['make food by photosynthesis', 'break down dead material', 'are primary consumers', 'are producers'], a: 1, w: 'They ==break down dead material==.' },
+    { q: 'A herbivore is a…', o: ['producer', 'primary consumer', 'secondary consumer', 'decomposer'], a: 1, w: 'A ==primary consumer==.' }
+  ],
+  exam: [
+    { q: 'Explain why energy is lost between trophic levels.', m: 3,
+      p: ['energy lost as ==heat== from ==respiration==', 'energy used for ==movement==', 'some parts are ==not eaten== / waste (faeces, urine)'] },
+    { q: 'State the meaning of the terms producer and decomposer.', m: 2,
+      p: ['producer: an organism that makes its own food by ==photosynthesis==', 'decomposer: breaks down ==dead organisms / waste== (releasing nutrients)'] },
+    { q: 'Describe the part played by the following in the carbon cycle: (a) plants (b) decomposers.', m: 3,
+      p: ['plants remove CO₂ by ==photosynthesis==', 'plants also release CO₂ by respiration', 'decomposers release CO₂ by ==respiration== as they break down dead material'] },
+    { q: 'Explain the effect on a food web of removing the top predator.', m: 2,
+      p: ['the ==prey increases== in number', 'which may eat too much of its own food source, upsetting the balance'] }
+  ]
+},
+human: {
+  code: 'Topic 19', name: 'Human influences on ecosystems',
+  lede: 'How people harm the environment through pollution and habitat loss, and how we can conserve biodiversity.',
+  learn: [
+    { h: 'Pollution and the greenhouse effect', list: ['==Carbon dioxide== and ==methane== are ==greenhouse gases==. They trap heat from the Earth, causing the ==enhanced greenhouse effect== and ==global warming==.', 'CO₂ comes from ==burning fossil fuels== and ==deforestation==. Methane comes from ==cattle== and ==rice paddies==.', 'Consequences: ==climate change==, ==melting ice==, ==rising sea level==, ==extreme weather== and changes to habitats.', '==Acid rain== comes from sulfur dioxide and nitrogen oxides. ==Plastics== harm marine life. ==Sewage== and ==fertilisers== cause ==eutrophication==.'] },
+    { h: 'Eutrophication and habitat loss', list: ['==Eutrophication==: ==fertiliser runs off== into water, ==algae== grow fast (==algal bloom==), block light, plants die, ==bacteria== decompose them and use up the ==oxygen==, so ==fish die==.', '==Deforestation== is clearing forests for farming, timber and building. It ==removes habitats==, ==reduces biodiversity==, increases ==soil erosion== and ==flooding==, and ==adds CO₂== (less photosynthesis, burning).', '==Overfishing== and ==overhunting== reduce populations so much that the species may become ==endangered== or ==extinct==.', '==Biodiversity== is the ==number of different species== in an area. Loss of habitat is the biggest cause of loss of biodiversity.'] },
+    { h: 'Conservation and sustainability', list: ['==Conservation== protects species and habitats. Methods: ==nature reserves== and national parks, ==captive breeding== in zoos, ==seed banks==, ==fishing quotas==, ==replanting== forests and ==education==.', '==Sustainable resource use== means using resources so that they ==last for the future==: ==recycling== paper and plastic, ==managing fish stocks== and forests, and ==renewable energy== (solar, wind).', 'Why conserve? It protects ==food chains==, useful ==medicines==, tourism and ==genetic variation==, and for ethical reasons.'] }
+  ],
+  mistakes: ['Saying ==the greenhouse effect is bad==. The natural effect keeps Earth warm; the enhanced effect is the problem.', 'Saying ==ozone depletion causes global warming==. It is a separate problem.', 'Saying ==fertiliser kills fish directly==. Algal growth uses up oxygen.', 'Saying ==recycling means reusing the same item==. It means processing to make new items.', 'Saying ==extinct means endangered==. Extinct means no more exist.'],
+  diagrams: [{ svg: svgEutro, cap: '==Eutrophication==, step by step.' }],
+  worked: [
+    W('Explain how fertiliser running into a river can kill fish.', 'Follow the ==chain of events==. Use the word ==oxygen==.', 'Write it in order.', 'Fertiliser → algae → decay → low oxygen',
+      [['Fertiliser', 'Nitrates and phosphates run into the river.', ''], ['Algae', 'Algae grow rapidly (an algal bloom) and cover the surface.', ''], ['Light blocked', 'Light cannot reach plants below, so they die.', ''], ['Decay', 'Bacteria decompose the dead plants and algae using up oxygen by respiration.', ''], ['Result', 'Fish die from lack of oxygen.', '']],
+      [['Fertiliser', 'nitrates', 0], ['Algae', 'bloom', 1], ['Light', 'blocked', 2], ['Bacteria', 'use oxygen', 3], ['Fish', 'die', 4]], true),
+    W('A forest of 4000 hectares is reduced to 3000 hectares. Calculate the percentage of forest lost.', '==Change ÷ original × 100==.', 'Divide by the original area.', '% = loss ÷ original × 100',
+      [['Loss', '4000 − 3000 = 1000 hectares', ''], ['Fraction', '1000 ÷ 4000', ''], ['Answer', '× 100 = 25 %', 'A quarter of the forest has gone.']],
+      [['Original', '4000 ha', -1], ['Now', '3000 ha', -1], ['Loss', '1000 ha', 0], ['Percentage', '25 %', 2]]),
+    W('Describe the effects of deforestation.', 'Think ==habitats==, ==soil== and ==climate==.', 'At least three effects.', 'Habitat, soil, CO₂',
+      [['Habitat', 'Animals and plants lose their homes, so biodiversity falls.', ''], ['Soil', 'Soil is no longer held by roots, so erosion and flooding increase.', ''], ['Climate', 'Fewer trees remove less CO₂, and burning adds CO₂. This increases global warming.', '']],
+      [['Habitat', 'less biodiversity', 0], ['Soil', 'erosion, flooding', 1], ['CO₂', 'rises', 2]], true),
+    W('Suggest why a captive breeding programme could help a rare species.', 'Say ==what it protects== and ==what it risks==.', 'Give a benefit and a limit.', 'Protect, breed, release',
+      [['Protection', 'The animals are safe from hunting and habitat loss.', ''], ['Breeding', 'They breed under care, increasing numbers.', ''], ['Release', 'Young can be released into protected habitat.', ''], ['Limit', 'Small numbers give little variation, and a suitable habitat must still exist.', '']],
+      [['Safe', 'no hunting', 0], ['Breed', 'numbers rise', 1], ['Release', 'to wild', 2], ['Limit', 'low variation', 3]], true)
+  ],
+  drill: 'human',
+  quiz: [
+    { q: 'Which gas is a greenhouse gas?', o: ['oxygen', 'nitrogen', 'methane', 'argon'], a: 2, w: '==Methane== (and CO₂).' },
+    { q: 'Eutrophication is caused by…', o: ['acid rain', 'excess fertiliser', 'overfishing', 'plastic'], a: 1, w: '==Excess fertiliser== or sewage.' },
+    { q: 'Deforestation increases…', o: ['biodiversity', 'soil erosion', 'photosynthesis', 'rainfall always'], a: 1, w: '==Soil erosion==.' },
+    { q: 'A seed bank is an example of…', o: ['pollution', 'conservation', 'deforestation', 'eutrophication'], a: 1, w: '==Conservation==.' },
+    { q: 'Biodiversity is the…', o: ['number of organisms', 'number of different species', 'mass of plants', 'number of habitats'], a: 1, w: 'The ==number of different species==.' },
+    { q: 'Which is a renewable source of energy?', o: ['coal', 'oil', 'wind', 'natural gas'], a: 2, w: '==Wind==.' }
+  ],
+  exam: [
+    { q: 'Explain how burning fossil fuels contributes to global warming.', m: 3,
+      p: ['burning releases ==carbon dioxide==', 'CO₂ is a ==greenhouse gas== which ==traps heat== (infrared) in the atmosphere', 'so the ==Earth’s average temperature rises=='] },
+    { q: 'Describe two consequences of deforestation.', m: 2,
+      p: ['==loss of habitat / biodiversity==', '==soil erosion / flooding== / more CO₂ in the air'] },
+    { q: 'State two ways in which a rare species can be conserved.', m: 2,
+      p: ['==nature reserves== / protected areas', '==captive breeding== / seed banks / legal protection / education'] },
+    { q: 'Explain what is meant by sustainable use of a resource, with an example.', m: 2,
+      p: ['using it so that it ==lasts for future generations== (not run out)', 'example: ==replanting trees==, fishing quotas, recycling'] }
+  ]
+}
 
 };
 
@@ -1203,9 +1497,73 @@ const DRILLS = {
     () => { const it = pick([['long-term heavy alcohol use', 'liver damage'], ['smoking during pregnancy', 'low birth mass'], ['injecting heroin with shared needles', 'risk of HIV']]);
       return choiceItem(`Which is a risk of ${it[0]}?`, it[1], ['liver damage', 'low birth mass', 'risk of HIV', 'better memory'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
   ]
+,
+  repro: [
+    () => { const it = pick([['makes pollen', 'anther'], ['catches pollen', 'stigma'], ['contains the ovules', 'ovary'], ['becomes the fruit', 'ovary'], ['becomes the seed', 'ovule'], ['is brightly coloured to attract insects', 'petal']]);
+      return choiceItem(`Which part of a flower ${it[0]}?`, it[1], ['anther', 'stigma', 'ovary', 'ovule', 'petal', 'filament'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['small, dull petals and feathery stigma', 'wind'], ['bright petals, scent and nectar', 'insect'], ['light smooth pollen in large amounts', 'wind'], ['sticky or spiky pollen', 'insect']]);
+      return choiceItem(`A flower has ${it[0]}. How is it pollinated?`, it[1], [it[1] === 'wind' ? 'insect' : 'wind'], [['Rule', 'wind: small, dull, feathery; insect: bright, scented, nectar']]); },
+    () => { const it = pick([['one parent and identical offspring', 'asexual'], ['two parents and fusion of gametes', 'sexual'], ['genetic variation in offspring', 'sexual'], ['no gametes', 'asexual']]);
+      return choiceItem(`Which type of reproduction involves ${it[0]}?`, it[1], [it[1] === 'asexual' ? 'sexual' : 'asexual'], [['Rule', 'asexual: 1 parent, clones; sexual: 2 gametes, variation']]); },
+    () => { const it = pick([['makes sperm', 'testis'], ['makes egg cells', 'ovary'], ['is where fertilisation happens', 'oviduct'], ['is where the embryo implants', 'uterus'], ['carries sperm out through the penis', 'urethra']]);
+      return choiceItem(`Which part of the human reproductive system ${it[0]}?`, it[1], ['testis', 'ovary', 'oviduct', 'uterus', 'urethra'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['oxygen', 'from the mother to the foetus'], ['urea', 'from the foetus to the mother'], ['carbon dioxide', 'from the foetus to the mother'], ['glucose', 'from the mother to the foetus']]);
+      return choiceItem(`Across the placenta, ${it[0]} passes…`, it[1], ['from the mother to the foetus', 'from the foetus to the mother'].filter(x => x !== it[1]), [['Rule', 'in: O₂, glucose, amino acids; out: CO₂, urea']]); }
+  ],
+  inherit: [
+    () => { const L = pick([['T', 'tall', 'short'], ['B', 'brown eyes', 'blue eyes'], ['R', 'round seeds', 'wrinkled seeds'], ['H', 'hairy', 'hairless']]), gs = ['XX', 'Xx', 'xx'], a = pick(['Xx', 'xx', 'XX']), b = pick(['Xx', 'xx', 'XX']);
+      const cl = g => g.replace(/X/g, L[0]).replace(/x/g, L[0].toLowerCase()); const A = cl(a), B = cl(b);
+      let dom = 0, tot = 0; for (const p of A) for (const q of B) { tot++; if (p === L[0] || q === L[0]) dom++; }
+      const rec = Math.random() < 0.5, ans = (rec ? tot - dom : dom) * 100 / tot;
+      return { kind:'num', q:`${L[1]} (${L[0]}) is dominant to ${L[2]} (${L[0].toLowerCase()}). Parents are ${A} × ${B}. What percentage of offspring will have ${rec ? L[2] : L[1]}?`, ans, tol:0, s:[['Gametes', `${A}: ${[...A].join(' or ')}; ${B}: ${[...B].join(' or ')}`], ['Punnett square', `${tot} squares`], ['Count', `${rec ? tot - dom : dom} of ${tot} = ${ans} %`]] }; },
+    () => { const it = pick([['Tt', 'heterozygous'], ['TT', 'homozygous'], ['tt', 'homozygous'], ['Bb', 'heterozygous']]);
+      return choiceItem(`The genotype ${it[0]} is…`, it[1], ['heterozygous', 'homozygous'].filter(x => x !== it[1]), [['Rule', 'same letters: homozygous; different: heterozygous']]); },
+    () => { const it = pick([['tall', 'phenotype'], ['Tt', 'genotype'], ['brown eyes', 'phenotype'], ['bb', 'genotype']]);
+      return choiceItem(`Is “${it[0]}” a genotype or a phenotype?`, it[1], ['genotype', 'phenotype'].filter(x => x !== it[1]), [['Rule', 'genotype: letters; phenotype: the feature']]); },
+    () => { const it = pick([['a human body cell', '46'], ['a human gamete', '23'], ['a human zygote', '46'], ['a daughter cell after mitosis', '46']]);
+      return choiceItem(`How many chromosomes are in ${it[0]}?`, it[1], ['46', '23', '92', '12'].filter(x => x !== it[1]).slice(0, 3), [['Rule', 'body cells 46; gametes 23']]); },
+    () => { const it = pick([['growth and repair', 'mitosis'], ['making gametes', 'meiosis'], ['identical daughter cells', 'mitosis'], ['halving the chromosome number', 'meiosis']]);
+      return choiceItem(`Which type of cell division is used for ${it[0]}?`, it[1], ['mitosis', 'meiosis'].filter(x => x !== it[1]), [['Match', it[1] + ': ' + it[0]]]); }
+  ],
+  select: [
+    () => { const n = rint(4, 6), v = Array.from({ length: n - 1 }, () => rint(8, 30)); let s = v.reduce((a, b) => a + b, 0), last = rint(8, 30); while ((s + last) % n) last++; const all = [...v, last];
+      return { kind:'num', q:`The heights of ${n} plants (cm) are ${all.join(', ')}. Calculate the mean height.`, ans:(s + last) / n, tol:0, s:[['Total', `${all.join(' + ')} = ${s + last}`], ['Divide', `${s + last} ÷ ${n} = ${(s + last) / n} cm`]] }; },
+    () => { const all = Array.from({ length: 5 }, () => rint(10, 40)), r = Math.max(...all) - Math.min(...all);
+      return { kind:'num', q:`The masses of 5 seeds (mg) are ${all.join(', ')}. Calculate the range.`, ans:r, tol:0, s:[['Range', `largest − smallest = ${Math.max(...all)} − ${Math.min(...all)} = ${r} mg`]] }; },
+    () => { const it = pick([['height', 'continuous'], ['blood group', 'discontinuous'], ['mass', 'continuous'], ['tongue rolling', 'discontinuous']]);
+      return choiceItem(`Is ${it[0]} an example of continuous or discontinuous variation?`, it[1], ['continuous', 'discontinuous'].filter(x => x !== it[1]), [['Rule', 'range of values: continuous; categories: discontinuous']]); },
+    () => { const o = ['variation', 'overproduction of offspring', 'struggle for survival', 'survival of the best adapted', 'reproduction and passing on alleles'], k = rint(0, 3);
+      return choiceItem(`In natural selection, which step comes after ${o[k]}?`, o[k + 1], o.filter((x, i) => i !== k + 1 && i !== k).slice(0, 3), [['Order', o.join(' → ')]]); },
+    () => { const it = pick([['ionising radiation', 'cause mutations'], ['planned breeding by humans', 'selective breeding'], ['the best adapted survive and reproduce', 'natural selection']]);
+      return choiceItem(`Which of these matches “${it[0]}”?`, it[1], ['cause mutations', 'selective breeding', 'natural selection'].filter(x => x !== it[1]), [['Match', it[0] + ': ' + it[1]]]); }
+  ],
+  ecosys: [
+    () => { const e = pick([1000, 2000, 5000, 10000, 20000]), p = pick([5, 10, 15, 20]), o = e * p / 100;
+      return { kind:'num', q:`A trophic level receives ${e} kJ of energy and passes on ${o} kJ. What percentage is passed on?`, ans:p, tol:0, s:[['Formula', 'passed on ÷ received × 100'], ['Substitute', `${o} ÷ ${e} × 100 = ${p} %`]] }; },
+    () => { const e = pick([1000, 5000, 10000, 20000]), ans = e / 10;
+      return { kind:'num', q:`A producer stores ${e} kJ of energy. About 10 % passes to the primary consumer. How much energy (kJ) does it receive?`, ans, tol:0, s:[['10 %', `${e} × 0.1 = ${ans} kJ`]] }; },
+    () => { const it = pick([['grass', 'producer'], ['rabbit', 'primary consumer'], ['fox', 'secondary consumer'], ['fungus on a dead log', 'decomposer'], ['an owl eating a fox-eating bird', 'tertiary consumer']]);
+      return choiceItem(`In a food chain, a ${it[0]} is a…`, it[1], ['producer', 'primary consumer', 'secondary consumer', 'decomposer', 'tertiary consumer'].filter(x => x !== it[1]).slice(0, 3), [['Rule', 'producer, primary, secondary, tertiary; decomposers break down dead matter']]); },
+    () => { const it = pick([['photosynthesis', 'removes CO₂ from the air'], ['respiration', 'puts CO₂ into the air'], ['combustion', 'puts CO₂ into the air'], ['decomposition', 'puts CO₂ into the air']]);
+      return choiceItem(`In the carbon cycle, ${it[0]}…`, it[1], ['removes CO₂ from the air', 'puts CO₂ into the air'].filter(x => x !== it[1]), [['Rule', 'photosynthesis removes; respiration, decay, combustion add']]); },
+    () => { const it = pick([['a group of one species in an area', 'population'], ['all the populations in an area', 'community'], ['where an organism lives', 'habitat'], ['the community plus the non-living environment', 'ecosystem']]);
+      return choiceItem(`Which term means ${it[0]}?`, it[1], ['population', 'community', 'habitat', 'ecosystem'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ': ' + it[0]]]); }
+  ],
+  human: [
+    () => { const a = pick([1000, 2000, 4000, 5000, 8000]), p = pick([10, 20, 25, 40, 50]), n = a - a * p / 100;
+      return { kind:'num', q:`A forest of ${a} hectares is reduced to ${n} hectares. What percentage of the forest has been lost?`, ans:p, tol:0, s:[['Loss', `${a} − ${n} = ${a - n} ha`], ['Percentage', `${a - n} ÷ ${a} × 100 = ${p} %`]] }; },
+    () => { const it = pick([['carbon dioxide', 'burning fossil fuels'], ['methane', 'cattle and rice fields'], ['eutrophication', 'excess fertiliser'], ['acid rain', 'sulfur dioxide']]);
+      return choiceItem(`Which is linked with ${it[0]}?`, it[1], ['burning fossil fuels', 'cattle and rice fields', 'excess fertiliser', 'sulfur dioxide'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const o = ['fertiliser runs into the river', 'algae grow quickly', 'light is blocked and plants die', 'bacteria use up the oxygen'], k = rint(0, 2);
+      return choiceItem(`In eutrophication, what happens after: ${o[k]}?`, o[k + 1], o.filter((x, i) => i !== k + 1 && i !== k).concat(['fish numbers rise']).slice(0, 3), [['Order', o.join(' → ') + ' → fish die']]); },
+    () => { const it = pick([['nature reserve', 'conservation'], ['seed bank', 'conservation'], ['overfishing', 'a cause of species loss'], ['fishing quota', 'sustainable use']]);
+      return choiceItem(`A ${it[0]} is an example of…`, it[1], ['conservation', 'a cause of species loss', 'sustainable use', 'pollution'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['deforestation', 'soil erosion'], ['global warming', 'rising sea level'], ['eutrophication', 'fish dying from low oxygen']]);
+      return choiceItem(`Which is a result of ${it[0]}?`, it[1], ['soil erosion', 'rising sea level', 'fish dying from low oxygen', 'more biodiversity'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
+  ]
 
 };
-let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1],['nutr',0],['nutr',1],['transp',0],['transp',1],['blood',0],['blood',1],['disease',0],['disease',1],['resp',0],['resp',1],['excr',0],['excr',1],['coord',0],['coord',1],['drugs',0],['drugs',1]];
+let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1],['nutr',0],['nutr',1],['transp',0],['transp',1],['blood',0],['blood',1],['disease',0],['disease',1],['resp',0],['resp',1],['excr',0],['excr',1],['coord',0],['coord',1],['drugs',0],['drugs',1],['repro',0],['repro',1],['inherit',0],['inherit',1],['select',0],['select',1],['ecosys',0],['ecosys',1],['human',0],['human',1]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -1221,7 +1579,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['resp','Humans','Gas exchange'],['excr','Humans','Excretion'],['coord','Humans','Coordination'],['drugs','Humans','Drugs'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['resp','Humans','Gas exchange'],['excr','Humans','Excretion'],['coord','Humans','Coordination'],['drugs','Humans','Drugs'],['repro','Genetics','Reproduction'],['inherit','Genetics','Inheritance'],['select','Genetics','Variation & selection'],['ecosys','Ecology','Ecosystems'],['human','Ecology','Human influences'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1238,13 +1596,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease','resp','excr','coord','drugs'];
+const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease','resp','excr','coord','drugs','repro','inherit','select','ecosys','human'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Biology 0610</span><h2>Biology full-year pack</h2>
-  <p class="lede">Fourteen topics so far, in Cambridge syllabus order: living things, cells, movement into and out of cells, biological molecules, enzymes and plant nutrition, human nutrition, transport in plants and animals, disease and immunity, gas exchange and respiration, excretion, coordination and drugs. More topics are added chapter by chapter. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">The whole Cambridge 0610 course in nineteen topics, in syllabus order: living things, cells, movement of substances, molecules, enzymes, plants, humans, genetics and ecology. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
