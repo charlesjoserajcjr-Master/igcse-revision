@@ -489,6 +489,59 @@ function svgComposite(){
 }
 
 /* ---------- content ---------- */
+function svgBearing(){
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="A three-figure bearing measured clockwise from north">${arrowDefs('bg')}
+  <line x1="150" y1="200" x2="150" y2="50" class="ln" marker-end="url(#a-bg)"/>${T(150, 38, 'N', 'mid lbl')}
+  <line x1="150" y1="200" x2="272" y2="155" class="hotl" marker-end="url(#h-bg)"/>
+  <circle cx="150" cy="200" r="4" class="inkf"/>${T(130, 220, 'A', 'lbl')}${T(284, 152, 'B', 'lbl')}
+  <path d="M150 140 A60 60 0 0 1 206.4 179.5" class="acc" fill="none"/>${T(208, 150, '070°', 'acct')}
+  ${T(380, 60, 'Bearing: the angle from NORTH,', 'lbl')}${T(380, 84, 'measured CLOCKWISE,', 'lbl')}${T(380, 108, 'written with THREE figures.', 'lbl')}
+  ${T(380, 150, '“Bearing of B from A” = start at A.', 'mut')}${T(380, 174, 'North is 000°, East 090°,', 'mut')}${T(380, 198, 'South 180°, West 270°.', 'mut')}
+  ${T(380, 240, 'Back bearing: add or subtract 180°.', 'hott')}${T(380, 264, 'B from A is 070°, so A from B is 250°.', 'hott')}</svg>`;
+}
+function svgTriRules(){
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="A triangle labelled for the sine and cosine rules">
+  <polygon points="80,250 360,250 250,60" class="cardf" style="stroke:var(--ink);stroke-width:2"/>
+  ${T(66, 262, 'A', 'lbl')}${T(372, 262, 'B', 'lbl')}${T(250, 48, 'C', 'mid lbl')}
+  ${T(325, 148, 'a', 'mono acct')}${T(145, 148, 'b', 'mono acct')}${T(220, 272, 'c', 'mono acct')}
+  ${T(430, 40, 'Side a is opposite angle A, and so on.', 'mut')}
+  ${T(430, 84, 'Sine rule (matching side and angle):', 'lbl')}${T(430, 108, 'a ÷ sin A = b ÷ sin B = c ÷ sin C', 'mono acct')}
+  ${T(430, 150, 'Cosine rule (two sides and the angle between):', 'lbl')}${T(430, 174, 'a² = b² + c² − 2bc cos A', 'mono acct')}
+  ${T(430, 214, 'Area of any triangle:', 'lbl')}${T(430, 238, '½ × a × b × sin C', 'mono acct')}
+  ${T(430, 276, 'Use the sine rule when you have a matching pair.', 'mut')}</svg>`;
+}
+function svgDT(){
+  const X = t => 70 + t * 70, Y = d => 230 - d * 2;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="A distance-time graph with three stages">${arrowDefs('dt')}
+  <line x1="70" y1="230" x2="440" y2="230" class="ln"/><line x1="70" y1="230" x2="70" y2="20" class="ln"/>
+  ${[1, 2, 3, 4, 5].map(t => `<line x1="${X(t)}" y1="230" x2="${X(t)}" y2="236" class="thin"/>${T(X(t), 252, t, 'mid mut')}`).join('')}
+  ${[20, 40, 60, 80, 100].map(d => `<line x1="64" y1="${Y(d)}" x2="70" y2="${Y(d)}" class="thin"/>${T(60, Y(d) + 4, d, 'end mut')}`).join('')}
+  <polyline points="${X(0)},${Y(0)} ${X(2)},${Y(80)} ${X(3)},${Y(80)} ${X(5)},${Y(0)}" class="acc" fill="none" style="stroke-width:3"/>
+  ${T(250, 272, 'time (hours)', 'mid lbl')}${T(40, 14, 'distance (km)', 'lbl')}
+  ${T(470, 60, 'Stage 1 (steep): moving away at 40 km/h.', 'acct')}${T(470, 90, 'Stage 2 (flat): stopped. Speed = 0.', 'hott')}${T(470, 120, 'Stage 3 (down): returning at 40 km/h.', 'acct')}
+  ${T(470, 164, 'Gradient of a distance-time graph = SPEED.', 'lbl')}${T(470, 188, 'Steeper line = faster. Flat = at rest.', 'mut')}${T(470, 222, 'Average speed = total distance ÷ total time.', 'mut')}</svg>`;
+}
+function svgST(){
+  const X = t => 60 + t * 8, Y = v => 220 - v * 8;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="A speed-time graph for a car journey">
+  <polygon points="${X(0)},${Y(0)} ${X(10)},${Y(20)} ${X(40)},${Y(20)} ${X(50)},${Y(0)}" class="accf" style="fill-opacity:.2"/>
+  <line x1="60" y1="220" x2="470" y2="220" class="ln"/><line x1="60" y1="220" x2="60" y2="20" class="ln"/>
+  ${[10, 20, 30, 40, 50].map(t => `<line x1="${X(t)}" y1="220" x2="${X(t)}" y2="226" class="thin"/>${T(X(t), 242, t, 'mid mut')}`).join('')}
+  ${[5, 10, 15, 20, 25].map(v => `<line x1="54" y1="${Y(v)}" x2="60" y2="${Y(v)}" class="thin"/>${T(48, Y(v) + 4, v, 'end mut')}`).join('')}
+  <polyline points="${X(0)},${Y(0)} ${X(10)},${Y(20)} ${X(40)},${Y(20)} ${X(50)},${Y(0)}" class="acc" fill="none" style="stroke-width:3"/>
+  ${T(260, 266, 'time (s)', 'mid lbl')}${T(72, 12, 'speed (m/s)', 'lbl')}
+  ${T(510, 50, 'Gradient of a speed-time graph', 'lbl')}${T(510, 72, '= ACCELERATION.', 'lbl')}${T(510, 96, '0 to 10 s: 20 ÷ 10 = 2 m/s²', 'acct')}${T(510, 118, '10 to 40 s: flat, constant speed.', 'mut')}
+  ${T(510, 160, 'AREA under the graph = DISTANCE.', 'lbl')}${T(510, 184, '½ × 10 × 20 + 30 × 20 + ½ × 10 × 20', 'mono hott')}${T(510, 208, '= 100 + 600 + 100 = 800 m', 'mono hott')}${T(510, 240, 'Average speed = 800 ÷ 50 = 16 m/s', 'acct')}</svg>`;
+}
+function svgTree2(){
+  const br = (x1, y1, x2, y2, lab, ly) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="acc"/>${T((x1 + x2) / 2 - 10, (y1 + y2) / 2 + (ly || 0), lab, 'mid mono hott')}`;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Tree diagram: two counters taken without replacement from 5 red and 3 blue">
+  ${br(50, 140, 220, 70, '5/8', -8)}${br(50, 140, 220, 210, '3/8', 18)}
+  ${br(220, 70, 420, 30, '4/7', -6)}${br(220, 70, 420, 110, '3/7', 16)}${br(220, 210, 420, 170, '5/7', -6)}${br(220, 210, 420, 250, '2/7', 16)}
+  ${T(224, 66, 'R', 'lbl')}${T(224, 206, 'B', 'lbl')}
+  ${T(430, 34, 'RR: 5/8 × 4/7 = 20/56', 'mono')}${T(430, 114, 'RB: 5/8 × 3/7 = 15/56', 'mono')}${T(430, 174, 'BR: 3/8 × 5/7 = 15/56', 'mono')}${T(430, 254, 'BB: 3/8 × 2/7 = 6/56', 'mono')}
+  ${T(8, 150, 'start', 'mut')}${T(30, 18, 'Without replacement the second fractions change (one fewer counter).', 'mut')}</svg>`;
+}
 const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
 const CH = {
 eq: {
@@ -1607,7 +1660,151 @@ func: {
     { q: 'f(x) = 2x + 3 and g(x) = x − 1. Solve fg(x) = 9.', m: 3,
       p: ['fg(x) = 2(x − 1) + 3 = ==2x + 1==', '2x + 1 = 9', '==x = 4=='] }
   ]
+},
+bear: {
+  code: 'Geometry', name: 'Bearings, sine and cosine rules',
+  lede: 'Give directions as three-figure bearings, and solve triangles that have no right angle using the sine rule, the cosine rule and the area formula.',
+  learn: [
+    { h: 'Bearings', list: ['A ==bearing== is an angle measured ==clockwise== from ==north==, written with ==three figures==: 070°, 005°, 250°.', 'Always start at the point the question says “from”. The ==bearing of B from A== starts at A.', 'To find a ==back bearing==: ==add 180°== if the bearing is less than 180°, otherwise ==subtract 180°==.', 'Draw a ==north line== at every point. North lines are ==parallel==, so you can use ==co-interior angles== (add to 180°).'] },
+    { h: 'Which rule do I need?', table: [['You know', 'Use', 'Formula'], ['a ==right angle==', 'SOH CAH TOA or Pythagoras', ''], ['a ==matching side and angle== (and one more side or angle)', '==sine rule==', 'a ÷ sin A = b ÷ sin B'], ['==two sides and the angle between== them', '==cosine rule== (find the third side)', 'a² = b² + c² − 2bc cos A'], ['==all three sides==', '==cosine rule== (find an angle)', 'cos A = (b² + c² − a²) ÷ 2bc'], ['two sides and the angle between, want area', '==area formula==', '½ ab sin C']], list: ['Side ==a== is opposite angle ==A==. Label the triangle first.', 'To find an ==angle== with the sine rule, flip it: ==sin A ÷ a = sin B ÷ b==.'] },
+    { h: 'Using the rules', list: ['Calculator in ==degree== mode. Keep full figures; round only the ==final answer== (3 significant figures or 1 decimal place).', 'For an angle, use the ==inverse== function: sin⁻¹, cos⁻¹.', 'Angles in a triangle ==add to 180°==. Find the missing angle before using the sine rule.', 'Check: the ==longest side== is opposite the ==largest angle==.'] }
+  ],
+  mistakes: ['Using the ==sine rule with no matching side and angle==.', 'Forgetting the ==north line== or measuring ==anticlockwise==.', 'Writing a bearing with ==fewer than three figures== (write 070°, not 70°).', 'In the cosine rule, doing ==(b² + c² − 2bc) × cos A== in the wrong order: work out ==2bc cos A== first, then subtract.', 'Calculator in ==radians==.'],
+  diagrams: [
+    { svg: svgBearing, cap: 'A ==three-figure bearing== is measured ==clockwise from north==.' },
+    { svg: svgTriRules, cap: 'Label the triangle: side ==a== is opposite angle ==A==.' }
+  ],
+  worked: [
+    W('The bearing of B from A is 070°. Find the bearing of A from B.', 'A ==back bearing== differs by ==180°==.', 'Check by drawing a north line at B.', 'bearing < 180°: add 180°',
+      [['Compare', '070° is less than 180°', ''], ['Add 180°', '070° + 180° = 250°', 'If it were over 180°, subtract.'], ['Answer', '250°', 'Always three figures.']],
+      [['B from A', '070°', -1], ['Rule', 'add 180°', 1], ['A from B', '250°', 2]]),
+    W('In triangle ABC, A = 40°, B = 65° and a = 8 cm. Find the side b.', 'You have a ==matching pair== (a and A), so use the ==sine rule==.', 'Put the unknown on the top.', 'b ÷ sin B = a ÷ sin A',
+      [['Choose the rule', 'Matching pair a and A, plus angle B: sine rule', ''], ['Write it', 'b ÷ sin 65° = 8 ÷ sin 40°', 'Unknown on top.'], ['Rearrange', 'b = 8 × sin 65° ÷ sin 40°', 'Multiply both sides by sin 65°.'], ['Calculate', 'b = 8 × 0.9063 ÷ 0.6428 = 11.3 cm', '3 s.f.']],
+      [['Known', 'a = 8, A = 40°, B = 65°', -1], ['Rule', 'sine rule', 0], ['b', '8 sin 65° ÷ sin 40°', 2], ['Answer', '11.3 cm', 3]]),
+    W('In triangle ABC, a = 9 cm, b = 12 cm and A = 30°. Angle B is acute. Find B.', 'To find an ==angle==, put the ==sines on top==.', 'Use the inverse sine at the end.', 'sin B ÷ b = sin A ÷ a',
+      [['Write it', 'sin B ÷ 12 = sin 30° ÷ 9', 'Sines on top this time.'], ['Rearrange', 'sin B = 12 × sin 30° ÷ 9', ''], ['Calculate', 'sin B = 12 × 0.5 ÷ 9 = 0.6667', ''], ['Inverse', 'B = sin⁻¹(0.6667) = 41.8°', 'B is acute, as stated.']],
+      [['Known', 'a = 9, b = 12, A = 30°', -1], ['sin B', '0.6667', 2], ['B', '41.8°', 3]]),
+    W('In triangle ABC, b = 7 cm, c = 9 cm and A = 50°. Find the side a.', 'You have ==two sides and the angle between== them: ==cosine rule==.', 'Work out 2bc cos A before subtracting.', 'a² = b² + c² − 2bc cos A',
+      [['Write it', 'a² = 7² + 9² − 2 × 7 × 9 × cos 50°', ''], ['Squares', 'a² = 49 + 81 − 126 × cos 50°', '2 × 7 × 9 = 126.'], ['Calculate', 'a² = 130 − 126 × 0.6428 = 130 − 80.99 = 49.01', 'Multiply before you subtract.'], ['Square root', 'a = √49.01 = 7.00 cm', '3 s.f.']],
+      [['Known', 'b = 7, c = 9, A = 50°', -1], ['a²', '130 − 80.99 = 49.01', 2], ['a', '7.00 cm', 3]]),
+    W('A triangle has sides a = 7 cm, b = 8 cm and c = 9 cm. Find angle C.', 'You have ==all three sides==: use the ==rearranged cosine rule==.', 'The angle you want goes with the side that is opposite it (c).', 'cos C = (a² + b² − c²) ÷ 2ab',
+      [['Write it', 'cos C = (a² + b² − c²) ÷ (2ab)', 'C is opposite c.'], ['Substitute', 'cos C = (49 + 64 − 81) ÷ (2 × 7 × 8)', ''], ['Simplify', 'cos C = 32 ÷ 112 = 0.2857', ''], ['Inverse', 'C = cos⁻¹(0.2857) = 73.4°', '']],
+      [['Known', 'a = 7, b = 8, c = 9', -1], ['cos C', '32 ÷ 112 = 0.2857', 2], ['C', '73.4°', 3]]),
+    W('Find the area of a triangle with sides 8 cm and 10 cm and the angle between them 35°.', 'Two sides and the ==angle between== them: use ==½ ab sin C==.', 'The angle must be between the two sides.', 'Area = ½ ab sin C',
+      [['Write it', 'Area = ½ × a × b × sin C', ''], ['Substitute', '½ × 8 × 10 × sin 35°', ''], ['Calculate', '40 × 0.5736', ''], ['Answer', '22.9 cm²', 'Units are squared.']],
+      [['Known', '8 cm, 10 cm, 35°', -1], ['Area', '½ × 8 × 10 × sin 35°', 1], ['Answer', '22.9 cm²', 3]]),
+    W('A ship sails 12 km from port P on a bearing of 040°, then 9 km on a bearing of 130°. Find its distance from P and its bearing from P.', 'Draw ==north lines== at both points. The turn is ==130° − 40° = 90°==.', 'A right angle means you can use Pythagoras and tan.', '040° then 130° is a right angle',
+      [['Sketch', 'Route P to Q (12 km, 040°), then Q to R (9 km, 130°)', 'Draw a north line at P and at Q.'], ['Angle at Q', '130° − 40° = 90°', 'The two paths are at right angles.'], ['Distance PR', 'PR² = 12² + 9² = 225, so PR = 15 km', 'Pythagoras.'], ['Angle at P', 'tan⁻¹(9 ÷ 12) = 36.9°', 'Opposite 9, adjacent 12.'], ['Bearing', '040° + 36.9° = 076.9°', 'Measured from north at P.']],
+      [['Turn', '90°', 1], ['PR', '15 km', 2], ['Extra angle', '36.9°', 3], ['Bearing', '076.9°', 4]])
+  ],
+  drill: 'bear',
+  quiz: [
+    { q: 'The bearing of Q from P is 050°. The bearing of P from Q is…', o: ['050°', '130°', '230°', '310°'], a: 2, w: '50 + 180 = ==230°==.' },
+    { q: 'A bearing is measured…', o: ['anticlockwise from north', 'clockwise from north', 'clockwise from east', 'anticlockwise from east'], a: 1, w: '==Clockwise from north==.' },
+    { q: 'Which rule finds a side when you know two sides and the angle between them?', o: ['sine rule', 'cosine rule', 'tan', 'Pythagoras always'], a: 1, w: 'The ==cosine rule==.' },
+    { q: 'West as a bearing is…', o: ['090°', '180°', '270°', '360°'], a: 2, w: 'West is ==270°==.' },
+    { q: 'The area of a triangle with sides 6 and 10 and angle 30° between them is…', o: ['15', '30', '60', '51.96'], a: 0, w: '½ × 6 × 10 × 0.5 = ==15==.' },
+    { q: 'In the sine rule a ÷ sin A, side a is…', o: ['next to A', 'opposite A', 'the longest side', 'the hypotenuse'], a: 1, w: '==Opposite== angle A.' }
+  ],
+  exam: [
+    { q: 'The bearing of town B from town A is 115°. Work out the bearing of A from B.', m: 2,
+      p: ['115 + 180 or 115 − 180', '==295°=='] },
+    { q: 'In triangle PQR, p = 12 cm, q = 15 cm and angle R = 40°. Calculate the length r. Give your answer to 3 significant figures.', m: 4,
+      p: ['r² = 12² + 15² − 2 × 12 × 15 × cos 40°', 'r² = 369 − 360 cos 40° = ==93.2==', '==r = 9.66 cm=='] },
+    { q: 'In triangle ABC, AB = 10 cm, angle A = 38° and angle B = 70°. Calculate BC.', m: 4,
+      p: ['angle C = 180 − 38 − 70 = ==72°==', 'BC ÷ sin 38° = 10 ÷ sin 72°', 'BC = 10 × sin 38° ÷ sin 72°', '==6.47 cm=='] }
+  ]
+},
+graph: {
+  code: 'Graphs', name: 'Travel graphs and rates',
+  lede: 'Read journeys from distance–time and speed–time graphs. The gradient and the area each tell you something.',
+  learn: [
+    { h: 'Distance–time graphs', list: ['Distance goes ==up the side==, time ==along the bottom==.', 'The ==gradient== (steepness) is the ==speed==. ==Steeper means faster==.', 'A ==flat== line means the object is ==stationary== (speed 0).', 'A line going ==back down== means the object is returning.', 'Speed = ==distance ÷ time==. Gradient = change in distance ÷ change in time.', '==Average speed== = ==total distance ÷ total time== (include any stops).'] },
+    { h: 'Speed–time graphs', list: ['Speed goes up the side, time along the bottom.', 'The ==gradient== is the ==acceleration== (units m/s²). A ==flat== line is ==constant speed==.', 'A line sloping ==down== is ==deceleration== (negative acceleration).', 'The ==area under the graph== is the ==distance travelled==. Split it into triangles, rectangles and trapeziums.', 'Trapezium area = ==½ × (a + b) × h== (a and b are the parallel sides).'], f: ['acceleration = change in speed ÷ time taken', 'distance = area under a speed-time graph'] },
+    { h: 'Units and conversion', list: ['km/h to m/s: ==× 1000 ÷ 3600==, which is ==÷ 3.6==. m/s to km/h: ==× 3.6==.', 'Change ==hours and minutes== to hours: 1 h 30 min = ==1.5 h==; 20 min = ==1/3 h==.', 'Make sure the ==units match== before you divide.'] }
+  ],
+  mistakes: ['Reading a ==flat line as constant speed== on a ==distance–time== graph (it means stopped).', 'Using ==distance ÷ time== on a speed–time graph (use gradient for acceleration).', 'Forgetting to ==halve== the area of a triangle.', 'Dividing by ==3.6 the wrong way== when converting units.', 'Writing ==km/h== for acceleration (it is m/s²).'],
+  diagrams: [
+    { svg: svgDT, cap: 'A ==distance–time== graph: gradient is ==speed==.' },
+    { svg: svgST, cap: 'A ==speed–time== graph: gradient is ==acceleration==, area is ==distance==.' }
+  ],
+  worked: [
+    W('A distance–time graph goes from (0, 0) to (2, 80), stays flat until 3, then returns to (5, 0). Work out (a) the speed in the first stage, (b) the average speed for the whole journey.', 'Gradient = ==distance ÷ time== for the first stage. For the average, use ==total distance travelled== (there and back).', 'Total distance includes the return.', 'speed = gradient',
+      [['(a) First stage', 'speed = 80 ÷ 2 = 40 km/h', 'Change in distance ÷ change in time.'], ['(b) Total distance', '80 km there + 80 km back = 160 km', 'Count the whole route.'], ['Total time', '5 hours', 'Including the stop.'], ['Average speed', '160 ÷ 5 = 32 km/h', '']],
+      [['Stage 1', '80 km in 2 h', -1], ['Speed', '40 km/h', 0], ['Total distance', '160 km', 1], ['Average', '32 km/h', 3]]),
+    W('A car accelerates from rest to 20 m/s in 10 s, travels at 20 m/s for 30 s, then slows to rest in 10 s. Find the acceleration in the first stage and the total distance.', 'Acceleration is the ==gradient==. Distance is the ==area==.', 'Draw the trapezium.', 'gradient = acceleration, area = distance',
+      [['Acceleration', '(20 − 0) ÷ 10 = 2 m/s²', 'Change in speed ÷ time.'], ['Area, first triangle', '½ × 10 × 20 = 100 m', ''], ['Area, rectangle', '30 × 20 = 600 m', ''], ['Area, last triangle', '½ × 10 × 20 = 100 m', ''], ['Total distance', '100 + 600 + 100 = 800 m', 'Alternative: trapezium ½ × (30 + 50) × 20 = 800.']],
+      [['Acceleration', '2 m/s²', 0], ['Triangle 1', '100 m', 1], ['Rectangle', '600 m', 2], ['Triangle 2', '100 m', 3], ['Total', '800 m', 4]]),
+    W('Convert 72 km/h to m/s.', 'Divide by ==3.6==.', 'Check: m/s numbers are smaller than km/h numbers.', '÷ 3.6',
+      [['Method 1', '72 × 1000 = 72 000 m in 1 hour', ''], ['Hour to seconds', '1 hour = 3600 s', ''], ['Divide', '72 000 ÷ 3600 = 20 m/s', 'Or 72 ÷ 3.6.']],
+      [['Given', '72 km/h', -1], ['Metres per hour', '72 000', 0], ['m/s', '20', 2]]),
+    W('A train travels 45 km in 30 minutes, then 75 km in 1 hour. Find its average speed for the whole journey.', 'Add the ==distances==, add the ==times==, then divide.', 'Do not average the two speeds.', 'total distance ÷ total time',
+      [['Total distance', '45 + 75 = 120 km', ''], ['Total time', '30 min + 1 h = 1.5 h', 'Change minutes to hours.'], ['Average speed', '120 ÷ 1.5 = 80 km/h', 'Not (90 + 75) ÷ 2.']],
+      [['Distance', '120 km', 0], ['Time', '1.5 h', 1], ['Average', '80 km/h', 2]])
+  ],
+  drill: 'graph',
+  quiz: [
+    { q: 'On a distance–time graph, a flat line means…', o: ['constant speed', 'stopped', 'accelerating', 'going backwards'], a: 1, w: '==Stationary==.' },
+    { q: 'On a speed–time graph, the area under the line is…', o: ['speed', 'acceleration', 'distance', 'time'], a: 2, w: 'The ==distance==.' },
+    { q: 'The gradient of a speed–time graph is…', o: ['speed', 'acceleration', 'distance', 'density'], a: 1, w: '==Acceleration==.' },
+    { q: '36 km/h in m/s is…', o: ['5', '10', '36', '100'], a: 1, w: '36 ÷ 3.6 = ==10==.' },
+    { q: 'A car goes from 0 to 24 m/s in 6 s. The acceleration is…', o: ['4 m/s²', '6 m/s²', '30 m/s²', '144 m/s²'], a: 0, w: '24 ÷ 6 = ==4 m/s²==.' },
+    { q: 'Average speed is…', o: ['total distance ÷ total time', 'the mean of the speeds', 'distance × time', 'the fastest speed'], a: 0, w: '==Total distance ÷ total time==.' }
+  ],
+  exam: [
+    { q: 'A cyclist rides 24 km in 1.5 hours, rests for 30 minutes, then rides 16 km in 1 hour. Calculate the average speed for the whole journey.', m: 3,
+      p: ['total distance = 24 + 16 = ==40 km==', 'total time = 1.5 + 0.5 + 1 = ==3 hours==', '40 ÷ 3 = ==13.3 km/h== (3 s.f.)'] },
+    { q: 'A speed–time graph shows a car going from 0 to 15 m/s in 5 s, then constant 15 m/s for 20 s. Calculate (a) the acceleration (b) the total distance.', m: 4,
+      p: ['acceleration = 15 ÷ 5 = ==3 m/s²==', 'area of triangle = ½ × 5 × 15 = ==37.5==', 'area of rectangle = 20 × 15 = ==300==', 'total distance = ==337.5 m=='] },
+    { q: 'Change 90 km/h into m/s.', m: 2,
+      p: ['90 × 1000 ÷ 3600  or  90 ÷ 3.6', '==25 m/s=='] }
+  ]
+},
+tree: {
+  code: 'Probability', name: 'Tree diagrams and combined events',
+  lede: 'Use a tree diagram to find the probability of two or more events, with and without replacement.',
+  learn: [
+    { h: 'Building a tree', list: ['Draw a ==branch== for each outcome. Write the ==probability on every branch==.', 'The branches from one point must ==add to 1==.', '==Multiply along== the branches to get the probability of a ==path== (AND).', '==Add== the probabilities of different paths that give the answer (OR).', 'The probabilities at the ends of all paths must ==add to 1==.'] },
+    { h: 'With and without replacement', list: ['==With replacement==: the probabilities ==stay the same== on the second pick (the events are ==independent==).', '==Without replacement==: the item is ==not put back==, so the ==second fractions change==: one fewer item (and maybe one fewer of that kind).', 'Bag with 5 red and 3 blue, two taken without replacement: P(RR) = 5/8 × 4/7 = ==20/56 = 5/14==.', '“==At least one==” is often easiest as ==1 − P(none)==.'], f: ['P(A and B) = P(A) × P(B | A)', 'expected number = probability × number of trials'] },
+    { h: 'Presenting answers', list: ['Give probabilities as ==fractions== (simplified), ==decimals== or percentages. Never “1 in 6”.', 'Show the ==multiplication== for each path. Method marks are given.', 'Check: ==all the end probabilities add to 1==.'] }
+  ],
+  mistakes: ['==Adding along== a path instead of multiplying.', 'Forgetting to ==change the second fraction== when the item is not replaced.', 'Branches from one point that ==do not add to 1==.', 'Using ==P(blue) × 2== for “different colours” and forgetting there are two paths (RB and BR).', 'Not ==simplifying== the fraction.'],
+  diagrams: [
+    { svg: svgTree2, cap: '==Without replacement==: bag of 5 red and 3 blue, two counters taken.' }
+  ],
+  worked: [
+    W('A bag has 5 red and 3 blue counters. Two are taken without replacement. Find the probability that both are red.', 'Multiply ==along the branches==. The second fraction has one ==fewer== counter.', 'Simplify at the end.', 'P(RR) = 5/8 × 4/7',
+      [['First pick red', '5/8', '5 red out of 8.'], ['Second pick red', '4/7', 'Now 4 red out of 7.'], ['Multiply', '5/8 × 4/7 = 20/56', ''], ['Simplify', '20/56 = 5/14', 'Divide by 4.']],
+      [['P(first red)', '5/8', 0], ['P(second red)', '4/7', 1], ['Product', '20/56', 2], ['Answer', '5/14', 3]]),
+    W('Using the same bag, find the probability that the two counters are different colours.', 'There are ==two paths==: red then blue, or blue then red.', 'Add the two paths.', 'P(RB) + P(BR)',
+      [['Path RB', '5/8 × 3/7 = 15/56', ''], ['Path BR', '3/8 × 5/7 = 15/56', ''], ['Add (OR)', '15/56 + 15/56 = 30/56', ''], ['Simplify', '30/56 = 15/28', '']],
+      [['RB', '15/56', 0], ['BR', '15/56', 1], ['Sum', '30/56', 2], ['Answer', '15/28', 3]]),
+    W('Using the same bag, find the probability that at least one counter is blue.', 'Use the shortcut: ==at least one = 1 − none==.', 'None blue means both red.', '1 − P(RR)',
+      [['Opposite event', 'No blue = both red', ''], ['P(RR)', '5/14', 'From the first example.'], ['Subtract', '1 − 5/14 = 9/14', '']],
+      [['None blue', '5/14', 1], ['At least one blue', '9/14', 2]]),
+    W('The probability that a bus is late is 0.3 on any day. Find the probability that it is late on both Monday and Tuesday, and on at least one of the two days.', 'The days are ==independent== (with replacement). Multiply for ==and==.', 'Use 1 − none for at least one.', 'independent: multiply',
+      [['Late both days', '0.3 × 0.3 = 0.09', 'AND means multiply.'], ['Not late', '1 − 0.3 = 0.7', ''], ['Late neither day', '0.7 × 0.7 = 0.49', ''], ['At least one day', '1 − 0.49 = 0.51', '']],
+      [['Both late', '0.09', 0], ['Neither late', '0.49', 2], ['At least one', '0.51', 3]])
+  ],
+  drill: 'tree',
+  quiz: [
+    { q: 'Along the branches of a tree diagram you…', o: ['add', 'multiply', 'subtract', 'divide'], a: 1, w: '==Multiply== along the branches.' },
+    { q: 'The probabilities at one branching point add to…', o: ['0', '0.5', '1', '2'], a: 2, w: '==1==.' },
+    { q: 'Without replacement, the second probabilities…', o: ['stay the same', 'change', 'are always 1/2', 'add to 2'], a: 1, w: 'They ==change==.' },
+    { q: 'P(at least one) is the same as…', o: ['P(none)', '1 − P(none)', 'P(none) ÷ 2', '2 × P(none)'], a: 1, w: '==1 − P(none)==.' },
+    { q: 'A bag has 4 red and 6 blue. Two taken without replacement. P(both red) = ?', o: ['4/10 × 4/10', '4/10 × 3/9', '4/10 × 4/9', '6/10 × 5/9'], a: 1, w: '4/10 × ==3/9==.' },
+    { q: 'P(rain) = 0.2 each day, independent. P(rain on both of two days) = ?', o: ['0.4', '0.04', '0.2', '0.02'], a: 1, w: '0.2 × 0.2 = ==0.04==.' }
+  ],
+  exam: [
+    { q: 'A bag contains 6 green and 4 yellow counters. Two counters are taken at random without replacement. Find the probability that they are both green.', m: 3,
+      p: ['P(first green) = ==6/10==', 'P(second green) = ==5/9==', '6/10 × 5/9 = 30/90 = ==1/3=='] },
+    { q: 'The probability that Ravi scores a goal is 0.6 in each of two penalties, independent. Calculate the probability that he scores exactly one goal.', m: 3,
+      p: ['P(score then miss) = 0.6 × 0.4 = ==0.24==', 'P(miss then score) = ==0.24==', 'total = ==0.48=='] },
+    { q: 'A spinner lands on blue with probability 0.25. It is spun 3 times. Find the probability that it lands on blue at least once.', m: 3,
+      p: ['P(not blue) = ==0.75==', 'P(not blue three times) = 0.75³ = ==0.421875==', '1 − 0.421875 = ==0.578 (3 s.f.)=='] }
+  ]
 }
+
 };
 /* ---------- drill generators ---------- */
 const sup = n => String(n).split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
@@ -1951,10 +2148,57 @@ const DRILLS = {
       return { kind:'num', q:`f(x) = ${lin(a, b)}. Find f⁻¹(${k}).`, ans:x0, tol:0, s:[['Solve f(x) = ' + k, `${lin(a, b)} = ${k}`],['x', String(x0)]] }; },
     () => { const a = rint(2, 6), b = rint(-5, 8), x0 = rint(-3, 7), k = a * x0 + b;
       return { kind:'num', q:`f(x) = ${lin(a, b)}. Solve f(x) = ${k}.`, ans:x0, tol:0, s:[['Subtract ' + b, `${a}x = ${k - b}`],['Divide by ' + a, `x = ${x0}`]] }; }
+  ],
+  bear: [
+    () => { const b = rint(1, 35) * 10 - rint(0, 1) * 5, ans = b < 180 ? b + 180 : b - 180, p = n => String(n).padStart(3, '0');
+      return { kind:'num', q:`The bearing of B from A is ${p(b)}°. Work out the bearing of A from B (type the number, for example 250).`, ans, tol:0, s:[['Rule', b < 180 ? 'less than 180°: add 180°' : 'more than 180°: subtract 180°'], ['Answer', `${p(b)} ${b < 180 ? '+' : '−'} 180 = ${p(ans)}°`]] }; },
+    () => { const A = rint(30, 70), B = rint(35, 80), a = rint(5, 15), ans = a * Math.sin(B * Math.PI / 180) / Math.sin(A * Math.PI / 180);
+      return { kind:'num', q:`Triangle ABC: A = ${A}°, B = ${B}°, a = ${a} cm. Use the sine rule to find b (1 d.p.).`, ans:Math.round(ans * 100) / 100, tol:0.06, s:[['Sine rule', 'b ÷ sin B = a ÷ sin A'], ['Rearrange', `b = ${a} × sin ${B}° ÷ sin ${A}°`], ['Answer', `${num(ans)} cm`]] }; },
+    () => { const A = rint(25, 60), a = rint(8, 14), b = rint(a + 1, a + 6), sB = b * Math.sin(A * Math.PI / 180) / a;
+      if (sB >= 1) return DRILLS.bear[2]();
+      const ans = Math.asin(sB) * 180 / Math.PI;
+      return { kind:'num', q:`Triangle ABC: a = ${a} cm, b = ${b} cm, A = ${A}°. Angle B is acute. Find B (1 d.p.).`, ans:Math.round(ans * 100) / 100, tol:0.15, s:[['Sine rule (sines on top)', 'sin B ÷ b = sin A ÷ a'], ['sin B', `${b} × sin ${A}° ÷ ${a} = ${num(sB)}`], ['Inverse', `B = ${num(ans)}°`]] }; },
+    () => { const A = rint(30, 100), b = rint(5, 12), c = rint(5, 12), a = Math.sqrt(b * b + c * c - 2 * b * c * Math.cos(A * Math.PI / 180));
+      return { kind:'num', q:`Triangle ABC: b = ${b} cm, c = ${c} cm, A = ${A}°. Use the cosine rule to find a (1 d.p.).`, ans:Math.round(a * 100) / 100, tol:0.06, s:[['Cosine rule', 'a² = b² + c² − 2bc cos A'], ['Substitute', `a² = ${b * b} + ${c * c} − ${2 * b * c} × cos ${A}° = ${num(a * a)}`], ['Square root', `a = ${num(a)} cm`]] }; },
+    () => { let a, b, c; do { a = rint(5, 12); b = rint(5, 12); c = rint(5, 12); } while (a + b <= c || a + c <= b || b + c <= a);
+      const C = Math.acos((a * a + b * b - c * c) / (2 * a * b)) * 180 / Math.PI;
+      return { kind:'num', q:`A triangle has sides a = ${a} cm, b = ${b} cm and c = ${c} cm. Find angle C (1 d.p.).`, ans:Math.round(C * 100) / 100, tol:0.15, s:[['Cosine rule', 'cos C = (a² + b² − c²) ÷ 2ab'], ['Substitute', `cos C = (${a * a} + ${b * b} − ${c * c}) ÷ ${2 * a * b} = ${num((a * a + b * b - c * c) / (2 * a * b))}`], ['Inverse', `C = ${num(C)}°`]] }; },
+    () => { const a = rint(5, 14), b = rint(5, 14), C = rint(20, 80), ar = 0.5 * a * b * Math.sin(C * Math.PI / 180);
+      return { kind:'num', q:`A triangle has sides ${a} cm and ${b} cm with an angle of ${C}° between them. Find its area (1 d.p.).`, ans:Math.round(ar * 100) / 100, tol:0.06, s:[['Formula', 'Area = ½ ab sin C'], ['Substitute', `½ × ${a} × ${b} × sin ${C}°`], ['Answer', `${num(ar)} cm²`]] }; },
+    () => { const it = pick([['north', '000'], ['east', '090'], ['south', '180'], ['west', '270']]);
+      return choiceItem(`What is the bearing of ${it[0]}?`, it[1] + '°', ['000', '090', '180', '270'].filter(x => x !== it[1]).map(x => x + '°'), [['Rule', 'clockwise from north: N 000, E 090, S 180, W 270']]); }
+  ],
+  graph: [
+    () => { const t = pick([2, 4, 5, 10, 20]), v = rint(3, 12), d = v * t;
+      return { kind:'num', q:`On a distance–time graph, a line goes from (0, 0) to (${t}, ${d}) (hours, km). Find the speed in km/h.`, ans:v, tol:0, s:[['Gradient', `${d} ÷ ${t} = ${v} km/h`]] }; },
+    () => { const d1 = rint(2, 9) * 10, t1 = pick([1, 2, 4]), d2 = rint(2, 9) * 10, t2 = pick([1, 2, 5]), st = pick([0.5, 1, 1.5]), T = t1 + t2 + st, ans = (d1 + d2) / T;
+      return { kind:'num', q:`A cyclist goes ${d1} km in ${t1} h, rests for ${st} h, then goes ${d2} km in ${t2} h. Find the average speed for the whole journey (km/h, 1 d.p.).`, ans:Math.round(ans * 100) / 100, tol:0.06, s:[['Total distance', `${d1} + ${d2} = ${d1 + d2} km`], ['Total time', `${t1} + ${st} + ${t2} = ${T} h`], ['Divide', `${d1 + d2} ÷ ${T} = ${num(ans)} km/h`]] }; },
+    () => { const k = rint(1, 8) * 18 / 3.6, ans = k, kmh = Math.round(k * 3.6);
+      return { kind:'num', q:`Convert ${kmh} km/h to m/s.`, ans:ans, tol:0.05, s:[['Divide by 3.6', `${kmh} ÷ 3.6 = ${num(ans)} m/s`]] }; },
+    () => { const v = rint(2, 9) * 5, t = pick([5, 10, 4, 8]), a = v / t;
+      return { kind:'num', q:`A car accelerates from rest to ${v} m/s in ${t} s. Find its acceleration in m/s².`, ans:Math.round(a * 100) / 100, tol:0.02, s:[['Formula', 'acceleration = change in speed ÷ time'], ['Substitute', `${v} ÷ ${t} = ${num(a)} m/s²`]] }; },
+    () => { const v = pick([10, 12, 20, 24]), t1 = pick([4, 5, 10]), t2 = pick([10, 20, 30]), t3 = pick([4, 5, 10]), d = 0.5 * t1 * v + t2 * v + 0.5 * t3 * v;
+      return { kind:'num', q:`A speed–time graph shows a car speeding up from 0 to ${v} m/s in ${t1} s, staying at ${v} m/s for ${t2} s, then slowing to rest in ${t3} s. Find the total distance (m).`, ans:d, tol:0, s:[['Triangle 1', `½ × ${t1} × ${v} = ${0.5 * t1 * v}`], ['Rectangle', `${t2} × ${v} = ${t2 * v}`], ['Triangle 2', `½ × ${t3} × ${v} = ${0.5 * t3 * v}`], ['Total', `${d} m`]] }; },
+    () => { const it = pick([['a flat line on a distance–time graph', 'the object is stationary'], ['a steeper line on a distance–time graph', 'a faster speed'], ['a flat line on a speed–time graph', 'constant speed'], ['the gradient of a speed–time graph', 'acceleration'], ['the area under a speed–time graph', 'distance travelled']]);
+      return choiceItem(`What does ${it[0]} show?`, it[1], ['the object is stationary', 'a faster speed', 'constant speed', 'acceleration', 'distance travelled'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
+  ],
+  tree: [
+    () => { let r = rint(2, 7), b = rint(2, 6); const n = r + b;
+      return { kind:'frac', q:`A bag has ${r} red and ${b} blue counters. Two are taken without replacement. Find P(both red) as a simplified fraction.`, ans:fr(r * (r - 1), n * (n - 1)), s:[['First red', `${r}/${n}`], ['Second red', `${r - 1}/${n - 1}`], ['Multiply', `${r * (r - 1)}/${n * (n - 1)}`]] }; },
+    () => { const r = rint(2, 7), b = rint(2, 6), n = r + b;
+      return { kind:'frac', q:`A bag has ${r} red and ${b} blue counters. Two are taken without replacement. Find P(one of each colour) as a simplified fraction.`, ans:fr(2 * r * b, n * (n - 1)), s:[['RB', `${r}/${n} × ${b}/${n - 1}`], ['BR', `${b}/${n} × ${r}/${n - 1}`], ['Add', `${2 * r * b}/${n * (n - 1)}`]] }; },
+    () => { const r = rint(2, 7), b = rint(2, 6), n = r + b;
+      return { kind:'frac', q:`A bag has ${r} red and ${b} blue counters. Two are taken without replacement. Find P(at least one blue) as a simplified fraction.`, ans:fr(n * (n - 1) - r * (r - 1), n * (n - 1)), s:[['None blue = both red', `${r * (r - 1)}/${n * (n - 1)}`], ['1 −', `${n * (n - 1) - r * (r - 1)}/${n * (n - 1)}`]] }; },
+    () => { const p = pick([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]), ans = Math.round(p * p * 100) / 100;
+      return { kind:'num', q:`The probability of a success each time is ${p}. Two independent trials are made. Find P(both succeed).`, ans, tol:0.005, s:[['Multiply', `${p} × ${p} = ${ans}`]] }; },
+    () => { const p = pick([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]), ans = Math.round((1 - (1 - p) * (1 - p)) * 100) / 100;
+      return { kind:'num', q:`The probability of a success each time is ${p}. Two independent trials are made. Find P(at least one success).`, ans, tol:0.005, s:[['None', `${num(1 - p)} × ${num(1 - p)} = ${num((1 - p) * (1 - p))}`], ['1 −', `${ans}`]] }; },
+    () => { const p = pick([0.1, 0.2, 0.25, 0.4, 0.5]), n = pick([40, 100, 200, 500]), ans = p * n;
+      return { kind:'num', q:`The probability that a seed grows is ${p}. How many of ${n} seeds are expected to grow?`, ans, tol:0, s:[['Expected number', `${p} × ${n} = ${ans}`]] }; }
   ]
 };
 
-let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2]];
+let MOCK = [['eq',0],['eq',2],['ang',1],['stat',0],['shape',0],['frac',1],['seq',0],['ratio',0],['ratio',1],['prob',0],['prob',2],['numb',1],['pct',1],['alg',0],['pyth',0],['coord',0],['trans',0],['simil',0],['simul',2],['quad',1],['sets',1],['vect',1],['cumf',0],['circ',0],['func',2],['bear',0],['graph',0],['tree',0]];
 const MOCK_N = MOCK.length;
 function drawMock(){
   const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
@@ -1970,7 +2214,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['eq','Algebra','Equations'],['ang','Geometry','Angles'],['stat','Statistics','Investigations'],['shape','Measure','Shapes'],['frac','Number','Fractions'],['seq','Algebra','Sequences'],['ratio','Number','Ratio'],['prob','Probability','Probability'],['numb','Number','Primes'],['pow','Number','Powers'],['pct','Number','Percentages'],['alg','Algebra','Algebra skills'],['pyth','Geometry','Pythagoras'],['coord','Graphs','Straight lines'],['trans','Geometry','Transformations'],['simil','Geometry','Similar shapes'],['simul','Algebra','Simultaneous'],['quad','Algebra','Quadratics'],['sets','Number','Sets'],['vect','Geometry','Vectors'],['cumf','Statistics','Cumulative freq'],['circ','Geometry','Circles'],['func','Algebra','Functions'],['bear','Geometry','Bearings & rules'],['graph','Graphs','Travel graphs'],['tree','Probability','Tree diagrams'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1987,13 +2231,13 @@ function render(){
   v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func'];
+const KEYS = ['eq','ang','stat','shape','frac','seq','ratio','prob','numb','pow','pct','alg','pyth','coord','trans','simil','simul','quad','sets','vect','cumf','circ','func','bear','graph','tree'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Maths</span><h2>Maths revision pack</h2>
-  <p class="lede">Twenty-three topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Twenty-six topics: equations and inequalities, angles, statistical investigations, shapes and measurements, fractions, sequences and functions, ratio and proportion, and probability. Work through each tab from left to right, then try the mini mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
