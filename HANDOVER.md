@@ -44,6 +44,9 @@ Term 1 packs (`physics.html`, `chemistry.html`, `cs.html`) are frozen and labell
 ## Full-year Physics progress
 `physics-year.html` now covers the whole 0625 course in 18 chapters: Term 1 (Density, Thermal energy transfer, Sound) plus Motion, Forces, Energy/work/power, Pressure, Particles, Waves, Light, EM spectrum, Electric circuits, Magnetism, Measurement, Momentum, Thermal properties, Atoms and radioactivity, Space. Possible additions later: more exam-style questions per chapter, Extended-only topics (e.g. lenses calculations), and the school's Term 2/3 chapter order.
 
+## Full-year Chemistry progress
+`chemistry-year.html`: Term 1 chapters (Atoms, Bonding, Displacement, Salts) plus Separation techniques, Formulae/Mr/equations, The mole, Rates of reaction, Energetics. Still to add (0620 order): states of matter, electrolysis, metals and extraction, periodic table groups, air and water, organic chemistry, chemical analysis (tests for ions and gases).
+
 ## Known limitations
 - Progress is saved only in the browser on that device.
 - GitHub Pages must stay enabled (Settings → Pages → Deploy from branch `main` / root).

@@ -392,7 +392,60 @@ function flow(id, steps){
 const svgSoluble = () => flow('sp', [['acid','Excess solid','add CuO to warm acid','until in excess'],['filter','Filter','remove the','excess solid'],['evap','Evaporate','heat filtrate until','crystals start to form'],['crystals','Crystallise','cool; filter crystals,','dry on filter paper']]);
 const svgPrecip = () => flow('pp', [['mix','Mix solutions','two soluble salts','→ precipitate forms'],['filter','Filter','precipitate stays','on filter paper'],['wash','Wash','with distilled','water'],['dry','Dry','in a warm oven or','between filter papers']]);
 
-/* ---------- content ---------- */
+/* ---------- content ---------- *//* ---------- new chapters: helpers and diagrams ---------- */
+const T = (x, y, s, cls = '') => `<text x="${x}" y="${y}" class="${cls}">${s}</text>`;
+const W = (q, intro, tip, f, s, r, prose) => ({ q, intro, tip, f, s, r, prose });
+function svgChromato(){
+  return `<svg viewBox="0 0 760 270" role="img" aria-label="Paper chromatography and Rf value">
+  <rect x="60" y="30" width="180" height="200" class="nonmetal" style="stroke:var(--ink);stroke-width:1.6"/>
+  <line x1="60" y1="60" x2="240" y2="60" class="hotl" stroke-dasharray="5 4"/>${T(250, 64, 'solvent front', 'hott')}
+  <line x1="60" y1="190" x2="240" y2="190" class="thin"/>${T(250, 194, 'baseline (pencil)', 'mut')}
+  <circle cx="100" cy="190" r="5" class="accf"/><circle cx="100" cy="150" r="5" class="accf"/><circle cx="150" cy="190" r="5" class="hotf"/><circle cx="150" cy="100" r="5" class="hotf"/><circle cx="150" cy="130" r="5" class="hotf"/><circle cx="200" cy="190" r="5" class="inkf"/><circle cx="200" cy="100" r="5" class="inkf"/>
+  ${T(100, 250, 'A', 'mid lbl')}${T(150, 250, 'B', 'mid lbl')}${T(200, 250, 'C', 'mid lbl')}
+  ${T(440, 56, 'Rf = distance moved by the spot', 'mono acct')}${T(440, 80, '     ÷ distance moved by the solvent', 'mono acct')}${T(440, 116, 'Measure from the baseline.', 'mut')}${T(440, 140, 'Rf is always between 0 and 1.', 'mut')}${T(440, 176, 'Same Rf in the same solvent =', 'lbl')}${T(440, 198, 'same substance. B and C share', 'lbl')}${T(440, 220, 'a spot at the same height.', 'lbl')}</svg>`;
+}
+function svgDistill(){
+  return `<svg viewBox="0 0 780 270" role="img" aria-label="Simple distillation apparatus">${arrowDefs('d')}
+  <circle cx="130" cy="180" r="50" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="130" y1="130" x2="130" y2="80" class="ln"/><polyline points="130,80 130,70 260,70" class="ln" fill="none"/>
+  <rect x="260" y="48" width="200" height="44" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="260" y1="70" x2="460" y2="70" class="acc"/>
+  <polyline points="460,70 500,70 500,170" class="ln" fill="none"/><rect x="460" y="170" width="80" height="60" class="nonmetal" style="stroke:var(--ink);stroke-width:2"/>
+  <line x1="320" y1="130" x2="320" y2="94" class="acc" marker-end="url(#b-d)"/>${T(320, 150, 'cold water in', 'mid acct')}<line x1="400" y1="46" x2="400" y2="18" class="acc" marker-end="url(#b-d)"/>${T(400, 14, 'water out', 'mid acct')}
+  ${T(130, 252, 'heat the mixture', 'mid lbl')}${T(360, 118, 'condenser', 'mid mut')}${T(500, 248, 'pure liquid (distillate)', 'mid lbl')}
+  ${T(580, 60, 'Simple distillation:', 'lbl')}${T(580, 84, 'separates a SOLVENT from a', 'mut')}${T(580, 104, 'dissolved solid (e.g. water', 'mut')}${T(580, 124, 'from salt solution).', 'mut')}${T(580, 164, 'Fractional distillation:', 'lbl')}${T(580, 188, 'separates liquids with', 'mut')}${T(580, 208, 'different boiling points.', 'mut')}</svg>`;
+}
+function svgRateGraph(){
+  const X = t => 70 + 8 * t, Y = v => 200 - 1.4 * v; const pts = (k) => { const a = []; for (let t = 0; t <= 60; t += 3) a.push(`${X(t)},${Y(100 * (1 - Math.exp(-k * t)))}`); return a.join(' '); };
+  return `<svg viewBox="0 0 860 260" role="img" aria-label="Volume of gas against time for a fast and a slow reaction">
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(64)}" y2="${Y(0)}" class="ln"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(110)}" class="ln"/>
+  <polyline points="${pts(0.12)}" class="hotl" fill="none"/><polyline points="${pts(0.04)}" class="acc" fill="none"/>
+  ${T(X(14), Y(122), 'faster: hotter, more concentrated,', 'hott')}${T(X(14), Y(114), 'powder or catalyst', 'hott')}${T(X(30), Y(50), 'slower', 'acct')}${T(X(30), Y(0) + 32, 'time', 'mid lbl')}${T(24, 16, 'volume of gas', 'lbl')}
+  ${T(X(0) - 8, Y(100) + 4, 'max', 'end mut')}
+  ${T(580, 80, 'Steeper curve = faster rate.', 'lbl')}${T(580, 104, 'Both finish at the same', 'mut')}${T(580, 124, 'volume if the same amount', 'mut')}${T(580, 144, 'of reactant is used.', 'mut')}${T(580, 180, 'Rate = change ÷ time', 'mono acct')}</svg>`;
+}
+function svgProfile(){
+  const panel = (x, up, title) => `${T(x + 100, 28, title, 'mid lbl')}<line x1="${x}" y1="40" x2="${x}" y2="230" class="ln"/><line x1="${x}" y1="230" x2="${x + 200}" y2="230" class="ln"/>
+  <polyline points="${x + 10},${up ? 90 : 160} ${x + 60},${up ? 90 : 160} ${x + 100},60 ${x + 140},${up ? 170 : 90} ${x + 190},${up ? 170 : 90}" class="acc" fill="none"/>
+  ${T(x + 12, up ? 80 : 178, 'reactants', '')}${T(x + 190, up ? 188 : 80, 'products', 'end')}${T(x + 100, 52, 'activation energy', 'mid hott')}${T(x + 100, 250, 'progress of reaction', 'mid mut')}`;
+  return `<svg viewBox="0 0 860 270" role="img" aria-label="Energy level diagrams for exothermic and endothermic reactions">
+  ${panel(30, true, 'Exothermic: products lower')}${panel(300, false, 'Endothermic: products higher')}
+  ${T(540, 90, 'Exothermic: energy GIVEN OUT', 'lbl')}${T(540, 112, 'to the surroundings (gets hot).', 'mut')}${T(540, 148, 'Endothermic: energy TAKEN IN', 'lbl')}${T(540, 170, 'from the surroundings (gets cold).', 'mut')}${T(540, 206, 'ΔH negative = exothermic', 'mono acct')}${T(540, 228, 'ΔH positive = endothermic', 'mono hott')}</svg>`;
+}
+function svgAtomCount(){
+  return `<svg viewBox="0 0 780 250" role="img" aria-label="Balancing an equation by counting atoms">
+  ${T(40, 50, 'CH₄ + 2O₂ → CO₂ + 2H₂O', 'mono lbl')}
+  ${T(40, 90, 'Atoms on the left', 'acct')}${T(40, 114, 'C: 1     H: 4     O: 2 × 2 = 4', 'mono')}
+  ${T(40, 152, 'Atoms on the right', 'hott')}${T(40, 176, 'C: 1     H: 2 × 2 = 4     O: 2 + 2 = 4', 'mono')}
+  ${T(40, 214, 'Equal on both sides: the equation is balanced ✓', 'lbl')}
+  ${T(470, 76, 'Rules for balancing:', 'lbl')}${T(470, 102, '1. Write the correct formulae first.', 'mut')}${T(470, 124, '2. Only change the BIG numbers', 'mut')}${T(470, 144, '   in front. Never the small ones.', 'mut')}${T(470, 168, '3. Count every atom each side.', 'mut')}${T(470, 192, '4. Add state symbols (s)(l)(g)(aq).', 'mut')}</svg>`;
+}
+function svgMoleTriangle(){
+  return `<svg viewBox="0 0 780 270" role="img" aria-label="Mole calculations">
+  <polygon points="140,24 40,200 240,200" class="metal" style="stroke:var(--ink);stroke-width:2"/><line x1="66" y1="150" x2="214" y2="150" class="ln"/><line x1="140" y1="150" x2="140" y2="200" class="ln"/>
+  ${T(140, 128, 'mass (g)', 'mid lbl')}${T(90, 182, 'moles', 'mid lbl')}${T(190, 182, 'Mr', 'mid lbl')}
+  ${T(300, 56, 'moles = mass ÷ Mr', 'mono acct')}${T(300, 84, 'mass = moles × Mr', 'mono acct')}${T(300, 120, 'gas: moles = volume (dm³) ÷ 24', 'mono')}${T(300, 148, 'solution: moles = c × V (dm³)', 'mono')}
+  ${T(300, 184, 'cm³ ÷ 1000 = dm³', 'mono hott')}${T(300, 214, 'yield % = actual ÷ theoretical × 100', 'mono hott')}</svg>`;
+}
+
 const CH = {
 atoms: {
   code: 'Ch 4', name: 'Atoms and the periodic table',
@@ -645,6 +698,245 @@ salts: {
     { q: 'Write the ionic equation for neutralisation and say which ion comes from the acid and which from the alkali.', m: 2,
       p: ['==H⁺ + OH⁻ → H₂O==', 'H⁺ from the ==acid==; OH⁻ from the ==alkali=='] }
   ]
+},
+sepn: {
+  code: 'Topic 1', name: 'Separating mixtures and purity',
+  lede: 'Choose the right separation method for the mixture, and know how to test whether a substance is pure.',
+  learn: [
+    { h: 'Pure substances and mixtures', list: ['A ==pure substance== is a ==single element or compound==. It has a ==sharp, fixed melting point== and boiling point.', 'A ==mixture== has ==different substances not chemically joined==. It melts over a ==range== of temperatures.', 'The substances in a mixture keep their own properties and can be ==separated by physical methods==.', 'An ==impurity== ==lowers the melting point== and ==raises the boiling point== of a substance.', 'A ==solvent== dissolves a ==solute== to make a ==solution==. A substance that does not dissolve is ==insoluble==.'] },
+    { h: 'Separation methods', table: [['Method', 'Separates', 'Idea'], ['Filtration', 'insoluble solid from a liquid', 'the solid stays on the filter paper (residue); the liquid passes through (filtrate)'], ['Evaporation / crystallisation', 'a dissolved solid from its solution', 'heat to remove some solvent, cool so crystals form'], ['Simple distillation', 'a solvent from a solution', 'evaporate, then condense the pure liquid'], ['Fractional distillation', 'liquids with different boiling points', 'the lowest boiling point comes off first (e.g. ethanol from water, crude oil)'], ['Chromatography', 'substances with different solubilities', 'they move different distances up the paper']] },
+    { h: 'Chromatography and Rf', list: ['Draw the ==baseline in pencil== (ink would run). Put a ==spot== on it. The ==solvent level must be below the baseline==.', 'The solvent rises and carries the substances. ==More soluble substances move further==.', 'Each ==spot== is one substance. A ==pure substance gives one spot==.', '==Rf = distance moved by the substance ÷ distance moved by the solvent==. Measure both from the baseline.', '==Same Rf in the same solvent== means the ==same substance==.'], f: ['Rf = distance moved by spot ÷ distance moved by solvent front'] }
+  ],
+  mistakes: ['Drawing the baseline in ==ink==.', 'Letting the ==solvent level above the baseline==.', 'Measuring the distance from the ==bottom of the paper== instead of the baseline.', 'Using ==distillation== to separate an insoluble solid. Use filtration.', 'Saying a pure substance ==melts over a range==. It melts at one temperature.'],
+  diagrams: [
+    { svg: svgChromato, cap: 'Chromatography: ==Rf = spot distance ÷ solvent distance==.' },
+    { svg: svgDistill, cap: '==Simple distillation== separates a solvent from a solution.' }
+  ],
+  worked: [
+    W('Describe how to separate sand from a mixture of sand and salt water.', 'Sand is ==insoluble==, so use ==filtration==.', 'Name the residue and the filtrate.', 'Filtration',
+      [['Pour the mixture through filter paper', 'in a funnel', 'The paper has tiny holes. Only dissolved particles pass through.'], ['The sand stays behind', 'This is the residue', 'It is insoluble.'], ['Wash and dry the sand', 'with distilled water, then dry it', 'This removes any salt.'], ['The filtrate', 'Salt solution passes through', 'To get the salt, heat the filtrate to evaporate the water.']],
+      [['Method', 'filtration', 0], ['Residue', 'sand', 1], ['Wash and dry', 'sand', 2], ['Filtrate', 'salt solution', 3]], true),
+    W('Describe how to obtain pure water from salt water.', 'Use ==simple distillation==.', 'The water evaporates and condenses; the salt stays behind.', 'Evaporate then condense',
+      [['Heat the salt solution', 'in a flask', 'The water boils.'], ['The water vapour', 'passes into the condenser', 'The salt does not evaporate, so it stays in the flask.'], ['Cold water around the condenser', 'turns the vapour back into liquid water', 'This is condensation.'], ['Collect it', 'in a beaker as pure distilled water', 'Check: it boils at exactly 100 °C.']],
+      [['Heat', 'the solution boils', 0], ['Vapour', 'water only', 1], ['Condenser', 'vapour turns to liquid', 2], ['Collect', 'pure water', 3]], true),
+    W('In a chromatogram, the solvent front moved 8.0 cm and a spot moved 5.2 cm. Calculate the Rf value.', '==Rf = distance moved by the spot ÷ distance moved by the solvent==.', 'Rf has no unit and is always less than 1.', 'Rf = spot ÷ solvent',
+      [['Write the formula', 'Rf = distance moved by spot ÷ distance moved by solvent', ''], ['Substitute', 'Rf = 5.2 ÷ 8.0', 'Both measured from the baseline.'], ['Answer', 'Rf = 0.65', 'No unit.']],
+      [['Spot', '5.2 cm', -1], ['Solvent', '8.0 cm', -1], ['Rf', '0.65', 2]]),
+    W('A student tests a colouring from a sweet. It gives two spots. A known dye E102 gives one spot at the same height as the lower spot. What can you conclude?', 'Compare ==heights== (Rf values) of the spots.', 'Use the keywords: mixture, same Rf.', 'Same height, same substance',
+      [['Number of spots', 'Two spots', 'Each spot is a different substance.'], ['Conclusion about the colouring', 'It is a mixture of at least two dyes', 'A pure substance gives one spot.'], ['Compare with E102', 'The lower spot is at the same height', 'Same Rf in the same solvent.'], ['Conclusion', 'The colouring contains E102', 'But not every spot is E102.']],
+      [['Spots', '2', 0], ['Colouring', 'a mixture', 1], ['Lower spot', 'same Rf as E102', 2], ['Conclusion', 'contains E102', 3]], true),
+    W('Pure ice melts at 0 °C. A sample of ice with salt dissolved in it melts at −3 °C over a range. What does this show?', 'Use the fixed melting point idea to test purity.', 'Impurities lower the melting point.', 'Pure = sharp melting point',
+      [['A pure substance', 'melts at one sharp temperature', ''], ['This sample', 'melts over a range, below 0 °C', ''], ['Conclusion', 'The sample is impure (a mixture)', 'The impurity (salt) lowers the melting point.']],
+      [['Pure', 'sharp m.p.', 0], ['Sample', 'range, lower', 1], ['Conclusion', 'impure', 2]], true),
+    W('Which method would you use to separate ethanol (boiling point 78 °C) from water (100 °C)?', 'The liquids have ==different boiling points==, so use ==fractional distillation==.', 'Say which liquid comes off first.', 'Fractional distillation',
+      [['The liquids are miscible', 'They mix completely, so filtration will not work', ''], ['Different boiling points', '78 °C and 100 °C', ''], ['Method', 'Fractional distillation', 'Heat the mixture in a fractionating column.'], ['First fraction', 'Ethanol comes off first', 'It has the lower boiling point.']],
+      [['Boiling points', '78 °C v 100 °C', 1], ['Method', 'fractional distillation', 2], ['First off', 'ethanol', 3]], true)
+  ],
+  drill: 'sepn',
+  quiz: [
+    { q: 'A pure substance has…', o: ['a melting range', 'a sharp, fixed melting point', 'no melting point', 'a changing boiling point'], a: 1, w: 'A ==sharp, fixed melting point==.' },
+    { q: 'Sand and water can be separated by…', o: ['distillation', 'filtration', 'chromatography', 'crystallisation'], a: 1, w: '==Filtration==: sand is insoluble.' },
+    { q: 'In chromatography the baseline is drawn in…', o: ['pen', 'pencil', 'marker', 'any'], a: 1, w: '==Pencil==. Ink would dissolve and run.' },
+    { q: 'Rf is calculated as…', o: ['solvent ÷ spot', 'spot ÷ solvent', 'spot × solvent', 'spot − solvent'], a: 1, w: '==Spot ÷ solvent==.' },
+    { q: 'Which method separates liquids with different boiling points?', o: ['filtration', 'evaporation', 'fractional distillation', 'decanting'], a: 2, w: '==Fractional distillation==.' },
+    { q: 'An impurity makes the melting point…', o: ['higher', 'lower', 'sharper', 'unchanged'], a: 1, w: '==Lower== (and spread out).' }
+  ],
+  exam: [
+    { q: 'Describe how to obtain dry crystals of salt from a mixture of salt and sand.', m: 4,
+      p: ['==Add water== and stir to dissolve the salt', '==Filter== to remove the sand', '==Heat the filtrate== to evaporate some of the water', 'Leave to ==crystallise==, then filter and dry the crystals'] },
+    { q: 'A chromatogram has a solvent front 10.0 cm from the baseline. A spot is 4.0 cm from the baseline. Calculate the Rf value.', m: 2,
+      p: ['Rf = ==spot distance ÷ solvent distance== = 4.0 ÷ 10.0', '==0.40=='] },
+    { q: 'Explain why the baseline in chromatography is drawn in pencil and must be above the solvent level.', m: 2,
+      p: ['Pencil is ==insoluble== so it does not run (ink would dissolve and interfere)', 'If the baseline were below the solvent the ==spots would dissolve into the solvent=='] }
+  ]
+},
+eqn: {
+  code: 'Topic 3', name: 'Formulae, Mr and equations',
+  lede: 'Balance equations by counting atoms, and calculate relative formula masses.',
+  learn: [
+    { h: 'Relative masses', list: ['==Relative atomic mass (Ar)== is the ==average mass of an atom compared with 1/12 of a carbon-12 atom==.', '==Relative formula mass (Mr)== = the ==sum of the Ar values== of all the atoms in the formula.', 'Useful Ar values: ==H 1, C 12, N 14, O 16, Na 23, Mg 24, Al 27, S 32, Cl 35.5, K 39, Ca 40, Fe 56, Cu 64, Zn 65==.', 'For brackets, ==multiply everything inside== the bracket by the number outside.'], f: ['Mr of Mg(OH)₂ = 24 + 2 × (16 + 1) = 58'] },
+    { h: 'Writing and balancing equations', list: ['A ==word equation== names the substances. A ==symbol equation== uses formulae.', '==Reactants → products==. Atoms are ==never lost or made==, so each element must have the ==same number of atoms on each side==.', 'Balance by writing ==big numbers in front== of formulae. ==Never change the small numbers== in a formula.', 'Work on one element at a time. Leave ==oxygen or hydrogen== until last if they appear in several places.', '==State symbols==: (s) solid, (l) liquid, (g) gas, (aq) dissolved in water.'] }
+  ],
+  mistakes: ['Changing the ==small numbers== (H₂O to H₂O₂) to balance.', 'Forgetting to ==multiply the whole bracket==.', 'Using ==mass number== instead of ==Ar==.', 'Forgetting to ==count atoms on both sides== at the end.', 'Writing ==Cl== instead of ==Cl₂== for the chlorine molecule. H₂, N₂, O₂, F₂, Cl₂, Br₂, I₂ are diatomic.'],
+  diagrams: [{ svg: svgAtomCount, cap: 'Balancing: count the atoms of each element on both sides.' }],
+  worked: [
+    W('Calculate the relative formula mass (Mr) of calcium carbonate, CaCO₃. (Ar: Ca 40, C 12, O 16)', 'Add up the ==Ar== of every atom in the formula.', 'Write how many of each atom there are.', 'Mr = sum of Ar',
+      [['List the atoms', '1 Ca, 1 C, 3 O', ''], ['Add the Ar values', '40 + 12 + (3 × 16)', 'Three oxygens, so 3 × 16.'], ['Work out', '40 + 12 + 48', ''], ['Answer', 'Mr = 100', 'No unit.']],
+      [['Ca', '40', 0], ['C', '12', 0], ['3 O', '48', 1], ['Mr', '100', 3]]),
+    W('Calculate the Mr of magnesium hydroxide, Mg(OH)₂, and of ammonium sulfate, (NH₄)₂SO₄. (Ar: Mg 24, O 16, H 1, N 14, S 32)', 'Multiply ==everything in the bracket== by the number outside.', 'Check each atom count before adding.', 'Brackets multiply',
+      [['Mg(OH)₂: atoms', '1 Mg, 2 O, 2 H', 'The 2 outside the bracket doubles both O and H.'], ['Mg(OH)₂: add', '24 + (2 × 16) + (2 × 1) = 24 + 32 + 2 = 58', ''], ['(NH₄)₂SO₄: atoms', '2 N, 8 H, 1 S, 4 O', '2 × NH₄ gives 2 N and 8 H.'], ['(NH₄)₂SO₄: add', '28 + 8 + 32 + 64 = 132', '2 × 14 = 28, 8 × 1 = 8, 32, 4 × 16 = 64.']],
+      [['Mg(OH)₂', 'Mr = 58', 1], ['(NH₄)₂SO₄ atoms', '2N 8H 1S 4O', 2], ['(NH₄)₂SO₄', 'Mr = 132', 3]]),
+    W('Balance: H₂ + O₂ → H₂O', 'Count the atoms of ==each element== on both sides, then add ==big numbers== in front.', 'Never change H₂O into H₂O₂.', 'Balance O first, then H',
+      [['Count the atoms', 'Left: 2 H, 2 O.   Right: 2 H, 1 O', 'Oxygen does not balance.'], ['Balance the O', 'Put 2 in front of H₂O: H₂ + O₂ → 2H₂O', 'Now 2 O on each side. But H is now 4 on the right.'], ['Balance the H', 'Put 2 in front of H₂: 2H₂ + O₂ → 2H₂O', 'Now 4 H on each side.'], ['Check', 'Left: 4 H, 2 O.   Right: 4 H, 2 O ✓', 'Balanced.']],
+      [['Unbalanced', 'O is 2 v 1', 0], ['After step 2', 'H₂ + O₂ → 2H₂O', 1], ['Balanced', '2H₂ + O₂ → 2H₂O', 2], ['Check', '4H 2O both sides ✓', 3]]),
+    W('Balance: Fe + O₂ → Fe₂O₃', 'Oxygen is the awkward one: ==2 on the left, 3 on the right==. Find the ==lowest common multiple== (6).', 'Use the LCM of 2 and 3.', 'LCM of 2 and 3 is 6',
+      [['Count the atoms', 'Left: 1 Fe, 2 O.   Right: 2 Fe, 3 O', ''], ['Make the oxygen 6', '3O₂ on the left, 2Fe₂O₃ on the right: Fe + 3O₂ → 2Fe₂O₃', '3 × 2 = 6 and 2 × 3 = 6.'], ['Now the iron', 'Right: 4 Fe. So put 4 in front of Fe', ''], ['Balanced and checked', '4Fe + 3O₂ → 2Fe₂O₃', 'Left: 4 Fe, 6 O. Right: 4 Fe, 6 O ✓.']],
+      [['Oxygen', 'LCM 6', 1], ['After step 2', 'Fe + 3O₂ → 2Fe₂O₃', 1], ['Iron', '4 Fe needed', 2], ['Balanced', '4Fe + 3O₂ → 2Fe₂O₃', 3]]),
+    W('Balance the combustion of methane: CH₄ + O₂ → CO₂ + H₂O', 'Balance ==C==, then ==H==, then ==O== last.', 'Oxygen appears in two products, so do it last.', 'C, H, then O',
+      [['Carbon', '1 C on each side: already balanced', ''], ['Hydrogen', 'Right has 2 H, left has 4 H. Put 2 in front of H₂O', 'CH₄ + O₂ → CO₂ + 2H₂O'], ['Oxygen', 'Right: 2 + 2 = 4 O. Put 2 in front of O₂', 'CH₄ + 2O₂ → CO₂ + 2H₂O'], ['Check', 'Left: 1 C, 4 H, 4 O.   Right: 1 C, 4 H, 4 O ✓', '']],
+      [['C', 'balanced', 0], ['H', '2H₂O', 1], ['O', '2O₂', 2], ['Check', '1C 4H 4O ✓', 3]]),
+    W('Write a balanced equation with state symbols for magnesium reacting with hydrochloric acid.', 'First ==formulae==, then ==balance==, then ==state symbols==.', 'The products are magnesium chloride and hydrogen.', 'Formulae, balance, states',
+      [['Formulae', 'Mg + HCl → MgCl₂ + H₂', 'Magnesium chloride is MgCl₂ (Mg²⁺ and 2 Cl⁻).'], ['Count', 'Cl: 1 on the left, 2 on the right', ''], ['Balance', 'Mg + 2HCl → MgCl₂ + H₂', 'Now 2 H and 2 Cl on each side.'], ['State symbols', 'Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)', 'The metal is a solid, the acid and salt are dissolved, hydrogen is a gas.']],
+      [['Formulae', 'Mg, HCl, MgCl₂, H₂', 0], ['Balance', '2HCl', 2], ['States', '(s) (aq) (aq) (g)', 3]], true)
+  ],
+  drill: 'eqn',
+  quiz: [
+    { q: 'The Mr of water, H₂O, is… (H = 1, O = 16)', o: ['17', '18', '19', '2'], a: 1, w: '2 + 16 = ==18==.' },
+    { q: 'The Mr of CO₂ is… (C = 12, O = 16)', o: ['28', '44', '56', '30'], a: 1, w: '12 + 32 = ==44==.' },
+    { q: 'To balance an equation you change…', o: ['the small numbers', 'the big numbers in front', 'the products', 'the elements'], a: 1, w: '==The big numbers in front==.' },
+    { q: 'What does (aq) mean?', o: ['solid', 'liquid', 'gas', 'dissolved in water'], a: 3, w: '==Aqueous==: dissolved in water.' },
+    { q: 'How many oxygen atoms are in 2Fe₂O₃?', o: ['2', '3', '6', '5'], a: 2, w: '2 × 3 = ==6==.' },
+    { q: 'Which is diatomic?', o: ['Na', 'Cl₂', 'Mg', 'C'], a: 1, w: '==Cl₂==: chlorine exists as a molecule of two atoms.' }
+  ],
+  exam: [
+    { q: 'Calculate the relative formula mass of aluminium sulfate, Al₂(SO₄)₃. (Ar: Al 27, S 32, O 16)', m: 3,
+      p: ['2 × 27 = 54', '3 × (32 + 4 × 16) = 3 × 96 = 288', '54 + 288 = ==342=='] },
+    { q: 'Balance the equation: Al + O₂ → Al₂O₃', m: 2,
+      p: ['Correct use of ==big numbers== (4Al and 3O₂ and 2Al₂O₃)', '==4Al + 3O₂ → 2Al₂O₃=='] },
+    { q: 'Write a balanced equation for the reaction of calcium carbonate with hydrochloric acid, including state symbols.', m: 3,
+      p: ['Correct formulae: CaCO₃, HCl, CaCl₂, H₂O, CO₂', '==CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂== (balanced)', '==(s) (aq) (aq) (l) (g)== state symbols'] }
+  ]
+},
+mole: {
+  code: 'Topic 3', name: 'The mole and calculations',
+  lede: 'The mole links mass, volume and concentration. Learn the triangle and the steps for equation calculations.',
+  learn: [
+    { h: 'The mole', list: ['The ==mole== is the unit for ==amount of substance==. One mole contains ==6.02 × 10²³ particles==.', '==Moles = mass ÷ Mr== (mass in grams).', '==Mass = moles × Mr==.', 'For a gas at room temperature and pressure, ==1 mole occupies 24 dm³==: ==moles = volume ÷ 24== (volume in dm³).', '1 dm³ = 1000 cm³.'], f: ['n = m ÷ Mr', 'n = V ÷ 24 (gas, dm³)', 'n = c × V (solutions)'] },
+    { h: 'Concentration of solutions', list: ['==Concentration== is the amount of solute per ==dm³== of solution.', '==c (mol/dm³) = moles ÷ volume (dm³)==. So ==moles = c × V==.', 'Convert ==cm³ to dm³== by dividing by 1000.', 'Concentration can also be in ==g/dm³== = mass ÷ volume. mol/dm³ × Mr = g/dm³.'] },
+    { h: 'Calculations from equations', list: ['Write a ==balanced equation==. The big numbers give the ==mole ratio==.', '==Step 1==: moles of the substance you know. ==Step 2==: use the ratio. ==Step 3==: convert to mass, volume or concentration.', '==Percentage yield == actual yield ÷ theoretical yield × 100==.', 'The ==limiting reactant== is the one that runs out first and decides the amount of product.'] }
+  ],
+  mistakes: ['Using ==cm³== instead of ==dm³== in concentration.', 'Forgetting to use the ==mole ratio== from the equation.', 'Using the ==wrong Mr== (check brackets).', 'Using ==24 cm³== for the molar gas volume (it is 24 dm³).', 'Giving a ==percentage yield above 100%==.'],
+  diagrams: [{ svg: svgMoleTriangle, cap: 'The mole links ==mass==, ==gas volume== and ==concentration==.' }],
+  worked: [
+    W('Calculate the number of moles in 36 g of water. (Mr = 18)', '==Moles = mass ÷ Mr==.', 'Always write the formula first.', 'n = m ÷ Mr',
+      [['Write the formula', 'moles = mass ÷ Mr', ''], ['Substitute', 'moles = 36 ÷ 18', ''], ['Answer with unit', '2 mol', '']],
+      [['m, Mr', '36 g, 18', -1], ['n', '2 mol', 2]]),
+    W('Calculate the mass of 0.25 mol of calcium carbonate, CaCO₃. (Mr = 100)', '==Mass = moles × Mr==.', 'The answer is in grams.', 'm = n × Mr',
+      [['Write the formula', 'mass = moles × Mr', ''], ['Substitute', 'mass = 0.25 × 100', ''], ['Answer with unit', '25 g', '']],
+      [['n, Mr', '0.25 mol, 100', -1], ['m', '25 g', 2]]),
+    W('10 g of calcium carbonate is heated: CaCO₃ → CaO + CO₂. Find the mass of calcium oxide and the volume of CO₂ at room temperature and pressure. (Mr: CaCO₃ 100, CaO 56)', 'Moles of the known substance, then the ==mole ratio==, then convert.', 'The ratio is 1 : 1 : 1.', 'Moles, ratio, convert',
+      [['Moles of CaCO₃', '10 ÷ 100 = 0.1 mol', ''], ['Use the ratio 1 : 1 : 1', '0.1 mol CaO and 0.1 mol CO₂', 'The big numbers in the equation are all 1.'], ['Mass of CaO', '0.1 × 56 = 5.6 g', 'Mass = moles × Mr.'], ['Volume of CO₂', '0.1 × 24 = 2.4 dm³', 'One mole of gas is 24 dm³.']],
+      [['n(CaCO₃)', '0.1 mol', 0], ['n(CaO), n(CO₂)', '0.1 mol each', 1], ['Mass CaO', '5.6 g', 2], ['Volume CO₂', '2.4 dm³', 3]]),
+    W('5 g of sodium hydroxide (Mr = 40) is dissolved to make 250 cm³ of solution. Calculate the concentration in mol/dm³.', 'Find the moles, convert the volume to ==dm³==, then ==c = n ÷ V==.', 'Divide cm³ by 1000.', 'c = n ÷ V',
+      [['Moles of NaOH', '5 ÷ 40 = 0.125 mol', ''], ['Volume in dm³', '250 ÷ 1000 = 0.25 dm³', ''], ['Concentration', 'c = 0.125 ÷ 0.25', ''], ['Answer with unit', '0.5 mol/dm³', '']],
+      [['Moles', '0.125 mol', 0], ['Volume', '0.25 dm³', 1], ['c', '0.5 mol/dm³', 3]]),
+    W('In a reaction the theoretical yield of a product is 5.6 g but only 4.2 g is made. Calculate the percentage yield.', '==Percentage yield = actual ÷ theoretical × 100==.', 'It must be less than 100%.', 'yield = actual ÷ theoretical × 100',
+      [['Write the formula', 'yield = actual yield ÷ theoretical yield × 100', ''], ['Substitute', '4.2 ÷ 5.6 × 100', ''], ['Answer', '75%', '']],
+      [['Actual', '4.2 g', -1], ['Theoretical', '5.6 g', -1], ['Yield', '75%', 2]]),
+    W('Magnesium reacts with hydrochloric acid: Mg + 2HCl → MgCl₂ + H₂. What volume of hydrogen is made from 2.4 g of Mg? (Ar Mg = 24)', 'Moles of Mg, ratio 1 : 1 with H₂, then ==× 24 dm³==.', 'Check the ratio of Mg to H₂ from the equation.', 'Mole ratio 1 : 1',
+      [['Moles of Mg', '2.4 ÷ 24 = 0.1 mol', ''], ['Moles of H₂', '0.1 mol', 'The ratio Mg : H₂ is 1 : 1.'], ['Volume of H₂', '0.1 × 24 = 2.4 dm³', ''], ['In cm³', '2.4 × 1000 = 2400 cm³', 'If the question asks for cm³.']],
+      [['n(Mg)', '0.1 mol', 0], ['n(H₂)', '0.1 mol', 1], ['V(H₂)', '2.4 dm³', 2], ['In cm³', '2400 cm³', 3]])
+  ],
+  drill: 'mole',
+  quiz: [
+    { q: 'Moles are calculated as…', o: ['mass × Mr', 'mass ÷ Mr', 'Mr ÷ mass', 'volume × Mr'], a: 1, w: '==mass ÷ Mr==.' },
+    { q: 'One mole of any gas at room temperature and pressure occupies…', o: ['22.4 cm³', '24 cm³', '24 dm³', '100 dm³'], a: 2, w: '==24 dm³==.' },
+    { q: '2 mol of CO₂ (Mr 44) has a mass of…', o: ['22 g', '44 g', '88 g', '46 g'], a: 2, w: '2 × 44 = ==88 g==.' },
+    { q: '0.2 mol is dissolved in 500 cm³. The concentration is…', o: ['0.1 mol/dm³', '0.4 mol/dm³', '100 mol/dm³', '0.2 mol/dm³'], a: 1, w: '0.2 ÷ 0.5 = ==0.4 mol/dm³==.' },
+    { q: 'In 2H₂ + O₂ → 2H₂O, 4 mol of H₂ gives…', o: ['2 mol H₂O', '4 mol H₂O', '8 mol H₂O', '1 mol H₂O'], a: 1, w: 'Ratio 2 : 2, so ==4 mol==.' },
+    { q: 'Percentage yield is…', o: ['theoretical ÷ actual × 100', 'actual ÷ theoretical × 100', 'actual × theoretical', 'actual − theoretical'], a: 1, w: '==actual ÷ theoretical × 100==.' }
+  ],
+  exam: [
+    { q: 'Calculate the mass of 0.5 mol of sodium hydroxide, NaOH. (Ar: Na 23, O 16, H 1)', m: 2,
+      p: ['Mr = 23 + 16 + 1 = ==40==', 'Mass = 0.5 × 40 = ==20 g=='] },
+    { q: 'Calcium carbonate decomposes: CaCO₃ → CaO + CO₂. Calculate the mass of calcium oxide made from 50 g of calcium carbonate. (Mr: CaCO₃ 100, CaO 56)', m: 3,
+      p: ['Moles of CaCO₃ = 50 ÷ 100 = ==0.5 mol==', 'Mole ratio 1 : 1 so ==0.5 mol CaO==', 'Mass = 0.5 × 56 = ==28 g=='] },
+    { q: '4.0 g of sodium hydroxide (Mr = 40) is dissolved in water to make 500 cm³ of solution. Calculate the concentration in mol/dm³.', m: 3,
+      p: ['Moles = 4.0 ÷ 40 = ==0.1 mol==', 'Volume = 500 ÷ 1000 = ==0.5 dm³==', 'Concentration = 0.1 ÷ 0.5 = ==0.2 mol/dm³=='] }
+  ]
+},
+rates: {
+  code: 'Topic 6', name: 'Rates of reaction',
+  lede: 'Why reactions go faster or slower: collisions, energy and catalysts.',
+  learn: [
+    { h: 'Collision theory', list: ['Reacting particles must ==collide== with ==enough energy== (the ==activation energy==) for a reaction to happen.', 'Not every collision is successful. A successful collision is a ==fruitful== one.', 'To increase the rate, increase the ==number of successful collisions per second==.'] },
+    { h: 'Factors that change the rate', table: [['Factor', 'Effect on rate', 'Explanation'], ['Higher temperature', 'faster', 'particles move faster and have more energy, so more collisions each second and a bigger fraction with enough energy'], ['Higher concentration (or pressure of a gas)', 'faster', 'more particles in the same space, so more frequent collisions'], ['Larger surface area (powder not lumps)', 'faster', 'more particles exposed, so more collisions'], ['Catalyst', 'faster', 'provides a route with lower activation energy, so more collisions are successful; not used up']] },
+    { h: 'Measuring rate', list: ['Measure the ==volume of gas== with a gas syringe, or the ==loss in mass== on a balance, or the time for a ==cloudiness== to hide a cross.', '==Rate = amount of product (or reactant used) ÷ time==.', 'On a graph of volume against time, the ==gradient== is the rate. A ==steeper line== is a ==faster reaction==.', 'The reaction has stopped when the line becomes ==horizontal==.'], f: ['average rate = volume of gas ÷ time'] }
+  ],
+  mistakes: ['Saying the ==particles get bigger== or ==expand== when heated.', 'Not saying ==collisions per second== or ==frequency==.', 'Saying a ==catalyst is used up==. It is unchanged at the end.', 'Forgetting that a ==catalyst lowers the activation energy==.', 'Saying a faster reaction makes ==more product== (the same total, just quicker).'],
+  diagrams: [{ svg: svgRateGraph, cap: 'A ==steeper== curve means a ==faster== reaction. Both reach the same final volume.' }],
+  worked: [
+    W('60 cm³ of gas is collected in the first 30 s of a reaction. Calculate the average rate.', '==Average rate = volume ÷ time==.', 'Include the unit cm³/s.', 'rate = volume ÷ time',
+      [['Write the formula', 'average rate = volume of gas ÷ time', ''], ['Substitute', '60 ÷ 30', ''], ['Answer with unit', '2 cm³/s', '']],
+      [['V, t', '60 cm³, 30 s', -1], ['Rate', '2 cm³/s', 2]]),
+    W('Explain why a reaction is faster at a higher temperature.', 'Use the keywords: ==faster==, ==energy==, ==collisions==, ==activation energy==.', 'Say both: more collisions AND more energy.', 'Faster, more energy, more collisions',
+      [['Particles move faster', 'They have more kinetic energy', ''], ['More collisions', 'They collide more frequently', 'More collisions each second.'], ['More successful collisions', 'A greater proportion of collisions have energy ≥ the activation energy', 'More collisions are successful.'], ['Result', 'The rate of reaction increases', '']],
+      [['Particles', 'faster, more energy', 0], ['Collisions', 'more often', 1], ['Success', 'more reach activation energy', 2], ['Rate', 'increases', 3]], true),
+    W('Explain why powdered marble reacts faster with acid than marble chips of the same mass.', 'Link ==surface area== to ==collisions==.', 'The mass is the same, so the total amount of product is the same.', 'Powder: bigger surface area',
+      [['Powder', 'Has a much larger surface area', 'More of the solid is exposed.'], ['More collisions', 'More acid particles can collide with the marble at the same time', ''], ['Result', 'The rate is faster, but the total amount of gas made is the same', 'The same mass gives the same total volume.']],
+      [['Powder', 'larger surface area', 0], ['Collisions', 'more frequent', 1], ['Result', 'faster, same total gas', 2]], true),
+    W('Explain how a catalyst speeds up a reaction.', 'Link ==activation energy== to ==successful collisions==.', 'A catalyst is not used up.', 'Lower activation energy',
+      [['Provides an alternative pathway', 'The catalyst gives a route with a lower activation energy', ''], ['More successful collisions', 'More of the collisions have enough energy to react', ''], ['Result', 'The rate increases and the catalyst is not used up', 'It can be used again.']],
+      [['Pathway', 'lower activation energy', 0], ['Collisions', 'more are successful', 1], ['Result', 'faster, catalyst unchanged', 2]], true),
+    W('Two experiments of the same reaction give gas volumes after 20 s of 30 cm³ (experiment A) and 55 cm³ (experiment B). Which is faster, and by how much?', 'Compare the ==rates== using volume ÷ time.', 'Same time, so compare the volumes.', 'rate = volume ÷ time',
+      [['Rate of A', '30 ÷ 20 = 1.5 cm³/s', ''], ['Rate of B', '55 ÷ 20 = 2.75 cm³/s', ''], ['Compare', 'B is faster', '2.75 is greater than 1.5.'], ['By how much', '2.75 − 1.5 = 1.25 cm³/s faster', '']],
+      [['Rate A', '1.5 cm³/s', 0], ['Rate B', '2.75 cm³/s', 1], ['Faster', 'B', 2], ['Difference', '1.25 cm³/s', 3]]),
+    W('A graph of gas volume against time becomes flat at 100 cm³ after 60 s. What does this show?', 'A ==flat line== means the volume is not changing.', 'The total amount is set by the reactant that runs out.', 'Flat = finished',
+      [['The line is horizontal', 'No more gas is being made', ''], ['Why', 'At least one reactant has been used up', 'The reaction has stopped.'], ['The total', '100 cm³ of gas in total', 'Read off the plateau.']],
+      [['Flat line', 'no more gas', 0], ['Reason', 'a reactant used up', 1], ['Total', '100 cm³', 2]], true)
+  ],
+  drill: 'rates',
+  quiz: [
+    { q: 'For a reaction to happen, particles must collide with…', o: ['any energy', 'at least the activation energy', 'no energy', 'light'], a: 1, w: '==At least the activation energy==.' },
+    { q: 'Increasing concentration makes the rate faster because…', o: ['particles move faster', 'collisions are more frequent', 'the activation energy falls', 'the particles get smaller'], a: 1, w: '==More frequent collisions==.' },
+    { q: 'A catalyst…', o: ['is used up', 'lowers the activation energy', 'raises the temperature', 'changes the products'], a: 1, w: '==Lowers the activation energy== and is not used up.' },
+    { q: 'On a volume–time graph, a steeper line means…', o: ['a slower reaction', 'a faster reaction', 'more product', 'no reaction'], a: 1, w: '==A faster reaction==.' },
+    { q: 'Which has the larger surface area?', o: ['a lump of chalk', 'chalk powder', 'a chalk block', 'a chalk stick'], a: 1, w: '==Powder==.' },
+    { q: '90 cm³ of gas is made in 45 s. The average rate is…', o: ['0.5 cm³/s', '2 cm³/s', '135 cm³/s', '4050 cm³/s'], a: 1, w: '90 ÷ 45 = ==2 cm³/s==.' }
+  ],
+  exam: [
+    { q: 'Explain, in terms of particles, why increasing the concentration of an acid increases the rate of reaction with magnesium.', m: 3,
+      p: ['There are ==more acid particles== in the same volume', 'So the particles ==collide more often== (more frequent collisions)', 'More ==successful collisions== per second, so the rate increases'] },
+    { q: 'State two ways of increasing the rate of reaction between marble chips and hydrochloric acid, other than increasing the concentration.', m: 2,
+      p: ['==Increase the temperature==', '==Use smaller pieces== (powder) / increase the surface area (or add a catalyst if one exists)'] },
+    { q: '48 cm³ of gas is collected in 24 s. Calculate the average rate of reaction and state its units.', m: 2,
+      p: ['48 ÷ 24 = ==2==', '==cm³/s=='] }
+  ]
+},
+energ: {
+  code: 'Topic 5', name: 'Chemical energetics',
+  lede: 'Energy changes in reactions: exothermic and endothermic, energy level diagrams and bond energies.',
+  learn: [
+    { h: 'Exothermic and endothermic', list: ['==Exothermic==: energy is ==given out== to the surroundings. The temperature of the surroundings ==rises==. Examples: ==combustion==, ==neutralisation==, ==respiration==, many oxidation reactions.', '==Endothermic==: energy is ==taken in== from the surroundings. The temperature ==falls==. Examples: ==thermal decomposition==, ==photosynthesis==, dissolving ammonium nitrate.', '==ΔH is negative== for an exothermic reaction and ==positive== for an endothermic reaction.'] },
+    { h: 'Energy level diagrams', list: ['==Exothermic==: the products are at a ==lower== energy than the reactants.', '==Endothermic==: the products are at a ==higher== energy than the reactants.', 'The ==activation energy== is the ==minimum energy needed for a reaction== to start. It is the hump on the diagram.', 'A ==catalyst== lowers the activation energy (the hump is lower). ΔH does not change.'] },
+    { h: 'Bond energies', list: ['==Breaking bonds is endothermic== (takes energy in). ==Making bonds is exothermic== (gives energy out).', '==ΔH = energy to break bonds − energy released making bonds==.', 'If more energy is ==released== making bonds than ==used== breaking bonds, the reaction is ==exothermic== (ΔH negative).', 'Fuels: ==hydrogen== releases lots of energy and gives only water, but it is flammable and hard to store.'], f: ['ΔH = bonds broken − bonds made'] }
+  ],
+  mistakes: ['Mixing up which is ==exothermic== and which is ==endothermic==.', 'Saying exothermic means ==the reaction gets hot== (it means energy is given out).', 'Saying bond ==breaking releases energy==. It needs energy.', 'Putting the ==wrong sign== on ΔH.', 'Showing a catalyst changing the ==products’ energy==.'],
+  diagrams: [{ svg: svgProfile, cap: '==Exothermic==: products lower. ==Endothermic==: products higher.' }],
+  worked: [
+    W('The temperature of a solution rises from 20 °C to 35 °C when a solid dissolves. Is the process exothermic or endothermic? Explain.', 'Look at what happens to the ==temperature of the surroundings==.', 'Temperature up means energy was given out.', 'Temperature rises: exothermic',
+      [['The temperature rises', '20 °C → 35 °C', ''], ['Energy transfer', 'Energy has been given out to the solution (surroundings)', ''], ['Conclusion', 'The process is exothermic', 'ΔH is negative.']],
+      [['Temperature', 'rises', 0], ['Energy', 'given out', 1], ['Type', 'exothermic', 2]], true),
+    W('Sketch the energy level diagram for an exothermic reaction and label the activation energy and ΔH.', 'The ==products are lower== than the reactants. The ==hump== is the activation energy.', 'Draw ΔH as an arrow downwards.', 'Products below reactants',
+      [['Reactants', 'Drawn higher up on the energy axis', ''], ['Activation energy', 'The curve rises to a peak above the reactants', 'Energy needed to start the reaction.'], ['Products', 'Drawn lower than the reactants', 'Energy has been given out.'], ['ΔH', 'An arrow from reactants down to products, labelled negative', '']],
+      [['Reactants', 'higher', 0], ['Peak', 'activation energy', 1], ['Products', 'lower', 2], ['ΔH', 'negative', 3]], true),
+    W('Calculate ΔH for H₂ + Cl₂ → 2HCl using bond energies: H–H 436, Cl–Cl 243, H–Cl 432 kJ/mol.', 'Add the ==bonds broken==, add the ==bonds made==, then ==ΔH = broken − made==.', 'There are 2 H–Cl bonds in 2HCl.', 'ΔH = broken − made',
+      [['Bonds broken', 'H–H and Cl–Cl: 436 + 243 = 679 kJ', 'Energy taken in.'], ['Bonds made', '2 × H–Cl: 2 × 432 = 864 kJ', 'Energy given out.'], ['ΔH', '679 − 864', 'Broken minus made.'], ['Answer', 'ΔH = −185 kJ/mol', 'Negative, so exothermic.']],
+      [['Broken', '679 kJ', 0], ['Made', '864 kJ', 1], ['ΔH', '−185 kJ/mol', 3]]),
+    W('Explain why the reaction in the previous example is exothermic in terms of bonds.', 'Compare the ==energy released== with the ==energy taken in==.', 'Use the numbers: 864 is more than 679.', 'More released than taken in',
+      [['Energy taken in to break bonds', '679 kJ', ''], ['Energy released making bonds', '864 kJ', ''], ['Compare', 'More energy is released than is taken in', '864 is greater than 679.'], ['Conclusion', 'So the reaction is exothermic', 'ΔH is negative.']],
+      [['Taken in', '679 kJ', 0], ['Released', '864 kJ', 1], ['Compare', 'released is bigger', 2], ['Type', 'exothermic', 3]], true),
+    W('State what a catalyst does to the energy level diagram of a reaction.', 'It changes the ==hump== only.', 'ΔH does not change.', 'Lower the peak',
+      [['The activation energy', 'The peak of the curve is lower', 'The catalyst provides a different pathway.'], ['ΔH', 'The reactants and products stay at the same levels', 'So ΔH is unchanged.'], ['Effect on the reaction', 'It goes faster', 'More collisions have enough energy.']],
+      [['Peak', 'lower', 0], ['ΔH', 'unchanged', 1], ['Rate', 'faster', 2]], true)
+  ],
+  drill: 'energ',
+  quiz: [
+    { q: 'An exothermic reaction…', o: ['takes in energy', 'gives out energy', 'has positive ΔH', 'cools the surroundings'], a: 1, w: '==Gives out energy==.' },
+    { q: 'Which is endothermic?', o: ['combustion', 'neutralisation', 'thermal decomposition', 'respiration'], a: 2, w: '==Thermal decomposition== takes in energy.' },
+    { q: 'Breaking bonds is…', o: ['exothermic', 'endothermic', 'neither', 'both'], a: 1, w: '==Endothermic==.' },
+    { q: 'The activation energy is…', o: ['the energy given out', 'the minimum energy needed to start a reaction', 'the energy of products', 'the temperature'], a: 1, w: 'The ==minimum energy needed to start a reaction==.' },
+    { q: 'ΔH is negative for…', o: ['endothermic reactions', 'exothermic reactions', 'all reactions', 'no reactions'], a: 1, w: '==Exothermic== reactions.' },
+    { q: 'A catalyst changes…', o: ['ΔH', 'the activation energy', 'the products', 'the mass'], a: 1, w: 'The ==activation energy==.' }
+  ],
+  exam: [
+    { q: 'State what is meant by an exothermic reaction and give one example.', m: 2,
+      p: ['A reaction that ==gives out energy== to the surroundings (the temperature rises)', 'Example: ==combustion== / neutralisation / respiration'] },
+    { q: 'The bond energies are: C–H 413, O=O 498, C=O 805, O–H 464 kJ/mol. For CH₄ + 2O₂ → CO₂ + 2H₂O, calculate (a) the energy to break bonds [1] (b) the energy released making bonds [1] (c) ΔH [1].', m: 3,
+      p: ['Broken: 4 × 413 + 2 × 498 = ==2648 kJ==', 'Made: 2 × 805 + 4 × 464 = ==3466 kJ==', 'ΔH = 2648 − 3466 = ==−818 kJ/mol=='] },
+    { q: 'Draw and label an energy level diagram for an endothermic reaction.', m: 3,
+      p: ['==Products higher== than reactants', '==Activation energy== shown as the hump', '==ΔH positive== arrow upwards'] }
+  ]
 }
 };
 
@@ -743,6 +1035,60 @@ const DRILLS = {
       const [s, m, why] = pick([['copper(II) sulfate from copper(II) oxide', A, 'soluble salt; insoluble base can be added in excess'],['zinc chloride from zinc', A, 'soluble salt; metal added in excess'],['magnesium sulfate from magnesium carbonate', A, 'soluble salt; insoluble carbonate in excess'],['sodium chloride', T, 'sodium salt: acid + alkali, both solutions'],['potassium nitrate', T, 'potassium salt: acid + alkali, both solutions'],['ammonium sulfate', T, 'ammonium salt: acid + alkali solution'],['barium sulfate', P, 'insoluble salt'],['silver chloride', P, 'insoluble salt'],['lead(II) iodide', P, 'insoluble salt']]);
       return choiceItem(`Which method would you use to make ${s}?`, m, [A,T,P].filter(x => x !== m),
         [['Reason', why],['Method', m]]); }
+  ],
+  sepn: [
+    () => { const sv = rint(6, 14), rf = rint(2, 9) / 10, sp = Math.round(rf * sv * 10) / 10, ans = Math.round(sp / sv * 100) / 100;
+      return { kind:'num', q:`In a chromatogram the solvent front moved ${sv} cm and a spot moved ${sp} cm. Calculate the Rf value (2 d.p.).`, ans, tol:0.011, s:[['Formula', 'Rf = spot ÷ solvent'],['Substitute', `${sp} ÷ ${sv}`],['Answer', String(ans)]] }; },
+    () => { const it = pick([['sand from a mixture of sand and water', 'filtration', 'sand is insoluble'], ['salt crystals from salt solution', 'crystallisation', 'salt is dissolved: evaporate some water, then cool'], ['pure water from salt solution', 'simple distillation', 'the solvent is evaporated and condensed'], ['ethanol from a mixture of ethanol and water', 'fractional distillation', 'the liquids have different boiling points'], ['the dyes in a black ink', 'chromatography', 'the dyes have different solubilities'], ['petrol and diesel from crude oil', 'fractional distillation', 'the fractions have different boiling points'], ['copper(II) sulfate crystals from its solution', 'crystallisation', 'heat to evaporate some water, then cool']]);
+      return choiceItem(`Which method separates ${it[0]}?`, it[1], ['filtration', 'crystallisation', 'simple distillation', 'fractional distillation', 'chromatography'].filter(x => x !== it[1]).slice(0, 3), [['Reason', it[2]],['Method', it[1]]]); },
+    () => { const pure = Math.random() < .5, t = pick([0, 80, 801, 1085]);
+      return choiceItem(pure ? `A substance melts sharply at exactly ${t} °C. Is it pure or a mixture?` : `A substance starts melting at ${t - 6} °C and is fully melted at ${t + 1} °C. Is it pure or a mixture?`, pure ? 'pure' : 'a mixture', [pure ? 'a mixture' : 'pure'], [['Pure substances', 'melt at one sharp temperature'],['Mixtures', 'melt over a range'],['Answer', pure ? 'pure' : 'a mixture']]); }
+  ],
+  eqn: [
+    () => { const AR = { H: 1, C: 12, N: 14, O: 16, Na: 23, Mg: 24, Al: 27, S: 32, Cl: 35.5, K: 39, Ca: 40, Fe: 56, Cu: 64, Zn: 65 };
+      const f = pick([['H₂O', { H: 2, O: 1 }], ['CO₂', { C: 1, O: 2 }], ['NaOH', { Na: 1, O: 1, H: 1 }], ['CaCO₃', { Ca: 1, C: 1, O: 3 }], ['MgO', { Mg: 1, O: 1 }], ['H₂SO₄', { H: 2, S: 1, O: 4 }], ['HCl', { H: 1, Cl: 1 }], ['NH₃', { N: 1, H: 3 }], ['Mg(OH)₂', { Mg: 1, O: 2, H: 2 }], ['Ca(OH)₂', { Ca: 1, O: 2, H: 2 }], ['Al₂O₃', { Al: 2, O: 3 }], ['Fe₂O₃', { Fe: 2, O: 3 }], ['CuSO₄', { Cu: 1, S: 1, O: 4 }], ['Na₂CO₃', { Na: 2, C: 1, O: 3 }], ['(NH₄)₂SO₄', { N: 2, H: 8, S: 1, O: 4 }], ['Al₂(SO₄)₃', { Al: 2, S: 3, O: 12 }], ['KNO₃', { K: 1, N: 1, O: 3 }], ['Ca(NO₃)₂', { Ca: 1, N: 2, O: 6 }], ['ZnCl₂', { Zn: 1, Cl: 2 }], ['CuO', { Cu: 1, O: 1 }]]);
+      const parts = Object.entries(f[1]).map(([e, n]) => `${n} × ${AR[e]}`); const ans = Object.entries(f[1]).reduce((a, [e, n]) => a + n * AR[e], 0);
+      return { kind:'num', q:`Calculate the relative formula mass (Mr) of ${f[0]}. (Ar: H 1, C 12, N 14, O 16, Na 23, Mg 24, Al 27, S 32, Cl 35.5, K 39, Ca 40, Fe 56, Cu 64, Zn 65)`, ans, tol:0.01, s:[['Atoms', Object.entries(f[1]).map(([e, n]) => n + ' ' + e).join(', ')],['Add', parts.join(' + ')],['Answer', String(ans)]] }; },
+    () => { const eq = pick([['H₂ + O₂ → H₂O', [2, 1, 2]], ['Mg + O₂ → MgO', [2, 1, 2]], ['Na + Cl₂ → NaCl', [2, 1, 2]], ['Al + O₂ → Al₂O₃', [4, 3, 2]], ['Fe + Cl₂ → FeCl₃', [2, 3, 2]], ['CH₄ + O₂ → CO₂ + H₂O', [1, 2, 1, 2]], ['N₂ + H₂ → NH₃', [1, 3, 2]], ['Ca + HCl → CaCl₂ + H₂', [1, 2, 1, 1]], ['Zn + HCl → ZnCl₂ + H₂', [1, 2, 1, 1]], ['Na + H₂O → NaOH + H₂', [2, 2, 2, 1]], ['Mg + HCl → MgCl₂ + H₂', [1, 2, 1, 1]], ['C₃H₈ + O₂ → CO₂ + H₂O', [1, 5, 3, 4]]]);
+      const right = eq[1].join(', '); const set = new Set([right]); const wrongs = [];
+      while (wrongs.length < 3) { const w = eq[1].map(x => Math.max(1, x + pick([-1, 0, 1, 2]))).join(', '); if (!set.has(w)) { set.add(w); wrongs.push(w); } }
+      return choiceItem(`Which numbers (in order, in front of each formula) balance ${eq[0]}?`, right, wrongs, [['Count atoms', 'on both sides'],['Balanced equation', eq[0].replace(/(^| )(?=[A-Z(])/g, '$1') + '   numbers: ' + right]]); },
+    () => { const f = pick([['Ca(OH)₂', 'O', 2], ['Ca(OH)₂', 'H', 2], ['Al₂(SO₄)₃', 'O', 12], ['Al₂(SO₄)₃', 'S', 3], ['(NH₄)₂SO₄', 'H', 8], ['(NH₄)₂SO₄', 'N', 2], ['Mg(NO₃)₂', 'O', 6], ['Mg(NO₃)₂', 'N', 2], ['Fe₂O₃', 'O', 3], ['Fe₂O₃', 'Fe', 2]]), c = rint(2, 4);
+      return { kind:'num', q:`How many ${f[1]} atoms are there in ${c}${f[0]}?`, ans:c * f[2], tol:0, s:[['In one formula unit', `${f[2]} ${f[1]} atoms`],['Multiply by the big number', `${c} × ${f[2]}`],['Answer', String(c * f[2])]] }; }
+  ],
+  mole: [
+    () => { const f = pick([['H₂O', 18], ['CO₂', 44], ['NaOH', 40], ['CaCO₃', 100], ['MgO', 40], ['H₂SO₄', 98], ['HCl', 36.5], ['Mg', 24], ['Cu', 64], ['NaCl', 58.5]]), n = pick([0.1, 0.2, 0.25, 0.5, 1, 2, 3]), m = Math.round(n * f[1] * 100) / 100, w = rint(0, 2);
+      if (w === 0) return { kind:'num', q:`Calculate the number of moles in ${m} g of ${f[0]}. (Mr = ${f[1]})`, ans:n, tol:0.0005, s:[['Formula', 'moles = mass ÷ Mr'],['Substitute', `${m} ÷ ${f[1]}`],['Answer', `${n} mol`]] };
+      if (w === 1) return { kind:'num', q:`Calculate the mass of ${n} mol of ${f[0]}. (Mr = ${f[1]})`, ans:m, tol:0.005, s:[['Formula', 'mass = moles × Mr'],['Substitute', `${n} × ${f[1]}`],['Answer', `${m} g`]] };
+      return { kind:'num', q:`${n} mol of a substance has a mass of ${m} g. Calculate its Mr.`, ans:f[1], tol:0.01, s:[['Formula', 'Mr = mass ÷ moles'],['Substitute', `${m} ÷ ${n}`],['Answer', String(f[1])]] }; },
+    () => { const n = pick([0.05, 0.1, 0.25, 0.5, 1, 2, 4]), w = rint(0, 1);
+      return w ? { kind:'num', q:`Calculate the volume of ${n} mol of a gas at room temperature and pressure, in dm³.`, ans:n * 24, tol:0.005, s:[['1 mole = 24 dm³', `${n} × 24`],['Answer', `${num(n * 24)} dm³`]] }
+        : { kind:'num', q:`How many moles are in ${num(n * 24)} dm³ of a gas at room temperature and pressure?`, ans:n, tol:0.0005, s:[['moles = volume ÷ 24', `${num(n * 24)} ÷ 24`],['Answer', `${n} mol`]] }; },
+    () => { const c = pick([0.1, 0.2, 0.5, 1, 2]), V = pick([100, 200, 250, 500, 1000]), n = c * V / 1000; let w = rint(0, 1); if (Math.abs(Math.round(n * 100) / 100 - n) > 1e-9) w = 1;
+      return w ? { kind:'num', q:`${n} mol of solute is dissolved to make ${V} cm³ of solution. Calculate the concentration in mol/dm³.`, ans:c, tol:0.0005, s:[['Volume in dm³', `${V} ÷ 1000 = ${V / 1000}`],['c = n ÷ V', `${n} ÷ ${V / 1000}`],['Answer', `${c} mol/dm³`]] }
+        : { kind:'num', q:`How many moles of solute are in ${V} cm³ of a ${c} mol/dm³ solution?`, ans:n, tol:0.00005, s:[['Volume in dm³', `${V} ÷ 1000 = ${V / 1000}`],['n = c × V', `${c} × ${V / 1000}`],['Answer', `${n} mol`]] }; },
+    () => { const th = pick([4, 5, 8, 10, 20, 25]), pc = pick([40, 50, 60, 75, 80, 90]), act = th * pc / 100;
+      return { kind:'num', q:`The theoretical yield is ${th} g but only ${act} g is made. Calculate the percentage yield.`, ans:pc, tol:0.01, s:[['Formula', 'actual ÷ theoretical × 100'],['Substitute', `${act} ÷ ${th} × 100`],['Answer', `${pc}%`]] }; },
+    () => { const [a, ma, b, mb] = pick([['CaCO₃', 100, 'CaO', 56], ['Mg', 24, 'MgO', 40], ['CuCO₃', 124, 'CuO', 80], ['ZnCO₃', 125, 'ZnO', 81]]), k = pick([0.1, 0.2, 0.25, 0.5, 1, 2]), m1 = k * ma, m2 = Math.round(k * mb * 100) / 100;
+      const eq = a === 'Mg' ? '2Mg + O₂ → 2MgO' : `${a} → ${b} + CO₂`;
+      return { kind:'num', q:`${eq}. Calculate the mass of ${b} made from ${num(m1)} g of ${a}. (Mr: ${a} ${ma}, ${b} ${mb}. The mole ratio ${a} : ${b} is 1 : 1.)`, ans:m2, tol:0.02, s:[['Moles', `${num(m1)} ÷ ${ma} = ${k} mol`],['Ratio 1 : 1', `${k} mol of ${b}`],['Mass', `${k} × ${mb} = ${num(m2)} g`]] }; }
+  ],
+  rates: [
+    () => { const t = pick([10, 20, 25, 30, 40, 50, 60]), r = pick([0.5, 1, 1.5, 2, 2.5, 3, 4]), V = Math.round(r * t * 10) / 10, w = rint(0, 1);
+      return w ? { kind:'num', q:`${V} cm³ of gas is collected in ${t} s. Calculate the average rate in cm³/s.`, ans:r, tol:0.005, s:[['Formula', 'rate = volume ÷ time'],['Substitute', `${V} ÷ ${t}`],['Answer', `${r} cm³/s`]] }
+        : { kind:'num', q:`A reaction makes gas at an average rate of ${r} cm³/s. How long does it take to collect ${V} cm³?`, ans:t, tol:0.005, s:[['Formula', 'time = volume ÷ rate'],['Substitute', `${V} ÷ ${r}`],['Answer', `${t} s`]] }; },
+    () => { const it = pick([['the temperature is increased', 'faster', 'particles move faster and collide more often with more energy'], ['the concentration of the acid is increased', 'faster', 'more particles per unit volume, so more frequent collisions'], ['marble chips are replaced by marble powder of the same mass', 'faster', 'larger surface area gives more collisions'], ['a catalyst is added', 'faster', 'lower activation energy, so more successful collisions'], ['the temperature is decreased', 'slower', 'fewer collisions, with less energy'], ['the acid is diluted with water', 'slower', 'fewer particles per unit volume, so fewer collisions'], ['the size of lumps is increased', 'slower', 'smaller surface area gives fewer collisions']]);
+      return choiceItem(`What happens to the rate of reaction when ${it[0]}?`, it[1], ['faster', 'slower', 'stays the same'].filter(x => x !== it[1]), [['Reason', it[2]],['Answer', it[1]]]); },
+    () => { const t = pick([15, 20, 30, 40, 60]), a = rint(2, 8) * 5, b = a + rint(2, 8) * 5;
+      return { kind:'num', q:`In experiment A, ${a} cm³ of gas is made in ${t} s. In experiment B, ${b} cm³ is made in ${t} s. How many cm³/s faster is B? (2 d.p.)`, ans:Math.round((b - a) / t * 100) / 100, tol:0.011, s:[['Rate of A', `${a} ÷ ${t} = ${num(a / t)}`],['Rate of B', `${b} ÷ ${t} = ${num(b / t)}`],['Difference', `${num((b - a) / t)} cm³/s`]] }; }
+  ],
+  energ: [
+    () => { const X = rint(4, 30) * 100 + rint(0, 9) * 10, Y = rint(4, 30) * 100 + rint(0, 9) * 10; if (X === Y) return { kind:'num', q:'Bonds broken need 800 kJ and bonds made release 1000 kJ. Calculate ΔH.', ans:-200, tol:0.01, s:[['ΔH = broken − made', '800 − 1000'],['Answer', '−200 kJ/mol']] };
+      return { kind:'num', q:`In a reaction, breaking bonds takes in ${X} kJ and making bonds gives out ${Y} kJ. Calculate ΔH in kJ. (Include the minus sign if negative.)`, ans:X - Y, tol:0.01, s:[['ΔH = bonds broken − bonds made', `${X} − ${Y}`],['Answer', `${X - Y} kJ (${X - Y < 0 ? 'exothermic' : 'endothermic'})`]] }; },
+    () => { const it = pick([['burning natural gas', 'exothermic'], ['photosynthesis', 'endothermic'], ['neutralising an acid with an alkali', 'exothermic'], ['thermal decomposition of calcium carbonate', 'endothermic'], ['respiration', 'exothermic'], ['dissolving ammonium nitrate in water (the temperature falls)', 'endothermic'], ['a reaction in which the temperature of the mixture rises', 'exothermic'], ['a reaction where ΔH is positive', 'endothermic']]);
+      return choiceItem(`Is ${it[0]} exothermic or endothermic?`, it[1], [it[1] === 'exothermic' ? 'endothermic' : 'exothermic'], [['Rule', 'exothermic: gives out energy (ΔH negative); endothermic: takes in energy (ΔH positive)'],['Answer', it[1]]]); },
+    () => { const n = rint(2, 4), E = pick([[413, 'C–H'], [436, 'H–H'], [464, 'O–H'], [432, 'H–Cl'], [498, 'O=O'], [805, 'C=O']]);
+      return { kind:'num', q:`A reaction makes ${n} ${E[1]} bonds, each releasing ${E[0]} kJ/mol. How much energy is released by making these bonds, in kJ?`, ans:n * E[0], tol:0.01, s:[['Multiply', `${n} × ${E[0]}`],['Answer', `${n * E[0]} kJ`]] }; }
   ]
 };
 
@@ -757,7 +1103,7 @@ function drawMock(){
 if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['rates','Topic 6','Rates'],['energ','Topic 5','Energetics'],['mock','','Mini mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -775,7 +1121,7 @@ function render(){
   bindView();
 }
 function renderStart(){
-  const rows = ['atoms','bonding','displace','salts'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+  const rows = ['atoms','bonding','displace','salts','sepn','eqn','mole','rates','energ'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Chemistry: the whole syllabus</h2>
@@ -935,6 +1281,8 @@ salts: [
     tip: 'Give the reason: ==an excess soluble reactant cannot be removed by filtering==.' }
 ]
 });
+
+for (const key in CH) CH[key].worked.forEach(w => { if (w.r && !w.board0) { w.board0 = () => wkBoard(w, -1); w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); }); } });
 
 function renderChapter(k){
   const c = CH[k];
