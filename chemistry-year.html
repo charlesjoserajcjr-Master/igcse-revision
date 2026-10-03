@@ -183,6 +183,7 @@ a{color:var(--accent)}
 .pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
 .qgroup{margin:18px 0 -6px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
 .qgroup small{color:var(--muted);font-family:var(--body);font-weight:400;font-size:.85rem}
+.tblwrap{overflow-x:auto;margin:10px 0}.rt{border-collapse:collapse;font-size:.92rem}.rt th,.rt td{border:1px solid var(--line);padding:6px 10px;text-align:center}.rt th{background:var(--accent-soft)}.prac p{margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -2215,6 +2216,229 @@ const EXTRA2 = {
 };
 for (const k in EXTRA2) CH[k].exam.push(...EXTRA2[k]);
 
+const tbl = (h, rows) => `<div class="tblwrap"><table class="rt"><thead><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+/* ---------- practical skills: graph rules diagram ---------- */
+function svgGraphRules(){
+  const X = x => 90 + x * 76, Y = y => 250 - y * 38;
+  const pts = [[0.4, 0.9], [1.3, 2.1], [2.4, 3.1], [3.5, 3.8], [4.5, 4.2]];
+  const cross = ([x, y]) => `<path d="M${X(x) - 6} ${Y(y) - 6} L${X(x) + 6} ${Y(y) + 6} M${X(x) - 6} ${Y(y) + 6} L${X(x) + 6} ${Y(y) - 6}" class="acc"/>`;
+  const note = (y, n, a, b) => `${T(520, y, n + '  ' + a, 'lbl')}${T(540, y + 20, b, 'mut')}`;
+  return `<svg viewBox="0 0 880 300" role="img" aria-label="A well drawn graph with labelled axes, even scales, crosses and a smooth line of best fit">
+  <line x1="90" y1="250" x2="470" y2="250" class="ln"/><line x1="90" y1="250" x2="90" y2="40" class="ln"/>
+  ${[0, 1, 2, 3, 4, 5].map(i => `<line x1="${X(i)}" y1="250" x2="${X(i)}" y2="256" class="thin"/>${T(X(i), 272, i * 10, 'mid mut')}`).join('')}${[0, 1, 2, 3, 4, 5].map(i => `<line x1="84" y1="${Y(i)}" x2="90" y2="${Y(i)}" class="thin"/>${T(78, Y(i) + 4, i * 2, 'end mut')}`).join('')}
+  ${T(280, 294, 'independent variable / unit', 'mid lbl')}${T(24, 30, 'dependent variable / unit', 'lbl')}
+  <path d="M${X(0)} ${Y(0.3)} C ${X(1)} ${Y(1.8)}, ${X(2.2)} ${Y(3.3)}, ${X(4.8)} ${Y(4.3)}" class="acc" fill="none"/>${pts.map(cross).join('')}
+  <line x1="${X(2.4)}" y1="250" x2="${X(2.4)}" y2="${Y(3.1)}" class="hotl" style="stroke-dasharray:5 4;stroke-width:1.6"/><line x1="90" y1="${Y(3.1)}" x2="${X(2.4)}" y2="${Y(3.1)}" class="hotl" style="stroke-dasharray:5 4;stroke-width:1.6"/>
+  ${note(50, '1', 'Independent variable on the x-axis', 'Dependent variable on the y-axis, both with units.')}${note(100, '2', 'Even scale', 'Points fill more than half of the grid.')}${note(150, '3', 'Small crosses', 'Plot every point carefully.')}${note(200, '4', 'Smooth best-fit line', 'Not dot to dot.')}${note(250, '5', 'Dashed lines', 'Show how you read a value.')}</svg>`;
+}
+
+/* ---------- Chemistry practical: skills chapter and task bank (original) ---------- */
+const PR_CODE = '0620', PR_LEDE = 'Four questions in the style of the real paper: apparatus and method, data handling, qualitative analysis and a plan.';
+const PR_NOTES = `<details class="card"><summary><b>Notes for use in qualitative analysis</b></summary><div style="margin-top:8px">
+  <h3>Tests for anions</h3>` + tbl(['anion', 'test', 'result'], [['carbonate, CO₃²⁻', 'add dilute acid, then test the gas', 'effervescence, carbon dioxide made'], ['chloride, Cl⁻ (in solution)', 'acidify with dilute nitric acid, add aqueous silver nitrate', 'white precipitate'], ['bromide, Br⁻ (in solution)', 'acidify with dilute nitric acid, add aqueous silver nitrate', 'cream precipitate'], ['iodide, I⁻ (in solution)', 'acidify with dilute nitric acid, add aqueous silver nitrate', 'yellow precipitate'], ['nitrate, NO₃⁻ (in solution)', 'add aqueous sodium hydroxide, then aluminium foil, warm', 'ammonia gas is made'], ['sulfate, SO₄²⁻ (in solution)', 'acidify with dilute nitric acid, add aqueous barium nitrate', 'white precipitate']]) + `
+  <h3>Tests for cations</h3>` + tbl(['cation', 'aqueous sodium hydroxide', 'aqueous ammonia'], [['aluminium, Al³⁺', 'white precipitate, soluble in excess (colourless solution)', 'white precipitate, insoluble in excess'], ['ammonium, NH₄⁺', 'ammonia gas on warming', '–'], ['calcium, Ca²⁺', 'white precipitate, insoluble in excess', 'no precipitate or very slight white'], ['copper(II), Cu²⁺', 'light blue precipitate, insoluble in excess', 'light blue precipitate, soluble in excess (dark blue solution)'], ['iron(II), Fe²⁺', 'green precipitate, insoluble in excess, turns brown near the surface', 'green precipitate, insoluble in excess, turns brown near the surface'], ['iron(III), Fe³⁺', 'red-brown precipitate, insoluble in excess', 'red-brown precipitate, insoluble in excess'], ['zinc, Zn²⁺', 'white precipitate, soluble in excess (colourless solution)', 'white precipitate, soluble in excess (colourless solution)']]) + `
+  <h3>Tests for gases</h3>` + tbl(['gas', 'test and result'], [['ammonia, NH₃', 'turns damp red litmus paper blue'], ['carbon dioxide, CO₂', 'turns limewater milky'], ['chlorine, Cl₂', 'bleaches damp litmus paper'], ['hydrogen, H₂', 'a lighted splint gives a squeaky pop'], ['oxygen, O₂', 'relights a glowing splint']]) + `
+  <h3>Flame tests</h3>` + tbl(['metal ion', 'flame colour'], [['lithium, Li⁺', 'red'], ['sodium, Na⁺', 'yellow'], ['potassium, K⁺', 'lilac'], ['calcium, Ca²⁺', 'orange-red'], ['barium, Ba²⁺', 'light green'], ['copper(II), Cu²⁺', 'blue-green']]) + `</div></details>`;
+const PR_SLOTS = [{ k: 'method' }, { k: 'data' }, { k: 'qa' }, { k: 'plan' }];
+const GRAPH_PTS = ['The ==axes are labelled== with the quantity and the unit', 'An ==even scale== that uses more than half of the grid', 'All points ==plotted accurately== (small crosses)', 'A ==smooth line of best fit== (not dot to dot) or ruled lines where the data is straight'];
+const PR_BANK = {
+  method: [
+    { t: 'Preparing crystals of magnesium sulfate', intro: '<p>A student makes hydrated magnesium sulfate crystals from magnesium oxide and dilute sulfuric acid.</p><ol><li>Pour 40 cm³ of dilute sulfuric acid into a beaker and warm it.</li><li>Add magnesium oxide in small portions, stirring, until no more dissolves.</li><li>Filter the mixture.</li><li>Heat the filtrate until about half of the water has evaporated.</li><li>Leave the solution to cool and crystals form. Filter the crystals and dry them.</li></ol>',
+      parts: [
+        { q: 'State one observation made in step 2.', m: 1, p: ['The ==white solid dissolves== (disappears)'] },
+        { q: 'Explain why magnesium oxide is added until no more dissolves.', m: 1, p: ['So that all the ==acid has reacted== (the oxide is in excess)'] },
+        { q: 'Name the residue in step 3.', m: 1, p: ['==Excess magnesium oxide=='] },
+        { q: 'Name the piece of apparatus used to support the filter paper in step 3.', m: 1, p: ['==Filter funnel=='] },
+        { q: 'Explain why the filtrate is heated until only about half the water has evaporated and not until it is completely dry.', m: 2, p: ['To make a ==saturated solution== so that crystals form on cooling', 'Heating to dryness would give a ==powder== (and hydrated crystals would lose water)'] },
+        { q: 'Name the salt formed.', m: 1, p: ['==Magnesium sulfate=='] },
+        { q: 'Write the word equation for the reaction in step 2.', m: 1, p: ['magnesium oxide + sulfuric acid → ==magnesium sulfate + water=='] }
+      ] },
+    { t: 'Distillation of salty water', intro: '<p>A student separates pure water from salty water. The salty water and some anti-bumping granules are in a flask heated with a Bunsen burner. A thermometer is in the neck of the flask with its bulb level with the side arm. The vapour passes through a Liebig condenser. Cold water enters the condenser at the bottom and leaves at the top. The liquid that drips out is collected in a beaker.</p>',
+      parts: [
+        { q: 'Name the process used to separate the pure water from the salty water.', m: 1, p: ['==Distillation=='] },
+        { q: 'Explain why the cold water enters the condenser at the bottom.', m: 1, p: ['So the condenser ==stays full of water== and the cooling is more efficient (the water flows against the vapour)'] },
+        { q: 'State what happens to the water vapour in the condenser.', m: 1, p: ['It ==condenses== (turns into liquid)'] },
+        { q: 'State the reading on the thermometer while pure water distils.', m: 1, p: ['==100 °C=='] },
+        { q: 'Describe one test that shows the liquid collected is water and one test that shows it is pure.', m: 2, p: ['Water: it turns ==anhydrous copper(II) sulfate from white to blue== (or cobalt chloride paper from blue to pink)', 'Pure: it has a ==boiling point of exactly 100 °C== (or leaves no residue on evaporation)'] },
+        { q: 'Explain why the bulb of the thermometer must be level with the side arm.', m: 1, p: ['So that it measures the ==temperature of the vapour== that is distilling'] },
+        { q: 'Explain why the salt stays in the flask.', m: 1, p: ['The salt has a ==much higher boiling point== (it does not evaporate)'] }
+      ] },
+    { t: 'Chromatography of colourings', intro: '<p>A student uses paper chromatography to find out which of three food colourings, P, Q and R, are in a sweet, S. The student draws a start line and puts a spot of each colouring and a spot of the dye from the sweet on it. The paper is placed in water. Colourings P and R each give one spot. Colouring Q gives two spots. The dye from the sweet gives two spots, which are at the same heights as the two spots from Q.</p>',
+      parts: [
+        { q: 'Explain why the start line is drawn in pencil and not in ink.', m: 1, p: ['Pencil is ==insoluble== and does not run (ink would dissolve in the solvent)'] },
+        { q: 'Explain why the start line must be above the level of the solvent.', m: 1, p: ['So that the spots ==do not dissolve into the solvent== in the beaker'] },
+        { q: 'State which colouring is in the sweet and give a reason.', m: 2, p: ['Colouring ==Q==', 'The two spots from the sweet are at the ==same heights== as the two spots from Q'] },
+        { q: 'A spot moves 3.6 cm while the solvent front moves 9.0 cm. Calculate the R<sub>f</sub> value.', m: 2, p: ['R<sub>f</sub> = ==distance moved by spot ÷ distance moved by solvent==', '3.6 ÷ 9.0 = ==0.40=='] },
+        { q: 'Explain why the position of the solvent front is marked as soon as the paper is removed.', m: 1, p: ['The solvent ==evaporates==, so the distance has to be measured before it dries'] },
+        { q: 'State what the single spot from colouring R shows.', m: 1, p: ['R is a ==pure== single substance (not a mixture)'] }
+      ] }
+  ],
+  data: [
+    { t: 'Rate of reaction of magnesium and acid', intro: '<p>A student reacts magnesium ribbon with an excess of dilute hydrochloric acid. The hydrogen gas is collected in a gas syringe and the volume is read every 10 seconds.</p>' + tbl(['time / s', '0', '10', '20', '30', '40', '50', '60'], [['total volume of gas / cm³', '0', '18', '31', '40', '46', '48', '48']]),
+      parts: [
+        { q: 'Name the gas collected in the gas syringe.', m: 1, p: ['==Hydrogen=='] },
+        { q: 'State the independent variable and the dependent variable.', m: 2, p: ['independent: ==time==', 'dependent: the ==total volume of gas==' ] },
+        { q: 'Plot a graph of total volume of gas (y-axis) against time (x-axis) on graph paper and draw a smooth curve.', m: 4, p: GRAPH_PTS },
+        { q: 'Use your graph to estimate the volume of gas at 25 s. Show how you did this.', m: 2, p: ['==Construction lines== on the graph at 25 s', 'An estimate between ==35 and 37 cm³=='] },
+        { q: 'State the time at which the reaction finished.', m: 1, p: ['About ==50 s== (the volume stops rising)'] },
+        { q: 'Describe how the rate of reaction changes during the experiment and explain why.', m: 3, p: ['The rate is ==fastest at the start== (the steepest part of the curve)', 'The rate ==decreases== and the curve becomes flat', 'The ==concentration of acid falls== and the magnesium is used up'] },
+        { q: 'Sketch on your graph the curve for the same experiment at a higher temperature.', m: 2, p: ['A ==steeper== curve at the start', 'It levels off at the ==same final volume== (48 cm³)'] },
+        { q: 'Calculate the mean rate of reaction in the first 20 seconds.', m: 2, p: ['31 ÷ 20', '==1.55 cm³ per second=='] },
+        { q: 'Suggest why a gas syringe is used to measure the volume of gas.', m: 1, p: ['It measures the ==volume accurately== and the gas does not dissolve or escape'] }
+      ] },
+    { t: 'Titration of sodium hydroxide with hydrochloric acid', intro: '<p>A student uses a pipette to put 25.0 cm³ of sodium hydroxide solution, concentration 0.100 mol per dm³, into a conical flask on a white tile. A few drops of indicator are added. Hydrochloric acid of unknown concentration is added from a burette. The student does one rough titration and three accurate titrations. NaOH + HCl → NaCl + H₂O</p>' + tbl(['titration', 'rough', '1', '2', '3'], [['final burette reading / cm³', '25.4', '24.6', '24.2', '24.6'], ['initial burette reading / cm³', '0.0', '0.5', '0.2', '0.4']]),
+      parts: [
+        { q: 'Calculate the titre (volume of acid added) for each titration.', m: 3, p: ['rough: 25.4 − 0.0 = ==25.4 cm³==', 'titration 1: ==24.1 cm³== and titration 2: ==24.0 cm³==', 'titration 3: ==24.2 cm³=='] },
+        { q: 'Calculate the mean titre using the accurate results.', m: 2, p: ['Use ==titrations 1, 2 and 3== (not the rough one)', '(24.1 + 24.0 + 24.2) ÷ 3 = ==24.1 cm³=='] },
+        { q: 'Explain why a rough titration is done first.', m: 1, p: ['To find the ==approximate end-point== so the accurate ones can be done slowly near it'] },
+        { q: 'State the purpose of the indicator.', m: 1, p: ['It ==changes colour== at the end-point (when the acid has neutralised the alkali)'] },
+        { q: 'Calculate the number of moles of sodium hydroxide in the flask.', m: 2, p: ['25.0 ÷ 1000 = 0.0250 dm³', '0.0250 × 0.100 = ==0.00250 mol=='] },
+        { q: 'State the number of moles of hydrochloric acid that reacted.', m: 1, p: ['==0.00250 mol== (the ratio is 1 : 1)'] },
+        { q: 'Calculate the concentration of the hydrochloric acid in mol per dm³.', m: 2, p: ['volume of acid = 24.1 ÷ 1000 = ==0.0241 dm³==', '0.00250 ÷ 0.0241 = ==0.104 mol per dm³=='] },
+        { q: 'Name the apparatus used to measure exactly 25.0 cm³ of sodium hydroxide.', m: 1, p: ['A ==pipette=='] },
+        { q: 'Explain why the burette is rinsed with the acid before use.', m: 1, p: ['To remove ==water== that would dilute the acid'] },
+        { q: 'Explain why the flask is placed on a white tile.', m: 1, p: ['So the ==colour change== can be seen clearly'] },
+        { q: 'Suggest two possible sources of error.', m: 2, p: ['Reading the ==meniscus== from the wrong angle', 'Adding the acid ==too quickly near the end-point== / air bubble in the burette tip'] },
+        { q: 'State one safety precaution.', m: 1, p: ['Wear ==eye protection=='] }
+      ] },
+    { t: 'Temperature change of a displacement reaction', intro: '<p>A student adds 2.0 g of zinc powder to different volumes of copper(II) sulfate solution in a polystyrene cup and stirs. The student records the highest temperature reached.</p>' + tbl(['volume of copper(II) sulfate solution / cm³', 'initial temperature / °C', 'highest temperature / °C'], [['10', '20.0', '25.0'], ['20', '20.0', '30.0'], ['30', '20.5', '35.5'], ['40', '20.0', '35.0'], ['50', '20.0', '35.0']]),
+      parts: [
+        { q: 'Calculate the temperature rise for each experiment.', m: 3, p: ['10 cm³: ==5.0 °C== and 20 cm³: ==10.0 °C==', '30 cm³: ==15.0 °C==', '40 cm³ and 50 cm³: ==15.0 °C== each'] },
+        { q: 'Plot a graph of temperature rise (y-axis) against volume (x-axis) on graph paper. Draw two straight lines of best fit.', m: 4, p: GRAPH_PTS },
+        { q: 'Use your graph to find the volume of copper(II) sulfate solution at which the two lines cross.', m: 2, p: ['The lines are ==extended until they cross==', '==30 cm³=='] },
+        { q: 'Explain why the temperature rise is the same for 40 cm³ and 50 cm³.', m: 2, p: ['The ==zinc is the limiting reactant== (all used up)', 'So the ==same amount of energy== is released'] },
+        { q: 'Explain why a polystyrene cup is used.', m: 2, p: ['Polystyrene is a ==poor conductor of heat==', 'So there is ==less heat loss== and the temperature rise is more accurate'] },
+        { q: 'State whether the reaction is exothermic or endothermic and give a reason.', m: 1, p: ['==Exothermic==: the temperature rises'] },
+        { q: 'Suggest two improvements to the method.', m: 2, p: ['Put a ==lid== on the cup', '==Stir== all the time / use a digital thermometer / repeat the experiment (any two)'] },
+        { q: 'State the colour change of the solution as the reaction takes place.', m: 1, p: ['==Blue to colourless== (the blue fades)'] },
+        { q: 'State one safety precaution.', m: 1, p: ['Wear ==eye protection== / wash hands after use of copper salts'] }
+      ] }
+  ],
+  qa: [
+    { t: 'Qualitative analysis: solid A and solution B', intro: '<p>A student tests solid A and solution B. Use the notes for qualitative analysis. Solution B is aqueous zinc chloride.</p>' + tbl(['tests on solid A', 'observations'], [['Test 1: dissolve A in water. Add aqueous sodium hydroxide dropwise then in excess.', 'blue solution; light blue precipitate which does not dissolve in excess'], ['Test 2: to a second portion of the solution add dilute nitric acid and then aqueous barium nitrate.', 'white precipitate']]),
+      parts: [
+        { q: 'Identify the cation in solid A. Give a reason.', m: 2, p: ['==Copper(II)== (Cu²⁺)', 'A ==light blue precipitate== insoluble in excess sodium hydroxide'] },
+        { q: 'Identify the anion in solid A.', m: 1, p: ['==Sulfate== (SO₄²⁻)'] },
+        { q: 'Name solid A.', m: 1, p: ['==Copper(II) sulfate=='] },
+        { q: 'Record the observations when aqueous ammonia is added dropwise and then in excess to solution B.', m: 2, p: ['A ==white precipitate==', 'It ==dissolves in excess== to give a colourless solution'] },
+        { q: 'Describe a test and the observations to show that solution B contains chloride ions.', m: 2, p: ['Add ==dilute nitric acid== and then ==aqueous silver nitrate==', 'A ==white precipitate== forms'] }
+      ] },
+    { t: 'Qualitative analysis: solid C and solution D', intro: '<p>A student tests solid C and solution D. Use the notes for qualitative analysis. Solution D is aqueous ammonium chloride.</p>' + tbl(['tests on solid C', 'observations'], [['Test 1: dissolve C in water. Add aqueous sodium hydroxide dropwise then in excess.', 'pale green solution; green precipitate which does not dissolve in excess and turns brown near the surface'], ['Test 2: to a second portion of the solution add dilute nitric acid and then aqueous barium nitrate.', 'white precipitate']]),
+      parts: [
+        { q: 'Identify the cation in solid C. Give a reason.', m: 2, p: ['==Iron(II)== (Fe²⁺)', 'A ==green precipitate== insoluble in excess that turns brown'] },
+        { q: 'Identify the anion in solid C.', m: 1, p: ['==Sulfate=='] },
+        { q: 'Name solid C.', m: 1, p: ['==Iron(II) sulfate=='] },
+        { q: 'Record the observations when aqueous sodium hydroxide is added to solution D and the mixture is warmed.', m: 2, p: ['==Ammonia gas== is given off', 'It turns ==damp red litmus paper blue=='] },
+        { q: 'Describe a test and the observations to show that solution D contains chloride ions.', m: 2, p: ['Add ==dilute nitric acid== then ==aqueous silver nitrate==', 'A ==white precipitate== forms'] }
+      ] },
+    { t: 'Qualitative analysis: solid E and solution F', intro: '<p>A student tests solid E and solution F. Use the notes for qualitative analysis. Solution F is aqueous potassium iodide.</p>' + tbl(['tests on solid E', 'observations'], [['Test 1: add dilute hydrochloric acid to E. Test the gas given off with limewater.', 'effervescence; the limewater turns milky'], ['Test 2: dissolve E in dilute hydrochloric acid. Add aqueous sodium hydroxide dropwise then in excess.', 'white precipitate which does not dissolve in excess']]),
+      parts: [
+        { q: 'Identify the gas given off in test 1 and the anion in solid E.', m: 2, p: ['The gas is ==carbon dioxide==', 'The anion is ==carbonate== (CO₃²⁻)'] },
+        { q: 'Identify the cation in solid E.', m: 1, p: ['==Calcium== (Ca²⁺)'] },
+        { q: 'Name solid E.', m: 1, p: ['==Calcium carbonate=='] },
+        { q: 'Describe a test and the observations to show that solution F contains iodide ions.', m: 2, p: ['Add ==dilute nitric acid== then ==aqueous silver nitrate==', 'A ==yellow precipitate== forms'] },
+        { q: 'Describe how to do a flame test on solution F and state the colour of the flame.', m: 2, p: ['Dip a ==clean wire loop== in the solution and hold it in a ==Bunsen flame==', 'The flame is ==lilac== (potassium)'] }
+      ] }
+  ],
+  plan: [
+    { t: 'Plan: reactivity of metals', intro: '<p>Plan an investigation to compare the reactivity of three metals, magnesium, zinc and copper, using dilute hydrochloric acid. You are provided with strips of each metal, dilute hydrochloric acid and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: the ==metal== (magnesium, zinc, copper)', 'Dependent variable: the ==volume of gas== (or the time for bubbling to stop / the temperature rise) in a set time', 'Apparatus: ==boiling tubes==, measuring cylinder, gas syringe or delivery tube, stopwatch, thermometer', 'Control: the same ==volume and concentration of acid==, the same size of metal and the same temperature', '==Repeat== each metal and calculate a mean', 'Conclusion: the metal that gives the ==fastest reaction== is the most reactive; wear eye protection (hydrogen is flammable)'] }] },
+    { t: 'Plan: temperature and rate of reaction', intro: '<p>Plan an investigation to find the effect of temperature on the rate of reaction between sodium thiosulfate solution and dilute hydrochloric acid. The mixture turns cloudy as sulfur forms. You are provided with both solutions and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: ==temperature== (for example 20, 30, 40, 50, 60 °C)', 'Dependent variable: the ==time for a cross under the flask to disappear==', 'Apparatus: conical flask, paper with a cross, ==water bath==, thermometer, stopwatch, measuring cylinders', 'Control: the same ==volume and concentration== of each solution', '==Repeat== and calculate a mean', '==Plot a graph== of time (or 1 ÷ time) against temperature; carry out in a ventilated area and wear eye protection (sulfur dioxide)'] }] },
+    { t: 'Plan: antacid tablets', intro: '<p>Plan an investigation to compare how much stomach acid three brands of antacid tablet can neutralise. You are provided with the tablets, dilute hydrochloric acid, an indicator and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: the ==brand of tablet==', 'Dependent variable: the ==volume of acid needed== to neutralise the tablet', 'Apparatus: ==burette==, conical flask, indicator, balance, mortar', 'Control: the same ==mass of tablet==, volume of water and concentration of acid', 'Crush and dissolve each tablet; add acid until the ==indicator changes colour==; ==repeat== and calculate a mean', 'The tablet that needs the ==most acid== is best; wear eye protection'] }] },
+    { t: 'Plan: concentration and rate of reaction', intro: '<p>Plan an investigation to find the effect of the concentration of hydrochloric acid on the rate of reaction with marble chips (calcium carbonate). You are provided with marble chips, hydrochloric acid and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: the ==concentration of acid== (diluted with water to give different values)', 'Dependent variable: the ==volume of carbon dioxide== in a set time (or the loss of mass)', 'Apparatus: conical flask, ==gas syringe==, stopwatch, measuring cylinder, balance', 'Control: the same ==mass and size of marble chips==, volume of acid and temperature', '==Repeat== and calculate a mean', '==Plot a graph== of volume (or rate) against concentration; wear eye protection'] }] }
+  ]
+};
+
+CH.skills = {
+  code: 'Practical', name: 'Practical skills',
+  lede: 'Tables, graphs, titrations, qualitative analysis and planning: the skills tested in Paper 5 and Paper 6.',
+  learn: [
+    { h: 'Variables', list: ['The ==independent variable== is what you ==change==.', 'The ==dependent variable== is what you ==measure==.', '==Control variables== are kept ==the same== so the test is fair (temperature, volume, concentration, mass).', '==Repeat== and take a ==mean== to make results more ==reliable==.'] },
+    { h: 'Tables and graphs', list: ['Rule a table. ==Independent variable in the first column==. ==Units in the headings==. Same number of ==decimal places==.', 'Graph: ==independent variable on the x-axis==. Label both axes with ==units==. Use an ==even scale== that fills more than half of the grid.', 'Plot with ==small crosses==. Draw a ==smooth curve== or a ==ruled straight line== of best fit. ==Do not join dot to dot==.', 'To read a value use ==dashed construction lines==.'] },
+    { h: 'Titration', list: ['Use a ==pipette== for the alkali and a ==burette== for the acid, with an indicator and a ==white tile==.', 'Do a ==rough== titration first. Then do accurate ones until two or three results are within ==0.2 cm³== (==concordant==).', 'Find the ==mean titre== from the concordant results.', '==Moles = concentration × volume (in dm³)==. Use the ==mole ratio== from the equation. ==Concentration = moles ÷ volume==.'], f: ['moles = concentration × volume (dm³)', 'concentration = moles ÷ volume (dm³)'] },
+    { h: 'Qualitative analysis', list: ['Add ==sodium hydroxide== or ==ammonia== a little at a time (==dropwise==) and then ==in excess==. Note the ==colour== of the precipitate and if it ==dissolves==.', 'For ==anions== use ==dilute nitric acid== first, then ==silver nitrate== (halides) or ==barium nitrate== (sulfate).', 'Always give the ==colour== and the ==state== (precipitate, effervescence, solution).', 'Use the ==notes for qualitative analysis== printed in the paper.'] },
+    { h: 'Errors, improvements and safety', list: ['Errors: reading a ==meniscus== or thermometer, ==heat loss==, using a large measuring cylinder, adding too quickly near the end-point.', 'Improvements: ==repeat==, use a ==pipette or burette== instead of a cylinder, use a ==lid== or ==polystyrene cup==, ==stir==, use a ==water bath==.', 'Safety: ==eye protection==, ventilation for gases, careful with hot apparatus, tie back hair.'] },
+    { h: 'Planning an investigation (6 marks)', list: ['What you will ==change== and the ==range==.', 'What you will ==measure== and how.', 'The ==apparatus==.', 'The ==variables to keep the same==.', '==Repeat== and calculate a ==mean==.', 'How you will ==use the results== (graph, conclusion) and a ==safety== point.'] }
+  ],
+  mistakes: ['Joining the points ==dot to dot==.', 'Using the ==rough titre== in the mean.', 'Forgetting to add the alkali ==in excess== in the cation tests.', 'Saying a precipitate is “==cloudy==” instead of giving its ==colour==.', 'Writing ==“be careful”== as a safety point.', 'Not ==converting cm³ to dm³== in mole calculations.'],
+  diagrams: [{ svg: svgGraphRules, cap: 'A ==well drawn graph==: labelled axes, even scale, crosses, smooth line and dashed lines to read a value.' }],
+  worked: [
+    W('A titration uses 25.0 cm³ of 0.100 mol per dm³ NaOH. The mean titre of HCl is 24.0 cm³. Calculate the concentration of the acid. NaOH + HCl → NaCl + H₂O', 'Moles of alkali first, then ==use the 1 : 1 ratio==, then divide by the acid volume.', 'Convert cm³ to dm³ by dividing by 1000.', 'moles = c × V',
+      [['Moles of NaOH', '0.0250 dm³ × 0.100 = 0.00250 mol', ''], ['Moles of HCl', '1 : 1, so 0.00250 mol', 'From the equation.'], ['Volume of acid', '24.0 ÷ 1000 = 0.0240 dm³', ''], ['Concentration', '0.00250 ÷ 0.0240 = 0.104 mol per dm³', '']],
+      [['n(NaOH)', '0.00250 mol', 0], ['n(HCl)', '0.00250 mol', 1], ['V(acid)', '0.0240 dm³', 2], ['c(HCl)', '0.104 mol/dm³', 3]]),
+    W('Solution X gives a blue precipitate with aqueous sodium hydroxide. With excess aqueous ammonia the precipitate dissolves to give a dark blue solution. Identify the cation.', 'Match the ==colour== and the ==behaviour in excess== to the notes.', 'Quote both observations in the answer.', 'Match the notes',
+      [['Colour of the precipitate', 'Light blue with sodium hydroxide', 'Only copper(II) gives a blue precipitate.'], ['Behaviour with ammonia', 'Dissolves in excess to a dark blue solution', 'A very clear sign of copper(II).'], ['Answer', 'The cation is copper(II), Cu²⁺', '']],
+      [['NaOH', 'light blue precipitate', 0], ['Excess NH₃', 'dark blue solution', 1], ['Cation', 'Cu²⁺', 2]], true)
+  ],
+  drill: undefined,
+  quiz: [
+    MQ('Which is the independent variable when investigating how temperature affects the rate of a reaction?', 'temperature', ['rate of reaction', 'volume of acid', 'the mass of product'], 'You ==change== the ==temperature==.'),
+    MQ('Which titre should not be used to calculate the mean titre?', 'the rough titre', ['a concordant titre', 'the first accurate titre', 'the third accurate titre'], 'The ==rough== titration is only a guide.'),
+    MQ('A precipitate forms with sodium hydroxide and dissolves in excess to give a colourless solution. The cation could be…', 'zinc or aluminium', ['copper(II)', 'iron(II)', 'calcium'], '==Zinc== and ==aluminium== give white precipitates that dissolve in excess sodium hydroxide.'),
+    MQ('Which reagent is added after dilute nitric acid to test for chloride ions?', 'silver nitrate', ['barium nitrate', 'sodium hydroxide', 'limewater'], '==Silver nitrate== gives a ==white precipitate== with chloride.'),
+    MQ('What is the purpose of a white tile under a titration flask?', 'to make the colour change easier to see', ['to keep the flask warm', 'to stop spills', 'to measure the mass'], 'A ==white background== makes the end-point clear.'),
+    MQ('Which change makes the mean of results more reliable?', 'repeating the experiment', ['using a larger flask', 'using a faster stopwatch', 'using only one result'], '==Repeats== make results more reliable.')
+  ],
+  exam: [
+    { q: 'Describe how to carry out a titration to find the volume of acid that neutralises 25.0 cm³ of alkali.', m: 4, p: ['Measure 25.0 cm³ of alkali with a ==pipette== into a flask and add ==indicator==', 'Add the acid from a ==burette== until the indicator ==changes colour==', 'Do a ==rough== titration first, then repeat accurately', 'Find the ==mean== of concordant titres'] },
+    { q: 'Describe how to test a solution to find out whether it contains copper(II) ions.', m: 3, p: ['Add ==aqueous sodium hydroxide== dropwise then in excess', 'A ==light blue precipitate==', 'It ==does not dissolve in excess==' ] },
+    { q: 'State two ways of improving the accuracy of an experiment to measure the temperature change of a reaction in a cup.', m: 2, p: ['Use a ==lid== and a ==polystyrene cup== to reduce heat loss', '==Stir== / use a digital thermometer / repeat and take a mean'] },
+    { q: 'List four things that should be included in a plan for an investigation.', m: 4, p: ['What will be ==changed== (and the range)', 'What will be ==measured==', 'The ==variables kept the same==', '==Repeats== and a mean / how the results are used'] }
+  ]
+};
+
+/* ---------- practical paper (alternative to practical, Paper 6 style): 40 marks, 1 hour ---------- */
+/* Each question is a task from PR_BANK with parts that add up to the marks of its slot (PR_SLOTS). Tasks give the method and results; the student draws tables and graphs on paper, then ticks the mark points. */
+let PRQ = [], PRLIST = [];
+function buildPrac(){
+  const seen = store.prseen = store.prseen || {}, used = {}, out = [];
+  PR_SLOTS.forEach(sl => { const bank = PR_BANK[sl.k]; used[sl.k] = used[sl.k] || new Set();
+    const c = bank.map((t, i) => ({ i, s: (seen[sl.k + i] || 0) * 2 + Math.random() })).filter(x => !used[sl.k].has(x.i)).sort((a, b) => a.s - b.s)[0];
+    used[sl.k].add(c.i); seen[sl.k + c.i] = (seen[sl.k + c.i] || 0) + 1; out.push([sl.k, c.i]); });
+  return out;
+}
+function prRebuild(sel){
+  PRQ = sel.map(([k, i], n) => { const t = PR_BANK[k][i]; return Object.assign({}, t, { n: n + 1, m: t.parts.reduce((s, p) => s + p.m, 0) }); });
+  PRLIST = []; PRQ.forEach(t => t.parts.forEach((p, j) => PRLIST.push(Object.assign({}, p, { lbl: t.n + ' (' + 'abcdefghijkl'[j] + ')', qn: t.n }))));
+}
+let prTimer = null, prLeft = 60 * 60;
+function drawPrac(){
+  const sel = buildPrac(); store.prq = sel; prRebuild(sel); prLeft = 60 * 60;
+  Object.keys(store.ticks).forEach(k => { if (k.startsWith('prac-') || k.startsWith('open-prac-')) delete store.ticks[k]; }); save();
+}
+(function(){ if (Array.isArray(store.prq) && store.prq.length === PR_SLOTS.length && store.prq.every(([k, i]) => PR_BANK[k] && PR_BANK[k][i])) prRebuild(store.prq); })();
+function renderPrac(){
+  if (!PRQ.length) drawPrac();
+  const [g, t] = examScore('prac', PRLIST);
+  let idx = 0; const cards = PRQ.map(q => `<h3 class="qgroup">Question ${q.n} <span class="pm">[${q.m} marks]</span><small>${q.t}</small></h3><div class="card prac">${q.intro}</div>` + q.parts.map(() => examCard('prac-' + idx, PRLIST[idx], idx++)).join('')).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge ${PR_CODE} practical skills</span><h2>Practical paper</h2>
+    <p class="lede">Alternative to Practical (Paper 6) style: ${t} marks, 1 hour. ${PR_LEDE}</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==1 hour==. Total: ==${t} marks==.</li>
+      <li>Answer ==all== the questions on paper. You ==may use a calculator==.</li>
+      <li>==Draw tables and graphs on paper== with a ruler and a sharp pencil. Then tap the mark points you earned.</li>
+      <li>==Show your working== and give the ==units==.</li>
+      <li>If your school gives the hands-on Paper 5 instead, practise the skills in the Practical skills tab and use this paper for the written parts.</li></ul></div>
+    ${PR_NOTES || ''}
+    <div class="card"><div class="scorebar"><div class="timer" id="prclock">${fmtTime(prLeft)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
+      <div class="row"><button class="btn primary" id="prgo">${prTimer ? 'Pause' : 'Start timer'}</button><button class="btn ghost" id="prreset">Reset timer</button><button class="btn ghost" id="prnew">New paper (different tasks)</button><button class="btn ghost" id="prclear">Clear my marks</button></div></div>
+    ${cards}</div>`.replace(/==(.+?)==/g, '<mark class="kw">$1</mark>');
+}
+function bindPrac(){
+  document.getElementById('prgo').onclick = () => {
+    if (prTimer) { clearInterval(prTimer); prTimer = null; document.getElementById('prgo').textContent = 'Resume'; return; }
+    document.getElementById('prgo').textContent = 'Pause';
+    prTimer = setInterval(() => { prLeft = Math.max(0, prLeft - 1); const c = document.getElementById('prclock'); if (c) { c.textContent = prLeft ? fmtTime(prLeft) : 'Time up'; c.classList.toggle('low', prLeft < 300); } if (!prLeft) { clearInterval(prTimer); prTimer = null; } }, 1000);
+  };
+  document.getElementById('prreset').onclick = () => { clearInterval(prTimer); prTimer = null; prLeft = 60 * 60; render(); };
+  document.getElementById('prnew').onclick = () => { clearInterval(prTimer); prTimer = null; drawPrac(); render(); };
+  document.getElementById('prclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('prac-')) delete store.ticks[k]; }); save(); render(); };
+}
+
 /* ---------- structured theory papers in the Cambridge 0620 pattern ---------- */
 /* Measured from the May/June 2026 papers: Paper 3 (Core) 0620/31 and Paper 4 (Extended) 0620/41, 80 marks, 1 hour 15 minutes, answer all questions.
    Each paper has 7 questions of 7 to 16 marks (Core 10, 11, 12, 12, 9, 16, 10; Extended 7, 10, 10, 10, 15, 16, 12), in syllabus order, with parts (a), (b), (c) mixing recall, equations, calculations and explanations. */
@@ -2315,7 +2539,7 @@ function bindMC(){
 }
 
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['states','Topic 1','States of matter'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['emp','Topic 3','Empirical formulae'],['rates','Topic 6','Rates'],['redox','Topic 7','Redox, industry'],['energ','Topic 5','Energetics'],['electro','Topic 4','Electrolysis'],['metals','Topic 9','Metals'],['air','Topic 10','Air and water'],['fert','Topic 10','Fertilisers'],['hydro','Topic 11','Hydrocarbons'],['organics','Topic 11','Alcohols, polymers'],['macro','Topic 11','Proteins, plastics'],['analysis','Topic 12','Analysis'],['mc','','MC paper'],['mock','','Theory paper']];
+const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['states','Topic 1','States of matter'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['emp','Topic 3','Empirical formulae'],['rates','Topic 6','Rates'],['redox','Topic 7','Redox, industry'],['energ','Topic 5','Energetics'],['electro','Topic 4','Electrolysis'],['metals','Topic 9','Metals'],['air','Topic 10','Air and water'],['fert','Topic 10','Fertilisers'],['hydro','Topic 11','Hydrocarbons'],['organics','Topic 11','Alcohols, polymers'],['macro','Topic 11','Proteins, plastics'],['analysis','Topic 12','Analysis'],['skills','Practical','Practical skills'],['mc','','MC paper'],['mock','','Theory paper'],['prac','','Practical paper']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2329,11 +2553,11 @@ document.getElementById('tabs').addEventListener('click', e => {
 function examScore(key, list){ let got = 0, tot = 0; list.forEach((q,i) => { tot += q.m; got += Math.min(q.m, (store.ticks[key+'-'+i] || []).length); }); return [got, tot]; }
 function render(){
   const v = document.getElementById('view');
-  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : cur === 'mc' ? renderMC() : renderChapter(cur);
+  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : cur === 'mc' ? renderMC() : cur === 'prac' ? renderPrac() : renderChapter(cur);
   bindView();
 }
 function renderStart(){
-  const rows = ['states','atoms','bonding','displace','salts','sepn','eqn','mole','emp','rates','redox','energ','electro','metals','air','fert','hydro','organics','macro','analysis'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+  const rows = ['states','atoms','bonding','displace','salts','sepn','eqn','mole','emp','rates','redox','energ','electro','metals','air','fert','hydro','organics','macro','analysis','skills'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Chemistry: the whole syllabus</h2>
@@ -2498,7 +2722,7 @@ for (const key in CH) CH[key].worked.forEach(w => { if (w.r && !w.board0) { w.bo
 
 function renderChapter(k){
   const c = CH[k];
-  const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],['drill','Drill'],['quiz','Quiz'],['exam','Exam Qs']];
+  const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],...(c.drill?[['drill','Drill']]:[]),['quiz','Quiz'],['exam','Exam Qs']];
   let body = '';
   if (sub_ === 'learn') body = c.learn.map(cardHTML).join('') + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
   if (sub_ === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
@@ -2549,8 +2773,9 @@ function renderMock(){
 let quizScore = 0;
 function bindView(){
   quizScore = 0;
-  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && sub_ === 'drill') newDrill();
+  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && cur !== 'prac' && sub_ === 'drill') newDrill();
   if (cur === 'mc') bindMC();
+  if (cur === 'prac') bindPrac();
   if (cur === 'mock') {
     document.getElementById('tgo').onclick = () => {
       if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
@@ -2589,7 +2814,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
       store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? THQ : CH[cur].exam;
+      const list = cur === 'mock' ? THQ : cur === 'prac' ? PRLIST : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
 });
 

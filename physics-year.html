@@ -34,6 +34,7 @@ svg .mono{font-family:var(--mono)}
 .pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
 .qgroup{margin:18px 0 -6px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
 .qgroup small{color:var(--muted);font-family:var(--body);font-weight:400;font-size:.85rem}
+.tblwrap{overflow-x:auto;margin:10px 0}.rt{border-collapse:collapse;font-size:.92rem}.rt th,.rt td{border:1px solid var(--line);padding:6px 10px;text-align:center}.rt th{background:var(--accent-soft)}.prac p{margin:0 0 8px}
 </style>
 <title>Physics Full-Year Pack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2218,6 +2219,169 @@ const EXTRA2 = {
 };
 for (const k in EXTRA2) CH[k].exam.push(...EXTRA2[k]);
 
+const tbl = (h, rows) => `<div class="tblwrap"><table class="rt"><thead><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+/* ---------- practical skills: graph rules diagram ---------- */
+function svgGraphRules(){
+  const X = x => 90 + x * 76, Y = y => 250 - y * 38;
+  const pts = [[0.4, 0.9], [1.3, 2.1], [2.4, 3.1], [3.5, 3.8], [4.5, 4.2]];
+  const cross = ([x, y]) => `<path d="M${X(x) - 6} ${Y(y) - 6} L${X(x) + 6} ${Y(y) + 6} M${X(x) - 6} ${Y(y) + 6} L${X(x) + 6} ${Y(y) - 6}" class="acc"/>`;
+  const note = (y, n, a, b) => `${T(520, y, n + '  ' + a, 'lbl')}${T(540, y + 20, b, 'mut')}`;
+  return `<svg viewBox="0 0 880 300" role="img" aria-label="A well drawn graph with labelled axes, even scales, crosses and a smooth line of best fit">
+  <line x1="90" y1="250" x2="470" y2="250" class="ln"/><line x1="90" y1="250" x2="90" y2="40" class="ln"/>
+  ${[0, 1, 2, 3, 4, 5].map(i => `<line x1="${X(i)}" y1="250" x2="${X(i)}" y2="256" class="thin"/>${T(X(i), 272, i * 10, 'mid mut')}`).join('')}${[0, 1, 2, 3, 4, 5].map(i => `<line x1="84" y1="${Y(i)}" x2="90" y2="${Y(i)}" class="thin"/>${T(78, Y(i) + 4, i * 2, 'end mut')}`).join('')}
+  ${T(280, 294, 'independent variable / unit', 'mid lbl')}${T(24, 30, 'dependent variable / unit', 'lbl')}
+  <path d="M${X(0)} ${Y(0.3)} C ${X(1)} ${Y(1.8)}, ${X(2.2)} ${Y(3.3)}, ${X(4.8)} ${Y(4.3)}" class="acc" fill="none"/>${pts.map(cross).join('')}
+  <line x1="${X(2.4)}" y1="250" x2="${X(2.4)}" y2="${Y(3.1)}" class="hotl" style="stroke-dasharray:5 4;stroke-width:1.6"/><line x1="90" y1="${Y(3.1)}" x2="${X(2.4)}" y2="${Y(3.1)}" class="hotl" style="stroke-dasharray:5 4;stroke-width:1.6"/>
+  ${note(50, '1', 'Independent variable on the x-axis', 'Dependent variable on the y-axis, both with units.')}${note(100, '2', 'Even scale', 'Points fill more than half of the grid.')}${note(150, '3', 'Small crosses', 'Plot every point carefully.')}${note(200, '4', 'Smooth best-fit line', 'Not dot to dot.')}${note(250, '5', 'Dashed lines', 'Show how you read a value.')}</svg>`;
+}
+
+/* ---------- Physics practical: skills chapter and task bank (original) ---------- */
+const PR_CODE = '0625', PR_LEDE = 'Four questions in the style of the real paper: three experiments with results to analyse and a plan.', PR_NOTES = '';
+const PR_SLOTS = [{ k: 'data' }, { k: 'data' }, { k: 'data' }, { k: 'plan' }];
+const GRAPH_PTS = ['The ==axes are labelled== with the quantity and the unit', 'An ==even scale== that uses more than half of the grid', 'All points ==plotted accurately== (small crosses)', 'A ==best-fit line== (ruled straight line or smooth curve) with points balanced either side'];
+const PR_BANK = {
+  data: [
+    { t: 'Extension of a spring', intro: '<p>A student hangs different loads on a spring and measures the length of the spring with a metre rule. The original length of the spring is 10.0 cm.</p>' + tbl(['load / N', '0', '1.0', '2.0', '3.0', '4.0', '5.0'], [['length of spring / cm', '10.0', '12.1', '13.9', '16.2', '18.0', '20.1']]),
+      parts: [
+        { q: 'Calculate the extension of the spring for a load of 3.0 N.', m: 1, p: ['16.2 − 10.0 = ==6.2 cm=='] },
+        { q: 'Calculate the extension for every load, then plot a graph of extension (y-axis) against load (x-axis) on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'Determine the gradient of your graph. Show clearly on the graph how you obtained the values.', m: 3, p: ['A ==large triangle== drawn on the graph (using more than half the line)', 'gradient = ==change in extension ÷ change in load== (for example 8.0 ÷ 4.0)', '==2.0 cm/N== (1.9 to 2.1)'] },
+        { q: 'State what the graph shows about the relationship between extension and load.', m: 1, p: ['The extension is ==directly proportional== to the load (a straight line through the origin)'] },
+        { q: 'Suggest two ways of improving the accuracy of the length measurements.', m: 2, p: ['Read the rule with the ==eye level with the pointer== (avoid parallax)', 'Use a ==set square== or pointer / use a rule with a finer scale / repeat the readings (any two)'] }
+      ] },
+    { t: 'Cooling of hot water', intro: '<p>A student pours hot water into a beaker and measures its temperature every minute using a thermometer.</p>' + tbl(['time / s', '0', '60', '120', '180', '240', '300'], [['temperature / °C', '80', '71', '64', '58', '53', '49']]),
+      parts: [
+        { q: 'Calculate the fall in temperature in the first 120 s.', m: 1, p: ['80 − 64 = ==16 °C=='] },
+        { q: 'Plot a graph of temperature (y-axis) against time (x-axis) on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'Use your graph to find the temperature at 150 s. Show how you did this.', m: 1, p: ['About ==61 °C== (60 to 62), with construction lines'] },
+        { q: 'Describe how the rate of cooling changes with time and explain why.', m: 2, p: ['The rate of cooling ==decreases== (the curve gets less steep)', 'The ==temperature difference== between the water and the room gets smaller, so less energy is lost each second'] },
+        { q: 'Suggest two improvements to the experiment.', m: 2, p: ['Put a ==lid== on the beaker', '==Insulate== the beaker / stir the water / use a digital thermometer (any two)'] },
+        { q: 'State one safety precaution.', m: 1, p: ['Handle the ==hot water== carefully / wear eye protection'] }
+      ] },
+    { t: 'Period of a simple pendulum', intro: '<p>A student measures the time for 20 oscillations of a pendulum for different lengths l. The period T is the time for one oscillation.</p>' + tbl(['length l / cm', '20', '40', '60', '80', '100'], [['time for 20 oscillations / s', '18.0', '25.4', '31.1', '35.9', '40.1']]),
+      parts: [
+        { q: 'Calculate T and T² for each length and complete a table with suitable headings and units.', m: 3, p: ['T = time ÷ 20: ==0.90, 1.27, 1.56, 1.80, 2.01 s==', 'T²: ==0.81, 1.61, 2.42, 3.22, 4.02 s²== (within 0.03)', 'A table with ==headings and units=='] },
+        { q: 'Plot a graph of T² (y-axis) against l in metres (x-axis) on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'Determine the gradient of the graph.', m: 2, p: ['gradient = ==(4.02 − 0.81) ÷ (1.0 − 0.2)== (a large triangle)', '==4.0 s²/m== (3.9 to 4.1)'] },
+        { q: 'The gradient is equal to 4π² ÷ g. Calculate a value for g.', m: 1, p: ['g = 4π² ÷ 4.0 = ==9.9 m/s²== (9.6 to 10.1)'] },
+        { q: 'Explain why the student times 20 oscillations rather than 1 oscillation.', m: 1, p: ['It ==reduces the effect of reaction-time error== (the percentage error is smaller)'] }
+      ] },
+    { t: 'Resistance of a wire', intro: '<p>A student connects different lengths of the same wire to a 3.0 V supply and measures the current in the circuit.</p>' + tbl(['length of wire / cm', '20', '40', '60', '80', '100'], [['current / A', '0.60', '0.31', '0.20', '0.15', '0.12']]),
+      parts: [
+        { q: 'Calculate the resistance of each length of wire using R = V ÷ I.', m: 2, p: ['R = ==V ÷ I== with V = 3.0 V', '==5.0, 9.7, 15, 20 and 25 Ω== (all correct)'] },
+        { q: 'Plot a graph of resistance (y-axis) against length (x-axis) on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'State what the graph shows about the relationship between resistance and length.', m: 1, p: ['The resistance is ==directly proportional== to the length (a straight line through the origin)'] },
+        { q: 'Determine the resistance per cm of the wire from the gradient.', m: 2, p: ['gradient = (25 − 5.0) ÷ (100 − 20)', '==0.25 Ω/cm=='] },
+        { q: 'Explain why the student should switch off the current between readings.', m: 2, p: ['The wire ==heats up== when the current is on', 'Its ==resistance increases== with temperature, so the readings would not be fair'] }
+      ] },
+    { t: 'Refraction in a glass block', intro: '<p>A student shines a ray of light into a glass block and measures the angle of incidence i and the angle of refraction r.</p>' + tbl(['angle of incidence i / °', '20', '30', '40', '50', '60'], [['angle of refraction r / °', '13', '19', '25', '31', '35']]),
+      parts: [
+        { q: 'Calculate sin i and sin r for each pair of angles and complete a table with suitable headings.', m: 3, p: ['sin i: ==0.34, 0.50, 0.64, 0.77, 0.87==', 'sin r: ==0.22, 0.33, 0.42, 0.52, 0.57== (within 0.01)', 'A table with ==headings=='] },
+        { q: 'Plot a graph of sin i (y-axis) against sin r (x-axis) on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'Determine the gradient of the graph.', m: 2, p: ['A ==large triangle== on the line (for example (0.87 − 0.34) ÷ (0.57 − 0.22))', '==1.5== (1.4 to 1.6)'] },
+        { q: 'State what the gradient represents.', m: 1, p: ['The ==refractive index== of the glass'] },
+        { q: 'Explain why the angles are measured from the normal.', m: 1, p: ['The ==angles of incidence and refraction are defined== from the normal (a line at 90° to the surface)'] }
+      ] }
+  ],
+  plan: [
+    { t: 'Plan: thermal conduction in metals', intro: '<p>Plan an experiment to compare how quickly three metal rods, A, B and C, conduct thermal energy. The rods are identical except that each is made of a different metal. You are provided with the rods, a Bunsen burner, wax, drawing pins and common laboratory apparatus.</p><p>In your plan name the other apparatus, describe the method including what you will measure, state the key variables kept constant, draw a table for the readings and explain how you will use the readings to reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 7, p: ['Apparatus: ==stopwatch==, ruler, clamp stand, heat-proof mat (and the items given)', 'Stick a ==drawing pin with wax== at the same distance along each rod and heat the ends of the rods equally', 'Measure the ==time for each pin to fall==', 'Control: the ==same length and diameter== of rod, the same distance of the pin and the same heating', '==Repeat== and calculate a mean', 'A table with headings: ==metal | time for pin to fall / s==', 'The metal with the ==shortest time== is the best conductor'] }] },
+    { t: 'Plan: surface colour and cooling', intro: '<p>Plan an experiment to find how the colour of the outside surface of a can affects the rate at which hot water in the can cools. You are provided with identical cans painted matt black, matt white and shiny silver, and common laboratory apparatus.</p><p>In your plan name the other apparatus, describe the method including what you will measure, state the key variables kept constant, draw a table for the readings and explain how you will use the readings to reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 7, p: ['Apparatus: ==thermometer==, stopwatch, kettle (hot water), measuring cylinder', 'Pour the ==same volume of hot water at the same starting temperature== into each can', 'Measure the ==temperature after a set time== (for example 10 minutes) or the time to fall by 20 °C', 'Control: the same ==volume and starting temperature== of water, lids, room conditions and position', '==Repeat== and calculate a mean', 'A table: ==colour of can | starting temperature / °C | final temperature / °C | temperature fall / °C==', 'The can with the ==largest temperature fall== cools fastest'] }] },
+    { t: 'Plan: speed of a trolley on a slope', intro: '<p>Plan an experiment to find how the speed of a trolley at the bottom of a slope depends on the height from which it is released. You are provided with a trolley, a ramp, books and common laboratory apparatus.</p><p>In your plan name the other apparatus, describe the method including what you will measure, state the key variables kept constant, draw a table for the readings and explain how you will use the readings to reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 7, p: ['Apparatus: ==metre rule==, stopwatch (or light gates), books to change the height', 'Release the trolley from rest at different ==heights== (for example 10, 15, 20, 25, 30 cm)', 'Measure the ==time to travel a fixed distance== at the bottom and calculate speed = distance ÷ time', 'Control: the ==same trolley and mass==, the same ramp surface and the same distance timed', '==Repeat== and calculate a mean', 'A table: ==height / cm | time / s | speed / m/s==', '==Plot a graph== of speed against height to see the pattern'] }] },
+    { t: 'Plan: current and p.d. for a lamp', intro: '<p>Plan an experiment to find how the current in a filament lamp depends on the potential difference (p.d.) across it. You are provided with a lamp, cells or a variable power supply, a switch, connecting leads and common laboratory apparatus.</p><p>In your plan name the other apparatus, describe the method including what you will measure, state the key variables kept constant, draw a table for the readings and explain how you will use the readings to reach a conclusion.</p>',
+      parts: [{ q: 'Write your plan.', m: 7, p: ['Apparatus: ==ammeter== in series with the lamp and ==voltmeter== in parallel across it', 'Use a ==variable resistor== (or change the number of cells) to change the p.d.', 'Measure the ==current for each p.d.== (for example 1.0, 2.0, 3.0, 4.0, 5.0 V)', 'Control: the ==same lamp==; ==switch off between readings== so the filament stays at the same starting temperature', '==Repeat== and calculate a mean', 'A table: ==p.d. / V | current / A==', '==Plot a graph== of current against p.d. and describe the curve'] }] }
+  ]
+};
+
+CH.skills = {
+  code: 'Practical', name: 'Practical skills',
+  lede: 'Measuring, tables, graphs, gradients, errors and planning: the skills tested in Paper 5 and Paper 6.',
+  learn: [
+    { h: 'Variables', list: ['The ==independent variable== is what you ==change==.', 'The ==dependent variable== is what you ==measure==.', '==Control variables== are kept ==the same==.', '==Repeat== and take a ==mean== to make results more ==reliable==.'] },
+    { h: 'Measuring', list: ['Read a scale with your ==eye level with the pointer== to avoid ==parallax==.', 'Look for a ==zero error== and correct it.', 'Write ==every reading to the same number of decimal places== as the instrument.', 'A ==micrometer screw gauge== reads to 0.01 mm. A ==ruler== reads to 1 mm. A ==stopwatch== reads to 0.1 s but your ==reaction time== is about 0.2 s.', 'Time ==many oscillations== (20) and divide, to reduce the effect of reaction time.', 'An ==ammeter== goes in ==series==. A ==voltmeter== goes in ==parallel==.'] },
+    { h: 'Tables and graphs', list: ['Rule a table. ==Independent variable first==. ==Units in the headings== (for example length / cm).', 'Graph: ==independent variable on the x-axis==. Label axes with ==units==. Use an ==even scale== that fills more than half of the grid.', 'Plot with ==small crosses==. Draw a ==ruled best-fit line== (balanced points either side) or a ==smooth curve==.', 'You do not have to start the axes at zero unless you need the origin.'] },
+    { h: 'Gradient', list: ['Draw a ==large triangle== using more than half of the line.', '==Gradient = change in y ÷ change in x==.', 'Show the triangle on the graph and write down the ==values you read==.', 'Give the ==unit== of the gradient (for example cm/N).', 'Do not use data points that are ==not on the line== to find the gradient.'], f: ['gradient = Δy ÷ Δx'] },
+    { h: 'Errors, improvements and safety', list: ['Sources of error: ==parallax==, ==reaction time==, ==heat loss==, ==zero error==, friction.', 'Improvements: ==repeat== and take a mean, use a ==larger distance or time==, use ==light gates== or a data logger, use a ==lid== or ==insulation==.', 'Do not say “be more careful”. Say ==what you would change and why==.', 'Safety: take care with ==hot water==, ==electricity==, falling masses and glass.'] },
+    { h: 'Planning an experiment (7 marks)', list: ['Name the ==apparatus==.', 'Describe the ==method==: what you change, what you measure and how.', 'State the ==variables to keep the same==.', '==Repeat== and calculate a ==mean==.', 'Draw a ==table== with headings and units.', 'Say how you will ==use the readings== (graph, comparison) to reach a ==conclusion==.'] }
+  ],
+  mistakes: ['Joining the points ==dot to dot==.', 'Using a ==small triangle== for the gradient.', 'Forgetting the ==unit== of the gradient.', 'Putting ==units in the body== of the table.', 'Using ==a single reading== when a mean is needed.', 'Writing ==“be more accurate”== with no detail.'],
+  diagrams: [{ svg: svgGraphRules, cap: 'A ==well drawn graph==: labelled axes, even scale, crosses, a best-fit line and dashed lines to read a value.' }],
+  worked: [
+    W('On a graph of extension against load, a point on the line is (1.0 N, 2.0 cm) and another is (5.0 N, 10.0 cm). Calculate the gradient.', '==Gradient = change in y ÷ change in x==.', 'Choose points far apart on the line.', 'gradient = Δy ÷ Δx',
+      [['Change in y', '10.0 − 2.0 = 8.0 cm', ''], ['Change in x', '5.0 − 1.0 = 4.0 N', ''], ['Divide', '8.0 ÷ 4.0 = 2.0', ''], ['Unit', '2.0 cm/N', 'The unit is the y unit divided by the x unit.']],
+      [['Δy', '8.0 cm', 0], ['Δx', '4.0 N', 1], ['Gradient', '2.0 cm/N', 3]]),
+    W('A pendulum makes 20 oscillations in 36 s. Calculate the period and explain why 20 oscillations were timed.', '==Period = total time ÷ number of oscillations==.', 'Timing many oscillations reduces the effect of reaction time.', 'T = t ÷ n',
+      [['Formula', 'T = t ÷ n', ''], ['Substitute', 'T = 36 ÷ 20', ''], ['Answer with unit', 'T = 1.8 s', ''], ['Reason', 'The same reaction-time error is shared over 20 swings, so the percentage error is smaller', '']],
+      [['t', '36 s', -1], ['n', '20', -1], ['T', '1.8 s', 2]])
+  ],
+  drill: undefined,
+  quiz: [
+    MQ('Which instrument should be used to measure the diameter of a thin wire most accurately?', 'a micrometer screw gauge', ['a metre rule', 'a measuring cylinder', 'a stopwatch'], 'A ==micrometer== reads to 0.01 mm.'),
+    MQ('How is a voltmeter connected to measure the p.d. across a lamp?', 'in parallel with the lamp', ['in series with the lamp', 'in series with the cell only', 'it does not matter'], 'A voltmeter goes in ==parallel==.'),
+    MQ('A line on a graph passes through (2.0, 4.0) and (6.0, 12.0). What is the gradient?', '2.0', ['0.5', '8.0', '4.0'], '(12.0 − 4.0) ÷ (6.0 − 2.0) = ==2.0==.'),
+    MQ('Why should the reading on a scale be taken with the eye level with the pointer?', 'to avoid parallax error', ['to avoid zero error', 'to avoid reaction-time error', 'to make the measurement faster'], '==Parallax== makes a reading look too high or too low.'),
+    MQ('Which improves the reliability of the results?', 'repeating the readings and taking a mean', ['using a longer ruler', 'using a bigger beaker', 'using one result only'], '==Repeats== and a ==mean==.'),
+    MQ('A micrometer screw gauge reads 0.58 mm with nothing in it reading +0.02 mm. What is the corrected reading?', '0.56 mm', ['0.60 mm', '0.58 mm', '0.02 mm'], '0.58 − 0.02 = ==0.56 mm==.')
+  ],
+  exam: [
+    { q: 'Describe how to determine the gradient of a straight-line graph.', m: 3, p: ['Draw a ==large triangle== using more than half of the line', 'Read the ==change in y== and the ==change in x==', 'gradient = ==Δy ÷ Δx== with the unit'] },
+    { q: 'State two sources of error when timing a pendulum with a stopwatch and an improvement for each.', m: 4, p: ['==Reaction time== when starting or stopping the stopwatch', 'Improvement: time ==20 oscillations== and divide / repeat and take a mean', '==Parallax== when judging the pendulum passing the centre', 'Improvement: use a ==fiducial marker== or light gate'] },
+    { q: 'List four things to include in a plan for an experiment.', m: 4, p: ['The ==apparatus==', 'What will be ==changed and measured==', 'The ==variables kept the same==', '==Repeats== and how the results are used (table and graph)'] },
+    { q: 'A student draws a graph of results. State three rules for drawing the graph.', m: 3, p: ['==Label axes== with the quantity and unit', 'Use an ==even scale== filling more than half the grid', 'Plot with ==small crosses== and draw a ==best-fit line=='] }
+  ]
+};
+
+/* ---------- practical paper (alternative to practical, Paper 6 style): 40 marks, 1 hour ---------- */
+/* Each question is a task from PR_BANK with parts that add up to the marks of its slot (PR_SLOTS). Tasks give the method and results; the student draws tables and graphs on paper, then ticks the mark points. */
+let PRQ = [], PRLIST = [];
+function buildPrac(){
+  const seen = store.prseen = store.prseen || {}, used = {}, out = [];
+  PR_SLOTS.forEach(sl => { const bank = PR_BANK[sl.k]; used[sl.k] = used[sl.k] || new Set();
+    const c = bank.map((t, i) => ({ i, s: (seen[sl.k + i] || 0) * 2 + Math.random() })).filter(x => !used[sl.k].has(x.i)).sort((a, b) => a.s - b.s)[0];
+    used[sl.k].add(c.i); seen[sl.k + c.i] = (seen[sl.k + c.i] || 0) + 1; out.push([sl.k, c.i]); });
+  return out;
+}
+function prRebuild(sel){
+  PRQ = sel.map(([k, i], n) => { const t = PR_BANK[k][i]; return Object.assign({}, t, { n: n + 1, m: t.parts.reduce((s, p) => s + p.m, 0) }); });
+  PRLIST = []; PRQ.forEach(t => t.parts.forEach((p, j) => PRLIST.push(Object.assign({}, p, { lbl: t.n + ' (' + 'abcdefghijkl'[j] + ')', qn: t.n }))));
+}
+let prTimer = null, prLeft = 60 * 60;
+function drawPrac(){
+  const sel = buildPrac(); store.prq = sel; prRebuild(sel); prLeft = 60 * 60;
+  Object.keys(store.ticks).forEach(k => { if (k.startsWith('prac-') || k.startsWith('open-prac-')) delete store.ticks[k]; }); save();
+}
+(function(){ if (Array.isArray(store.prq) && store.prq.length === PR_SLOTS.length && store.prq.every(([k, i]) => PR_BANK[k] && PR_BANK[k][i])) prRebuild(store.prq); })();
+function renderPrac(){
+  if (!PRQ.length) drawPrac();
+  const [g, t] = examScore('prac', PRLIST);
+  let idx = 0; const cards = PRQ.map(q => `<h3 class="qgroup">Question ${q.n} <span class="pm">[${q.m} marks]</span><small>${q.t}</small></h3><div class="card prac">${q.intro}</div>` + q.parts.map(() => examCard('prac-' + idx, PRLIST[idx], idx++)).join('')).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge ${PR_CODE} practical skills</span><h2>Practical paper</h2>
+    <p class="lede">Alternative to Practical (Paper 6) style: ${t} marks, 1 hour. ${PR_LEDE}</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==1 hour==. Total: ==${t} marks==.</li>
+      <li>Answer ==all== the questions on paper. You ==may use a calculator==.</li>
+      <li>==Draw tables and graphs on paper== with a ruler and a sharp pencil. Then tap the mark points you earned.</li>
+      <li>==Show your working== and give the ==units==.</li>
+      <li>If your school gives the hands-on Paper 5 instead, practise the skills in the Practical skills tab and use this paper for the written parts.</li></ul></div>
+    ${PR_NOTES || ''}
+    <div class="card"><div class="scorebar"><div class="timer" id="prclock">${fmtTime(prLeft)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
+      <div class="row"><button class="btn primary" id="prgo">${prTimer ? 'Pause' : 'Start timer'}</button><button class="btn ghost" id="prreset">Reset timer</button><button class="btn ghost" id="prnew">New paper (different tasks)</button><button class="btn ghost" id="prclear">Clear my marks</button></div></div>
+    ${cards}</div>`.replace(/==(.+?)==/g, '<mark class="kw">$1</mark>');
+}
+function bindPrac(){
+  document.getElementById('prgo').onclick = () => {
+    if (prTimer) { clearInterval(prTimer); prTimer = null; document.getElementById('prgo').textContent = 'Resume'; return; }
+    document.getElementById('prgo').textContent = 'Pause';
+    prTimer = setInterval(() => { prLeft = Math.max(0, prLeft - 1); const c = document.getElementById('prclock'); if (c) { c.textContent = prLeft ? fmtTime(prLeft) : 'Time up'; c.classList.toggle('low', prLeft < 300); } if (!prLeft) { clearInterval(prTimer); prTimer = null; } }, 1000);
+  };
+  document.getElementById('prreset').onclick = () => { clearInterval(prTimer); prTimer = null; prLeft = 60 * 60; render(); };
+  document.getElementById('prnew').onclick = () => { clearInterval(prTimer); prTimer = null; drawPrac(); render(); };
+  document.getElementById('prclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('prac-')) delete store.ticks[k]; }); save(); render(); };
+}
+
 /* ---------- multiple-choice papers in the Cambridge 0625 pattern ---------- */
 /* Measured from the May/June 2026 papers: Paper 1 (Core) and Paper 2 (Extended), 40 questions, 40 marks, 45 minutes, one mark each.
    Questions follow the syllabus order: motion, forces and energy; thermal physics; waves; electricity and magnetism; nuclear physics; space physics. */
@@ -2316,7 +2480,7 @@ function drawTheory(type){
 
 
 /* ---------- state ---------- */
-const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['waves','Topic 3','Waves'],['light','Topic 3','Light'],['emspec','Topic 3','EM spectrum'],['circuits','Topic 4','Circuits'],['static','Topic 4','Static electricity'],['comps','Topic 4','Components'],['magnet','Topic 4','Magnetism'],['meas','Topic 1','Measurement'],['momentum','Topic 1','Momentum'],['thermprop','Topic 2','Thermal props'],['nuclear','Topic 5','Radioactivity'],['space','Topic 6','Space'],['mc','','MC paper'],['mock','','Theory paper']];
+const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['waves','Topic 3','Waves'],['light','Topic 3','Light'],['emspec','Topic 3','EM spectrum'],['circuits','Topic 4','Circuits'],['static','Topic 4','Static electricity'],['comps','Topic 4','Components'],['magnet','Topic 4','Magnetism'],['meas','Topic 1','Measurement'],['momentum','Topic 1','Momentum'],['thermprop','Topic 2','Thermal props'],['nuclear','Topic 5','Radioactivity'],['space','Topic 6','Space'],['skills','Practical','Practical skills'],['mc','','MC paper'],['mock','','Theory paper'],['prac','','Practical paper']];
 let cur = 'start'; let sub = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2340,12 +2504,13 @@ function render(){
   if (cur === 'start') v.innerHTML = renderStart();
   else if (cur === 'mock') v.innerHTML = renderMock();
   else if (cur === 'mc') v.innerHTML = renderMC();
+  else if (cur === 'prac') v.innerHTML = renderPrac();
   else v.innerHTML = renderChapter(cur);
   bindView();
 }
 
 function renderStart(){
-  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles','waves','light','emspec','circuits','static','comps','magnet','meas','momentum','thermprop','nuclear','space'].map(k => {
+  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles','waves','light','emspec','circuits','static','comps','magnet','meas','momentum','thermprop','nuclear','space','skills'].map(k => {
     const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz best ${qb}/${qt}</span></div>
       <div class="bar"><i style="width:${Math.round(100*qb/qt)}%"></i></div>
@@ -2544,8 +2709,9 @@ let quizScore = 0;
 function bindView(){
   const v = document.getElementById('view');
   quizScore = 0;
-  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && sub === 'drill') newDrill();
+  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && cur !== 'prac' && sub === 'drill') newDrill();
   if (cur === 'mc') bindMC();
+  if (cur === 'prac') bindPrac();
   if (cur === 'mock') {
     document.getElementById('tgo').onclick = () => {
       if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
@@ -2599,7 +2765,7 @@ document.getElementById('view').addEventListener('click', e => {
       store.ticks[key] = arr; save();
       pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? THQ : CH[cur].exam;
+      const list = cur === 'mock' ? THQ : cur === 'prac' ? PRLIST : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list);
       const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt;
     }

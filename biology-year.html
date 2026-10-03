@@ -183,6 +183,7 @@ a{color:var(--accent)}
 .pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
 .qgroup{margin:18px 0 -6px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
 .qgroup small{color:var(--muted);font-family:var(--body);font-weight:400;font-size:.85rem}
+.tblwrap{overflow-x:auto;margin:10px 0}.rt{border-collapse:collapse;font-size:.92rem}.rt th,.rt td{border:1px solid var(--line);padding:6px 10px;text-align:center}.rt th{background:var(--accent-soft)}.prac p{margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -2161,6 +2162,193 @@ const EXTRA2 = {
 };
 for (const k in EXTRA2) CH[k].exam.push(...EXTRA2[k]);
 
+const tbl = (h, rows) => `<div class="tblwrap"><table class="rt"><thead><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+/* ---------- practical skills: graph rules diagram ---------- */
+function svgGraphRules(){
+  const X = x => 90 + x * 76, Y = y => 250 - y * 38;
+  const pts = [[0.4, 0.9], [1.3, 2.1], [2.4, 3.1], [3.5, 3.8], [4.5, 4.2]];
+  const cross = ([x, y]) => `<path d="M${X(x) - 6} ${Y(y) - 6} L${X(x) + 6} ${Y(y) + 6} M${X(x) - 6} ${Y(y) + 6} L${X(x) + 6} ${Y(y) - 6}" class="acc"/>`;
+  const note = (y, n, a, b) => `${T(520, y, n + '  ' + a, 'lbl')}${T(540, y + 20, b, 'mut')}`;
+  return `<svg viewBox="0 0 880 300" role="img" aria-label="A well drawn graph with labelled axes, even scales, crosses and a smooth line of best fit">
+  <line x1="90" y1="250" x2="470" y2="250" class="ln"/><line x1="90" y1="250" x2="90" y2="40" class="ln"/>
+  ${[0, 1, 2, 3, 4, 5].map(i => `<line x1="${X(i)}" y1="250" x2="${X(i)}" y2="256" class="thin"/>${T(X(i), 272, i * 10, 'mid mut')}`).join('')}${[0, 1, 2, 3, 4, 5].map(i => `<line x1="84" y1="${Y(i)}" x2="90" y2="${Y(i)}" class="thin"/>${T(78, Y(i) + 4, i * 2, 'end mut')}`).join('')}
+  ${T(280, 294, 'independent variable / unit', 'mid lbl')}${T(24, 30, 'dependent variable / unit', 'lbl')}
+  <path d="M${X(0)} ${Y(0.3)} C ${X(1)} ${Y(1.8)}, ${X(2.2)} ${Y(3.3)}, ${X(4.8)} ${Y(4.3)}" class="acc" fill="none"/>${pts.map(cross).join('')}
+  <line x1="${X(2.4)}" y1="250" x2="${X(2.4)}" y2="${Y(3.1)}" class="hotl" style="stroke-dasharray:5 4;stroke-width:1.6"/><line x1="90" y1="${Y(3.1)}" x2="${X(2.4)}" y2="${Y(3.1)}" class="hotl" style="stroke-dasharray:5 4;stroke-width:1.6"/>
+  ${note(50, '1', 'Independent variable on the x-axis', 'Dependent variable on the y-axis, both with units.')}${note(100, '2', 'Even scale', 'Points fill more than half of the grid.')}${note(150, '3', 'Small crosses', 'Plot every point carefully.')}${note(200, '4', 'Smooth best-fit line', 'Not dot to dot.')}${note(250, '5', 'Dashed lines', 'Show how you read a value.')}</svg>`;
+}
+
+/* ---------- Biology practical: skills chapter and task bank (original) ---------- */
+const PR_CODE = '0610', PR_LEDE = 'Three questions in the style of the real paper: an investigation with results, a plan, and data handling.', PR_NOTES = '';
+const PR_SLOTS = [{ k: 'inv' }, { k: 'plan' }, { k: 'data' }];
+const GRAPH_PTS = ['The ==axes are labelled== with the quantity and the unit', 'An ==even scale== that uses more than half of the grid', 'All points ==plotted accurately== (small crosses)', 'A ==smooth line of best fit== (not dot to dot)'];
+const PR_BANK = {
+  inv: [
+    { t: 'Osmosis in potato cylinders', intro: `<p>A student investigated the effect of the concentration of sucrose solution on the mass of potato cylinders. Five potato cylinders of the same length and diameter were each weighed. Each was placed in a different concentration of sucrose solution for 30 minutes, then dried with a paper towel and weighed again. The cylinders were cut with a scalpel.</p>` + tbl(['sucrose concentration / mol per dm³', 'initial mass / g', 'final mass / g'], [['0.0', '1.20', '1.38'], ['0.2', '1.22', '1.28'], ['0.4', '1.18', '1.17'], ['0.6', '1.21', '1.08'], ['0.8', '1.20', '1.00']]),
+      parts: [
+        { q: 'Prepare a table to show the concentration, initial mass, final mass, change in mass and percentage change in mass. Calculate the values and complete the table on paper.', m: 4, p: ['A ruled table with the ==concentration in the first column==', 'Headings with ==units== (g and %)', 'Change in mass correct: +0.18, +0.06, −0.01, −0.13, −0.20', 'Percentage change correct: +15.0, +4.9, −0.85, −10.7, −16.7'] },
+        { q: 'Show your working for the percentage change in mass of the cylinder in 0.6 mol per dm³ sucrose solution.', m: 3, p: ['change = 1.08 − 1.21 = ==−0.13 g==', '−0.13 ÷ 1.21 × 100', '==−10.7 %== (a loss of 10.7 %)'] },
+        { q: 'State the independent variable and the dependent variable in this investigation.', m: 2, p: ['independent: the ==concentration of the sucrose solution==', 'dependent: the ==change in mass== (or percentage change in mass) of the potato cylinder'] },
+        { q: 'State a conclusion for the results.', m: 2, p: ['As the concentration increases, the potato ==gains less mass== and then ==loses mass==', 'In dilute solutions water enters the cells by ==osmosis==; in concentrated solutions water leaves'] },
+        { q: 'Plot a graph of percentage change in mass (y-axis) against sucrose concentration (x-axis) on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'State two variables that should be kept constant.', m: 2, p: ['==Temperature==', '==Volume of solution== / size of the cylinders / time in the solution / same potato (any two)'] },
+        { q: 'Suggest one way of improving the reliability of the results.', m: 1, p: ['==Repeat== the experiment and calculate a ==mean=='] },
+        { q: 'State one safety precaution when using the scalpel.', m: 1, p: ['Cut on a ==tile== or board, cutting ==away from the body=='] }
+      ] },
+    { t: 'Light and photosynthesis in pondweed', intro: `<p>A student investigated the effect of light on the rate of photosynthesis in pondweed. A piece of pondweed in water was placed at different distances from a lamp. At each distance the student counted the bubbles of gas released from the cut end in one minute.</p>` + tbl(['distance of lamp from pondweed / cm', 'bubbles per minute'], [['10', '48'], ['20', '30'], ['30', '18'], ['40', '12'], ['50', '8']]),
+      parts: [
+        { q: 'Draw a table for the results with suitable headings and units.', m: 3, p: ['A ==ruled table==', 'Headings ==distance / cm== and ==bubbles per minute== with units', 'All values entered correctly in order'] },
+        { q: 'Describe the relationship between the distance of the lamp and the number of bubbles.', m: 2, p: ['As the distance increases the number of bubbles ==decreases==', 'The decrease is ==faster at short distances== (not a straight line)'] },
+        { q: 'Calculate the percentage decrease in the number of bubbles per minute from 10 cm to 50 cm.', m: 2, p: ['decrease = 48 − 8 = 40', '40 ÷ 48 × 100 = ==83.3 %== (83 %)'] },
+        { q: 'Plot a graph of bubbles per minute (y-axis) against distance (x-axis) on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'Use your graph to estimate the number of bubbles per minute at 25 cm. Show on the graph how you did this.', m: 2, p: ['==Construction lines== drawn on the graph at 25 cm', 'An estimate between ==22 and 26== bubbles per minute'] },
+        { q: 'State the independent variable and the dependent variable.', m: 2, p: ['independent: the ==distance of the lamp== (light intensity)', 'dependent: the ==number of bubbles per minute== (rate of photosynthesis)'] },
+        { q: 'Suggest two reasons why counting bubbles gives only an estimate of the rate of photosynthesis.', m: 2, p: ['Bubbles may be ==different sizes==', 'Bubbles may be ==missed== when counting / some oxygen dissolves in the water (any two)'] },
+        { q: 'The lamp also gives out heat. Explain why this is a problem and suggest how to solve it.', m: 2, p: ['Heat changes the ==temperature==, which also affects the rate of photosynthesis', 'Put a ==glass tank of water== between the lamp and the plant to absorb the heat'] }
+      ] },
+    { t: 'Temperature and amylase', intro: `<p>A student investigated the effect of temperature on the action of the enzyme amylase on starch. Starch solution and amylase solution were mixed and kept at different temperatures in water baths. Every 10 seconds a drop of the mixture was added to iodine solution on a white tile. The time taken for the iodine to stop turning blue-black was recorded.</p>` + tbl(['temperature / °C', 'time for starch to disappear / s'], [['20', '270'], ['30', '150'], ['40', '80'], ['50', '210'], ['60', 'no change after 600']]),
+      parts: [
+        { q: 'Draw a table for the results with suitable headings and units.', m: 3, p: ['A ==ruled table==', 'Headings with ==units== (°C and s)', 'All values entered correctly'] },
+        { q: 'Calculate the rate of reaction at 30 °C using: rate = 1 ÷ time × 1000.', m: 2, p: ['1 ÷ 150 × 1000', '==6.7== (6.67)'] },
+        { q: 'State the optimum temperature from these results and give a reason.', m: 2, p: ['About ==40 °C==', 'It gave the ==shortest time== for the starch to be digested (the fastest rate)'] },
+        { q: 'Explain the result at 60 °C.', m: 3, p: ['The enzyme is ==denatured==', 'The shape of the ==active site changes==', 'The starch ==cannot fit== so is not digested'] },
+        { q: 'Plot a graph of time taken (y-axis) against temperature (x-axis) for 20 to 50 °C on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'State the colour change of the iodine solution when all of the starch has been digested.', m: 1, p: ['From ==blue-black== to ==orange-brown== (stays the colour of iodine)'] },
+        { q: 'State two variables that should be kept the same in every experiment.', m: 2, p: ['==Volume and concentration of the starch== and amylase', '==pH== / time between samples / size of the drops (any two)'] },
+        { q: 'Suggest two ways of making the end-point more accurate.', m: 2, p: ['Test every ==10 seconds== (shorter intervals) / use a stopwatch', 'Compare with a ==colour standard== / use a colorimeter'] }
+      ] }
+  ],
+  plan: [
+    { t: 'Plan: pH and amylase', intro: '<p>Plan an investigation to find the effect of pH on the activity of the enzyme amylase. You are provided with starch solution, amylase solution, buffer solutions of different pH, iodine solution and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will use the results.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: ==pH== using buffer solutions (for example pH 3, 5, 7, 9, 11)', 'Dependent variable: ==time for the starch to disappear== (iodine on a white tile every 30 s)', 'Apparatus: test tubes, ==water bath==, stopwatch, dropping pipettes, iodine, starch and amylase', 'Control: the same ==temperature==, and the same volume and concentration of starch and enzyme', '==Repeat== the experiment and calculate a ==mean==', '==Plot a graph== of time against pH to find the optimum / wear eye protection'] }] },
+    { t: 'Plan: vitamin C in fruit juice', intro: '<p>Plan an investigation to compare the amount of vitamin C in three fruit juices, A, B and C. You are provided with the juices, DCPIP solution (blue) and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will use the results.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: the ==type of juice== (A, B and C)', 'Dependent variable: the ==volume of juice needed to make the DCPIP colourless==', 'Apparatus: ==DCPIP solution==, syringe or burette, test tubes, measuring cylinder', 'Add the juice ==drop by drop== to a fixed volume of DCPIP, shaking, until it turns colourless', 'Control: the same ==volume and concentration of DCPIP== and the same method', 'The juice that needs the ==smallest volume== has the most vitamin C; repeat and take a ==mean=='] }] },
+    { t: 'Plan: light and photosynthesis', intro: '<p>Plan an investigation to find the effect of light intensity on the rate of photosynthesis of pondweed. You are provided with pondweed, a lamp, a beaker of water and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will use the results.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: the ==distance of the lamp== from the pondweed (for example 10, 20, 30, 40, 50 cm) measured with a ruler', 'Dependent variable: the ==number of bubbles per minute== from the cut end', 'Apparatus: pondweed, beaker or boiling tube, lamp, ruler, ==stopwatch==', 'Control: ==temperature== (heat shield or water bath), the same plant, carbon dioxide (sodium hydrogencarbonate)', 'Leave the plant to ==adjust== at each distance, and ==repeat== to calculate a mean', '==Plot a graph== of bubbles against distance / wear eye protection near the lamp'] }] },
+    { t: 'Plan: exercise and pulse rate', intro: '<p>Plan an investigation to find the effect of different lengths of exercise on pulse rate. You are provided with a stopwatch, a step and common laboratory apparatus.</p><p>Your plan should name the apparatus, say what you will change and measure, how you will keep the test fair, and how you will use the results.</p>',
+      parts: [{ q: 'Write your plan.', m: 6, p: ['Independent variable: the ==length of exercise== (for example 0, 1, 2, 3 minutes of step-ups)', 'Dependent variable: the ==pulse rate== in beats per minute (count for 30 s and double)', 'Apparatus: ==stopwatch==, step, chair', 'Control: the ==same person==, the same step height and stepping rate', 'Allow the pulse to ==return to normal== between tests; ==repeat== and calculate a mean', '==Plot a graph== of pulse rate against exercise time; do not take part if unwell and keep the step stable'] }] }
+  ],
+  data: [
+    { t: 'Fertiliser and crop yield', intro: '<p>Scientists investigated the effect of nitrate fertiliser on the yield of wheat. They planted the same variety of wheat in six fields and used different masses of fertiliser. The yield of grain was measured at the end of the season.</p>' + tbl(['mass of fertiliser / kg per hectare', 'yield / tonnes per hectare'], [['0', '2.0'], ['40', '3.8'], ['80', '5.4'], ['120', '6.3'], ['160', '6.6'], ['200', '6.5']]),
+      parts: [
+        { q: 'State two variables that the scientists kept constant.', m: 2, p: ['The ==variety of wheat==', '==Number of seeds per m²== / area of field / soil type / watering (any two)'] },
+        { q: 'Plot a line graph of the data on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'Describe the effect on the yield of increasing the mass of fertiliser from 0 to 120 kg per hectare.', m: 1, p: ['The yield ==increases== (from 2.0 to 6.3 tonnes per hectare)'] },
+        { q: 'Use your graph to estimate the yield when 100 kg per hectare of fertiliser is used. Show on the graph how you did this.', m: 2, p: ['==Construction lines== at 100 kg per hectare', 'An estimate of about ==5.9 tonnes per hectare== (5.8 to 6.0)'] },
+        { q: 'Calculate the percentage increase in yield when the fertiliser is increased from 0 to 120 kg per hectare.', m: 3, p: ['increase = 6.3 − 2.0 = ==4.3==', '4.3 ÷ 2.0 × 100', '==215 %=='] },
+        { q: 'Suggest why the yield does not increase above 160 kg per hectare.', m: 2, p: ['Another factor is ==limiting== (for example water, light or other minerals)', 'The plants cannot use any more nitrate'] },
+        { q: 'Name the mineral ion in fertilisers that plants use to make proteins.', m: 1, p: ['==Nitrate=='] }
+      ] },
+    { t: 'Temperature and the heart rate of Daphnia', intro: '<p>A student investigated the effect of temperature on the heart rate of Daphnia (water fleas). The heart rate was counted with a microscope at five different temperatures.</p>' + tbl(['temperature / °C', 'heart rate / beats per minute'], [['10', '90'], ['15', '120'], ['20', '160'], ['25', '215'], ['30', '240']]),
+      parts: [
+        { q: 'State two variables that should be kept constant in this investigation.', m: 2, p: ['The ==same Daphnia== (size, age)', '==Time of counting== / light intensity / time allowed to adjust (any two)'] },
+        { q: 'Plot a line graph of the data on graph paper.', m: 4, p: GRAPH_PTS },
+        { q: 'Describe the effect of temperature on the heart rate, using figures from the table.', m: 2, p: ['As the temperature increases the heart rate ==increases==', 'From ==90 to 240 beats per minute== between 10 and 30 °C'] },
+        { q: 'Use your graph to estimate the heart rate at 22 °C. Show how you did this.', m: 2, p: ['==Construction lines== at 22 °C', 'An estimate of about ==182== (178 to 186) beats per minute'] },
+        { q: 'Calculate the percentage increase in the heart rate between 10 °C and 30 °C.', m: 3, p: ['increase = 240 − 90 = ==150==', '150 ÷ 90 × 100', '==167 %== (166.7)'] },
+        { q: 'Explain why the heart rate of Daphnia increases as the temperature increases.', m: 2, p: ['The rate of ==respiration== (metabolism) increases', 'More ==oxygen and energy== are needed, so the heart beats faster'] }
+      ] },
+    { t: 'Food tests', intro: '<p>A student tested four foods, A, B, C and D, with different reagents. The table shows the observations.</p>' + tbl(['food', 'iodine solution', 'Benedict’s solution (heated)', 'biuret solution', 'ethanol, then water'], [['A', 'blue-black', 'stays blue', 'stays blue', 'stays clear'], ['B', 'orange-brown', 'brick-red', 'stays blue', 'stays clear'], ['C', 'orange-brown', 'stays blue', 'purple', 'stays clear'], ['D', 'orange-brown', 'stays blue', 'stays blue', 'cloudy white']]),
+      parts: [
+        { q: 'State which food contains starch and the observation that shows this.', m: 2, p: ['Food ==A==', 'The iodine solution turned ==blue-black==' ] },
+        { q: 'State which food contains a reducing sugar and the observation that shows this.', m: 2, p: ['Food ==B==', 'Benedict’s solution turned ==brick-red== when heated'] },
+        { q: 'State which food would be best for growth and repair. Give a reason.', m: 2, p: ['Food ==C==', 'It contains ==protein== (the biuret test is purple)'] },
+        { q: 'Describe how to carry out the test for reducing sugars.', m: 3, p: ['Add ==Benedict’s solution== to the food sample (in solution)', '==Heat== in a hot water bath', 'A ==brick-red precipitate== means a reducing sugar is present'] },
+        { q: 'The student wants to compare the amount of reducing sugar in two foods. Suggest how to make this a fair comparison.', m: 2, p: ['Use the ==same mass and volume== of each food solution and of Benedict’s solution', 'Heat for the ==same time== at the same temperature'] },
+        { q: 'A 50 g sample of food B contains 12 g of sugar. Calculate the percentage of sugar in the food.', m: 2, p: ['12 ÷ 50 × 100', '==24 %=='] },
+        { q: 'State two safety precautions when heating the test tubes in a water bath.', m: 2, p: ['Wear ==eye protection==', 'Use a ==test-tube holder== / do not point the tube at anyone / take care with hot water (any two)'] }
+      ] }
+  ]
+};
+
+CH.skills = {
+  code: 'Practical', name: 'Practical skills',
+  lede: 'Variables, tables, graphs, calculations, errors and planning: the skills tested in Paper 5 and Paper 6.',
+  learn: [
+    { h: 'Variables', list: ['The ==independent variable== is what you ==change==.', 'The ==dependent variable== is what you ==measure==.', '==Control variables== are kept ==the same== so the test is fair.', 'Examples of control variables: ==temperature==, volume, time, mass, the same organism or sample.', '==Repeat== the experiment and take a ==mean== to make results more ==reliable==.'] },
+    { h: 'Tables', list: ['Draw a table with a ==ruler== and rule all the lines.', 'Put the ==independent variable in the first column==.', 'Put the ==units in the headings==, not in the body of the table.', 'Use the ==same number of decimal places== in each column.', 'Add columns for ==calculations== such as change or percentage change.'] },
+    { h: 'Graphs', list: ['==Independent variable on the x-axis==, dependent variable on the y-axis.', '==Label== each axis with the quantity and the ==unit==.', 'Choose an ==even scale== so the points fill ==more than half== of the grid.', 'Plot each point with a ==small cross== or a dot in a circle.', 'Draw a ==smooth line of best fit== (or a ruled straight line). ==Do not join dot to dot==.', 'To read a value, draw ==dashed construction lines== to the line and to the axis.'] },
+    { h: 'Calculations', list: ['==Percentage change = (final − initial) ÷ initial × 100==.', '==Magnification = image size ÷ actual size==. Use the ==same units==.', '==Mean = total ÷ number of readings==.', '==Rate = change ÷ time==.', 'Write the ==formula==, the ==substitution== and the ==answer with a unit==.'], f: ['% change = (final − initial) ÷ initial × 100', 'magnification = image ÷ actual'] },
+    { h: 'Errors and improvements', list: ['Sources of error: ==reading a scale== (parallax), ==reaction time== with a stopwatch, ==heat loss==, drops or bubbles of different size.', 'Improvements: ==repeat== and take a mean, use a ==smaller measuring cylinder== or a syringe, use a ==water bath== to keep the temperature steady, use a ==colour standard== or a colorimeter.', 'Do not say “be more careful”. Say ==what== you would change and ==why==.', '==Safety==: wear eye protection, cut on a tile and away from your body, take care with hot water and electricity.'] },
+    { h: 'Planning an investigation (6 marks)', list: ['Say what you will ==change== (the independent variable) and the ==range== of values.', 'Say what you will ==measure== and how (dependent variable).', 'Name the ==apparatus==.', 'Name the ==variables to keep the same==.', '==Repeat== and calculate a ==mean==.', 'Say how you will ==use the results==: draw a graph and look for a pattern. Add a ==safety== point.'] },
+    { h: 'Food tests and other tests', table: [['Test for', 'Reagent', 'Positive result'], ['starch', 'iodine solution', 'blue-black'], ['reducing sugar', 'Benedict’s solution, heat', 'brick-red precipitate'], ['protein', 'biuret solution', 'purple'], ['fat', 'ethanol, then water', 'cloudy white emulsion'], ['vitamin C', 'DCPIP', 'blue colour disappears'], ['carbon dioxide', 'limewater', 'cloudy'], ['carbon dioxide (in water)', 'hydrogencarbonate indicator', 'red to yellow']] }
+  ],
+  mistakes: ['Joining the points ==dot to dot== instead of drawing a smooth line.', 'Putting the ==units in the body== of a table.', 'Choosing a scale that uses ==less than half== of the grid.', 'Writing ==“do it again”== as an improvement with no detail.', 'Forgetting to ==keep other variables the same==.', 'Calculating a percentage change using the ==final== value instead of the ==initial== value.'],
+  diagrams: [{ svg: svgGraphRules, cap: 'A ==well drawn graph==: labelled axes, even scale, crosses, a smooth line of best fit and dashed lines to read a value.' }],
+  worked: [
+    W('A student measures the mass of a potato cylinder before and after soaking: 1.20 g and 1.38 g. Calculate the percentage change in mass.', '==% change = (final − initial) ÷ initial × 100==.', 'Divide by the starting mass.', '% change = change ÷ initial × 100',
+      [['Change in mass', '1.38 − 1.20 = +0.18 g', 'Final minus initial.'], ['Divide by the initial mass', '0.18 ÷ 1.20 = 0.15', ''], ['Percentage', '0.15 × 100 = +15 %', 'The positive sign shows a gain.']],
+      [['Initial', '1.20 g', -1], ['Final', '1.38 g', -1], ['Change', '+0.18 g', 0], ['% change', '+15 %', 2]]),
+    W('A graph shows bubbles per minute against the distance of a lamp. Describe how to read the value at 25 cm.', 'Use ==construction lines== so the examiner can see your method.', 'Draw them with a ruler and a sharp pencil.', 'Construction lines',
+      [['Find 25 cm on the x-axis', 'Mark the point on the axis', ''], ['Go up to the line', 'Draw a dashed line up to the line of best fit', ''], ['Go across to the y-axis', 'Draw a dashed line across to the y-axis', ''], ['Read the value', 'Read the number and write it with its unit', '']],
+      [['x value', '25 cm', 0], ['Up to line', 'dashed line', 1], ['Across to axis', 'dashed line', 2], ['Reading', 'value with unit', 3]], true)
+  ],
+  drill: undefined,
+  quiz: [
+    MQ('In an investigation, the variable that you change is the…', 'independent variable', ['dependent variable', 'control variable', 'result'], 'You ==change== the ==independent variable==.'),
+    MQ('Which axis should the independent variable be plotted on?', 'the x-axis', ['the y-axis', 'either axis', 'neither axis'], '==Independent variable== on the ==x-axis==.'),
+    MQ('A cylinder has mass 2.00 g before and 1.80 g after. What is the percentage change in mass?', '−10 %', ['−0.2 %', '+11 %', '−11 %'], '(1.80 − 2.00) ÷ 2.00 × 100 = ==−10 %==.'),
+    MQ('Which is the best way to improve the reliability of results?', 'repeat the experiment and calculate a mean', ['use a larger beaker', 'work more quickly', 'use only one reading'], '==Repeats== and a ==mean== make results more reliable.'),
+    MQ('Where should the units be written in a results table?', 'in the column headings', ['after every number', 'in the title only', 'nowhere'], 'Put ==units in the headings==.'),
+    MQ('A line of best fit on a graph should be…', 'a smooth line or ruled line passing close to most points', ['a line joining every point', 'always a straight line through the origin', 'a line below all the points'], 'Draw a ==smooth line of best fit==, not dot to dot.')
+  ],
+  exam: [
+    { q: 'State what is meant by the independent variable and the dependent variable.', m: 2, p: ['The ==independent variable== is the one you change', 'The ==dependent variable== is the one you measure'] },
+    { q: 'Describe how to draw a good graph of results.', m: 4, p: GRAPH_PTS },
+    { q: 'Suggest two sources of error in an investigation that uses a stopwatch and a measuring cylinder, and an improvement for each.', m: 4, p: ['==Reaction time== when starting or stopping the stopwatch', 'Improvement: ==repeat and take a mean== / use a data logger', '==Reading the scale== at an angle or a large measuring cylinder', 'Improvement: read at ==eye level== / use a smaller cylinder or syringe'] },
+    { q: 'List four things that should be included in a plan for an investigation.', m: 4, p: ['What will be ==changed== (and the range)', 'What will be ==measured==', 'The ==variables kept the same==', '==Repeats== and a mean / how the results will be used'] }
+  ]
+};
+
+/* ---------- practical paper (alternative to practical, Paper 6 style): 40 marks, 1 hour ---------- */
+/* Each question is a task from PR_BANK with parts that add up to the marks of its slot (PR_SLOTS). Tasks give the method and results; the student draws tables and graphs on paper, then ticks the mark points. */
+let PRQ = [], PRLIST = [];
+function buildPrac(){
+  const seen = store.prseen = store.prseen || {}, used = {}, out = [];
+  PR_SLOTS.forEach(sl => { const bank = PR_BANK[sl.k]; used[sl.k] = used[sl.k] || new Set();
+    const c = bank.map((t, i) => ({ i, s: (seen[sl.k + i] || 0) * 2 + Math.random() })).filter(x => !used[sl.k].has(x.i)).sort((a, b) => a.s - b.s)[0];
+    used[sl.k].add(c.i); seen[sl.k + c.i] = (seen[sl.k + c.i] || 0) + 1; out.push([sl.k, c.i]); });
+  return out;
+}
+function prRebuild(sel){
+  PRQ = sel.map(([k, i], n) => { const t = PR_BANK[k][i]; return Object.assign({}, t, { n: n + 1, m: t.parts.reduce((s, p) => s + p.m, 0) }); });
+  PRLIST = []; PRQ.forEach(t => t.parts.forEach((p, j) => PRLIST.push(Object.assign({}, p, { lbl: t.n + ' (' + 'abcdefghijkl'[j] + ')', qn: t.n }))));
+}
+let prTimer = null, prLeft = 60 * 60;
+function drawPrac(){
+  const sel = buildPrac(); store.prq = sel; prRebuild(sel); prLeft = 60 * 60;
+  Object.keys(store.ticks).forEach(k => { if (k.startsWith('prac-') || k.startsWith('open-prac-')) delete store.ticks[k]; }); save();
+}
+(function(){ if (Array.isArray(store.prq) && store.prq.length === PR_SLOTS.length && store.prq.every(([k, i]) => PR_BANK[k] && PR_BANK[k][i])) prRebuild(store.prq); })();
+function renderPrac(){
+  if (!PRQ.length) drawPrac();
+  const [g, t] = examScore('prac', PRLIST);
+  let idx = 0; const cards = PRQ.map(q => `<h3 class="qgroup">Question ${q.n} <span class="pm">[${q.m} marks]</span><small>${q.t}</small></h3><div class="card prac">${q.intro}</div>` + q.parts.map(() => examCard('prac-' + idx, PRLIST[idx], idx++)).join('')).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge ${PR_CODE} practical skills</span><h2>Practical paper</h2>
+    <p class="lede">Alternative to Practical (Paper 6) style: ${t} marks, 1 hour. ${PR_LEDE}</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==1 hour==. Total: ==${t} marks==.</li>
+      <li>Answer ==all== the questions on paper. You ==may use a calculator==.</li>
+      <li>==Draw tables and graphs on paper== with a ruler and a sharp pencil. Then tap the mark points you earned.</li>
+      <li>==Show your working== and give the ==units==.</li>
+      <li>If your school gives the hands-on Paper 5 instead, practise the skills in the Practical skills tab and use this paper for the written parts.</li></ul></div>
+    ${PR_NOTES || ''}
+    <div class="card"><div class="scorebar"><div class="timer" id="prclock">${fmtTime(prLeft)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
+      <div class="row"><button class="btn primary" id="prgo">${prTimer ? 'Pause' : 'Start timer'}</button><button class="btn ghost" id="prreset">Reset timer</button><button class="btn ghost" id="prnew">New paper (different tasks)</button><button class="btn ghost" id="prclear">Clear my marks</button></div></div>
+    ${cards}</div>`.replace(/==(.+?)==/g, '<mark class="kw">$1</mark>');
+}
+function bindPrac(){
+  document.getElementById('prgo').onclick = () => {
+    if (prTimer) { clearInterval(prTimer); prTimer = null; document.getElementById('prgo').textContent = 'Resume'; return; }
+    document.getElementById('prgo').textContent = 'Pause';
+    prTimer = setInterval(() => { prLeft = Math.max(0, prLeft - 1); const c = document.getElementById('prclock'); if (c) { c.textContent = prLeft ? fmtTime(prLeft) : 'Time up'; c.classList.toggle('low', prLeft < 300); } if (!prLeft) { clearInterval(prTimer); prTimer = null; } }, 1000);
+  };
+  document.getElementById('prreset').onclick = () => { clearInterval(prTimer); prTimer = null; prLeft = 60 * 60; render(); };
+  document.getElementById('prnew').onclick = () => { clearInterval(prTimer); prTimer = null; drawPrac(); render(); };
+  document.getElementById('prclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('prac-')) delete store.ticks[k]; }); save(); render(); };
+}
+
 /* ---------- multiple-choice paper in the Cambridge 0610 pattern ---------- */
 /* Measured from the May/June 2026 Paper 1 (Core): 40 questions, 40 marks, 45 minutes, one mark each, in syllabus order:
    characteristics and cells, movement in and out of cells, enzymes, plants, human nutrition and transport, disease, gas exchange, coordination, reproduction, inheritance, ecology, biotechnology. */
@@ -2261,7 +2449,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['resp','Humans','Gas exchange'],['excr','Humans','Excretion'],['coord','Humans','Coordination'],['drugs','Humans','Drugs'],['repro','Genetics','Reproduction'],['inherit','Genetics','Inheritance'],['select','Genetics','Variation & selection'],['ecosys','Ecology','Ecosystems'],['human','Ecology','Human influences'],['biotech','Genetics','Biotechnology'],['mc','','MC paper'],['mock','','Theory paper']];
+const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['resp','Humans','Gas exchange'],['excr','Humans','Excretion'],['coord','Humans','Coordination'],['drugs','Humans','Drugs'],['repro','Genetics','Reproduction'],['inherit','Genetics','Inheritance'],['select','Genetics','Variation & selection'],['ecosys','Ecology','Ecosystems'],['human','Ecology','Human influences'],['biotech','Genetics','Biotechnology'],['skills','Practical','Practical skills'],['mc','','MC paper'],['mock','','Theory paper'],['prac','','Practical paper']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2275,10 +2463,10 @@ document.getElementById('tabs').addEventListener('click', e => {
 function examScore(key, list){ let got = 0, tot = 0; list.forEach((q,i) => { tot += q.m; got += Math.min(q.m, (store.ticks[key+'-'+i] || []).length); }); return [got, tot]; }
 function render(){
   const v = document.getElementById('view');
-  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : cur === 'mc' ? renderMC() : renderChapter(cur);
+  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : cur === 'mc' ? renderMC() : cur === 'prac' ? renderPrac() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease','resp','excr','coord','drugs','repro','inherit','select','ecosys','human','biotech'];
+const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease','resp','excr','coord','drugs','repro','inherit','select','ecosys','human','biotech','skills'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
@@ -2382,8 +2570,9 @@ function renderMock(){
 let quizScore = 0;
 function bindView(){
   quizScore = 0;
-  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && sub_ === 'drill') newDrill();
+  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && cur !== 'prac' && sub_ === 'drill') newDrill();
   if (cur === 'mc') bindMC();
+  if (cur === 'prac') bindPrac();
   if (cur === 'mock') {
     document.getElementById('tgo').onclick = () => {
       if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
@@ -2422,7 +2611,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
       store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? THQ : CH[cur].exam;
+      const list = cur === 'mock' ? THQ : cur === 'prac' ? PRLIST : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
 });
 
