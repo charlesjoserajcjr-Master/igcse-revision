@@ -1832,22 +1832,266 @@ const EXTRA = {
 };
 for (const k in EXTRA) CH[k].exam.push(...EXTRA[k]);
 
+/* ---------- Extended supplement (original): one extra card per chapter, Extended-only MC (x:1) and exam questions (x:1) ---------- */
+const X = { x: 1 };
+const BIOX = {
+  char: {
+    cards: [{ h: 'Kingdoms in detail (Extended)', list: ['==Animals==: multicellular, no cell walls, feed on other organisms (heterotrophs).', '==Plants==: multicellular, cellulose cell walls, chloroplasts, make their own food.', '==Fungi==: body of threads called ==hyphae== (a ==mycelium==), cell walls of ==chitin==, ==saprotrophic== feeding, reproduce by ==spores==.', '==Prokaryotes== (bacteria): single-celled, ==no nucleus== (DNA in a loop, with ==plasmids==).', '==Protoctists==: single-celled with a ==nucleus==. Some photosynthesise (algae), some are parasites.', '==Viruses== are ==not cells==: a ==protein coat== around genetic material (DNA or RNA).'] }],
+    mc: [
+      MQ('Which kind of organism has a body of hyphae and feeds saprotrophically?', 'a fungus', ['a protoctist', 'a plant', 'a prokaryote'], '==Fungi== have ==hyphae== and feed on dead material.', X),
+      MQ('Which is a feature of prokaryotes?', 'their DNA is not enclosed in a nucleus', ['they have a cellulose cell wall', 'they are always multicellular', 'they have chloroplasts'], '==Prokaryotes== have ==no nucleus==; the DNA is a loop, often with plasmids.', X),
+      MQ('Which structure is found in a virus?', 'a protein coat around genetic material', ['a nucleus and cytoplasm', 'a cell wall made of cellulose', 'chloroplasts'], 'A ==virus== is a ==protein coat== around DNA or RNA. It is not a cell.', X)
+    ],
+    exam: [
+      { q: 'State three features of fungi.', m: 3, x: 1, p: ['The body is made of ==hyphae== (a mycelium)', 'Cell walls made of ==chitin==', '==Saprotrophic== feeding / reproduce by ==spores== (any three)'] },
+      { q: 'Describe the structure of a virus and explain why viruses are not classified as living cells.', m: 3, x: 1, p: ['A ==protein coat==', '==Genetic material== (DNA or RNA) inside', 'There is ==no cell structure== (no cytoplasm or nucleus), so it cannot carry out life processes outside a host cell'] }
+    ]
+  },
+  cells: {
+    cards: [{ h: 'Surface area to volume ratio (Extended)', list: ['A ==small== object has a ==large surface area to volume ratio==.', 'A cube of side 1 cm: surface area 6 cm², volume 1 cm³, ratio ==6 : 1==.', 'A cube of side 2 cm: surface area 24 cm², volume 8 cm³, ratio ==3 : 1==.', 'A ==large ratio== makes ==diffusion faster== across the surface.', 'Large organisms have a ==small ratio==, so they need ==transport systems== and exchange surfaces such as ==villi== and ==alveoli==.'] }],
+    mc: [
+      MQ('A cube has sides of 2 cm. What is its surface area to volume ratio?', '3 : 1', ['1 : 3', '6 : 1', '12 : 1'], 'Surface area = 6 × 2 × 2 = 24 cm². Volume = 8 cm³. Ratio = ==3 : 1==.', X),
+      MQ('Why do large animals need a circulatory system?', 'diffusion alone is too slow because the surface area to volume ratio is small', ['they have more cells that never respire', 'they have no exchange surfaces', 'their cells cannot make proteins'], 'A ==small surface area to volume ratio== means diffusion cannot supply all the cells.', X),
+      MQ('A drawing of a cell is 36 mm wide. The magnification is × 1200. What is the actual width of the cell?', '30 µm', ['3 µm', '300 µm', '43 µm'], 'actual size = image ÷ magnification = 36 ÷ 1200 = 0.03 mm = ==30 µm==.', X)
+    ],
+    exam: [
+      { q: 'A cube has sides of 3 cm. Calculate its surface area to volume ratio.', m: 3, x: 1, p: ['Surface area = 6 × 3 × 3 = ==54 cm²==', 'Volume = 3 × 3 × 3 = ==27 cm³==', 'Ratio = 54 ÷ 27 = ==2 : 1=='] },
+      { q: 'Explain why a small single-celled organism does not need a transport system but a large animal does.', m: 3, x: 1, p: ['The small organism has a ==large surface area to volume ratio==', 'So substances ==diffuse== quickly to all parts of the cell', 'A large animal has a ==small ratio== and long diffusion distances, so it needs a ==transport system=='] }
+    ]
+  },
+  move: {
+    cards: [{ h: 'Osmosis and water potential (Extended)', list: ['==Water potential== is the tendency of water to move. Pure water has the ==highest== water potential.', 'Water moves by osmosis from a ==higher== to a ==lower water potential== through a ==partially permeable membrane==.', 'Animal cells in pure water take in water and may ==burst== (==lysis==). In a concentrated solution they ==shrivel==.', 'Plant cells in a concentrated solution lose water and ==plasmolyse== (the membrane pulls away from the cell wall).', '==Active transport== uses ==carrier proteins== and ==energy== from respiration to move particles ==against== a concentration gradient.', 'The rate of diffusion increases with a ==steeper gradient==, a ==higher temperature== and a ==larger surface area==.'] }],
+    mc: [
+      MQ('A red blood cell is placed in pure water. What happens?', 'it takes in water and bursts', ['it loses water and shrinks', 'it stays exactly the same', 'it becomes turgid'], 'It has ==no cell wall==, so water enters by osmosis until the cell ==bursts==.', X),
+      MQ('What is plasmolysis?', 'the cell membrane pulls away from the cell wall as the cell loses water', ['the cell bursts because it takes in water', 'the cell wall breaks down', 'the cell becomes turgid'], 'A plant cell in a ==concentrated solution== loses water and ==plasmolyses==.', X),
+      MQ('Which change would decrease the rate of diffusion?', 'lowering the temperature', ['increasing the surface area', 'increasing the concentration gradient', 'shortening the diffusion distance'], 'A ==lower temperature== means particles have less kinetic energy and move more slowly.', X)
+    ],
+    exam: [
+      { q: 'Explain why red blood cells burst when placed in pure water but plant cells do not.', m: 3, x: 1, p: ['Water enters by ==osmosis== (from higher to lower water potential)', 'Animal cells have ==no cell wall==', 'In plant cells the ==cell wall== resists expansion, so the cell becomes ==turgid==, not burst'] },
+      { q: 'Describe two differences between diffusion and active transport.', m: 2, x: 1, p: ['Diffusion is ==down== a concentration gradient; active transport is ==against== it', 'Active transport needs ==energy== from respiration and ==carrier proteins==; diffusion does not'] }
+    ]
+  },
+  molecules: {
+    cards: [{ h: 'Large molecules and DNA (Extended)', list: ['==Starch==, ==glycogen== and ==cellulose== are made of many ==glucose== molecules joined together.', '==Proteins== are chains of ==amino acids==. A ==fat== is made of ==three fatty acids== and ==one glycerol==.', '==DNA== is a ==double helix== of two strands.', 'The bases pair in a fixed way: ==A with T== and ==C with G== (==complementary base pairing==).', 'The ==order of bases== in a gene codes for the ==order of amino acids== in a protein.', 'Test for ==vitamin C==: ==DCPIP== loses its blue colour. Test for ==protein==: ==biuret== turns purple.'] }],
+    mc: [
+      MQ('One strand of a DNA molecule has the bases G G C T. What is the sequence of the other strand?', 'C C G A', ['C C G T', 'A A T C', 'T T G A'], 'G pairs with C and T pairs with A, so G G C T pairs with ==C C G A==.', X),
+      MQ('Which substance is made of many glucose molecules?', 'glycogen', ['protein', 'a fat', 'DNA'], '==Glycogen==, starch and cellulose are polymers of glucose.', X),
+      MQ('What does a fat molecule contain?', 'one glycerol and three fatty acids', ['three glycerol and one fatty acid', 'many amino acids', 'many glucose molecules'], 'A fat is ==1 glycerol + 3 fatty acids==.', X)
+    ],
+    exam: [
+      { q: 'One strand of a DNA molecule has the base sequence A A G C T. Write the sequence of the complementary strand and state the rule you used.', m: 3, x: 1, p: ['==T T C G A==', '==A pairs with T==', '==C pairs with G== (complementary base pairing)'] },
+      { q: 'Describe how the structure of a protein is related to the sequence of bases in DNA.', m: 3, x: 1, p: ['A ==gene== is a section of DNA', 'The ==order of bases== codes for the ==order of amino acids==', 'The amino acids join to make a ==specific protein=='] }
+    ]
+  },
+  enzymes: {
+    cards: [{ h: 'Lock and key (Extended)', list: ['Each enzyme has an ==active site== of a particular shape.', 'Only a substrate with a ==complementary shape== fits: the enzyme is ==specific== (==lock and key==).', 'A higher temperature gives more ==collisions== and a faster reaction, up to the ==optimum==.', 'Above the optimum the ==active site changes shape== and the enzyme is ==denatured==. The substrate no longer fits.', 'An extreme ==pH== also denatures enzymes.', 'More substrate raises the rate until all the ==active sites are occupied==.'] }],
+    mc: [
+      MQ('Why does an enzyme act on only one type of substrate?', 'the substrate has a shape complementary to the active site', ['the enzyme is too large for other substrates', 'other substrates are not made of protein', 'the enzyme changes shape for each substrate'], 'The enzyme is ==specific==: only the right shape fits the ==active site==.', X),
+      MQ('Why does the rate of an enzyme reaction rise as the temperature rises towards the optimum?', 'more frequent collisions between enzyme and substrate', ['the active site gets larger', 'the enzyme is denatured', 'more enzyme is made'], 'The particles have more ==kinetic energy==, so there are more ==collisions==.', X),
+      MQ('On a graph of rate against substrate concentration the line levels off. Why?', 'all the active sites are occupied', ['the enzyme has been denatured', 'the substrate has run out', 'the temperature has fallen'], 'The enzyme concentration is now ==limiting==: all the ==active sites== are in use.', X)
+    ],
+    exam: [
+      { q: 'Explain why the rate of an enzyme-catalysed reaction falls at very high temperatures.', m: 3, x: 1, p: ['The shape of the ==active site changes==', 'The enzyme is ==denatured==', 'The substrate ==no longer fits==, so fewer reactions happen'] },
+      { q: 'Describe and explain how the rate of reaction changes as the substrate concentration is increased, with a fixed amount of enzyme.', m: 3, x: 1, p: ['The rate ==increases== at first', 'More ==collisions== between substrate and active sites', 'It ==levels off== because all the ==active sites are occupied=='] }
+    ]
+  },
+  plantnut: {
+    cards: [{ h: 'Photosynthesis in detail (Extended)', list: ['Equation: ==6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂== (in light, with chlorophyll).', '==Chlorophyll== absorbs ==light energy== and changes it into ==chemical energy== in glucose.', 'Glucose is used for ==respiration==, or turned into ==starch== (storage), ==cellulose== (cell walls) and ==sucrose== (transport). With ==nitrate== it makes ==amino acids==.', '==Nitrate== is needed for ==proteins== (a lack gives stunted growth). ==Magnesium== is needed for ==chlorophyll== (a lack gives yellow leaves).', '==Limiting factors==: light intensity, carbon dioxide concentration and temperature. The factor in shortest supply limits the rate.'] }],
+    mc: [
+      MQ('Which is the balanced equation for photosynthesis?', '6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂', ['C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O', '6CO₂ + 6O₂ → C₆H₁₂O₆ + 6H₂O', 'CO₂ + H₂O → C₆H₁₂O₆ + O₂'], 'Six carbon dioxide and six water give ==one glucose and six oxygen==.', X),
+      MQ('A plant has yellow leaves. Which mineral ion deficiency could cause this?', 'magnesium', ['calcium', 'sodium', 'chloride'], '==Magnesium== is needed to make chlorophyll.', X),
+      MQ('A graph of photosynthesis rate against light intensity becomes horizontal. What must now be limiting the rate?', 'a factor other than light, such as carbon dioxide concentration', ['light intensity', 'the number of leaves in the dark', 'oxygen concentration only'], 'More light no longer helps, so another ==limiting factor== (CO₂ or temperature) is in short supply.', X)
+    ],
+    exam: [
+      { q: 'Write the word equation and the balanced symbol equation for photosynthesis.', m: 3, x: 1, p: ['carbon dioxide + water → ==glucose + oxygen==', '==6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂== (balanced)', '==Light energy== and ==chlorophyll== shown'] },
+      { q: 'Explain why a plant that lacks nitrate has stunted growth.', m: 3, x: 1, p: ['Nitrate is needed to make ==amino acids==', 'So ==proteins== cannot be made', 'Proteins are needed for ==growth== (new cells and enzymes)'] }
+    ]
+  },
+  nutr: {
+    cards: [{ h: 'Digestion and absorption in detail (Extended)', list: ['==Bile== is made in the ==liver== and stored in the ==gall bladder==. It ==neutralises== stomach acid and ==emulsifies== fats (a larger surface area for lipase).', '==Peristalsis== is waves of muscle contraction that push food along the gut.', 'Digested food is absorbed in the ==small intestine==. ==Villi== have a ==large surface area==, thin walls and a ==good blood supply==.', 'Blood from the small intestine goes to the liver in the ==hepatic portal vein==.', 'In the liver the body ==assimilates== the food. Extra glucose is stored as ==glycogen==.'] }],
+    mc: [
+      MQ('Which vessel carries blood from the small intestine to the liver?', 'hepatic portal vein', ['hepatic vein', 'hepatic artery', 'renal vein'], 'The ==hepatic portal vein== takes absorbed food to the liver.', X),
+      MQ('Why does the emulsification of fat help digestion?', 'it gives a larger surface area for lipase to act', ['it breaks fat into fatty acids', 'it makes fat insoluble', 'it neutralises the fat'], 'Small droplets have a ==larger surface area== for ==lipase==.', X),
+      MQ('What is peristalsis?', 'muscle contractions that move food along the gut', ['the breakdown of food by enzymes', 'the absorption of water', 'the chewing of food'], '==Peristalsis== is a wave of ==muscle contraction== along the gut wall.', X)
+    ],
+    exam: [
+      { q: 'Describe how the structure of a villus helps the absorption of digested food.', m: 3, x: 1, p: ['A large ==surface area== (folded, with microvilli)', 'A ==thin wall== (one cell thick), so a short diffusion distance', 'A good ==blood supply== (capillaries) to carry the food away'] },
+      { q: 'Explain the roles of bile in digestion.', m: 3, x: 1, p: ['==Neutralises== stomach acid (alkaline conditions suit enzymes)', '==Emulsifies== fat into small droplets', 'A larger surface area so ==lipase== digests fat faster'] }
+    ]
+  },
+  transp: {
+    cards: [{ h: 'Phloem, xylem and plant adaptations (Extended)', list: ['==Xylem== vessels are ==dead== hollow tubes strengthened with ==lignin==. They carry water and mineral ions upwards.', '==Phloem== has ==sieve tubes== and ==companion cells==. It carries ==sucrose== and amino acids (==translocation==).', 'Translocation moves substances from a ==source== (for example a leaf) to a ==sink== (for example roots, fruits or storage organs).', '==Xerophytes== (dry places): curled leaves, hairs, ==sunken stomata==, a thick waxy cuticle, reduced leaves.', '==Hydrophytes== (in water): thin or no cuticle, ==large air spaces== for floating, ==stomata on the upper surface==.', 'If water loss is faster than uptake the cells lose turgor and the plant ==wilts==.'] }],
+    mc: [
+      MQ('What is the function of lignin in xylem vessels?', 'it strengthens the walls', ['it carries sucrose', 'it makes the tubes leak', 'it absorbs water from the soil'], '==Lignin== strengthens the walls so the vessels do not collapse.', X),
+      MQ('In translocation, a leaf making sucrose is the…', 'source', ['sink', 'xylem', 'stoma'], 'A ==source== makes or releases the sucrose; a ==sink== uses or stores it.', X),
+      MQ('Which feature helps a xerophyte reduce water loss?', 'sunken stomata', ['a thin cuticle', 'stomata on the upper surface', 'large air spaces in the leaf'], '==Sunken stomata== trap moist air and reduce transpiration.', X)
+    ],
+    exam: [
+      { q: 'Describe how xylem vessels are adapted for their function.', m: 3, x: 1, p: ['No ==cross walls==, so a continuous hollow tube', 'Walls strengthened with ==lignin==', '==Dead== cells with no cytoplasm, so water flows freely'] },
+      { q: 'Explain how the features of a cactus reduce water loss.', m: 3, x: 1, p: ['Leaves reduced to ==spines== (a small surface area)', 'A thick ==waxy cuticle==', '==Sunken stomata== / the stem stores water (any three)'] }
+    ]
+  },
+  blood: {
+    cards: [{ h: 'Heart disease and the circulation (Extended)', list: ['==Coronary arteries== supply the heart muscle with oxygen and glucose.', 'In ==coronary heart disease== fatty deposits ==block== the coronary arteries. The heart muscle gets ==less oxygen== and may stop working (a heart attack).', 'Risk factors: ==diet high in saturated fat==, ==smoking==, ==stress==, ==lack of exercise== and ==genetic factors==.', 'The ==left ventricle== has a ==thicker muscular wall== because it pumps blood at a high pressure to the whole body.', 'In clotting, ==platelets== help and ==fibrinogen== is changed into insoluble ==fibrin== threads.'] }],
+    mc: [
+      MQ('Which blood vessel becomes blocked in coronary heart disease?', 'coronary artery', ['aorta', 'pulmonary vein', 'vena cava'], 'The ==coronary arteries== supply the heart muscle.', X),
+      MQ('Why does the left ventricle have a thicker wall than the right ventricle?', 'it pumps blood at a higher pressure around the whole body', ['it pumps blood to the lungs only', 'it holds more blood', 'it contains the valves'], 'The left side pumps to the ==whole body==, so it needs more force.', X),
+      MQ('Which protein forms the mesh of a blood clot?', 'fibrin', ['fibrinogen', 'haemoglobin', 'an antibody'], '==Fibrinogen== is changed into insoluble ==fibrin==.', X)
+    ],
+    exam: [
+      { q: 'Describe how a blocked coronary artery can cause a heart attack.', m: 3, x: 1, p: ['Coronary arteries supply the ==heart muscle== with blood', 'A blockage reduces the supply of ==oxygen and glucose==', 'The muscle cells ==cannot respire== enough, so the heart muscle is damaged and may stop'] },
+      { q: 'State three risk factors for coronary heart disease.', m: 3, x: 1, p: ['A diet high in ==saturated fat==', '==Smoking==', '==Stress== / lack of exercise / genetic factors (any three)'] }
+    ]
+  },
+  disease: {
+    cards: [{ h: 'Antibodies and resistance (Extended)', list: ['A pathogen has ==antigens== on its surface. The body makes ==specific antibodies== that fit these antigens.', '==Lymphocytes== make antibodies. ==Memory cells== stay in the blood, so a second infection is stopped ==faster==.', 'A ==vaccine== contains a weakened or dead pathogen (antigens). It makes memory cells without causing the disease.', '==Passive immunity== gives ready-made antibodies (for example in ==breast milk==). It is ==short-lived== because no memory cells are made.', 'Bacteria become ==resistant== to antibiotics by ==natural selection==. Overuse of antibiotics makes this ==more likely==.'] }],
+    mc: [
+      MQ('What are antigens?', 'molecules on the surface of a pathogen that trigger an immune response', ['proteins that kill pathogens', 'cells that make antibodies', 'chemicals made by white blood cells to clot blood'], '==Antigens== are on the pathogen. ==Antibodies== are made by the body.', X),
+      MQ('Why is a second infection by the same pathogen often stopped quickly?', 'memory cells make the right antibodies faster', ['red blood cells attack the pathogen', 'the pathogen cannot divide twice', 'antibiotics are made in the blood'], '==Memory cells== give a faster and larger response.', X),
+      MQ('Why is passive immunity short-lived?', 'no memory cells are produced', ['the antibodies are destroyed by the pathogen', 'the baby makes its own antibodies', 'the antibodies are too large'], 'The antibodies are donated, so there are ==no memory cells==.', X)
+    ],
+    exam: [
+      { q: 'Explain how vaccination gives long-term protection against a disease.', m: 3, x: 1, p: ['The vaccine contains ==antigens== (weakened or dead pathogen)', 'Lymphocytes make ==antibodies== and ==memory cells==', 'On infection the memory cells respond ==faster== and make more antibodies'] },
+      { q: 'Explain how the overuse of antibiotics leads to antibiotic-resistant bacteria.', m: 3, x: 1, p: ['Bacteria show ==variation==; a ==mutation== gives resistance in some', 'The antibiotic kills the others, so the resistant bacteria ==survive and reproduce==', 'They ==pass on the resistance allele==, so the resistant population increases'] }
+    ]
+  },
+  resp: {
+    cards: [{ h: 'Respiration and breathing in detail (Extended)', list: ['Aerobic: ==C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O==.', 'Anaerobic in muscles: ==glucose → lactic acid==. In yeast: ==glucose → ethanol + carbon dioxide==.', 'After hard exercise extra oxygen is needed to break down the ==lactic acid==: the ==oxygen debt==. This is why breathing and heart rate stay high.', 'Breathing in: the ==external intercostal muscles== and ==diaphragm== contract, the ribs move ==up and out==, the thorax ==volume increases== and the ==pressure decreases==, so air moves in.', 'Alveoli have thin walls, a large surface area, a rich blood supply and moist surfaces.'] }],
+    mc: [
+      MQ('Which substance must be broken down using extra oxygen after hard exercise?', 'lactic acid', ['ethanol', 'urea', 'glucose'], 'The ==lactic acid== made by anaerobic respiration is the ==oxygen debt==.', X),
+      MQ('When a person breathes in, what happens to the volume and the pressure in the thorax?', 'volume increases and pressure decreases', ['volume decreases and pressure increases', 'volume and pressure both increase', 'volume and pressure both decrease'], 'A bigger volume means a ==lower pressure==, so air flows in.', X),
+      MQ('Which equation represents anaerobic respiration in yeast?', 'glucose → ethanol + carbon dioxide', ['glucose → lactic acid', 'glucose + oxygen → carbon dioxide + water', 'carbon dioxide + water → glucose + oxygen'], 'Yeast makes ==ethanol and carbon dioxide==.', X)
+    ],
+    exam: [
+      { q: 'Explain what is meant by oxygen debt.', m: 3, x: 1, p: ['In hard exercise the muscles respire ==anaerobically==', 'This produces ==lactic acid==', 'Extra oxygen is needed afterwards to ==break down the lactic acid=='] },
+      { q: 'Describe the changes that make air move into the lungs during inhalation.', m: 4, x: 1, p: ['The ==external intercostal muscles== contract (ribs move up and out)', 'The ==diaphragm== contracts and flattens', 'The thorax ==volume increases==', 'The ==pressure decreases==, so air moves in'] }
+    ]
+  },
+  excr: {
+    cards: [{ h: 'The liver and the kidney (Extended)', list: ['==Deamination== in the ==liver==: excess amino acids lose the ==amino group==, which is changed to ==urea==.', 'In the kidney ==ultrafiltration== forces small molecules (water, glucose, urea, salts) out of the blood. ==Proteins and blood cells stay in the blood==.', '==Selective reabsorption==: all the ==glucose==, some water and some salts are taken back into the blood.', '==Urine== contains urea, excess water and salts.', '==ADH== controls water reabsorption. ==More ADH== means ==more water reabsorbed== and less, more concentrated urine.'] }],
+    mc: [
+      MQ('What happens to excess amino acids in the liver?', 'they are deaminated and urea is formed', ['they are stored as protein', 'they are excreted unchanged', 'they are changed into fat only'], '==Deamination== removes the amino group, which becomes ==urea==.', X),
+      MQ('Which substance is normally all reabsorbed in the kidney tubule?', 'glucose', ['urea', 'all of the salts', 'all of the water'], 'All the ==glucose== is reabsorbed by active transport.', X),
+      MQ('What is the effect of more ADH in the blood?', 'more water is reabsorbed and the urine is more concentrated', ['less water is reabsorbed and the urine is more dilute', 'more urea is reabsorbed', 'glucose appears in the urine'], '==ADH== makes the kidney ==reabsorb more water==.', X)
+    ],
+    exam: [
+      { q: 'Describe how the kidney produces urine from blood.', m: 4, x: 1, p: ['==Ultrafiltration==: small molecules (urea, glucose, water) are forced out of the blood', 'Proteins and blood cells ==stay in the blood==', '==Selective reabsorption== of all the glucose and some water and salts', 'Urea and excess water leave as ==urine=='] },
+      { q: 'Explain the role of the liver in the formation of urea.', m: 3, x: 1, p: ['Excess ==amino acids== cannot be stored', 'The ==amino group is removed== (deamination)', 'It is changed into ==urea==, which goes to the kidneys'] }
+    ]
+  },
+  coord: {
+    cards: [
+      { h: 'Synapses, the eye and auxin (Extended)', list: ['A ==synapse== is a gap between two neurones. A ==neurotransmitter== diffuses across and starts a new impulse.', '==Rods== work in ==dim light== and do not see colour. ==Cones== work in ==bright light== and see ==colour==. The ==fovea== has the most cones.', 'Near object: the ==ciliary muscle contracts==, the ==suspensory ligaments slacken== and the lens becomes ==thicker==. Distant object: the ciliary muscle ==relaxes== and the lens becomes ==thinner==.', '==Auxin== is a plant growth hormone made in the shoot tip. In ==phototropism== auxin moves to the ==shaded side==, which grows faster, so the shoot bends ==towards the light==.'] },
+      { h: 'Homeostasis (Extended)', list: ['==Homeostasis== keeps conditions steady using ==negative feedback==.', 'Blood glucose too high: ==insulin== is released and the liver turns glucose into ==glycogen==.', 'Blood glucose too low: ==glucagon== is released and the liver turns glycogen into glucose.', 'Too hot: ==vasodilation== (skin blood vessels widen) and ==sweating==. Too cold: ==vasoconstriction== and ==shivering==.'] }
+    ],
+    mc: [
+      MQ('What crosses a synapse?', 'neurotransmitter molecules', ['electrical charge in a wire', 'hormones in the blood', 'antibodies'], 'A ==neurotransmitter== diffuses across the gap.', X),
+      MQ('Which cells in the retina give colour vision?', 'cones', ['rods', 'neurones', 'fovea cells only'], '==Cones== respond to colour in bright light.', X),
+      MQ('The ciliary muscle relaxes. What happens to the lens?', 'it becomes thinner', ['it becomes thicker', 'it moves backwards', 'it does not change'], 'The ligaments pull tight, so the lens is ==thinner== for distant objects.', X),
+      MQ('What makes a shoot bend towards light?', 'auxin builds up on the shaded side, which grows faster', ['auxin builds up on the lit side, which grows faster', 'auxin stops cells growing on the shaded side', 'light makes the shoot tip heavier'], '==Auxin== moves to the ==shaded side==, so it elongates more.', X),
+      MQ('Which hormone makes the liver change glycogen into glucose?', 'glucagon', ['insulin', 'ADH', 'oestrogen'], '==Glucagon== raises blood glucose.', X),
+      MQ('What happens in the skin when a person is too hot?', 'the blood vessels near the surface widen (vasodilation)', ['the blood vessels near the surface narrow', 'the hairs stand up', 'shivering starts'], '==Vasodilation== lets more heat be lost.', X)
+    ],
+    exam: [
+      { q: 'Describe how an impulse passes across a synapse.', m: 3, x: 1, p: ['The impulse arrives at the end of the first neurone', '==Neurotransmitter== is released and ==diffuses== across the gap', 'It binds to receptors on the next neurone and starts a new impulse'] },
+      { q: 'Explain how a shoot grows towards a source of light.', m: 3, x: 1, p: ['==Auxin== is made in the shoot tip', 'It moves to the ==shaded side==', 'Cells on that side ==elongate faster==, so the shoot bends towards the light'] },
+      { q: 'Explain how the eye focuses on a near object.', m: 3, x: 1, p: ['The ==ciliary muscles contract==', 'The ==suspensory ligaments slacken==', 'The lens becomes ==thicker== (more curved) and refracts the light more'] },
+      { q: 'Describe how the body responds when the blood glucose concentration rises.', m: 3, x: 1, p: ['The pancreas releases ==insulin==', 'The liver converts ==glucose to glycogen==', 'Blood glucose falls (==negative feedback==)'] }
+    ]
+  },
+  drugs: {
+    cards: [{ h: 'Drugs and health (Extended)', list: ['==Heroin== is a ==depressant==. It causes ==addiction== and ==withdrawal symptoms==, and sharing needles can spread ==HIV==.', '==Alcohol== slows reactions, damages the ==liver== and can cause ==addiction==.', '==Carbon monoxide== combines with ==haemoglobin==, so the blood carries ==less oxygen==.', '==Tar== is a ==carcinogen== (causes ==lung cancer==) and damages the cilia, causing ==bronchitis==.'] }],
+    mc: [
+      MQ('How does carbon monoxide in tobacco smoke affect the blood?', 'it combines with haemoglobin so less oxygen is carried', ['it increases the number of red blood cells', 'it destroys white blood cells', 'it makes the blood clot'], '==Carbon monoxide== takes the place of oxygen on ==haemoglobin==.', X),
+      MQ('Which is a possible result of long-term alcohol misuse?', 'liver damage', ['lung cancer from tar', 'scurvy', 'faster reaction times'], 'Alcohol damages the ==liver==.', X),
+      MQ('Which drug can spread HIV when needles are shared?', 'heroin', ['caffeine', 'paracetamol', 'nicotine'], 'Injected drugs such as ==heroin== can spread ==HIV== through shared needles.', X)
+    ],
+    exam: [
+      { q: 'Describe the harmful effects of tobacco smoke on the gas exchange system.', m: 3, x: 1, p: ['==Tar== causes lung cancer', 'Cilia are damaged, so ==mucus and bacteria== are not removed (bronchitis)', '==Carbon monoxide== reduces the oxygen carried by the blood'] },
+      { q: 'Explain why heroin users may become addicted and why this is harmful.', m: 3, x: 1, p: ['The body becomes ==dependent== and has ==withdrawal symptoms==', 'Users may lose money or work or turn to crime (==social effects==)', 'Risk of ==HIV== from shared needles / overdose'] }
+    ]
+  },
+  repro: {
+    cards: [{ h: 'Meiosis and hormones (Extended)', list: ['==Meiosis== makes ==gametes== with ==half== the number of chromosomes (==haploid==). Body cells are ==diploid== (46 in humans).', '==Fertilisation== joins two gametes and restores the diploid number.', '==Asexual== reproduction makes ==identical== offspring from one parent. ==Sexual== reproduction gives ==variation== but needs two parents.', 'Menstrual cycle: ==FSH== matures an egg; ==oestrogen== repairs the uterus lining; ==LH== causes ovulation; ==progesterone== keeps the lining.', 'The ==placenta== passes oxygen and nutrients to the fetus and carbon dioxide and urea back. The blood does not mix.'] }],
+    mc: [
+      MQ('A human sperm has 23 chromosomes. How many chromosomes does the zygote have?', '46', ['23', '92', '69'], 'The egg also has 23, so the zygote has ==46==.', X),
+      MQ('Which process produces gametes?', 'meiosis', ['mitosis', 'fertilisation', 'pollination'], '==Meiosis== halves the chromosome number to make gametes.', X),
+      MQ('Which hormone causes ovulation?', 'LH', ['FSH', 'progesterone', 'testosterone'], '==LH== (luteinising hormone) triggers ovulation.', X),
+      MQ('What is an advantage of sexual reproduction in a wild population?', 'it produces variation, so some may survive a change', ['it needs only one parent', 'it produces identical offspring', 'it is much faster than asexual reproduction'], '==Variation== helps the species adapt to change.', X)
+    ],
+    exam: [
+      { q: 'State two differences between meiosis and mitosis.', m: 2, x: 1, p: ['Meiosis makes ==gametes==; mitosis makes body cells for growth and repair', 'Meiosis ==halves== the chromosome number (haploid); mitosis keeps it (diploid) / meiosis gives variation'] },
+      { q: 'Describe the role of the placenta.', m: 3, x: 1, p: ['==Oxygen and nutrients== pass from the mother to the fetus', '==Carbon dioxide and urea== pass to the mother', 'The blood of the mother and fetus ==does not mix== / antibodies pass across'] }
+    ]
+  },
+  inherit: {
+    cards: [{ h: 'Codominance, sex linkage and protein synthesis (Extended)', list: ['==Codominance==: both alleles show in the heterozygote (for example red and white giving ==roan==).', '==Sex-linked== genes are on the ==X chromosome==. Males (XY) have only one copy, so a recessive allele (for example ==colour blindness==) shows more often in males.', '==Protein synthesis==: a gene in the ==nucleus== is copied into ==mRNA==. The mRNA goes to a ==ribosome==, where ==amino acids== join in the order it codes for.', 'A ==mutation== is a ==random change== in DNA.', 'A ==test cross== with a homozygous recessive shows whether an organism with the dominant feature is ==homozygous== or ==heterozygous==.'] }],
+    mc: [
+      MQ('Two heterozygous plants are crossed. The offspring show 1 colour A : 2 colour B : 1 colour C. What does this show?', 'the alleles are codominant', ['the trait is sex-linked', 'the parents are pure-breeding', 'the allele is recessive'], 'A ==1 : 2 : 1== ratio of three colours shows ==codominance==.', X),
+      MQ('Why are males more likely to show a recessive sex-linked condition?', 'they have only one X chromosome', ['they have two Y chromosomes', 'they have more genes', 'the Y chromosome carries the allele'], 'XY males have ==one X==, so one recessive allele is enough.', X),
+      MQ('Where does the mRNA take the code for a protein?', 'to the ribosome', ['to the mitochondrion', 'back to the DNA', 'to the cell membrane'], '==mRNA== goes to the ==ribosome== for protein synthesis.', X),
+      MQ('A black rabbit (B_) is crossed with a brown rabbit (bb). Half the offspring are brown. What is the genotype of the black parent?', 'Bb', ['BB', 'bb', 'B'], 'A brown (bb) offspring needs a ==b== from each parent, so the black parent is ==Bb==.', X)
+    ],
+    exam: [
+      { q: 'Explain why a recessive sex-linked condition such as colour blindness is more common in males than in females.', m: 3, x: 1, p: ['The allele is on the ==X chromosome==', 'Males have only ==one X== (XY), so one recessive allele shows the condition', 'Females (XX) need ==two== recessive alleles; they may be carriers'] },
+      { q: 'Describe how the sequence of bases in a gene determines the structure of a protein.', m: 3, x: 1, p: ['The gene is copied to ==mRNA== in the nucleus', 'The mRNA goes to a ==ribosome==', 'The ==order of bases== decides the ==order of amino acids=='] }
+    ]
+  },
+  select: {
+    cards: [{ h: 'Adaptation and evolution (Extended)', list: ['==Adaptive features== help an organism survive in its habitat (for example thick fat in the Arctic, ==camouflage==).', '==Natural selection==: variation, overproduction, struggle for survival, the best adapted survive, they ==reproduce and pass on alleles==, and those alleles become ==more common==.', '==Evolution== is the gradual change in a species over many generations caused by natural selection.', '==Selective breeding== picks parents with the wanted features over many generations. It ==reduces variation==.'] }],
+    mc: [
+      MQ('What is evolution?', 'a gradual change in a species over many generations caused by natural selection', ['a change in one organism during its life', 'a change caused only by the environment', 'the choice of parents by farmers'], '==Evolution== is change in the species over ==many generations==.', X),
+      MQ('Which is a disadvantage of selective breeding?', 'it reduces genetic variation', ['it increases the number of alleles', 'it makes breeding faster than in the wild', 'it produces new species at once'], 'Using few parents ==reduces variation==, so a disease may harm the whole stock.', X),
+      MQ('Which is an adaptive feature of an Arctic mammal?', 'a thick layer of fat for insulation', ['large ears to lose heat', 'a thin coat', 'a large surface area to volume ratio'], 'A thick layer of ==fat== reduces heat loss.', X)
+    ],
+    exam: [
+      { q: 'Explain how natural selection could lead to a population of rabbits with longer legs.', m: 4, x: 1, p: ['There is ==variation== in leg length', 'Longer-legged rabbits ==escape predators== better and survive', 'They ==reproduce== and ==pass on the alleles==', 'The allele for long legs becomes ==more common== over generations'] },
+      { q: 'State two disadvantages of selective breeding.', m: 2, x: 1, p: ['It ==reduces variation== (inbreeding)', '==Harmful alleles== can spread / the stock cannot adapt to disease or change'] }
+    ]
+  },
+  ecosys: {
+    cards: [{ h: 'Pyramids and nutrient cycles (Extended)', list: ['==Pyramids of number== show the numbers of organisms at each level. ==Pyramids of biomass== show dry mass. ==Pyramids of energy== show energy.', 'Only about ==10%== of the energy passes to the next level. The rest is lost as ==heat==, in ==movement== and in ==waste==. So food chains have ==few trophic levels==.', 'Eating plants is more ==energy efficient== than eating meat.', '==Nitrogen cycle==: ==nitrogen-fixing bacteria== change nitrogen gas into nitrates; ==decomposers== make ammonia; ==denitrifying bacteria== return nitrogen to the air. Plants take up ==nitrates==.', 'Population size is limited by ==food==, ==predation==, ==disease== and ==competition==.'] }],
+    mc: [
+      MQ('About what percentage of the energy at one trophic level is passed to the next?', '10%', ['90%', '50%', '1%'], 'Only about ==10%== is passed on.', X),
+      MQ('Which organisms change nitrogen gas into nitrates?', 'nitrogen-fixing bacteria', ['decomposers only', 'producers', 'denitrifying bacteria'], '==Nitrogen-fixing bacteria== make nitrogen available to plants.', X),
+      MQ('Why are there rarely more than five trophic levels in a food chain?', 'too little energy is left for the next level', ['predators eat their own species', 'plants cannot support more levels', 'decomposers use all the energy first'], 'Energy is lost at ==each level==.', X)
+    ],
+    exam: [
+      { q: 'Explain why only about 10% of the energy in one trophic level is passed on to the next.', m: 3, x: 1, p: ['Energy is lost as ==heat== in respiration', 'Energy is used for ==movement== and growth', 'Some parts are not eaten or are lost in ==waste (faeces)=='] },
+      { q: 'Describe the role of bacteria in the nitrogen cycle.', m: 3, x: 1, p: ['==Nitrogen-fixing== bacteria change nitrogen gas into ==nitrates== (or ammonia)', '==Decomposers== change proteins and urea into ammonia', '==Denitrifying== bacteria return nitrogen to the atmosphere'] }
+    ]
+  },
+  human: {
+    cards: [{ h: 'Pollution and conservation in detail (Extended)', list: ['==Eutrophication==: fertiliser run-off → ==nitrates== in the river → ==algae multiply== → light blocked → plants die → ==bacteria decompose== them using ==oxygen== → ==fish die==.', 'The ==enhanced greenhouse effect==: more ==CO₂== and ==methane== trap more heat.', 'Conservation: protected areas, ==captive breeding==, ==seed banks==, quotas and laws.', '==Sustainable development== meets present needs without harming the future.'] }],
+    mc: [
+      MQ('Why does the oxygen concentration in a river fall after algae die?', 'bacteria decomposing the dead algae use oxygen in respiration', ['the algae release carbon dioxide only', 'the fish eat the oxygen', 'photosynthesis increases'], '==Decomposers== respire and use up the ==oxygen==.', X),
+      MQ('Why are seed banks useful for conservation?', 'they store seeds so a species can be regrown if it dies out in the wild', ['they stop the seeds from germinating for ever', 'they protect animals from hunters', 'they remove carbon dioxide'], 'A ==seed bank== keeps seeds as a ==back-up==.', X),
+      MQ('Which greenhouse gas is produced in large amounts by cattle?', 'methane', ['oxygen', 'nitrogen', 'argon'], 'Cattle make ==methane==.', X)
+    ],
+    exam: [
+      { q: 'Explain how the use of fertiliser on farmland can lead to the death of fish in a river.', m: 4, x: 1, p: ['Run-off carries ==nitrates== into the river', '==Algae== grow fast and block the light', 'Plants die and ==bacteria decompose== them', 'The bacteria use up the ==oxygen==, so the fish die'] },
+      { q: 'Suggest two reasons why captive breeding programmes may not save a species.', m: 2, x: 1, p: ['A small population has ==little genetic variation==', 'It may be hard to ==release== them: the habitat may be lost / animals may not survive in the wild'] }
+    ]
+  }
+};
+for (const k in BIOX) { CH[k].learn.push(...BIOX[k].cards); CH[k].quiz.push(...BIOX[k].mc); CH[k].exam.push(...BIOX[k].exam); }
+
 /* ---------- multiple-choice paper in the Cambridge 0610 pattern ---------- */
 /* Measured from the May/June 2026 Paper 1 (Core): 40 questions, 40 marks, 45 minutes, one mark each, in syllabus order:
    characteristics and cells, movement in and out of cells, enzymes, plants, human nutrition and transport, disease, gas exchange, coordination, reproduction, inheritance, ecology, biotechnology. */
 const MC_TOPICS = [
-  { k: 'char', n: 'Classification', core: 1 }, { k: 'cells', n: 'Cells', core: 2 }, { k: 'move', n: 'Diffusion and osmosis', core: 2 }, { k: 'molecules', n: 'Biological molecules', core: 1 },
-  { k: 'enzymes', n: 'Enzymes', core: 2 }, { k: 'plantnut', n: 'Photosynthesis', core: 2 }, { k: 'nutr', n: 'Human nutrition', core: 2 }, { k: 'transp', n: 'Transport in plants', core: 3 },
-  { k: 'blood', n: 'Blood and heart', core: 3 }, { k: 'disease', n: 'Disease and immunity', core: 1 }, { k: 'resp', n: 'Gas exchange and respiration', core: 2 }, { k: 'excr', n: 'Excretion', core: 1 },
-  { k: 'coord', n: 'Coordination', core: 5 }, { k: 'drugs', n: 'Drugs', core: 1 }, { k: 'repro', n: 'Reproduction', core: 3 }, { k: 'inherit', n: 'Inheritance', core: 2 },
-  { k: 'select', n: 'Variation and selection', core: 1 }, { k: 'ecosys', n: 'Ecosystems', core: 4 }, { k: 'human', n: 'Human influences', core: 1 }, { k: 'biotech', n: 'Biotechnology', core: 1 }
+  { k: 'char', n: 'Classification', core: 1, ext: 2 }, { k: 'cells', n: 'Cells', core: 2, ext: 2 }, { k: 'move', n: 'Diffusion and osmosis', core: 2, ext: 1 }, { k: 'molecules', n: 'Biological molecules', core: 1, ext: 2 },
+  { k: 'enzymes', n: 'Enzymes', core: 2, ext: 3 }, { k: 'plantnut', n: 'Photosynthesis', core: 2, ext: 1 }, { k: 'nutr', n: 'Human nutrition', core: 2, ext: 1 }, { k: 'transp', n: 'Transport in plants', core: 3, ext: 2 },
+  { k: 'blood', n: 'Blood and heart', core: 3, ext: 3 }, { k: 'disease', n: 'Disease and immunity', core: 1, ext: 2 }, { k: 'resp', n: 'Gas exchange and respiration', core: 2, ext: 2 }, { k: 'excr', n: 'Excretion', core: 1, ext: 1 },
+  { k: 'coord', n: 'Coordination', core: 5, ext: 3 }, { k: 'drugs', n: 'Drugs', core: 1, ext: 0 }, { k: 'repro', n: 'Reproduction', core: 3, ext: 3 }, { k: 'inherit', n: 'Inheritance', core: 2, ext: 4 },
+  { k: 'select', n: 'Variation and selection', core: 1, ext: 1 }, { k: 'ecosys', n: 'Ecosystems', core: 4, ext: 4 }, { k: 'human', n: 'Human influences', core: 1, ext: 2 }, { k: 'biotech', n: 'Biotechnology', core: 1, ext: 1 }
 ];
-const MC_PAPERS = { core: { name: 'Paper 1', tier: 'Core', mins: 45 } };
-const MC_POOL = {}; MC_TOPICS.forEach(t => { MC_POOL[t.k] = CH[t.k].quiz.map((q, i) => ({ k: t.k, i, q })); });
+const MC_PAPERS = { core: { name: 'Paper 1', tier: 'Core', mins: 45 }, ext: { name: 'Paper 2', tier: 'Extended', mins: 45 } };
+const MC_POOL = {}; MC_TOPICS.forEach(t => { MC_POOL[t.k] = CH[t.k].quiz.map((q, i) => ({ k: t.k, i, q, ext: !!q.x })); });
 function buildMC(type){ let q; for (let i = 0; i < 12; i++) { q = buildMCOnce(type); if (q.length === 40 && new Set(q.map(x => x.q)).size === 40) break; } return q; }
 function buildMCOnce(type){
-  const seen = store.mcseen = store.mcseen || {}, out = [], spare = [];
-  MC_TOPICS.forEach(t => { const n = t.core; const pool = (MC_POOL[t.k] || []).map(x => ({ x, s: (seen[x.k + '-' + x.i] || 0) * 2 + Math.random() * 0.9 })).sort((a, b) => a.s - b.s).map(y => y.x);
+  const tier = MC_PAPERS[type].tier, seen = store.mcseen = store.mcseen || {}, out = [], spare = [];
+  MC_TOPICS.forEach(t => { const n = tier === 'Core' ? t.core : t.ext; const pool = (MC_POOL[t.k] || []).filter(x => tier === 'Extended' || !x.ext).map(x => ({ x, s: (seen[x.k + '-' + x.i] || 0) * 2 - (tier === 'Extended' && x.ext ? 1 : 0) + Math.random() * 0.9 })).sort((a, b) => a.s - b.s).map(y => y.x);
     pool.slice(0, n).forEach(x => out.push({ x, t: t.k })); pool.slice(n).forEach(x => spare.push({ x, t: t.k })); const short = n - Math.min(n, pool.length); for (let j = 0; j < short; j++) out.push({ x: null, t: t.k }); });
   const used = new Set(out.filter(o => o.x).map(o => o.x.k + '-' + o.x.i)); const fill = shuffle(spare.filter(s => !used.has(s.x.k + '-' + s.x.i)));
   const items = out.map(o => { const e = o.x || (fill.length ? fill.shift().x : null); return e && { e, t: o.t }; }).filter(Boolean);
@@ -1855,24 +2099,26 @@ function buildMCOnce(type){
 }
 let MCQ = [], mcTimer = null, mcLeft = 45 * 60;
 function drawMC(type){
-  type = MC_PAPERS[type] ? type : 'core';
+  type = MC_PAPERS[type] ? type : (MC_PAPERS[store.mctype] ? store.mctype : 'core');
   MCQ = buildMC(type); store.mctype = type; store.mcq = MCQ; store.mcans = MCQ.map(() => null); store.mcdone = false; mcLeft = MC_PAPERS[type].mins * 60; save();
 }
 if (Array.isArray(store.mcq) && store.mcq.length === 40 && MC_PAPERS[store.mctype] && Array.isArray(store.mcans)) MCQ = store.mcq; else drawMC('core');
 function renderMC(){
-  const P = MC_PAPERS[store.mctype];
+  const P = MC_PAPERS[store.mctype], types = Object.keys(MC_PAPERS).map(k => `<button class="btn ${k === store.mctype ? 'primary' : 'ghost'}" data-mctype="${k}">${MC_PAPERS[k].name} · ${MC_PAPERS[k].tier}</button>`).join('');
   const done = store.mcdone, score = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0), answered = store.mcans.filter(x => x != null).length;
   const byTopic = MC_TOPICS.map(t => { const idx = MCQ.map((q, i) => [q, i]).filter(([q]) => q.t === t.k); return [t.n, idx.filter(([q, i]) => store.mcans[i] === q.a).length, idx.length]; }).filter(r => r[2]);
   const cards = MCQ.map((q, i) => `<div class="card" data-mcq="${i}"><span class="eyebrow">Question ${i + 1}</span><p class="q">${q.q}</p><div class="opts">${q.o.map((o, j) => `<button class="opt${store.mcans[i] === j ? ' sel' : ''}${done && j === q.a ? ' right' : ''}${done && store.mcans[i] === j && j !== q.a ? ' wrong' : ''}" data-mco="${j}" ${done ? 'disabled' : ''}><b>${'ABCD'[j]}</b> ${o}</button>`).join('')}</div>${done ? `<p class="why">${store.mcans[i] == null ? 'Not answered. ' : ''}${fmt(q.w)}</p>` : ''}</div>`).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0610 pattern</span><h2>Multiple-choice paper</h2>
     <p class="lede">${P.name} style, ${P.tier}: 40 questions, 40 marks, ${P.mins} minutes. The questions follow the syllabus order, as in the real paper.</p></div>
     <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Core: recall and simple reasoning. Extended: also DNA, enzymes in detail, codominance, hormones and cycles. Ask your teacher which tier you sit.</p></div>
     <div class="card"><h3>Instructions</h3><ul>
       <li>There are ==forty questions==. Answer all of them.</li>
       <li>Each question has ==four possible answers A, B, C and D==. Choose the one you think is correct.</li>
       <li>Each correct answer scores ==one mark==. No marks are taken off for a wrong answer.</li>
       <li>You ==may use a calculator==. Rough working goes on paper.</li>
-      <li>This pack covers the ==Core== course. The real Paper 1 is the Core paper.</li></ul></div>
+      <li>Paper 1 is the ==Core== paper and Paper 2 is the ==Extended== paper.</li></ul></div>
     <div class="card"><div class="scorebar"><div class="timer" id="mclock">${fmtTime(mcLeft)}</div><div class="big-score">${done ? score + '/40' : answered + '/40 answered'}</div></div>
       <div class="row"><button class="btn primary" id="mcgo">${mcTimer ? 'Pause' : 'Start timer'}</button><button class="btn ghost" id="mcmark">${done ? 'Marked' : 'Finish and mark my paper'}</button><button class="btn ghost" id="mcnew">New paper (different questions)</button></div></div>
     ${done ? `<div class="card"><h3>Your result: ${score} out of 40</h3><p class="note">${score >= 32 ? 'Excellent.' : score >= 24 ? 'Good. Read the explanations for the ones you missed.' : 'Keep practising. Read the explanations, then revise the chapters shown below.'}</p>${byTopic.map(r => `<div class="prog"><div class="pl"><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div><div class="bar"><i style="width:${Math.round(100 * r[1] / r[2])}%"></i></div></div>`).join('')}</div>` : ''}
@@ -1887,6 +2133,7 @@ function bindMC(){
   };
   document.getElementById('mcmark').onclick = () => { if (store.mcdone) return; clearInterval(mcTimer); mcTimer = null; store.mcdone = true; const sc = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0); store.mcbest = Math.max(store.mcbest || 0, sc); save(); render(); window.scrollTo(0, 0); };
   document.getElementById('mcnew').onclick = () => { clearInterval(mcTimer); mcTimer = null; drawMC(store.mctype); render(); window.scrollTo(0, 0); };
+  v.querySelectorAll('[data-mctype]').forEach(b => b.onclick = () => { clearInterval(mcTimer); mcTimer = null; drawMC(b.dataset.mctype); render(); });
   v.querySelectorAll('[data-mco]').forEach(b => b.onclick = () => { if (store.mcdone) return; const i = +b.closest('[data-mcq]').dataset.mcq, j = +b.dataset.mco; store.mcans[i] = store.mcans[i] === j ? null : j; save();
     b.closest('.opts').querySelectorAll('.opt').forEach((x, k) => x.classList.toggle('sel', store.mcans[i] === k)); document.querySelector('.big-score').textContent = store.mcans.filter(x => x != null).length + '/40 answered'; });
 }
@@ -1894,15 +2141,15 @@ function bindMC(){
 /* ---------- structured theory paper in the Cambridge 0610 pattern ---------- */
 /* Measured from the May/June 2026 Paper 3 (Core): 80 marks, 1 hour 15 minutes, 8 questions of 7 to 12 marks (8, 11, 12, 9, 7, 11, 11, 11), answer all, syllabus order.
    Each question has parts (a), (b), (c) and mixes recall, tables, data and calculations. */
-const TH_PAPERS = { core: { name: 'Paper 3', tier: 'Core', title: 'Theory (Core)', mins: 75, blocks: 8 } };
+const TH_PAPERS = { core: { name: 'Paper 3', tier: 'Core', title: 'Theory (Core)', mins: 75, blocks: 8 }, ext: { name: 'Paper 4', tier: 'Extended', title: 'Theory (Extended)', mins: 75, blocks: 8 } };
 const TH_CLUSTERS = [['char', 'cells'], ['move', 'molecules', 'enzymes'], ['plantnut', 'transp'], ['nutr', 'blood'], ['disease', 'resp', 'excr'], ['coord', 'drugs'], ['repro', 'inherit'], ['select', 'ecosys', 'human', 'biotech']];
 function buildTheory(type){
-  const seen = store.thseen = store.thseen || {}; let best = null;
+  const ext = type === 'ext', seen = store.thseen = store.thseen || {}; let best = null;
   for (let n = 0; n < 40000 && !best; n++) {
     let total = 0, ok = true; const blocks = [];
     for (const ks of TH_CLUSTERS) {
       const lead = pickLead(ks, seen), all = [];
-      ks.forEach(k => CH[k].exam.forEach((q, i) => all.push({ k, i, m: q.m, lead: k === lead })));
+      ks.forEach(k => CH[k].exam.forEach((q, i) => { if (ext || !q.x) all.push({ k, i, m: q.m, lead: k === lead }); }));
       const c = pick([3, 4, 4, 5]);
       const picked = all.map(x => ({ x, s: (x.lead ? 0 : 6) + (seen[x.k + '-' + x.i] || 0) * 2 + Math.random() * 4 })).sort((p, q) => p.s - q.s).slice(0, c).map(y => y.x).sort((p, q) => p.m - q.m);
       const bm = picked.reduce((s, x) => s + x.m, 0); if (bm < 7 || bm > 12) { ok = false; break; } total += bm; blocks.push(picked);
@@ -1916,7 +2163,7 @@ function pickLead(ks, seen){ return ks.map(k => ({ k, s: CH[k].exam.reduce((a, _
 let THQ = [];
 const thRebuild = parts => parts.map(([k, i, qn, lab, qm]) => Object.assign({}, CH[k].exam[i], { ch: k, qn, lab, qm, lbl: qn + (lab ? ' (' + lab + ')' : '') }));
 function drawTheory(type){
-  type = TH_PAPERS[type] ? type : 'core';
+  type = TH_PAPERS[type] ? type : (TH_PAPERS[store.thtype] ? store.thtype : 'core');
   const parts = buildTheory(type); store.thtype = type; store.thq = parts; THQ = thRebuild(parts); left = TH_PAPERS[type].mins * 60;
   Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save();
 }
@@ -2030,16 +2277,19 @@ const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%6
 function renderMock(){
   if (!THQ.length) drawTheory(store.thtype || 'core');
   const P = TH_PAPERS[store.thtype], list = THQ, [g,t] = examScore('mock', list), perMin = (P.mins / t).toFixed(2);
+  const types = Object.keys(TH_PAPERS).map(k => `<button class="btn ${k === store.thtype ? 'primary' : 'ghost'}" data-ptype="${k}">${TH_PAPERS[k].name} · ${TH_PAPERS[k].tier}</button>`).join('');
   let last = 0; const cards = list.map((q, i) => { let h = ''; if (q.qn !== last) { last = q.qn; const names = [...new Set(list.filter(x => x.qn === q.qn).map(x => CH[x.ch].name))].join(', '); h = `<h3 class="qgroup">Question ${q.qn} <span class="pm">[${q.qm} marks]</span><small>${names}</small></h3>`; } return h + examCard('mock-' + i, q, i); }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0610 pattern</span><h2>Theory paper</h2>
     <p class="lede">${P.name} style, ${P.title}: ${t} marks, ${P.mins} minutes, ${list[list.length-1].qn} questions with parts, in the order of the syllabus, like the real paper.</p></div>
     <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Paper 3 is the Core paper. Paper 4 is the Extended paper; its layout is assumed to match Paper 3 because no Paper 4 sample was available. Ask your teacher which tier you sit.</p></div>
     <div class="card"><h3>Instructions</h3><ul>
       <li>Time allowed: ==1 hour 15 minutes==. Total: ==${t} marks==.</li>
       <li>Answer ==all== the questions on paper. The marks for each part are shown in brackets.</li>
       <li>You ==may use a calculator==. ==Show all your working== and use the ==correct units==.</li>
       <li>That is about ${perMin} minutes per mark.</li>
-      <li>This pack covers the ==Core== course. The real Paper 3 is the Core theory paper.</li></ul></div>
+      <li>Core questions use the Core syllabus. Extended adds DNA, enzymes in detail, hormones, cycles and harder explanations.</li></ul></div>
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
       <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New paper (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div></div>
     ${cards}</div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
@@ -2059,6 +2309,7 @@ function bindView(){
     };
     document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = TH_PAPERS[store.thtype].mins*60; render(); };
     document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; drawTheory(store.thtype); render(); };
+    document.getElementById('view').querySelectorAll('[data-ptype]').forEach(b => b.onclick = () => { clearInterval(timer); timer = null; drawTheory(b.dataset.ptype); render(); });
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
