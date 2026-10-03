@@ -83,3 +83,7 @@ Still to do for Chemistry: the question pools are thin for some topics (states o
 
 ## Starter prompt for Claude Code
 > Read CLAUDE.md and HANDOVER.md. Then do open task 1 for physics.html and chemistry.html: make every worked example as explanatory as the Computer Science ones (Key idea, a "why" line under each step, exam tip, and a live working table beside the steps where it helps). Run tools/check.py on each page, look at the screenshots, then commit and push.
+
+
+## Term 1 School mock (3 Oct 2026, user-approved exception to the freeze)
+`physics.html`, `chemistry.html`, `cs.html`: the Mini mock became a **School mock** following the school's own paper format, not Cambridge's. `MODES` holds marks and minutes. Physics and Chemistry: 'Your share of the Science paper' (33 marks, 30 min, drawn so the total is exact) or 'Every question' (Physics 48 marks / 42 min, Chemistry 76 / 68), split into Section A (questions of 3 marks or fewer) and Section B. CS: all 25 questions = exactly 80 marks, 120 min; New mock changes the order. Stored in `store.smock`. The exact Paper 1 / Paper 2 layout of the school paper is not known; refine if a sample paper is shared.

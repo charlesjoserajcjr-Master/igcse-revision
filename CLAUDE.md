@@ -39,7 +39,7 @@ Each pack is **one self-contained HTML file**: inline CSS + inline JS + inline S
 Engine differences: `physics.html` is the first version (variable `sub`, numeric-only drills, steps without `why`/boards, artifact-style head). `chemistry.html` added drill kinds, tables in cards, the `sub_` variable. `cs.html` added `bits`/`text`/`table` drills, the logic lab (`renderLab`/`drawLab`), explanatory worked examples and side boards. When upgrading physics/chemistry, port features from `cs.html`.
 
 ## Term 1 freeze
-`physics.html`, `chemistry.html` and `cs.html` are the Term 1 Preparation packs. Do **not** edit them until the Term 1 exams are over (Science Mon 5 Oct, CS Fri 9 Oct 2026). All new chapters go into `maths.html` and the `*-year.html` files.
+`physics.html`, `chemistry.html` and `cs.html` are the Term 1 Preparation packs. Exception (user-approved 3 Oct 2026): their Mini mock was replaced by a **School mock** in the school's paper format (Physics/Chemistry: 33-mark share of the 100-mark, 1 h 30 Science paper, or every question; CS: all 80 marks in 2 h). Otherwise do **not** edit them until the Term 1 exams are over (Science Mon 5 Oct, CS Fri 9 Oct 2026). All new chapters go into `maths.html` and the `*-year.html` files.
 
 ## Content rules
 - Syllabus: Cambridge IGCSE (Physics 0625, Chemistry 0620, Computer Science 0478). Match Cambridge wording and mark-scheme style. The CS paper is **non-calculator**.

@@ -25,6 +25,7 @@
 .tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
+.qgroup{font-family:var(--display,inherit);font-size:1.05rem;margin:18px 0 -6px;color:var(--accent,inherit)}.qgroup .muted{font-weight:400;font-size:.85rem;color:var(--muted,inherit)}
 </style>
 <title>Physics Term Exam Pack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -575,18 +576,30 @@ const DRILLS = {
   ]
 };
 
-let MOCK = [['density',0],['density',1],['density',3],['thermal',1],['thermal',2],['thermal',3],['sound',1],['sound',2],['sound',3],['sound',5]];
-const MOCK_N = MOCK.length;
+/* School-format mock: marks and time follow the school paper (Science 100 marks / 1 h 30; CS 80 marks / 2 h) */
+const MODES = { share:{label:'Your share of the Science paper', marks:33, mins:30, sec:true}, full:{label:'Every Physics question', marks:null, mins:42, sec:true} };
+let MODE = 'share', MOCK = [];
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const MIN_LEFT = () => MODES[MODE].mins * 60;
 function drawMock(){
-  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
-  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
-  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
-  store.mock = MOCK; save();
+  const keys = Object.keys(CH), all = [];
+  keys.forEach(k => CH[k].exam.forEach((q, i) => all.push([k, i, q.m])));
+  const target = MODES[MODE].marks;
+  let pick = null;
+  if (!target) pick = shuffle(all.slice());
+  else for (let n = 0; n < 5000 && !pick; n++) {
+    let sum = 0; const got = shuffle(all.slice()).filter(x => sum + x[2] <= target && (sum += x[2], true));
+    if (sum === target && keys.every(k => got.some(x => x[0] === k))) pick = got;
+  }
+  MOCK = pick.sort((a, b) => (MODES[MODE].sec ? (a[2] > 3) - (b[2] > 3) : 0) || keys.indexOf(a[0]) - keys.indexOf(b[0])).map(x => [x[0], x[1]]);
+  store.smock = { mode: MODE, list: MOCK }; save();
 }
-if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+(function(){ const m = store.smock;
+  if (m && MODES[m.mode] && Array.isArray(m.list) && m.list.every(([k, i]) => CH[k] && CH[k].exam[i])) { MODE = m.mode; MOCK = m.list; } })();
+
 
 /* ---------- state ---------- */
-const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['mock','','School mock']];
 let cur = 'start'; let sub = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -622,7 +635,7 @@ function renderStart(){
       <div class="bar"><i style="width:${Math.round(100*g/t)}%;background:var(--good)"></i></div></div>`;
   }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · First term</span><h2>Physics for Monday’s Science paper</h2>
-  <p class="lede">Your Physics portion is three chapters: Density, Transfer of thermal energy and Sound. Work through each chapter tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">Your Physics portion is three chapters: Density, Transfer of thermal energy and Sound. Work through each chapter tab from left to right, then try the school mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each chapter</h3>
     <div class="plan">
@@ -783,17 +796,26 @@ function renderQuiz(k){
 }
 
 /* mock */
-let timer = null, left = 35*60;
+let timer = null, left = MIN_LEFT();
 function renderMock(){
-  const list = MOCK.map(([k,i]) => CH[k].exam[i]);
-  const [g,t] = examScore('mock', list);
-  return `<div class="chhead fadein"><span class="eyebrow">All three chapters</span><h2>Mini mock</h2>
-    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself with the mark schemes.</p></div>
+  if (!MOCK.length) drawMock();
+  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
+  const md = MODES[MODE], multi = Object.keys(MODES).length > 1;
+  const secA = md.sec ? list.filter(q => q.m <= 3).reduce((a,q) => a + q.m, 0) : 0;
+  let cards = '', lastSec = '';
+  list.forEach((q,i) => {
+    const sec = md.sec ? (q.m <= 3 ? 'A' : 'B') : '';
+    if (sec !== lastSec && sec) cards += `<h3 class="qgroup">Section ${sec} <span class="muted">${sec === 'A' ? 'shorter questions' : 'longer questions'}, ${sec === 'A' ? secA : t - secA} marks</span></h3>`;
+    lastSec = sec; cards += examCard('mock-'+i, q, i);
+  });
+  return `<div class="chhead fadein"><span class="eyebrow">School paper format</span><h2>School mock</h2>
+    <p class="lede">${t} marks of structured questions in ${md.mins} minutes, set out like your school paper. Answer on paper, then mark yourself with the mark schemes.</p></div>
     <div class="stack" style="margin-top:20px">
-    <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
-      <p class="note">35 minutes. About 1 minute per mark, plus time to check.</p></div>
-    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+    <div class="card">${multi ? `<div class="row" style="margin-bottom:12px">${Object.keys(MODES).map(k => `<button class="btn ${k === MODE ? 'primary' : 'ghost'}" data-mode="${k}">${MODES[k].label}${MODES[k].marks ? ' (' + MODES[k].marks + ' marks)' : ''}</button>`).join('')}</div>` : ''}
+      <div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">${md.marks ? 'New mock (different questions)' : 'New mock (different order)'}</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
+      <p class="note">${md.mins} minutes for ${t} marks. The full Science paper is 100 marks in 1 h 30 across Physics, Chemistry and Biology, so about 33 marks of it is Physics.</p></div>
+    ${cards}</div>`;
 }
 const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
 
@@ -811,8 +833,9 @@ function bindView(){
         if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
-    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 35*60; render(); };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = MIN_LEFT(); render(); };
     document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { clearInterval(timer); timer = null; MODE = b.dataset.mode; left = MIN_LEFT(); Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); });
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
