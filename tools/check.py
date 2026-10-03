@@ -74,7 +74,7 @@ with sync_playwright() as p:
           for (const t of Object.keys(PAPERS)) { const P = PAPERS[t];
             for (let n = 0; n < 40; n++) { const q = buildMock(t), tot = q.reduce((s, x) => s + x.m, 0);
               if (tot !== P.marks) bad.push([t, 'total', tot]);
-              const seen = new Set(); q.forEach(x => { if (seen.has(x.q)) bad.push([t, 'duplicate', x.q.slice(0, 40)]); seen.add(x.q); if (!P.calc && NOCALC_OUT.includes(x.ch)) bad.push([t, 'calculator topic', x.ch]); if (!P.calc && x.ch !== 'round' && NC_BAD.test(x.q)) bad.push([t, 'calculator wording', x.q.slice(0, 50)]); if (!x.p.length) bad.push([t, 'no mark scheme', x.q.slice(0, 40)]); }); } }
+              const seen = new Set(); q.forEach(x => { if (seen.has(x.q)) bad.push([t, 'duplicate', x.q.slice(0, 40)]); seen.add(x.q); if (typeof NOCALC_OUT !== 'undefined' && !P.calc && NOCALC_OUT.includes(x.ch)) bad.push([t, 'calculator topic', x.ch]); if (typeof NC_BAD !== 'undefined' && !P.calc && x.ch !== 'round' && NC_BAD.test(x.q)) bad.push([t, 'calculator wording', x.q.slice(0, 50)]); if (!x.p.length) bad.push([t, 'no mark scheme', x.q.slice(0, 40)]); }); } }
           return bad.slice(0, 10); }""")
         print('bad mock papers:', bad)
     pg.set_viewport_size({'width': 400, 'height': 900})

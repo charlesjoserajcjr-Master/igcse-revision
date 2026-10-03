@@ -155,6 +155,9 @@ svg .mono{font-family:var(--mono)}
 .plan b{font-family:var(--mono);font-size:.82rem;color:var(--muted);display:block;font-weight:600}
 .timer{font-family:var(--mono);font-size:2.2rem;font-weight:600;font-variant-numeric:tabular-nums}
 .timer.low{color:var(--hot)}
+.pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
+.qgroup{margin:18px 0 -6px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.qgroup small{color:var(--muted);font-family:var(--body);font-weight:400;font-size:.85rem}
 svg .gatebody{fill:var(--card);stroke:var(--ink);stroke-width:2}
 svg .won{stroke:var(--accent);stroke-width:4;fill:none}
 svg .woff{stroke:var(--muted);stroke-width:2;fill:none;stroke-dasharray:5 4}
@@ -811,6 +814,48 @@ function svgPython(){
   ${T(40, 170, 'names = ["Ann", "Bo", "Cy", "Di"]', 'mono acct')}${cell(0, 'Ann')}${cell(1, 'Bo')}${cell(2, 'Cy')}${cell(3, 'Di')}${T(400, 218, 'names[0] = "Ann"   len(names) = 4', 'mono')}${T(400, 258, 'index (starts at 0)', 'mut')}</svg>`;
 }
 
+const PSC = (...lines) => '<span class="mono">' + lines.map(l => l.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/^( +)/, m => '&nbsp;'.repeat(m.length))).join('<br>') + '</span>';
+function svgControl(){
+  const b = (x, y, w, t, s, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="64" rx="10" class="${cls}" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + w / 2, y + 28, t, 'mid lbl')}${T(x + w / 2, y + 48, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="An automated control system with sensor, microprocessor and actuator">${arrowDefs('ct')}
+  ${b(30, 60, 170, 'Sensor', 'measures temperature', 'nonmetal')}${b(260, 60, 190, 'Microprocessor', 'compares with the set value')}${b(510, 60, 150, 'Actuator', 'switches the heater')}${b(720, 60, 120, 'Process', 'room warms', 'nonmetal')}
+  ${[200, 450, 660].map(x => `<line x1="${x}" y1="92" x2="${x + 58}" y2="92" class="ln" marker-end="url(#a-ct)"/>`).join('')}
+  <path d="M780 124 V210 H115 V126" class="hotl" fill="none" marker-end="url(#h-ct)"/>${T(450, 232, 'feedback: the sensor measures the new temperature', 'mid hott')}
+  ${T(430, 30, 'Automated system: runs with little or no human help', 'mid lbl')}${T(430, 272, 'INPUT (sensor) → PROCESS (microprocessor) → OUTPUT (actuator)', 'mid mut')}</svg>`;
+}
+function svgRobot(){
+  const b = (x, y, w, t, s) => `<rect x="${x}" y="${y}" width="${w}" height="58" rx="8" class="metal" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + w / 2, y + 26, t, 'mid lbl')}${T(x + w / 2, y + 46, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="The characteristics of a robot">
+  <rect x="300" y="100" width="260" height="80" rx="14" class="nonmetal" style="stroke:var(--accent);stroke-width:2.5"/>${T(430, 148, 'ROBOT', 'mid lbl')}
+  ${b(30, 30, 220, 'Mechanical structure', 'frame, arms, wheels, grippers')}${b(610, 30, 220, 'Sensors (input)', 'camera, infrared, pressure')}
+  ${b(30, 200, 220, 'Actuators (output)', 'motors that move the parts')}${b(610, 200, 220, 'Microprocessor', 'runs the program')}
+  <line x1="250" y1="62" x2="320" y2="108" class="thin"/><line x1="610" y1="62" x2="540" y2="108" class="thin"/><line x1="250" y1="230" x2="320" y2="176" class="thin"/><line x1="610" y1="230" x2="540" y2="176" class="thin"/>
+  ${T(430, 16, 'A robot is programmable and carries out physical tasks.', 'mid mut')}${T(430, 272, 'Sensors tell it about the world, the program decides, the actuators act.', 'mid mut')}</svg>`;
+}
+function svgAI(){
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Machine learning is a part of artificial intelligence">
+  <circle cx="240" cy="140" r="120" class="nonmetal" style="stroke:var(--accent);stroke-width:2.5"/><circle cx="240" cy="180" r="62" class="metal" style="stroke:var(--hot);stroke-width:2.5"/>
+  ${T(240, 70, 'Artificial intelligence', 'mid lbl')}${T(240, 92, '(AI)', 'mid mut')}${T(240, 178, 'Machine', 'mid lbl')}${T(240, 198, 'learning', 'mid lbl')}
+  ${T(420, 60, 'AI: a computer system doing tasks that normally need', 'lbl')}${T(420, 82, 'human intelligence: reasoning, learning, solving problems.', 'lbl')}
+  ${T(420, 126, 'AI has: data, rules for using the data, the ability to', 'mut')}${T(420, 148, 'reason, and the ability to learn and adapt.', 'mut')}
+  ${T(420, 196, 'Machine learning: the system improves from data and', 'hott')}${T(420, 218, 'experience, without being re-programmed each time.', 'hott')}
+  ${T(420, 258, 'Examples: voice assistants, spam filters, game characters.', 'mut')}</svg>`;
+}
+function svgInterrupt(){
+  const b = (x, y, w, t, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="52" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + w / 2, y + 31, t, 'mid')}`;
+  return `<svg viewBox="0 0 900 240" role="img" aria-label="How the CPU handles an interrupt">${arrowDefs('ir')}
+  ${b(10, 30, 150, 'CPU runs a program', 'nonmetal')}${b(190, 30, 160, 'Interrupt signal arrives', 'cardf')}${b(380, 30, 160, 'Check the priority')}${b(570, 30, 160, 'Save the state')}${b(760, 30, 130, 'Run the ISR')}
+  ${[160, 350, 540, 730].map(x => `<line x1="${x}" y1="56" x2="${x + 30}" y2="56" class="ln" marker-end="url(#a-ir)"/>`).join('')}
+  <path d="M825 82 V150 H245" class="acc" fill="none" marker-end="url(#b-ir)"/>${b(60, 150, 190, 'Restore the state', 'nonmetal')}<line x1="60" y1="176" x2="30" y2="176" class="ln"/><path d="M60 176 H40 V84" class="ln" fill="none" marker-end="url(#a-ir)"/>
+  ${T(450, 120, 'ISR = interrupt service routine (a small program that deals with the interrupt)', 'mid mut')}${T(450, 224, 'The CPU then carries on with the program it was running before.', 'mid lbl')}</svg>`;
+}
+function svgTestData(){
+  const X = v => 80 + v * 14;
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="Test data for a number that must be from 1 to 50">
+  <line x1="${X(-4)}" y1="110" x2="${X(56)}" y2="110" class="ln"/><rect x="${X(1)}" y="96" width="${X(50) - X(1)}" height="28" class="accf" style="fill-opacity:.2"/>
+  ${[[-3, '−3', 'abnormal', 'hott'], [0, '0', 'boundary', 'hott'], [1, '1', 'extreme', 'acct'], [25, '25', 'normal', 'acct'], [50, '50', 'extreme', 'acct'], [51, '51', 'boundary', 'hott']].map(([v, l, k, c], i) => `<circle cx="${X(v)}" cy="110" r="6" class="${c === 'acct' ? 'accf' : 'hotf'}"/>${T(X(v), 84 - (i % 2) * 24, l, 'mid mono')}${T(X(v), i === 0 ? 198 : 150 + (i % 2) * 24, k, 'mid ' + c)}`).join('')}
+  ${T(430, 28, 'Rule: the number must be from 1 to 50 inclusive', 'mid lbl')}${T(430, 220, 'Normal, extreme and boundary data test the rule. Abnormal data and the boundary values 0 and 51 must be rejected.', 'mid mut')}</svg>`;
+}
 const CH = {
 data: {
   code: 'Ch 1', name: 'Data representation',
@@ -1267,8 +1312,264 @@ db: {
     { q: 'A table Book(BookID, Title, Price) is used. Write a query to find how many books cost more than 500.', m: 3,
       p: ['==SELECT COUNT(*)==', '==FROM Book==', '==WHERE Price > 500=='] }
   ]
+},
+hw2: {
+  code: 'Topic 3', name: 'CPU architecture, buses and interrupts',
+  lede: 'How a Von Neumann computer is organised, what each register and bus does, how cache and cores speed things up, and how the CPU deals with interrupts.',
+  learn: [
+    { h: 'Von Neumann architecture', list: ['The ==Von Neumann architecture== uses the ==stored program concept==: ==instructions and data are both stored in the same main memory (RAM)== as binary.', 'The CPU has an ==ALU== (arithmetic and logic), a ==control unit (CU)== and ==registers==. The CU ==fetches, decodes and controls the execution== of each instruction.', 'Instructions are run one after another by the ==fetch–decode–execute cycle==.'], table: [['Register', 'What it holds'], ['==PC== (program counter)', 'the ==address of the next instruction== to be fetched'], ['==MAR== (memory address register)', 'the ==address== in memory to be read from or written to'], ['==MDR== (memory data register)', 'the ==data or instruction== just read from, or about to be written to, memory'], ['==CIR== (current instruction register)', 'the ==instruction being decoded and executed=='], ['==ACC== (accumulator)', 'the ==results of calculations== done by the ALU']] },
+    { h: 'The cycle and the buses', list: ['==Fetch==: the address in the ==PC is copied to the MAR==. The instruction at that address is copied from RAM to the ==MDR==, then to the ==CIR==. The ==PC is increased by 1==.', '==Decode==: the ==CU decodes== the instruction in the CIR.', '==Execute==: the instruction is carried out (the ==ALU== does any calculation; the result may go to the ACC).', 'The ==address bus== carries the ==address== from the CPU to memory: ==one way==. The ==data bus== carries ==data and instructions==: ==two way==. The ==control bus== carries ==control signals== (such as read and write) from the CU.'] },
+    { h: 'CPU performance', list: ['==Clock speed== is the number of cycles per second, in ==GHz== (1 GHz = 1 billion cycles per second). A ==higher clock speed== means more instructions per second.', 'More ==cores==: each core can run a fetch–decode–execute cycle, so ==more instructions run at the same time==. The software must be written to use them.', '==Cache== is ==very fast memory built close to the CPU==. It stores ==frequently used instructions and data==, so the CPU does ==not have to wait for the slower RAM==. A ==larger cache== usually means better performance.', 'Cache is ==primary storage==: it is faster and more expensive than RAM, so there is much less of it.'] },
+    { h: 'Interrupts', list: ['An ==interrupt== is a ==signal sent to the CPU== (from hardware or software) to say that ==something needs attention immediately==.', '==Hardware interrupts==: a key is pressed, the mouse is clicked, the printer is out of paper, a device is connected. ==Software interrupts==: division by zero, an invalid instruction, a program trying to use memory it should not.', '==How the CPU handles one==: after each fetch–decode–execute cycle the CPU ==checks for interrupts==. If there is one with a ==high enough priority==, the CPU ==saves the current state== (the register contents), runs the ==interrupt service routine (ISR)==, then ==restores the state== and carries on.', 'Interrupts wait in a ==queue== and are dealt with in ==order of priority==.', 'Interrupts let the computer ==respond quickly== to events and let ==many tasks share the CPU==.'] }
+  ],
+  mistakes: ['Saying the ==PC holds the next instruction==. It holds the ==address== of the next instruction.', 'Saying ==the MAR holds data==. It holds an ==address==.', 'Saying ==the address bus is two-way==. It is one way; the data bus is two-way.', 'Saying ==more cores always doubles the speed==. Software must be able to use them.', 'Saying ==an interrupt stops the program for good==. The CPU saves the state and ==carries on== afterwards.'],
+  diagrams: [
+    { svg: svgCPU, cap: '==Registers and buses== in a Von Neumann CPU.' },
+    { svg: svgInterrupt, cap: 'How the CPU ==handles an interrupt==.' }
+  ],
+  worked: [
+    W('State the purpose of the PC, MAR and MDR.', 'Think ==address== or ==data==.', 'Say what each one holds, not what it does to the user.', 'address, address, data',
+      [['PC', 'Holds the address of the next instruction to be fetched.', ''], ['MAR', 'Holds the address in memory that is about to be read from or written to.', ''], ['MDR', 'Holds the data or instruction that has just been read from memory, or is about to be written.', '']],
+      [['PC', 'next address', 0], ['MAR', 'memory address', 1], ['MDR', 'data / instruction', 2]], true),
+    W('A computer has two buses between the CPU and RAM. Describe the purpose of the address bus and the data bus.', 'One bus carries ==where==. The other carries ==what==.', 'Mention direction for the full marks.', 'address one-way, data two-way',
+      [['Address bus', 'Carries the address of the memory location from the CPU to memory.', 'One way only: CPU to memory.'], ['Data bus', 'Carries data and instructions between the CPU and memory.', 'Two way.'], ['Control bus', 'Carries control signals such as read or write.', 'From the control unit.']],
+      [['Address bus', 'address, one way', 0], ['Data bus', 'data, two way', 1], ['Control bus', 'signals', 2]], true),
+    W('Explain how a larger cache can improve the performance of a CPU.', 'Link ==cache== to ==speed of fetching==.', 'Say what is stored and why that helps.', 'cache is faster than RAM',
+      [['What cache is', 'Very fast memory close to the CPU.', ''], ['What it stores', 'Frequently used instructions and data.', ''], ['Benefit', 'The CPU finds them quickly and does not have to wait for the slower RAM.', ''], ['Larger cache', 'More instructions and data can be kept there, so fewer slow trips to RAM.', '']],
+      [['Cache', 'fast, near CPU', 0], ['Stores', 'frequently used data', 1], ['Benefit', 'less waiting for RAM', 2], ['Larger', 'more stored', 3]], true),
+    W('A user presses a key while a program is running. Describe how the CPU deals with the interrupt.', 'Follow the ==order==: signal, check, save, ISR, restore.', 'Use the words priority and ISR.', 'save → ISR → restore',
+      [['Signal', 'The keyboard sends an interrupt signal to the CPU.', ''], ['Check', 'At the end of the current fetch–decode–execute cycle, the CPU checks the interrupt and its priority.', ''], ['Save', 'If the priority is high enough, the CPU saves the current state (register contents).', ''], ['ISR', 'The CPU runs the interrupt service routine for the key press.', ''], ['Restore', 'The CPU restores the saved state.', ''], ['Resume', 'It carries on with the program from where it stopped.', '']],
+      [['Signal', 'key press', 0], ['Check', 'priority', 1], ['Save', 'registers', 2], ['ISR', 'runs', 3], ['Restore', 'state', 4], ['Resume', 'program', 5]], true),
+    W('Identify whether each is a hardware or a software interrupt: (a) a mouse click (b) a program divides by zero.', 'Does it come from a ==device== or from a ==running program==?', 'Give an extra example of each to be safe.', 'device v program',
+      [['(a) Mouse click', 'Hardware interrupt, because it comes from an input device.', 'Others: key press, printer out of paper.'], ['(b) Division by zero', 'Software interrupt, because it is caused by a running program.', 'Others: invalid instruction, memory error.']],
+      [['(a)', 'hardware', 0], ['(b)', 'software', 1]], true),
+    W('The CPU of a computer has 2 cores and a clock speed of 2.4 GHz. Explain two ways its performance could be increased.', 'Use the three things in the CPU: ==clock speed==, ==cores==, ==cache==.', 'Each way needs a reason.', 'clock, cores, cache',
+      [['Way 1', 'Increase the clock speed (for example to 3.6 GHz).', 'More fetch–decode–execute cycles every second.'], ['Way 2', 'Add more cores (for example a quad core).', 'More instructions can be processed at the same time.'], ['Another', 'Increase the cache size.', 'Fewer slow trips to RAM.']],
+      [['Way 1', 'higher clock speed', 0], ['Way 2', 'more cores', 1], ['Another', 'bigger cache', 2]], true)
+  ],
+  drill: 'hw2',
+  quiz: [
+    { q: 'Which register holds the address of the next instruction?', o: ['MAR', 'MDR', 'PC', 'ACC'], a: 2, w: 'The ==PC (program counter)==.' },
+    { q: 'Which bus is one way?', o: ['address bus', 'data bus', 'both', 'neither'], a: 0, w: 'The ==address bus== (CPU to memory).' },
+    { q: 'Where are instructions and data stored in a Von Neumann computer?', o: ['in separate memories', 'in the same memory', 'only on the hard disk', 'in the ALU'], a: 1, w: 'In the ==same memory==.' },
+    { q: 'Cache memory is…', o: ['slower than RAM', 'faster than RAM, close to the CPU', 'secondary storage', 'read only'], a: 1, w: '==Fast memory close to the CPU==.' },
+    { q: 'After handling an interrupt, the CPU…', o: ['shuts down', 'restores its state and carries on', 'deletes the program', 'starts again'], a: 1, w: '==Restores the state== and carries on.' },
+    { q: 'A printer running out of paper sends a…', o: ['software interrupt', 'hardware interrupt', 'parity bit', 'packet'], a: 1, w: 'A ==hardware interrupt==.' }
+  ],
+  exam: [
+    { q: 'Describe the role of the ALU and the control unit in the CPU.', m: 4,
+      p: ['==ALU== carries out ==arithmetic== calculations', '==ALU== carries out ==logical== operations / comparisons', '==CU== ==decodes== instructions', '==CU== ==controls== the other parts / sends control signals / manages the fetch–decode–execute cycle'] },
+    { q: 'Explain why a computer with a larger cache may run programs faster.', m: 3,
+      p: ['cache is ==very fast memory close to the CPU==', 'it stores ==frequently used instructions or data==', 'so the CPU ==does not have to wait for RAM== (data is accessed more quickly)'] },
+    { q: 'Describe how a CPU handles an interrupt from a keyboard.', m: 6,
+      p: ['the keyboard sends an ==interrupt signal== to the CPU', 'the CPU ==checks for interrupts== after each fetch–decode–execute cycle', 'the CPU checks the ==priority== of the interrupt', 'the CPU ==saves the current state== / register contents', 'the ==interrupt service routine (ISR)== is run', 'the CPU ==restores the state== and carries on with the previous program'] },
+    { q: 'State the purpose of the address bus, the data bus and the control bus.', m: 3,
+      p: ['address bus: carries the ==address== of the memory location', 'data bus: carries ==data / instructions== between CPU and memory', 'control bus: carries ==control signals== (for example read or write)'] }
+  ]
+},
+emerg: {
+  code: 'Topic 6', name: 'Automated and emerging technologies',
+  lede: 'Automated systems, robots, artificial intelligence, machine learning and the Internet of Things. Learn the characteristics, and be ready to give a benefit and a drawback.',
+  learn: [
+    { h: 'Automated systems and embedded systems', list: ['An ==automated system== does a task ==with little or no human help==. It uses ==sensors== (input), a ==microprocessor== (process) and ==actuators== (output).', 'The ==feedback loop==: the sensor measures, the microprocessor compares the reading with the ==set value==, the actuator acts, and the sensor measures again.', 'Examples: air-conditioning, greenhouse watering, automatic doors, traffic lights, self-driving cars.', 'An ==embedded system== is a ==computer built into a device== to do ==one dedicated task== (washing machine, microwave, calculator, smart speaker).', '==Benefits==: works ==24 hours a day==, ==consistent and accurate==, can work in ==dangerous places==, ==fewer staff costs==. ==Drawbacks==: high ==set-up cost==, ==job losses==, needs ==maintenance==, can ==fail or be hacked==.'] },
+    { h: 'Robots', list: ['A ==robot== is a ==machine with a mechanical structure, sensors, a microprocessor and actuators==, which is ==programmed== to do a physical task.', 'Uses: ==factory assembly lines== (welding, painting), ==exploring dangerous or remote places== (deep sea, space), ==delivery==, ==surgery==, ==cleaning==.', '==Benefits==: do ==repetitive, boring or dangerous jobs==, work ==without tiredness==, are ==accurate and consistent==.', '==Drawbacks==: ==expensive== to buy and repair, ==job losses==, cannot ==cope with the unexpected== or show ==empathy==, a ==fault== can stop everything.', 'A ==smart speaker== is ==not a robot==: it has ==no mechanical structure for doing physical tasks==.'] },
+    { h: 'Artificial intelligence and machine learning', list: ['==Artificial intelligence (AI)== is a ==computer system able to do tasks that normally need human intelligence==, for example ==reasoning, learning and solving problems==.', 'AI systems have ==data==, ==rules for using the data==, the ability to ==reason== (decide), and the ability to ==learn and adapt==.', '==Machine learning (ML)== is part of AI: the system ==improves by learning from data and experience==, without being re-programmed each time.', 'Examples: ==voice assistants==, ==spam filters==, ==recommendations==, ==medical diagnosis==, ==game characters== that adapt to the player, ==self-driving cars==.', '==Benefits==: fast, works on huge data, can improve itself. ==Drawbacks==: needs ==lots of data== and ==training==, can be ==biased==, ==job losses==, ==privacy== concerns, wrong decisions can cause harm.'] },
+    { h: 'Internet of Things and wider impacts', list: ['The ==Internet of Things (IoT)== is a ==network of everyday devices that have sensors and an internet connection== and share data (smart fridge, fitness band, smart thermostat).', 'Benefits: ==convenience==, ==energy saving==, ==remote control== from a phone. Risks: ==security== (hackers), ==privacy== (data is collected), devices ==stop working without the internet==.', 'Impacts of automation: ==unemployment== in some jobs, ==new jobs== in others, ==safety== (self-driving cars), ==privacy== and ==ethical== questions (who is responsible when an AI makes a mistake?).'] }
+  ],
+  mistakes: ['Saying a ==robot is any computer==. It must have a mechanical structure and carry out physical tasks.', 'Saying ==AI and machine learning are the same==. ML is one part of AI.', 'Giving a ==benefit with no reason==. Say what the benefit is and why it helps.', 'Writing ==“it is cheaper”== with no detail. Say who saves what.', 'Forgetting the ==sensors, microprocessor and actuators== in an automated system.'],
+  diagrams: [
+    { svg: svgControl, cap: 'An ==automated system==: sensor, microprocessor, actuator and ==feedback==.' },
+    { svg: svgRobot, cap: 'The ==characteristics of a robot==.' },
+    { svg: svgAI, cap: '==Machine learning== is a part of ==artificial intelligence==.' }
+  ],
+  worked: [
+    W('Describe the characteristics of a robot.', 'Think about the ==parts== of a robot and what it is ==for==.', 'Aim for one point per mark and keep each one short.', 'structure, sensors, processor, actuators',
+      [['Mechanical structure', 'A robot has a mechanical structure, such as arms, wheels or a frame.', ''], ['Sensors', 'It has sensors that collect data about its surroundings.', ''], ['Microprocessor', 'It has a microprocessor that runs a program and makes decisions.', ''], ['Actuators', 'It has actuators, such as motors, that move its parts.', ''], ['Programmable', 'It is programmed to carry out a physical task.', '']],
+      [['Structure', 'arms, wheels, frame', 0], ['Sensors', 'collect data', 1], ['Processor', 'runs the program', 2], ['Actuators', 'motors', 3]], true),
+    W('A supermarket will use robots to deliver groceries to elderly customers. Explain one benefit to the supermarket and one drawback to the customers.', 'Give the ==benefit== and the ==reason==. Then the ==drawback== and the ==reason==.', 'Write the benefit for the supermarket and the drawback for the customers, not the other way round.', 'point + because',
+      [['Benefit (supermarket)', 'Robots can deliver all day and night without being paid wages or taking breaks.', 'So the supermarket saves money and can offer more deliveries.'], ['Drawback (customers)', 'The robot cannot carry the shopping into the kitchen or talk with the customer.', 'Elderly people may need help and company.'], ['Another drawback', 'The robot may break down and the groceries do not arrive.', '']],
+      [['Benefit', 'works all day, saves wages', 0], ['Drawback', 'no help, no company', 1]], true),
+    W('A smart speaker takes voice commands. Explain why it is not a robot, and why it is an embedded system.', 'Compare it with the list of robot ==characteristics==.', 'Give a reason for each answer.', 'no physical task; one dedicated job',
+      [['Not a robot', 'It has no mechanical structure, so it cannot carry out physical tasks.', 'It only takes voice input and gives audio output.'], ['Embedded system', 'It is a computer built into a device to do one dedicated task: respond to voice commands and play audio.', '']],
+      [['Not a robot', 'no mechanical structure', 0], ['Embedded', 'dedicated task', 1]], true),
+    W('A computer game uses artificial intelligence to control enemy characters. Explain how machine learning could make the characters more difficult.', 'Say what the AI ==collects==, what it ==learns== and how it ==changes==.', 'Link each step with so.', 'collect → learn → adapt',
+      [['Collects data', 'The AI records how the player moves and attacks.', ''], ['Learns', 'It finds patterns, for example the player always hides left.', 'This is machine learning.'], ['Adapts', 'It changes the enemies’ moves to beat those patterns.', ''], ['Result', 'The game becomes harder as the player plays more.', '']],
+      [['Collects', 'player data', 0], ['Learns', 'finds patterns', 1], ['Adapts', 'changes moves', 2]], true),
+    W('A greenhouse has an automated watering system. Describe how it keeps the soil moist.', 'Use the ==sensor → microprocessor → actuator== order.', 'Mention the set value and the feedback.', 'sensor, processor, actuator',
+      [['Sensor', 'A moisture sensor measures how wet the soil is.', 'It sends the reading to the microprocessor.'], ['Microprocessor', 'The microprocessor compares the reading with the stored set value.', ''], ['Actuator', 'If the soil is too dry, it signals the pump (actuator) to switch on and water the plants.', ''], ['Feedback', 'The sensor keeps measuring. When the soil is moist enough the pump stops.', '']],
+      [['Sensor', 'moisture', 0], ['Compare', 'with set value', 1], ['Actuator', 'pump on', 2], ['Feedback', 'pump off', 3]], true),
+    W('Give one benefit and one risk of using Internet of Things (IoT) devices in the home.', 'Think about ==convenience== and ==security==.', 'Explain, do not just name.', 'benefit + risk',
+      [['Benefit', 'A smart thermostat can be controlled from a phone, so the house is warm when the owner arrives and energy is saved.', ''], ['Risk', 'The devices are connected to the internet, so a hacker could gain access to the home network and the owner’s data.', 'Privacy and security risks.']],
+      [['Benefit', 'remote control, saves energy', 0], ['Risk', 'hacking, privacy', 1]], true)
+  ],
+  drill: 'emerg',
+  quiz: [
+    { q: 'Which is NOT a characteristic of a robot?', o: ['mechanical structure', 'sensors', 'actuators', 'it has no program'], a: 3, w: 'A robot is ==programmed==.' },
+    { q: 'Machine learning is…', o: ['a type of robot', 'a part of artificial intelligence', 'a sensor', 'an embedded system'], a: 1, w: 'A ==part of AI==.' },
+    { q: 'In an automated system, the actuator…', o: ['measures data', 'carries out an action', 'stores data', 'compares values'], a: 1, w: 'It ==carries out an action== (output).' },
+    { q: 'The Internet of Things connects…', o: ['only computers', 'everyday devices with sensors to the internet', 'only phones', 'robots only'], a: 1, w: '==Everyday devices== with sensors.' },
+    { q: 'One benefit of using robots in a factory is…', o: ['they never need maintenance', 'they can work without breaks', 'they are free', 'they never fail'], a: 1, w: 'They can ==work without breaks==.' },
+    { q: 'An embedded system is built into a device to do…', o: ['many different tasks', 'one dedicated task', 'no tasks', 'only calculations'], a: 1, w: '==One dedicated task==.' }
+  ],
+  exam: [
+    { q: 'Describe what is meant by artificial intelligence (AI).', m: 3,
+      p: ['a ==computer system== that can do tasks normally needing ==human intelligence==', 'it has ==data== and ==rules== for using the data', 'it can ==reason== / make decisions', 'it can ==learn and adapt== (machine learning)'] },
+    { q: 'A hospital uses robots to carry equipment between wards. Explain one benefit and one drawback of using robots.', m: 4,
+      p: ['benefit: robots can work ==all day and night== / without tiredness', 'reason: so equipment is always available / ==saves staff time== / reduces wages', 'drawback: robots are ==expensive== to buy and maintain / may ==break down== / cannot respond to emergencies', 'reason for the drawback given'] },
+    { q: 'Describe the characteristics of a robot.', m: 3,
+      p: ['has a ==mechanical structure==', 'has ==sensors== and ==actuators== / motors', 'has a ==microprocessor== / controlled by a ==program==', 'carries out ==physical tasks== / is programmable'] },
+    { q: 'A smart speaker is an example of an embedded system. Justify this statement.', m: 2,
+      p: ['it is a ==computer built into a device==', 'it does ==one dedicated task== (responds to voice commands and plays audio)'] },
+    { q: 'Describe how a car with automatic braking uses a sensor, a microprocessor and an actuator.', m: 5,
+      p: ['the ==sensor== (for example radar or camera) measures the ==distance to the object ahead==', 'the data is sent to the ==microprocessor==', 'the microprocessor ==compares the distance with a stored value== (set value)', 'if it is too close the microprocessor sends a signal to the ==actuator==', 'the ==actuator operates the brakes== / the sensor keeps measuring (feedback)'] }
+  ]
+},
+pseudo: {
+  code: 'Topic 7', name: 'Pseudocode, trace tables and testing',
+  lede: 'Cambridge reads and writes algorithms in pseudocode. Learn the keywords, arrays, procedures and functions, how to trace a program, how to find errors, and how to choose test data.',
+  learn: [
+    { h: 'Pseudocode basics', list: ['Declare variables: ' + PSC('DECLARE Total : INTEGER') + '. Types: ==INTEGER==, ==REAL==, ==CHAR==, ==STRING==, ==BOOLEAN==.', 'Assignment uses an arrow: ' + PSC('Total ← 0') + '. ==Input== and ==output==: ' + PSC('INPUT Num') + ', ' + PSC('OUTPUT Total') + '.', 'Operators: ==+ − * /==, ==DIV== (whole-number division, 17 DIV 5 = 3), ==MOD== (the remainder, 17 MOD 5 = 2), ==^== (power).', 'Comparisons: ==&lt; &gt; &lt;= &gt;= = &lt;&gt;== (&lt;&gt; means “not equal to”). Combine with ==AND, OR, NOT==.', 'A ==constant== never changes: ' + PSC('CONSTANT Pi ← 3.142') + '.'] },
+    { h: 'Selection and loops', list: ['==Selection==: ' + PSC('IF Mark >= 50', 'THEN', '  OUTPUT "Pass"', 'ELSE', '  OUTPUT "Fail"', 'ENDIF') + '.', '==FOR== loop: a ==fixed number== of times. ' + PSC('FOR Count ← 1 TO 5', '  ...', 'NEXT Count') + '.', '==WHILE== loop: the condition is checked ==first==, so it may run ==zero times==. ' + PSC('WHILE Num > 0 DO', '  ...', 'ENDWHILE') + '.', '==REPEAT== loop: the condition is checked ==at the end==, so it runs ==at least once==. ' + PSC('REPEAT', '  ...', 'UNTIL Num = 0') + '.', 'A ==CASE== statement chooses from many values: ' + PSC('CASE OF Grade', '  "A" : ...', '  OTHERWISE ...', 'ENDCASE') + '.'] },
+    { h: 'Arrays, procedures and functions', list: ['A ==1D array== stores several values of the same type: ' + PSC('DECLARE Marks : ARRAY[1:30] OF INTEGER') + '. ' + PSC('Marks[3] ← 72') + ' sets the third value.', 'A ==2D array== has rows and columns: ' + PSC('DECLARE Scores : ARRAY[1:30, 1:10] OF INTEGER') + '. ' + PSC('Scores[2, 4]') + ' is row 2, column 4.', 'Use a ==FOR loop== to go through every element: ' + PSC('FOR I ← 1 TO 30', '  Total ← Total + Marks[I]', 'NEXT I') + '.', 'A ==procedure== does a job: ' + PSC('PROCEDURE Greet(Name : STRING)', '  OUTPUT "Hello ", Name', 'ENDPROCEDURE') + ', used with ' + PSC('CALL Greet("Asha")') + '.', 'A ==function== ==returns a value==: ' + PSC('FUNCTION Double(N : INTEGER) RETURNS INTEGER', '  RETURN N * 2', 'ENDFUNCTION') + '.'] },
+    { h: 'Trace tables', list: ['A ==trace table== shows ==the value of every variable== as a program runs, one ==row for each change==.', 'Make a ==column for each variable== and one for ==OUTPUT==. Work through the code ==one line at a time==.', 'Only write a value in a column when it ==changes== or is ==output==.', 'Use a trace table to ==find errors== and to ==state the purpose== of an algorithm (for example: totals the numbers that are greater than 6).'] },
+    { h: 'Validation, verification and test data', table: [['Validation check', 'What it does'], ['==range check==', 'the value is ==between limits=='], ['==length check==', 'the data has the ==right number of characters=='], ['==type check==', 'the data is the ==right data type== (for example whole number)'], ['==presence check==', 'something has been ==entered=='], ['==format check==', 'the data is in the ==right pattern== (for example contains an @)'], ['==check digit==', 'a ==calculated digit== checks a number was entered correctly']], list: ['==Validation== checks the data is ==reasonable==. ==Verification== checks it was ==copied correctly== (==double entry==, ==visual check==). Validation cannot show data is ==correct==.', '==Test data== for a rule such as “whole number from 1 to 50”: ==normal== (25), ==extreme== (the largest and smallest allowed: 1 and 50), ==boundary== (the extreme and the value just outside: 50 and 51; 1 and 0), ==abnormal== (must be rejected: −3, 100, “abc”).'] },
+    { h: 'Finding errors', list: ['Check every ==variable is declared== and ==spelled the same== each time.', 'Check ==the loop starts and ends correctly== (1 TO 5, not 0 TO 5).', 'Check the ==right variable== is used in each calculation (Total + Num, not Total + Count).', 'Check ==the equals sign (=) is used to compare== and ==the arrow (←) is used to assign==, and the two are not mixed up.', 'Check every ==IF has ENDIF==, every ==FOR has NEXT==, every ==WHILE has ENDWHILE==.', 'Check ==OUTPUT is outside the loop== if it should only happen once.'] }
+  ],
+  mistakes: ['Using ==DIV== and ==MOD== the wrong way round. DIV gives the whole part; MOD gives the ==remainder==.', 'Writing ==a trace table row for every line== instead of every change.', 'Using ==a WHILE loop== when the code must run at least once (use REPEAT).', 'Forgetting the ==index starts at the declared number== (ARRAY[1:30] starts at 1).', 'Saying ==validation proves the data is correct==. It only checks it is ==sensible==.'],
+  diagrams: [
+    { svg: svgTestData, cap: '==Test data== for “a whole number from 1 to 50”.' }
+  ],
+  worked: [
+    W('A procedure is given TotalSeconds. Write pseudocode to declare Minutes and Seconds and work out the whole minutes and the seconds left over.', 'Use ==DIV== for whole minutes and ==MOD== for the remainder.', 'Declare the variables first.', 'DIV and MOD',
+      [['Declare', PSC('DECLARE Minutes : INTEGER', 'DECLARE Seconds : INTEGER'), 'Whole numbers, so INTEGER.'], ['Whole minutes', PSC('Minutes ← TotalSeconds DIV 60'), 'For example 135 DIV 60 = 2.'], ['Seconds left', PSC('Seconds ← TotalSeconds MOD 60'), 'For example 135 MOD 60 = 15.'], ['Output', PSC('OUTPUT Minutes, " minutes ", Seconds, " seconds"'), '']],
+      [['Declare', 'Minutes, Seconds', 0], ['Minutes', 'TotalSeconds DIV 60', 1], ['Seconds', 'TotalSeconds MOD 60', 2]], true),
+    W('Complete the trace table for the algorithm with the inputs 5, 8, 2, 9. <br>' + PSC('Total ← 0', 'FOR Count ← 1 TO 4', '  INPUT Num', '  IF Num > 6 THEN', '    Total ← Total + Num', '  ENDIF', 'NEXT Count', 'OUTPUT Total'), 'Work ==one line at a time==. Only the ==IF true== lines change Total.', 'State the purpose at the end.', 'trace every variable',
+      [['Count = 1', 'Num = 5. 5 > 6 is false, so Total stays 0.', ''], ['Count = 2', 'Num = 8. 8 > 6 is true, so Total = 0 + 8 = 8.', ''], ['Count = 3', 'Num = 2. False, so Total stays 8.', ''], ['Count = 4', 'Num = 9. True, so Total = 8 + 9 = 17.', ''], ['OUTPUT', '17', ''], ['Purpose', 'It totals the numbers that are greater than 6.', '']],
+      [['Count 1', 'Num 5, Total 0', 0], ['Count 2', 'Num 8, Total 8', 1], ['Count 3', 'Num 2, Total 8', 2], ['Count 4', 'Num 9, Total 17', 3], ['OUTPUT', '17', 4], ['Purpose', 'total numbers > 6', 5]]),
+    W('A program accepts a whole number from 1 to 50 inclusive. Give one example of each type of test data: normal, extreme, boundary and abnormal.', 'Decide what is ==allowed== first: 1 to 50.', 'Say why each one is used.', 'normal, extreme, boundary, abnormal',
+      [['Normal', '25', 'A typical value that is allowed.'], ['Extreme', '1 (or 50)', 'The smallest or largest allowed value.'], ['Boundary', '50 and 51 (or 1 and 0)', 'The edge value and the first value just outside it.'], ['Abnormal', '−3, 100 or “abc”', 'Must be rejected.']],
+      [['Normal', '25', 0], ['Extreme', '1 or 50', 1], ['Boundary', '50 and 51', 2], ['Abnormal', '−3, 100, abc', 3]], true),
+    W('Find the four errors in this pseudocode, which should total five numbers and output the average. <br>' + PSC('01 Total ← 0', '02 FOR Count ← 0 TO 5', '03   INPUT Num', '04   Total ← Total + Count', '05 NEXT Count', '06 Average ← Total / 5', '07 OUTPUT Total'), 'Check ==loop limits==, ==the variable used==, ==declarations== and ==what is output==.', 'Give the line number and the correction.', 'one error per line',
+      [['Line 2', 'The loop runs 6 times (0 to 5). It should be FOR Count ← 1 TO 5.', ''], ['Line 4', 'It adds Count, not the number input. It should be Total ← Total + Num.', ''], ['Line 6', 'Average is never declared. Add DECLARE Average : REAL.', 'Also Total and Num need declaring.'], ['Line 7', 'It outputs Total, not Average. It should be OUTPUT Average.', '']],
+      [['Line 2', 'FOR Count ← 1 TO 5', 0], ['Line 4', 'add Num', 1], ['Line 6', 'declare Average', 2], ['Line 7', 'output Average', 3]], true),
+    W('Write pseudocode to total all the values in the array Marks[1:5] and output the average.', 'Use a ==FOR loop== through the array, then divide.', 'Show the total and average are declared.', 'loop + total + divide',
+      [['Declare', PSC('DECLARE Total : INTEGER', 'DECLARE Average : REAL', 'DECLARE I : INTEGER'), ''], ['Start the total', PSC('Total ← 0'), 'A total must start at 0.'], ['Loop', PSC('FOR I ← 1 TO 5', '  Total ← Total + Marks[I]', 'NEXT I'), 'Adds every element.'], ['Average and output', PSC('Average ← Total / 5', 'OUTPUT Average'), 'For marks 12, 15, 9, 20, 4: total 60, average 12.']],
+      [['Total start', '0', 1], ['Loop', 'add Marks[I]', 2], ['Average', 'Total / 5', 3]], true),
+    W('Explain the difference between validation and verification. Give an example of each.', 'One checks the data is ==sensible==. The other checks it was ==copied correctly==.', 'Name a check for each.', 'sensible v correct copy',
+      [['Validation', 'Checks that data entered is reasonable and meets rules, for example a range check on an age between 0 and 120.', 'It does not prove the data is correct.'], ['Verification', 'Checks that data has been entered or copied correctly, for example double entry (typing it twice).', ''], ['Difference', 'A value can pass validation but still be wrong (age 25 typed as 52).', 'Verification helps to catch this.']],
+      [['Validation', 'sensible, range check', 0], ['Verification', 'copied correctly, double entry', 1], ['Difference', 'valid but wrong', 2]], true)
+  ],
+  drill: 'pseudo',
+  quiz: [
+    { q: '17 MOD 5 =', o: ['3', '2', '3.4', '85'], a: 1, w: '17 ÷ 5 = 3 remainder ==2==.' },
+    { q: '17 DIV 5 =', o: ['3', '2', '3.4', '12'], a: 0, w: 'The whole part: ==3==.' },
+    { q: 'Which loop always runs at least once?', o: ['FOR', 'WHILE', 'REPEAT … UNTIL', 'IF'], a: 2, w: '==REPEAT … UNTIL== checks at the end.' },
+    { q: 'Which type of test data should be rejected?', o: ['normal', 'extreme', 'abnormal', 'boundary (accepted)'], a: 2, w: '==Abnormal== data.' },
+    { q: 'A check that an @ is in an email address is a…', o: ['range check', 'format check', 'length check', 'check digit'], a: 1, w: 'A ==format check==.' },
+    { q: 'In DECLARE Marks : ARRAY[1:30] OF INTEGER, the first element is…', o: ['Marks[0]', 'Marks[1]', 'Marks[30]', 'Marks[31]'], a: 1, w: '==Marks[1]==.' }
+  ],
+  exam: [
+    { q: 'Identify three different types of test data that can be used to test a program.', m: 3,
+      p: ['==normal== data', '==abnormal== data (or erroneous)', '==extreme== data', '==boundary== data'] },
+    { q: 'A program accepts a whole number from 1 to 50 inclusive. Give two examples of test data that a range check should reject and one that it should accept at the boundary.', m: 3,
+      p: ['a rejected value such as ==0 or 51==', 'a second rejected value such as ==−5 / 100 / abc==', 'an accepted boundary value ==1 or 50=='] },
+    { q: 'The pseudocode below should total the numbers in an array Data[1:10]. Identify the errors and correct them. <br>' + PSC('01 Total ← 1', '02 FOR I ← 1 TO 11', '03   Total ← Total + Data[I]', '04 NEXT I', '05 OUTPUT Total'), m: 3,
+      p: ['line 1: ==Total should start at 0==', 'line 2: ==the loop should end at 10== (not 11)', 'a correct statement of both errors with ==corrections==' ] },
+    { q: 'Write pseudocode to input 20 numbers and output the largest.', m: 5,
+      p: ['==declares== or uses variables for the number and the largest', 'a ==loop that repeats 20 times==', '==inputs== a number inside the loop', '==compares== the number with the largest and ==updates== it when larger', '==outputs== the largest after the loop'] },
+    { q: 'Describe two differences between a WHILE loop and a REPEAT … UNTIL loop.', m: 2,
+      p: ['WHILE ==checks the condition at the start==; REPEAT checks it at the end', 'WHILE may run ==zero times==; REPEAT always runs ==at least once=='] },
+    { q: 'Complete a trace table for this algorithm with the inputs 3, 7 and 4. <br>' + PSC('Total ← 0', 'FOR Count ← 1 TO 3', '  INPUT Num', '  Total ← Total + Num * 2', 'NEXT Count', 'OUTPUT Total'), m: 4,
+      p: ['after Count = 1: ==Total = 6==', 'after Count = 2: ==Total = 20==', 'after Count = 3: ==Total = 28==', 'OUTPUT ==28=='] }
+  ]
 }
 };
+/* ---------- extra exam questions in the Cambridge 0478 style (merged into each chapter's exam bank) ---------- */
+const EXTRA = {
+  data: [
+    { q: 'Convert the denary number 150 into (a) 8-bit binary [2] (b) hexadecimal [1].', m: 3,
+      p: ['150 = 128 + 16 + 4 + 2', '==10010110==', '==96== (1001 = 9, 0110 = 6)'] },
+    { q: 'Two 8-bit binary numbers are 01101011 and 00110101. Add them using binary addition. State whether an overflow error occurs and give a reason.', m: 3,
+      p: ['correct addition with carries', 'answer ==10100000==', '==no overflow== because the answer fits in 8 bits (no carry out of the left-hand bit)'] },
+    { q: 'A logical left shift of two places is performed on the 8-bit binary number 00110101. Give the result and state the effect on the value.', m: 3,
+      p: ['==two 0s added at the right== / bits moved two places left', 'result ==11010100==', 'the value is ==multiplied by 4=='] },
+    { q: 'An image is 20 pixels wide and 10 pixels high. Each pixel uses a colour depth of 8 bits. Calculate the file size in bytes. Show your working.', m: 3,
+      p: ['pixels = 20 × 10 = ==200==', 'bits = 200 × 8 = ==1600==', '1600 ÷ 8 = ==200 bytes=='] },
+    { q: 'Describe how analogue sound is converted to digital data so that it can be stored in a computer.', m: 4,
+      p: ['the ==amplitude (height) of the sound wave is measured== at regular intervals (sampling)', 'the number of samples per second is the ==sample rate==', 'each sample is stored as a ==binary number== (using a set number of bits: the sample resolution)', 'the binary values are ==stored in a file=='] },
+    { q: 'Describe the difference between lossy and lossless compression and give one benefit of compressing a file before sending it.', m: 4,
+      p: ['==lossy== compression ==permanently removes data== (the original cannot be restored)', '==lossless== compression keeps ==all the data== (the original can be rebuilt exactly)', 'benefit: ==smaller file size== / uses less bandwidth', '...so it is ==sent faster== / takes less storage'] },
+    { q: 'Explain how text is represented in a computer using a character set such as ASCII or Unicode.', m: 5,
+      p: ['each character has a ==unique binary code== / number', 'the computer stores the ==binary code== for each character typed', 'a ==character set== is the list of characters and their codes', '==ASCII== uses 7 or 8 bits so can represent only a limited number of characters', '==Unicode== uses more bits (16 or 32) so can represent ==many more characters / languages=='] }
+  ],
+  trans: [
+    { q: 'Describe how a file is sent across a network using packet switching.', m: 4,
+      p: ['the file is ==split into packets==', 'each packet has a ==header== with a ==packet number / destination address==', 'each packet is sent by the ==best route / may take different routes== through routers', 'at the destination the packets are ==reassembled into the correct order== using the packet numbers'] },
+    { q: 'Explain how a parity check is used to detect errors in transmitted data.', m: 4,
+      p: ['the sender and receiver ==agree to use odd or even parity==', 'a ==parity bit is added== to make the number of 1s ==odd or even==', 'the receiver ==counts the 1s== in each byte received', 'if the parity is ==wrong, an error has occurred== (the data is requested again)'] },
+    { q: 'Describe how automatic repeat request (ARQ) is used to make sure data is received without errors.', m: 4,
+      p: ['the receiver ==checks the data== for errors', 'if there are no errors a ==positive acknowledgement== is sent back', 'if the acknowledgement is ==not received before a timeout==, the data is ==resent==', 'this repeats until it is received without errors / a ==set number of times=='] },
+    { q: 'Give two differences between serial and parallel data transmission.', m: 2,
+      p: ['serial sends ==one bit at a time== over one wire; parallel sends ==several bits at once== over several wires', 'serial is more ==reliable over longer distances== / parallel can ==skew== (bits arrive at different times)'] },
+    { q: 'Describe how symmetric encryption protects data sent across a network.', m: 3,
+      p: ['the ==plain text is scrambled== into ==cipher text== using an ==encryption algorithm and a key==', 'the ==same key== is used to encrypt and ==decrypt==', 'someone who intercepts the data ==cannot read it without the key=='] }
+  ],
+  hw: [
+    { q: 'Explain why a computer needs both RAM and secondary storage.', m: 4,
+      p: ['==RAM holds the programs and data currently in use==', 'RAM is ==fast to access== so the CPU can use it quickly', 'RAM is ==volatile== (loses its data when the power is off)', '==secondary storage keeps data permanently== (non-volatile) when the power is off'] },
+    { q: 'Describe how a solid-state drive (SSD) stores data and give two advantages over a hard disk drive.', m: 4,
+      p: ['data is stored in ==flash memory / transistors / NAND cells== using ==electrical charge==', 'it has ==no moving parts==', 'advantage: ==faster access== / read and write', 'advantage: ==more durable / quieter / uses less power=='] },
+    { q: 'Give two input devices and two output devices that could be used on a smartphone, and state one use of each.', m: 4,
+      p: ['input device: ==touch screen / microphone / camera / sensor==', 'a correct use of the input device', 'output device: ==screen / speaker / vibration motor==', 'a correct use of the output device'] }
+  ],
+  sw: [
+    { q: 'Describe five functions of an operating system.', m: 5,
+      p: ['manages ==files== / file management', 'manages ==memory== / allocates RAM to programs', 'handles ==interrupts==', 'provides a ==user interface==', 'manages ==security== / user accounts and passwords', '==multitasking== / manages processes', 'manages ==hardware / device drivers=='] },
+    { q: 'Describe the differences between a compiler and an interpreter.', m: 4,
+      p: ['a compiler ==translates the whole program at once==; an interpreter translates ==one line at a time==', 'a compiler produces an ==executable file / object code==; an interpreter does not', 'a compiler ==reports all errors after translation==; an interpreter stops at the ==first error==', 'compiled programs ==run faster== / an interpreted program is easier to ==debug=='] },
+    { q: 'Describe what is meant by antivirus software and one way it protects a computer.', m: 3,
+      p: ['software that ==detects and removes malware / viruses==', 'it ==scans files and programs== / compares with a database of known malware', 'it ==quarantines or deletes== infected files / warns the user'] }
+  ],
+  net: [
+    { q: 'Describe the process of phishing and give two ways a user can recognise a phishing email.', m: 4,
+      p: ['a ==fake email== (or message) sent to trick the user', 'it asks them to ==give personal details or click a link== to a fake website', 'recognise: ==spelling or grammar mistakes / generic greeting==', 'recognise: ==suspicious sender address or link / urgent request=='] },
+    { q: 'Explain how a firewall helps to protect a computer network.', m: 3,
+      p: ['it ==monitors incoming and outgoing traffic==', 'it ==compares the traffic with a set of rules==', 'it ==blocks unauthorised traffic== / hackers (and can block certain websites)'] },
+    { q: 'State the purpose of the domain name system (DNS) and describe how it is used when a URL is typed.', m: 4,
+      p: ['the DNS ==turns a domain name into an IP address==', 'the browser sends the domain name to a ==DNS server==', 'the DNS server ==looks up== the IP address', 'the IP address is returned so the browser can ==contact the web server=='] },
+    { q: 'Describe two differences between a session cookie and a persistent cookie.', m: 2,
+      p: ['a session cookie is ==deleted when the browser is closed==; a persistent cookie is stored until its ==expiry date==', 'a session cookie is ==kept in memory==; a persistent cookie is ==saved on the hard drive / storage=='] }
+  ],
+  algo: [
+    { q: 'Describe the four stages of the program development life cycle.', m: 4,
+      p: ['==analysis==: identify the problem and what is needed (requirements)', '==design==: plan the solution (flowcharts / pseudocode / structure diagrams)', '==coding==: write the program', '==testing==: run the program with test data and fix errors'] },
+    { q: 'Describe how a linear search finds a value in a list.', m: 3,
+      p: ['==each item is checked in order== starting at the first', 'each is ==compared with the search value==', 'it stops when the item is ==found== or the end of the list is reached'] },
+    { q: 'Describe how a bubble sort puts a list of numbers into ascending order.', m: 4,
+      p: ['==compare each pair of adjacent items==', '==swap them if they are in the wrong order==', 'repeat the pass through the whole list', 'stop when ==a pass has no swaps== / the list is in order'] }
+  ],
+  prog: [
+    { q: 'A program has three variables: Name (a person’s name), Age (a whole number) and Height (in metres, such as 1.62). State the most suitable data type for each variable.', m: 3,
+      p: ['Name: ==STRING==', 'Age: ==INTEGER==', 'Height: ==REAL=='] },
+    { q: 'Explain the difference between a procedure and a function.', m: 2,
+      p: ['a ==function returns a value==', 'a ==procedure does not return a value== (it carries out a task)'] },
+    { q: 'A school records the marks of 25 students in a test. The marks are out of 50. Write a program that:<br>• inputs the mark for each student into an array<br>• checks each mark is between 0 and 50 inclusive and asks again if not<br>• calculates and outputs the average mark<br>• outputs the highest mark and the lowest mark<br>• outputs how many students scored above the average.<br>You may use pseudocode or any programming language.', m: 15,
+      p: ['==declares / uses an array== for 25 marks', '==loop== through 25 students', '==inputs== each mark', '==validation loop== (re-input until valid)', 'range check uses ==0 and 50 inclusive==', '==total== accumulated correctly', '==average== calculated (total ÷ 25)', '==average output==', 'highest ==initialised sensibly== (first mark or 0)', 'highest ==updated by comparison==', 'lowest ==initialised and updated by comparison==', 'highest and lowest ==output==', '==second loop== to check each mark against the average', '==count== of marks above average', '==count output== / sensible, readable code with identifiers'] },
+    { q: 'A weather station records the temperature at noon every day for 30 days in the array Temp[1:30]. Write a program that:<br>• inputs the 30 temperatures and checks each is between −20 and 50 inclusive<br>• finds and outputs the highest and lowest temperatures<br>• counts and outputs the number of days with a temperature above 30<br>• outputs the average temperature to one decimal place.<br>You may use pseudocode or any programming language.', m: 15,
+      p: ['==array declared / used== with 30 elements', '==loop for 30 days==', '==input== each temperature', '==validation loop== re-asking until valid', '==range −20 to 50 inclusive== correct', '==highest== initialised', '==highest== updated by comparison', '==lowest== initialised', '==lowest== updated by comparison', '==highest and lowest output==', '==count of days above 30== (correct condition > 30)', '==count output==', '==total accumulated==', '==average calculated and rounded to 1 decimal place==', '==average output== / sensible identifiers and layout'] },
+    { q: 'A library charges a fine for each late book. The user enters the number of days late for each book. They enter −1 to stop.<br>The fine is $0.50 per day for the first 7 days and $1.00 per day after that.<br>Write a program that:<br>• inputs the number of days late for each book, rejecting any value below −1<br>• calculates the fine for each book<br>• outputs the fine for each book<br>• outputs the total of all the fines and the number of books that had a fine over $5.<br>You may use pseudocode or any programming language.', m: 15,
+      p: ['==loop until −1 is entered==', '==input== of days late', '==validation== rejects values below −1 (re-input)', '−1 is ==not processed== as a book', '==selection== for 7 days or fewer', '==fine for 7 days or fewer== = days × 0.50', '==fine over 7 days== = 7 × 0.50 + (days − 7) × 1.00', '==fine output for each book==', '==running total== of fines', '==total output==', '==count== of fines over $5', 'condition ==fine > 5== correct', '==count output==', 'variables ==initialised to 0== before the loop', 'sensible identifiers / clear structure'] }
+  ],
+  db: [
+    { q: 'A database table Product has the fields ProductID, Name, Price and Stock. Write an SQL statement to display the Name and Price of all products with a Stock of less than 10, in ascending order of Price.', m: 4,
+      p: ['==SELECT Name, Price==', '==FROM Product==', '==WHERE Stock < 10==', '==ORDER BY Price ASC=='] },
+    { q: 'Explain why a primary key is needed in a database table, and give an example of a suitable field in a table of students.', m: 3,
+      p: ['a primary key ==uniquely identifies each record==', 'so ==no two records can be confused / duplicates are avoided==', 'example: ==StudentID / admission number== (not a name)'] },
+    { q: 'State the output of the SQL statement SELECT SUM(Price) FROM Item WHERE Price > 20; when Item has prices 10, 25, 30 and 15, and describe what the statement does.', m: 3,
+      p: ['it ==adds together the Price values== for all records where Price is over 20', 'values used are ==25 and 30==', 'output ==55=='] }
+  ]
+};
+for (const k in EXTRA) if (CH[k]) CH[k].exam.push(...EXTRA[k]);
 
 /* ---------- drill generators ---------- */
 const choiceItem = (q, correct, wrongs, s) => { const o = shuffle([correct, ...wrongs]); return { kind:'choice', q, choices:o, ans:o.indexOf(correct), s }; };
@@ -1413,6 +1714,54 @@ const DRILLS = {
         : { kind:'num', q:`Table Item (ID, Name, Price):<br><span class="mono">${t}</span><br>What does  SELECT COUNT(*) FROM Item  return?`, ans:5, tol:0, s:[['Count the records', '5'],['Answer', '5']] }; },
     () => { const it = pick([['SELECT Name FROM Student', 'chooses the Name field from every record'], ['SELECT * FROM Student', 'chooses all fields from every record'], ['SELECT Name FROM Student WHERE Age > 13', 'chooses Name only for students older than 13'], ['SELECT Name FROM Student ORDER BY Name ASC', 'lists the names in alphabetical order'], ['SELECT COUNT(*) FROM Student', 'counts the records']]);
       return choiceItem(`What does  ${it[0]}  do?`, it[1], ['chooses the Name field from every record', 'chooses all fields from every record', 'chooses Name only for students older than 13', 'lists the names in alphabetical order', 'counts the records'].filter(x => x !== it[1]).slice(0, 3), [['Query', it[0]],['Meaning', it[1]]]); }
+  ],
+  hw2: [
+    () => { const it = pick([['holds the address of the next instruction', 'PC'], ['holds the address in memory being read or written', 'MAR'], ['holds the data or instruction just read from memory', 'MDR'], ['holds the instruction being decoded', 'CIR'], ['holds the results of ALU calculations', 'ACC']]);
+      return choiceItem(`Which register ${it[0]}?`, it[1], ['PC', 'MAR', 'MDR', 'CIR', 'ACC'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+    () => { const it = pick([['the address bus', 'one way (CPU to memory)'], ['the data bus', 'two way'], ['the control bus', 'one way (from the control unit)']]);
+      return choiceItem(`In which direction does ${it[0]} carry signals?`, it[1], ['one way (CPU to memory)', 'two way', 'one way (from the control unit)'].filter(x => x !== it[1]), [['Rule', 'address bus: one way; data bus: two way']]); },
+    () => { const it = pick([['a key is pressed', 'hardware'], ['the printer runs out of paper', 'hardware'], ['a program divides by zero', 'software'], ['a program tries to use memory it must not', 'software'], ['the mouse is clicked', 'hardware']]);
+      return choiceItem(`Is this a hardware or a software interrupt: ${it[0]}?`, it[1], [it[1] === 'hardware' ? 'software' : 'hardware'], [['Rule', 'from a device: hardware; from a running program: software']]); },
+    () => { const o = ['PC copied to MAR', 'instruction copied from RAM to MDR', 'instruction copied from MDR to CIR', 'control unit decodes the instruction', 'instruction is executed'], k = rint(0, 3);
+      return choiceItem(`In the fetch–decode–execute cycle, what happens straight after: ${o[k]}?`, o[k + 1], o.filter((x, i) => i !== k + 1 && i !== k).slice(0, 3), [['Order', o.join(' → ')]]); },
+    () => { const it = pick([['a higher clock speed', 'more cycles per second'], ['more cores', 'more instructions processed at the same time'], ['a larger cache', 'fewer slow trips to RAM']]);
+      return choiceItem(`How does ${it[0]} improve CPU performance?`, it[1], ['more cycles per second', 'more instructions processed at the same time', 'fewer slow trips to RAM', 'more secondary storage'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const o = ['signal sent to the CPU', 'CPU checks the priority', 'CPU saves the state', 'ISR runs', 'CPU restores the state'], k = rint(0, 3);
+      return choiceItem(`When an interrupt is handled, what comes straight after: ${o[k]}?`, o[k + 1], o.filter((x, i) => i !== k + 1 && i !== k).slice(0, 3), [['Order', o.join(' → ')]]); }
+  ],
+  emerg: [
+    () => { const it = pick([['a mechanical structure', true], ['sensors and actuators', true], ['a microprocessor and a program', true], ['it only stores data', false], ['it carries out physical tasks', true], ['it has no program', false]]);
+      return choiceItem(`Is “${it[0]}” a characteristic of a robot?`, it[1] ? 'yes' : 'no', [it[1] ? 'no' : 'yes'], [['Robot', 'mechanical structure, sensors, microprocessor, actuators, programmed, physical tasks']]); },
+    () => { const it = pick([['a computer system that can do tasks normally needing human intelligence', 'artificial intelligence'], ['a system that improves by learning from data without being re-programmed', 'machine learning'], ['a computer built into a device to do one dedicated task', 'embedded system'], ['everyday devices with sensors connected to the internet', 'Internet of Things'], ['a machine with a mechanical structure that is programmed to do physical tasks', 'robot']]);
+      return choiceItem(`Which term describes ${it[0]}?`, it[1], ['artificial intelligence', 'machine learning', 'embedded system', 'Internet of Things', 'robot'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ': ' + it[0]]]); },
+    () => { const it = pick([['a moisture sensor in a greenhouse', 'sensor (input)'], ['the pump that waters the plants', 'actuator (output)'], ['the chip that compares the reading with the set value', 'microprocessor (process)'], ['a temperature sensor', 'sensor (input)'], ['a motor that opens an automatic door', 'actuator (output)']]);
+      return choiceItem(`In an automated system, ${it[0]} is the…`, it[1], ['sensor (input)', 'actuator (output)', 'microprocessor (process)'].filter(x => x !== it[1]), [['Automated system', 'sensor → microprocessor → actuator']]); },
+    () => { const it = pick([['they can work 24 hours a day without breaks', 'benefit'], ['they are expensive to buy and repair', 'drawback'], ['they can do dangerous jobs instead of people', 'benefit'], ['they may cause job losses', 'drawback'], ['they are accurate and consistent', 'benefit'], ['they cannot cope with unexpected events', 'drawback']]);
+      return choiceItem(`Using robots: “${it[0]}”. Is this a benefit or a drawback?`, it[1], [it[1] === 'benefit' ? 'drawback' : 'benefit'], [['Rule', 'benefit = helps; drawback = causes a problem']]); },
+    () => { const it = pick([['washing machine', true], ['smart speaker', true], ['laptop', false], ['microwave oven', true], ['desktop computer', false], ['calculator', true]]);
+      return choiceItem(`Is a ${it[0]} an embedded system?`, it[1] ? 'yes' : 'no', [it[1] ? 'no' : 'yes'], [['Embedded', 'built into a device for one dedicated task']]); },
+    () => { const it = pick([['the AI collects data about the player', 'collect data'], ['the AI finds patterns in the data', 'learn'], ['the AI changes the enemies’ moves', 'adapt']]);
+      return choiceItem(`Which stage of machine learning is this: ${it[0]}?`, it[1], ['collect data', 'learn', 'adapt'].filter(x => x !== it[1]), [['Order', 'collect data → learn → adapt']]); }
+  ],
+  pseudo: [
+    () => { const b = rint(3, 12), a = rint(20, 99), isDiv = Math.random() < 0.5, ans = isDiv ? Math.floor(a / b) : a % b;
+      return { kind:'num', q:`What is the value of ${a} ${isDiv ? 'DIV' : 'MOD'} ${b}?`, ans, tol:0, s:[['Divide', `${a} ÷ ${b} = ${Math.floor(a / b)} remainder ${a % b}`], [isDiv ? 'DIV gives the whole part' : 'MOD gives the remainder', String(ans)]] }; },
+    () => { const lim = rint(3, 9), nums = Array.from({ length: 4 }, () => rint(1, 12)), ans = nums.filter(x => x > lim).reduce((a, b) => a + b, 0);
+      return { kind:'num', q:`A program totals the inputs that are greater than ${lim}. The inputs are ${nums.join(', ')}. What is output?`, ans, tol:0, s:[['Values over ' + lim, nums.filter(x => x > lim).join(', ') || 'none'], ['Total', String(ans)]] }; },
+    () => { const a = rint(1, 4), b = a + rint(2, 8);
+      return { kind:'num', q:`How many times does the loop FOR Count ← ${a} TO ${b} repeat?`, ans:b - a + 1, tol:0, s:[['Count from ' + a + ' to ' + b, `${b} − ${a} + 1 = ${b - a + 1}`]] }; },
+    () => { const k = rint(2, 5), n = rint(3, 6), ans = k * n * (n + 1) / 2;
+      return { kind:'num', q:`What is output? Total ← 0, then FOR I ← 1 TO ${n}: Total ← Total + I * ${k}, then OUTPUT Total.`, ans, tol:0, s:[['Add I × ' + k + ' each time', Array.from({ length: n }, (_, i) => (i + 1) * k).join(' + ')], ['Total', String(ans)]] }; },
+    () => { const r = rint(2, 40), c = rint(2, 10), twoD = Math.random() < 0.5;
+      return { kind:'num', q:`How many values can be stored by ${twoD ? `DECLARE Grid : ARRAY[1:${r}, 1:${c}] OF INTEGER` : `DECLARE Scores : ARRAY[1:${r}] OF INTEGER`}?`, ans:twoD ? r * c : r, tol:0, s:[[twoD ? 'rows × columns' : 'upper − lower + 1', String(twoD ? r * c : r)]] }; },
+    () => { const lo = rint(1, 20), hi = lo + rint(20, 80), mid = Math.floor((lo + hi) / 2), kind = pick(['normal', 'extreme', 'abnormal']);
+      const right = kind === 'normal' ? mid : kind === 'extreme' ? hi : hi + rint(5, 30);
+      const wrong = kind === 'normal' ? [hi + 10, lo - 3, 'abc'] : kind === 'extreme' ? [mid, hi + 1, lo - 5] : [mid, lo, hi];
+      return choiceItem(`A program accepts whole numbers from ${lo} to ${hi} inclusive. Which value is ${kind === 'extreme' ? 'extreme (largest allowed)' : kind} test data?`, String(right), wrong.map(String), [['Rule', 'normal: typical allowed; extreme: smallest or largest allowed; abnormal: must be rejected']]); },
+    () => { const it = pick([['the value is between limits', 'range check'], ['the data has the right number of characters', 'length check'], ['something has been entered', 'presence check'], ['the data is the right data type', 'type check'], ['an email contains an @', 'format check']]);
+      return choiceItem(`Which validation check makes sure ${it[0]}?`, it[1], ['range check', 'length check', 'presence check', 'type check', 'format check'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ': ' + it[0]]]); },
+    () => { const it = pick([['the condition is checked first and it may not run at all', 'WHILE'], ['it always runs at least once', 'REPEAT … UNTIL'], ['it runs a fixed number of times', 'FOR']]);
+      return choiceItem(`Which loop: ${it[0]}?`, it[1], ['WHILE', 'REPEAT … UNTIL', 'FOR'].filter(x => x !== it[1]), [['Rule', 'FOR fixed; WHILE test first; REPEAT test last']]); }
   ]
 };
 
@@ -1564,18 +1913,67 @@ const gt = (n, note) => gridBoard(['A','B','X'], [['',['0','0','0']],['',['0','1
 attach(WK_LOGIC[5], () => gt(4, 'Output column: 0 1 1 0'), [
   () => gt(4, '1 when the inputs are different'), () => gt(4, '11 → 0, so not OR'), () => gt(4, '<b>XOR</b>')]);
 
-let MOCK = [['data',0],['data',3],['data',5],['data',6],['trans',0],['trans',4],['trans',7],['logic',0],['logic',1],['logic',2]];
-const MOCK_N = MOCK.length;
-function drawMock(){
-  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
-  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
-  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
-  store.mock = MOCK; save();
+/* ---------- mock papers in the Cambridge 0478 pattern ---------- */
+/* Measured from five Oct/Nov 2025 papers. Paper 1 (Computer Systems) and Paper 2 (Algorithms, Programming and Logic): each 75 marks, 1 h 45, no calculator.
+   Paper 1: 6 or 7 questions of about 10 to 13 marks, built from many short parts (about 45% are 1 mark). Paper 2: about 11 questions; the last is a 15 mark programming task. */
+const PAPERS = {
+  p1: { name: 'Paper 1', title: 'Computer Systems', marks: 75, mins: 105, chapters: ['data', 'trans', 'hw', 'hw2', 'sw', 'net', 'emerg'], weight: { data: 0.18, trans: 0.12, hw: 0.1, hw2: 0.1, sw: 0.12, net: 0.2, emerg: 0.18 }, mix: { 1: 15, 2: 8, 3: 7, 4: 3, 5: 1, 6: 1 }, block: [9, 13] },
+  p2: { name: 'Paper 2', title: 'Algorithms, Programming and Logic', marks: 75, mins: 105, chapters: ['logic', 'algo', 'pseudo', 'db', 'prog'], weight: { logic: 0.15, algo: 0.2, pseudo: 0.25, db: 0.15, prog: 0.25 }, mix: { 1: 6, 2: 6, 3: 4, 4: 5, 5: 2 }, block: [4, 9], big: 15 }
+};
+const MOCK_KINDS = ['num', 'choice', 'text', 'bits'];
+const mockAnswer = d => d.kind === 'choice' ? d.choices[d.ans] : String(d.ans);
+const MOCK_GENS = {}; for (const k in DRILLS) MOCK_GENS[k] = DRILLS[k].filter(g => { try { return MOCK_KINDS.includes(g().kind); } catch (e) { return false; } });
+function drillPart(k, want, usedGen){
+  const base = MOCK_GENS[k], fresh = base.filter(g => !(usedGen || []).includes(g)), gens = fresh.length ? fresh : base; let best = null;
+  const one = (g) => { const d = g(); return { d, g, text: d.q + (d.kind === 'choice' ? '<br>' + d.choices.map((c, i) => 'ABCD'[i] + '&nbsp; ' + c).join('<br>') : ''), ans: mockAnswer(d), m: d.kind === 'choice' ? 1 : (d.s && d.s.length >= 2 ? 2 : 1) }; };
+  for (let t = 0; t < 40; t++) {
+    const a = one(pick(gens)); let part;
+    if (want === 2 && a.m === 1 && a.d.kind === 'choice') {
+      const others = gens.filter(g => g !== a.g), b = one(pick(others.length ? others : gens));
+      part = { q: '(i) ' + a.text + '<br><br>(ii) ' + b.text, m: 2, ch: k, g: a.g, p: ['==(i) Answer: ' + a.ans + '==', '==(ii) Answer: ' + b.ans + '=='] };
+    } else {
+      const steps = (a.d.s || []).slice(0, -1).map(x => x[1] != null ? x[1] : x[0]).filter(Boolean);
+      part = { q: a.text, m: a.m, ch: k, g: a.g, p: a.m === 2 ? ['Method: ' + (steps.join('; ') || 'correct working'), '==Answer: ' + a.ans + '=='] : ['==Answer: ' + a.ans + '=='] };
+    }
+    if (!best) best = part; if (part.m === want) return part;
+  }
+  return best;
 }
-if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+function buildMockOnce(type){
+  const P = PAPERS[type], chs = P.chapters.filter(k => CH[k]), cnt = {}, gm = {}, used = {}, parts = [];
+  const chooseChapter = cands => { const need = k => (gm[k] || 0) / P.weight[k], lo = Math.min(...cands.map(need)), c = cands.filter(k => need(k) === lo); return pick(c); };
+  const add = (k, m) => { cnt[k] = (cnt[k] || 0) + 1; gm[k] = (gm[k] || 0) + m; };
+  const gensOf = {};
+  if (P.big) { const pool = []; chs.forEach(k => CH[k].exam.forEach((q, i) => { if (q.m === P.big) pool.push([k, i]); })); const [k, i] = pick(pool), q = CH[k].exam[i]; used[k + i] = 1; add(k, q.m); parts.push({ q: q.q, m: q.m, p: q.p, ch: k, big: true }); }
+  const slots = []; Object.keys(P.mix).forEach(m => { for (let n = 0; n < P.mix[m]; n++) slots.push(+m); }); shuffle(slots);
+  slots.sort((a, b) => b - a).forEach(m => { if (m >= 3) {
+      const cands = chs.filter(k => CH[k].exam.some((q, i) => !used[k + i] && q.m !== P.big && Math.abs(q.m - m) <= 1)); const k = chooseChapter(cands.length ? cands : chs);
+      const opts = CH[k].exam.map((q, i) => i).filter(i => !used[k + i] && CH[k].exam[i].m !== P.big).sort((a, b) => Math.abs(CH[k].exam[a].m - m) - Math.abs(CH[k].exam[b].m - m) || Math.random() - 0.5); const i = opts[0];
+      if (i == null) { const pt = drillPart(k, 2); add(k, pt.m); parts.push(pt); return; } used[k + i] = 1; const q = CH[k].exam[i]; add(k, q.m); parts.push({ q: q.q, m: q.m, p: q.p, ch: k }); }
+    else { const k = chooseChapter(chs.filter(c => MOCK_GENS[c].length)); gensOf[k] = gensOf[k] || []; const pt = drillPart(k, m, gensOf[k]); gensOf[k].push(pt.g); add(k, pt.m); parts.push(pt); } });
+  let total = parts.reduce((s, x) => s + x.m, 0), guard = 0;
+  while (total !== P.marks && guard++ < 60) { const diff = P.marks - total;
+    if (diff > 0) { const k = chooseChapter(chs.filter(c => MOCK_GENS[c].length)), pt = drillPart(k, Math.min(2, diff), gensOf[k] || []); if (pt.m <= diff) { add(k, pt.m); parts.push(pt); total += pt.m; } }
+    else { const i = parts.findIndex(p => !p.big && p.p.length <= 2 && p.m <= -diff && p.g); if (i < 0) break; total -= parts[i].m; parts.splice(i, 1); } }
+  const order = chs.slice(); parts.sort((a, b) => order.indexOf(a.ch) - order.indexOf(b.ch) || Math.random() - 0.5);
+  const body = parts.filter(p => !p.big), blocks = []; let cur = [], sum = 0, target = rint(P.block[0], P.block[1]);
+  body.forEach(p => { cur.push(p); sum += p.m; if (sum >= target) { blocks.push(cur); cur = []; sum = 0; target = rint(P.block[0], P.block[1]); } });
+  if (cur.length) { if (blocks.length && sum < 5) blocks[blocks.length - 1].push(...cur); else blocks.push(cur); }
+  let shuf = shuffle(blocks); if (type === 'p1') { const di = shuf.findIndex(b => b.some(p => p.ch === 'data')); if (di > 0) { const [d] = shuf.splice(di, 1); shuf.unshift(d); } }
+  if (P.big) shuf.push(parts.filter(p => p.big));
+  const out = []; shuf.forEach((b, bi) => b.forEach((p, pi) => out.push({ q: p.q, m: p.m, p: p.p, ch: p.ch, qn: bi + 1, lab: b.length > 1 ? 'abcdefghij'[pi] : '', qm: b.reduce((s, x) => s + x.m, 0), head: pi === 0 }))); return out;
+}
+function buildMock(type){ let q; for (let i = 0; i < 30; i++) { q = buildMockOnce(type); const seen = q.map(x => x.q); if (q.reduce((s, x) => s + x.m, 0) === PAPERS[type].marks && new Set(seen).size === seen.length) break; } return q; }
+let MOCKQ = [];
+function drawMock(type){
+  type = PAPERS[type] ? type : (PAPERS[store.mockType] ? store.mockType : 'p1');
+  MOCKQ = buildMock(type); store.mockType = type; store.mockq = MOCKQ;
+  Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save();
+}
+if (Array.isArray(store.mockq) && store.mockq.length && PAPERS[store.mockType] && store.mockq[0].qn && store.mockq.reduce((s, q) => s + q.m, 0) === PAPERS[store.mockType].marks) MOCKQ = store.mockq; else drawMock(store.mockType || 'p1');
 
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['data','Ch 1','Data'],['trans','Ch 2','Transmission'],['logic','Ch 10','Logic'],['hw','Topic 3','Hardware'],['sw','Topic 4','Software'],['net','Topic 5','Internet'],['algo','Topic 7','Algorithms'],['prog','Topic 8','Python'],['db','Topic 9','Databases'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['data','Ch 1','Data'],['trans','Ch 2','Transmission'],['logic','Ch 10','Logic'],['hw','Topic 3','Hardware'],['hw2','Topic 3','CPU & interrupts'],['sw','Topic 4','Software'],['net','Topic 5','Internet'],['emerg','Topic 6','Emerging tech'],['algo','Topic 7','Algorithms'],['pseudo','Topic 7','Pseudocode'],['prog','Topic 8','Python'],['db','Topic 9','Databases'],['mock','','Mock paper']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1593,11 +1991,11 @@ function render(){
   bindView();
 }
 function renderStart(){
-  const rows = ['data','trans','logic','hw','sw','net','algo','prog','db'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+  const rows = ['data','trans','hw','hw2','sw','net','emerg','logic','algo','pseudo','prog','db'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Computer Science: the whole syllabus</h2>
-  <p class="lede">The Term 1 chapters are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">The Term 1 chapters are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the mock paper.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each chapter</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords examiners look for. Use them in your answers.</div>
@@ -1619,6 +2017,7 @@ function renderStart(){
   <div class="card"><h3>Rules that save marks</h3><ul>
     <li>Always write binary answers with ==all 8 bits==.</li>
     <li>In file-size questions, show ==÷ 8== and ==÷ 1024== as separate steps, and give the ==unit==.</li>
+    <li>No marks are given for ==brand names== of software or hardware. Write “a word processor”, not a product name.</li>
     <li>For “describe” questions on error checks, write the ==steps in order==: who does what, then what happens if it is wrong.</li></ul></div>
   <div class="card"><h3>Real past papers</h3><p>After finishing a chapter, try real Cambridge questions from the Computer Science 0478 papers and check the mark schemes:
     <a href="https://pastpapers.papacambridge.com/papers/caie/igcse-computer-science-0478" target="_blank" rel="noopener">PapaCambridge 0478</a> ·
@@ -1653,23 +2052,32 @@ function renderChapter(k){
 }
 function examCard(key, q, i){
   const ticks = store.ticks[key] || []; const open = store.ticks['open-'+key];
-  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${i+1}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
+  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${q.lbl || (i + 1)}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
     <p class="q">${q.q}</p>
     <div class="row"><button class="btn primary" data-ms>${open?'Hide mark scheme':'Show mark scheme'}</button><span class="got">${ticks.length?Math.min(ticks.length,q.m)+'/'+q.m:''}</span></div>
     <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
     ${q.p.map((p,j) => `<button class="point" aria-pressed="${ticks.includes(j)}" data-pt="${j}"><span class="box">✓</span><span>${fmt(p)}</span></button>`).join('')}</div></div>`;
 }
-let timer = null, left = 45*60;
+let timer = null, left = PAPERS[store.mockType].mins * 60;
 const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
 function renderMock(){
-  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
-  return `<div class="chhead fadein"><span class="eyebrow">All three chapters</span><h2>Mini mock</h2>
-    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
+  const P = PAPERS[store.mockType], list = MOCKQ.map(q => Object.assign({}, q, { lbl: q.qn + (q.lab ? ' (' + q.lab + ')' : '') })); const [g,t] = examScore('mock', list), perMin = (P.mins / P.marks).toFixed(2);
+  const types = Object.keys(PAPERS).map(k => `<button class="btn ${k === store.mockType ? 'primary' : 'ghost'}" data-ptype="${k}">${PAPERS[k].name} · ${PAPERS[k].title}</button>`).join('');
+  let heads = '', last = 0; const cards = list.map((q, i) => { let h = ''; if (q.qn !== last) { last = q.qn; const names = [...new Set(list.filter(x => x.qn === q.qn).map(x => CH[x.ch].name))].join(', '); h = `<h3 class="qgroup">Question ${q.qn} <span class="pm">[${q.qm} marks]</span><small>${names}</small></h3>`; } return h + examCard('mock-' + i, q, i); }).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0478 pattern</span><h2>Mock paper</h2>
+    <p class="lede">${P.name} style, ${P.title}: ${t} marks, ${P.mins} minutes, ${MOCKQ.reduce((m, q) => Math.max(m, q.qn), 0)} questions, in the layout of the real paper.</p></div>
     <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Paper 1 tests how computers work (data, hardware, software, networks, emerging technology). Paper 2 tests algorithms, programming, databases and logic.</p></div>
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==1 hour 45 minutes==. Total: ==${t} marks==.</li>
+      <li>Calculators ==must not be used==.</li>
+      <li>Answer all questions on paper. The marks for each part are shown.</li>
+      <li>No marks are given for ==brand names== of software or hardware.</li>
+      <li>That is about ${perMin} minutes per mark.</li>${P.big ? '<li>The last question is a ==15 mark programming task==. Write your answer in pseudocode or a language you know, such as Python.</li>' : ''}</ul></div>
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
-      <p class="note">45 minutes. About 1 minute per mark, plus time to check.</p></div>
-    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New paper (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div></div>
+    ${cards}</div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
 }
 let quizScore = 0;
 function bindView(){
@@ -1684,8 +2092,9 @@ function bindView(){
         if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
-    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 45*60; render(); };
-    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = PAPERS[store.mockType].mins * 60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; drawMock(store.mockType); left = PAPERS[store.mockType].mins * 60; render(); };
+    document.getElementById('view').querySelectorAll('[data-ptype]').forEach(b => b.onclick = () => { clearInterval(timer); timer = null; drawMock(b.dataset.ptype); left = PAPERS[store.mockType].mins * 60; render(); });
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
@@ -1713,7 +2122,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
       store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const list = cur === 'mock' ? MOCKQ : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
 });
 
