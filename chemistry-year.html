@@ -180,6 +180,9 @@ a{color:var(--accent)}
 .tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
+.pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
+.qgroup{margin:18px 0 -6px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.qgroup small{color:var(--muted);font-family:var(--body);font-weight:400;font-size:.85rem}
 </style>
 </head>
 <body>
@@ -2005,15 +2008,172 @@ const DRILLS = {
   ]
 };
 
-let MOCK = [['atoms',2],['atoms',4],['atoms',5],['bonding',0],['bonding',1],['bonding',4],['displace',0],['displace',1],['salts',0],['salts',1]];
-const MOCK_N = MOCK.length;
-function drawMock(){
-  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
-  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
-  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
-  store.mock = MOCK; save();
+/* ---------- extra structured questions in the Cambridge style (original) ---------- */
+const EXTRA = {
+  states: [
+    { q: 'Explain, using the particle model, why a gas can be compressed but a liquid cannot.', m: 3,
+      p: ['The particles in a gas are ==far apart==', 'The particles in a liquid are ==close together== (touching)', 'So gas particles can be pushed ==closer together== but liquid particles have ==almost no space== to move into'] },
+    { q: 'Describe what happens to the particles when a liquid is heated until it boils.', m: 3,
+      p: ['The particles gain ==energy== and move ==faster==', 'The ==forces between particles are overcome==', 'The particles ==separate== and move freely as a gas'] }
+  ],
+  sepn: [
+    { q: 'Describe how to obtain pure water from salty water. Name the process.', m: 3,
+      p: ['The process is ==distillation==', 'Heat the solution so that the ==water boils== (evaporates)', 'The ==vapour is condensed== in a condenser and the ==salt stays behind=='] },
+    { q: 'A student separates the dyes in a black ink using chromatography. Describe how the student does this and how the number of dyes is found.', m: 4,
+      p: ['Draw a ==pencil line== and put a spot of the ink on it', 'Stand the paper in a ==solvent== with the line ==above== the solvent level', 'Leave until the solvent has risen near the top of the paper', 'The number of ==separate spots== is the number of dyes'] },
+    { q: 'In a chromatography experiment a spot moves 3.0 cm and the solvent front moves 8.0 cm. Calculate the R<sub>f</sub> value.', m: 2,
+      p: ['R<sub>f</sub> = ==distance moved by the spot ÷ distance moved by the solvent==', '3.0 ÷ 8.0 = ==0.38== (0.375)'] }
+  ],
+  eqn: [
+    { q: 'Write the balanced symbol equation, with state symbols, for the reaction between magnesium and oxygen to form magnesium oxide.', m: 3,
+      p: ['Reactants ==Mg and O₂== and product ==MgO==', 'Balanced: ==2Mg + O₂ → 2MgO==', 'State symbols: ==(s), (g), (s)=='] },
+    { q: 'Calculate the relative formula mass of calcium carbonate, CaCO₃. [A<sub>r</sub>: Ca, 40; C, 12; O, 16]', m: 2,
+      p: ['40 + 12 + (3 × 16)', '==100=='] },
+    { q: 'State the law of conservation of mass and explain it in terms of atoms.', m: 2,
+      p: ['The ==total mass of the reactants equals the total mass of the products==', 'Atoms are ==rearranged==, not created or destroyed'] },
+    { q: 'Write the balanced symbol equation for the reaction between aluminium and dilute hydrochloric acid.', m: 3, x: 1,
+      p: ['Reactants ==Al and HCl== and products ==AlCl₃ and H₂==', '==2Al + 6HCl → 2AlCl₃ + 3H₂==', 'Correct balancing'] }
+  ],
+  mole: [
+    { q: 'Calculate the number of moles in 4.4 g of carbon dioxide, CO₂. [M<sub>r</sub>: CO₂, 44]', m: 2,
+      p: ['moles = ==mass ÷ M<sub>r</sub>== = 4.4 ÷ 44', '==0.10 mol=='] },
+    { q: 'Calculate the volume of 0.25 mol of a gas at room temperature and pressure. [One mole of gas occupies 24 dm³.]', m: 2,
+      p: ['volume = ==moles × 24==', '0.25 × 24 = ==6.0 dm³=='] },
+    { q: 'Calculate the mass of magnesium oxide formed when 2.4 g of magnesium burns in oxygen. 2Mg + O₂ → 2MgO [A<sub>r</sub>: Mg, 24; O, 16]', m: 3,
+      p: ['moles of Mg = 2.4 ÷ 24 = ==0.10 mol==', 'ratio 2 : 2, so moles of MgO = ==0.10 mol==', 'mass = 0.10 × 40 = ==4.0 g=='] },
+    { q: 'A solution contains 4.0 g of sodium hydroxide in 250 cm³. Calculate the concentration in g/dm³ and in mol/dm³. [M<sub>r</sub>: NaOH, 40]', m: 3,
+      p: ['250 cm³ = ==0.25 dm³==', 'concentration = 4.0 ÷ 0.25 = ==16 g/dm³==', 'moles = 4.0 ÷ 40 = 0.10; 0.10 ÷ 0.25 = ==0.40 mol/dm³=='] }
+  ],
+  emp: [
+    { q: 'A compound contains 40% carbon, 6.7% hydrogen and 53.3% oxygen by mass. Calculate its empirical formula. [A<sub>r</sub>: C, 12; H, 1; O, 16]', m: 3,
+      p: ['Divide by A<sub>r</sub>: ==3.33 : 6.7 : 3.33==', 'Divide by the smallest: ==1 : 2 : 1==', '==CH₂O=='] },
+    { q: 'The empirical formula of a compound is CH₂. Its relative molecular mass is 56. Calculate its molecular formula.', m: 2,
+      p: ['Mass of CH₂ = 14, and 56 ÷ 14 = ==4==', '==C₄H₈=='] }
+  ],
+  rates: [
+    { q: 'Describe how the rate of reaction between marble chips and hydrochloric acid can be measured.', m: 3,
+      p: ['Collect the gas in a ==gas syringe== (or measure the ==loss of mass== on a balance)', 'Record the ==volume== (or mass) at regular ==time intervals==', 'The rate is the ==volume of gas per unit time== (the gradient of the graph)'] },
+    { q: 'Explain, using collision theory, why increasing the concentration of an acid increases the rate of reaction.', m: 3,
+      p: ['There are ==more particles in the same volume==', 'So ==more frequent collisions== between particles', 'So more ==successful collisions== per second'] },
+    { q: 'State two ways to increase the rate of a reaction between a solid and an acid.', m: 2,
+      p: ['Increase the ==temperature==', 'Use a ==powder== (smaller pieces) / increase the concentration / add a catalyst (any two)'] },
+    { q: 'Explain why a catalyst increases the rate of reaction.', m: 2,
+      p: ['It provides an ==alternative pathway==', 'with a ==lower activation energy==, so more collisions are successful'] }
+  ],
+  redox: [
+    { q: 'State what is meant by oxidation in terms of oxygen and in terms of electrons.', m: 2,
+      p: ['Oxidation is the ==gain of oxygen==', 'Oxidation is the ==loss of electrons=='] },
+    { q: 'In the reaction CuO + H₂ → Cu + H₂O, identify the substance that is oxidised and the substance that is reduced.', m: 2,
+      p: ['Hydrogen is ==oxidised== (it gains oxygen)', 'Copper(II) oxide is ==reduced== (it loses oxygen)'] }
+  ],
+  energ: [
+    { q: 'State what is meant by an exothermic reaction and by an endothermic reaction.', m: 2,
+      p: ['==Exothermic==: transfers energy to the surroundings (the temperature rises)', '==Endothermic==: takes in energy from the surroundings (the temperature falls)'] },
+    { q: 'Describe the energy level diagram for an exothermic reaction.', m: 3,
+      p: ['The reactants are at a ==higher energy== than the products', 'There is a ==hump== for the ==activation energy==', 'The difference is the ==energy released== (ΔH is negative)'] },
+    { q: 'Explain, in terms of bonds, why a reaction is exothermic.', m: 2, x: 1,
+      p: ['==Breaking bonds== takes in energy (endothermic)', '==Making bonds== releases energy and more energy is released making bonds than is taken in breaking them'] }
+  ],
+  electro: [
+    { q: 'State the products at the cathode and at the anode when molten lead(II) bromide is electrolysed.', m: 2,
+      p: ['cathode: ==lead==', 'anode: ==bromine=='] },
+    { q: 'Explain why a solid ionic compound does not conduct electricity but the molten compound does.', m: 2,
+      p: ['In the solid the ==ions are fixed== in position', 'When molten the ==ions are free to move== and carry the charge'] },
+    { q: 'Describe how a steel spoon is electroplated with silver.', m: 3,
+      p: ['The spoon is the ==cathode== (negative electrode)', 'The anode is a piece of ==silver==', 'The electrolyte is ==aqueous silver nitrate== (a silver salt solution)'] },
+    { q: 'State the products formed at the electrodes and the substance left in solution when concentrated aqueous sodium chloride is electrolysed.', m: 3,
+      p: ['anode: ==chlorine==', 'cathode: ==hydrogen==', 'left in solution: ==sodium hydroxide=='] }
+  ],
+  metals: [
+    { q: 'Describe how iron is extracted from iron(III) oxide in the blast furnace.', m: 4,
+      p: ['==Coke (carbon)== burns to form carbon dioxide and then ==carbon monoxide==', 'Carbon monoxide ==reduces iron(III) oxide== to iron: Fe₂O₃ + 3CO → 2Fe + 3CO₂', '==Limestone== is added to remove impurities', 'The impurities form ==slag== (calcium silicate)'] },
+    { q: 'Explain why aluminium is extracted by electrolysis and not by heating its oxide with carbon.', m: 2,
+      p: ['Aluminium is ==more reactive than carbon==', 'So carbon ==cannot reduce== aluminium oxide'] },
+    { q: 'State two physical properties of metals.', m: 2,
+      p: ['Good ==conductors== of electricity and heat', '==Malleable and ductile== / high melting point / shiny (any two)'] }
+  ],
+  air: [
+    { q: 'Describe an experiment to show that air contains about 21% oxygen.', m: 3,
+      p: ['Heat ==copper== in a known volume of air in a gas syringe', 'The ==oxygen reacts== with the hot copper', 'The volume ==decreases by about one fifth== (21%)'] },
+    { q: 'Explain how increased carbon dioxide in the atmosphere contributes to climate change.', m: 3,
+      p: ['Carbon dioxide is a ==greenhouse gas==', 'It ==absorbs infrared radiation== and traps heat', 'This increases ==global warming== and changes the climate'] }
+  ],
+  fert: [
+    { q: 'Explain why farmers use fertilisers.', m: 2,
+      p: ['Crops need ==nitrogen, phosphorus and potassium== to grow', 'Fertilisers ==replace the nutrients== removed from the soil, giving a higher yield'] },
+    { q: 'Explain how fertilisers can pollute rivers and kill fish.', m: 3,
+      p: ['Fertiliser ==runs off== into the river', 'Algae grow rapidly (==eutrophication==)', 'When they die, bacteria decompose them and use up the ==oxygen==, so fish die'] }
+  ],
+  hydro: [
+    { q: 'State what is meant by a homologous series.', m: 2,
+      p: ['A family of compounds with the ==same functional group== and the same general formula', 'with ==similar chemical properties== and a gradual change in physical properties'] },
+    { q: 'Describe a test to distinguish between ethane and ethene.', m: 2,
+      p: ['Add ==bromine water==', 'Ethene ==decolourises== it (orange to colourless); ethane does not'] },
+    { q: 'Write the balanced equation for the complete combustion of ethane and name the products.', m: 3,
+      p: ['Products: ==carbon dioxide and water==', 'Reactants: ==ethane and oxygen==', '==2C₂H₆ + 7O₂ → 4CO₂ + 6H₂O=='] },
+    { q: 'Describe cracking and state why it is done.', m: 3,
+      p: ['==Large hydrocarbon molecules== are broken into ==smaller molecules==', 'Using ==heat and a catalyst== (or steam at a high temperature)', 'To make ==alkenes== and shorter, more useful fuels such as petrol'] }
+  ],
+  organics: [
+    { q: 'Describe how ethanol is made by fermentation. Include the conditions.', m: 4,
+      p: ['Glucose is fermented by ==yeast== (enzymes)', 'Warm: about ==30 °C==', '==No oxygen== (anaerobic)', 'The products are ==ethanol and carbon dioxide=='] },
+    { q: 'Give the name and formula of the carboxylic acid with two carbon atoms.', m: 2,
+      p: ['==Ethanoic acid==', '==CH₃COOH=='] },
+    { q: 'State two properties of ethanoic acid that show it is an acid.', m: 2,
+      p: ['It has a ==pH below 7== (turns litmus red)', 'It reacts with ==carbonates== to give carbon dioxide / with metals to give hydrogen (any two)'] }
+  ],
+  macro: [
+    { q: 'State one difference between addition polymerisation and condensation polymerisation.', m: 2,
+      p: ['Addition: ==one type of monomer== with a ==C=C double bond==, and only the polymer is formed', 'Condensation: monomers with ==two functional groups== join and a ==small molecule (water)== is lost'] },
+    { q: 'Explain why plastics cause problems for the environment.', m: 3,
+      p: ['Most plastics are not ==biodegradable==', 'They build up in ==landfill and in the oceans==', 'Burning them can release ==toxic gases== and carbon dioxide'] }
+  ],
+  analysis: [
+    { q: 'Describe the test for ammonium ions in a solution.', m: 3,
+      p: ['Add ==sodium hydroxide solution== and warm', '==Ammonia gas== is given off', 'It turns ==damp red litmus paper blue=='] },
+    { q: 'Describe how to test for sulfate ions in a solution.', m: 3,
+      p: ['Add ==dilute hydrochloric acid== (or nitric acid)', 'Then add ==barium chloride== (or barium nitrate) solution', 'A ==white precipitate== forms'] },
+    { q: 'State the flame test colours for sodium, potassium and copper ions.', m: 3,
+      p: ['sodium: ==yellow==', 'potassium: ==lilac==', 'copper: ==blue-green=='] },
+    { q: 'Describe the test for hydrogen gas and the positive result.', m: 2,
+      p: ['Hold a ==lighted splint== at the mouth of the tube', 'A ==squeaky pop== is heard'] }
+  ]
+};
+for (const k in EXTRA) CH[k].exam.push(...EXTRA[k]);
+
+/* ---------- structured theory papers in the Cambridge 0620 pattern ---------- */
+/* Measured from the May/June 2026 papers: Paper 3 (Core) 0620/31 and Paper 4 (Extended) 0620/41, 80 marks, 1 hour 15 minutes, answer all questions.
+   Each paper has 7 questions of 7 to 16 marks (Core 10, 11, 12, 12, 9, 16, 10; Extended 7, 10, 10, 10, 15, 16, 12), in syllabus order, with parts (a), (b), (c) mixing recall, equations, calculations and explanations. */
+const TH_PAPERS = { core: { name: 'Paper 3', tier: 'Core', title: 'Theory (Core)', mins: 75, blocks: 7 }, ext: { name: 'Paper 4', tier: 'Extended', title: 'Theory (Extended)', mins: 75, blocks: 7 } };
+const TH_CLUSTERS = [['states', 'sepn'], ['atoms', 'bonding'], ['eqn', 'mole', 'emp'], ['electro'], ['rates', 'redox', 'energ'], ['displace', 'salts', 'metals'], ['air', 'fert'], ['hydro', 'organics', 'macro'], ['analysis']];
+function buildTheory(type){
+  const ext = type === 'ext', seen = store.thseen = store.thseen || {}; let best = null;
+  const ok = (k, q) => ext || (!q.x && !MC_EXT_CH.includes(k));
+  const clusters = TH_CLUSTERS.map(ks => ks.filter(k => ext || !MC_EXT_CH.includes(k)));
+  for (let n = 0; n < 40000 && !best; n++) {
+    const keep = shuffle(clusters.map((_, i) => i)).slice(0, TH_PAPERS[type].blocks).sort((a, b) => a - b);
+    let total = 0, good = true; const blocks = [];
+    for (const ci of keep) {
+      const ks = clusters[ci], lead = ks.map(k => ({ k, s: CH[k].exam.reduce((a, _, i) => a + (seen[k + '-' + i] || 0), 0) + Math.random() * 3 })).sort((a, b) => a.s - b.s)[0].k, all = [];
+      ks.forEach(k => CH[k].exam.forEach((q, i) => { if (ok(k, q)) all.push({ k, i, m: q.m, lead: k === lead }); }));
+      const c = pick([3, 4, 4, 5]);
+      const picked = all.map(x => ({ x, s: (x.lead ? 0 : 6) + (seen[x.k + '-' + x.i] || 0) * 2 + Math.random() * 4 })).sort((p, q) => p.s - q.s).slice(0, c).map(y => y.x).sort((p, q) => p.m - q.m);
+      const bm = picked.reduce((s, x) => s + x.m, 0); if (bm < 7 || bm > 16) { good = false; break; } total += bm; blocks.push(picked);
+    }
+    if (good && total === 80) best = blocks;
+  }
+  const parts = []; (best || []).forEach((b, bi) => { const qm = b.reduce((s, x) => s + x.m, 0); b.forEach((x, pi) => { seen[x.k + '-' + x.i] = (seen[x.k + '-' + x.i] || 0) + 1; parts.push([x.k, x.i, bi + 1, 'abcde'[pi], qm]); }); });
+  return parts;
 }
-if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+let THQ = [];
+const thRebuild = parts => parts.map(([k, i, qn, lab, qm]) => Object.assign({}, CH[k].exam[i], { ch: k, qn, lab, qm, lbl: qn + (lab ? ' (' + lab + ')' : '') }));
+function drawTheory(type){
+  type = TH_PAPERS[type] ? type : (TH_PAPERS[store.thtype] ? store.thtype : 'core');
+  const parts = buildTheory(type); store.thtype = type; store.thq = parts; THQ = thRebuild(parts); left = TH_PAPERS[type].mins * 60;
+  Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save();
+}
+(function(){ if (Array.isArray(store.thq) && TH_PAPERS[store.thtype] && store.thq.length && store.thq.every(([k, i]) => CH[k] && CH[k].exam[i])) THQ = thRebuild(store.thq); })();
+
 
 /* ---------- multiple-choice papers in the Cambridge 0620 pattern ---------- */
 /* Measured from five 2025 and 2026 papers: Paper 1 (Core) and Paper 2 (Extended), 40 questions, 40 marks, 45 minutes, one mark each.
@@ -2081,7 +2241,7 @@ function bindMC(){
 }
 
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['states','Topic 1','States of matter'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['emp','Topic 3','Empirical formulae'],['rates','Topic 6','Rates'],['redox','Topic 7','Redox, industry'],['energ','Topic 5','Energetics'],['electro','Topic 4','Electrolysis'],['metals','Topic 9','Metals'],['air','Topic 10','Air and water'],['fert','Topic 10','Fertilisers'],['hydro','Topic 11','Hydrocarbons'],['organics','Topic 11','Alcohols, polymers'],['macro','Topic 11','Proteins, plastics'],['analysis','Topic 12','Analysis'],['mc','','MC paper'],['mock','','Theory mock']];
+const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['states','Topic 1','States of matter'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['emp','Topic 3','Empirical formulae'],['rates','Topic 6','Rates'],['redox','Topic 7','Redox, industry'],['energ','Topic 5','Energetics'],['electro','Topic 4','Electrolysis'],['metals','Topic 9','Metals'],['air','Topic 10','Air and water'],['fert','Topic 10','Fertilisers'],['hydro','Topic 11','Hydrocarbons'],['organics','Topic 11','Alcohols, polymers'],['macro','Topic 11','Proteins, plastics'],['analysis','Topic 12','Analysis'],['mc','','MC paper'],['mock','','Theory paper']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -2103,7 +2263,7 @@ function renderStart(){
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Chemistry: the whole syllabus</h2>
-  <p class="lede">The Term 1 chapters are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the multiple-choice paper and the theory mock.</p></div>
+  <p class="lede">The Term 1 chapters are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the multiple-choice paper and the theory paper.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each chapter</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords examiners look for. Use them in your answers.</div>
@@ -2283,23 +2443,34 @@ function renderChapter(k){
 }
 function examCard(key, q, i){
   const ticks = store.ticks[key] || []; const open = store.ticks['open-'+key];
-  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${i+1}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
+  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${q.lbl || (i+1)}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
     <p class="q">${q.q}</p>
     <div class="row"><button class="btn primary" data-ms>${open?'Hide mark scheme':'Show mark scheme'}</button><span class="got">${ticks.length?Math.min(ticks.length,q.m)+'/'+q.m:''}</span></div>
     <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
     ${q.p.map((p,j) => `<button class="point" aria-pressed="${ticks.includes(j)}" data-pt="${j}"><span class="box">✓</span><span>${fmt(p)}</span></button>`).join('')}</div></div>`;
 }
-let timer = null, left = 40*60;
+let timer = null, left = 75*60;
 const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
 function renderMock(){
-  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
-  return `<div class="chhead fadein"><span class="eyebrow">All four chapters</span><h2>Mini mock</h2>
-    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
+  if (!THQ.length) drawTheory(store.thtype || 'core');
+  const P = TH_PAPERS[store.thtype], list = THQ, [g,t] = examScore('mock', list), perMin = (P.mins / t).toFixed(2);
+  const types = Object.keys(TH_PAPERS).map(k => `<button class="btn ${k === store.thtype ? 'primary' : 'ghost'}" data-ptype="${k}">${TH_PAPERS[k].name} · ${TH_PAPERS[k].tier}</button>`).join('');
+  let last = 0; const cards = list.map((q, i) => { let h = ''; if (q.qn !== last) { last = q.qn; const names = [...new Set(list.filter(x => x.qn === q.qn).map(x => CH[x.ch].name))].join(', '); h = `<h3 class="qgroup">Question ${q.qn} <span class="pm">[${q.qm} marks]</span><small>${names}</small></h3>`; } return h + examCard('mock-' + i, q, i); }).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0620 pattern</span><h2>Theory paper</h2>
+    <p class="lede">${P.name} style, ${P.title}: ${t} marks, ${P.mins} minutes, ${list[list.length-1].qn} questions with parts, in the order of the syllabus, like the real paper.</p></div>
     <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Core uses the Core syllabus only. Extended adds the mole, empirical formulae, equilibrium and harder explanations. Ask your teacher which tier you sit.</p></div>
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==1 hour 15 minutes==. Total: ==${t} marks==.</li>
+      <li>Answer ==all== the questions on paper. The marks for each part are shown in brackets.</li>
+      <li>You ==may use a calculator==. ==Show all your working== and use the ==correct units==.</li>
+      <li>The ==Periodic Table== is printed in the paper. One mole of any gas occupies ==24 dm³== at room temperature and pressure.</li>
+      <li>That is about ${perMin} minutes per mark.</li></ul>
+      <details><summary><b>Periodic Table</b></summary><div style="overflow-x:auto;margin-top:8px">${periodicFull()}</div></details></div>
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
-      <p class="note">40 minutes. About 1 minute per mark, plus time to check.</p></div>
-    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New paper (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div></div>
+    ${cards}</div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
 }
 let quizScore = 0;
 function bindView(){
@@ -2314,8 +2485,9 @@ function bindView(){
         if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
-    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 40*60; render(); };
-    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = TH_PAPERS[store.thtype].mins*60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; drawTheory(store.thtype); render(); };
+    document.getElementById('view').querySelectorAll('[data-ptype]').forEach(b => b.onclick = () => { clearInterval(timer); timer = null; drawTheory(b.dataset.ptype); render(); });
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
@@ -2343,7 +2515,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
       store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const list = cur === 'mock' ? THQ : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
 });
 

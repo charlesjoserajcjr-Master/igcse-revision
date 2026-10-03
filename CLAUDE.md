@@ -12,7 +12,7 @@ Live site (GitHub Pages, branch `main`, root): https://charlesjoserajcjr-master.
 | `physics.html` | Physics pack: Ch 9 Density, Ch 10 Thermal energy transfer, Ch 11 Sound. Oldest engine (see below). |
 | `chemistry.html` | Chemistry pack: Ch 4 Atoms and periodic table, Ch 5 Bonding, Ch 6 Displacement, Ch 7 Salts. |
 | `maths.html` | Maths pack (0580): equations, angles, statistics, shapes, fractions, sequences, ratio, probability. Built on the chemistry engine plus `text`/`frac` drill kinds. Worked examples carry `intro`, `tip`, `f`, per-step why and `r` rows for the side table. |
-| `physics-year.html`, `chemistry-year.html`, `cs-year.html` | Full-year packs (Physics and Chemistry have a multiple-choice paper; Physics also a Cambridge-pattern Theory paper). Start as copies of the Term 1 packs (own progress keys `physyear-v1`, `chemyear-v1`, `csyear-v1`) and grow chapter by chapter in syllabus order. |
+| `physics-year.html`, `chemistry-year.html`, `cs-year.html` | Full-year packs (Physics, Chemistry and Biology each have a Cambridge-pattern multiple-choice paper and a Theory paper). Start as copies of the Term 1 packs (own progress keys `physyear-v1`, `chemyear-v1`, `csyear-v1`) and grow chapter by chapter in syllabus order. |
 | `biology-year.html` | Full-year Biology pack (0610), built from the maths engine with its own diagram helpers (`T`, `arrowDefs`). Key `biopack-v1`. 20 topics: the whole core course, with a Cambridge-pattern MC paper (Paper 1) and Theory paper (Paper 3). |
 | `cs.html` | Computer Science pack (0478): Ch 1 Data representation, Ch 2 Data transmission, Ch 10 Boolean logic. Newest engine. |
 | `tools/check.py` | Headless-browser test: clicks every tab, self-checks every drill generator, screenshots diagrams. Run it before every push. |
@@ -31,7 +31,8 @@ Each pack is **one self-contained HTML file**: inline CSS + inline JS + inline S
   - Optional `intro` ("Key idea" box) and `tip` ("Exam tip", revealed after the last step). `prose:true` switches the step font from mono to body.
 - **Drills** are random generators in `DRILLS[key]` returning `{kind, q, ans, s, …}`. Kinds: `num` (with `tol`), `choice` (`choices`, `ans` = index), `config` (e.g. 2,8,1), `formula` (case-checked chemical formula), `bits` (8-bit binary), `text` (hex / RLE, case-insensitive), `table` (tap-to-fill truth table). `judge()` marks typed answers.
 - **Exam questions**: `{q, m (marks), p: [marking points]}`. The student writes on paper, then taps each point he got; score = min(ticks, marks).
-- **Multiple-choice mock** (`chemistry-year.html`): `MC_TOPICS`, `buildMC()` build a 40-question Cambridge 0620 style paper from the quiz banks, in syllabus order.
+- **Theory papers** (`physics-year.html`, `biology-year.html`, `chemistry-year.html`): `TH_PAPERS`, `TH_CLUSTERS`, `buildTheory()`, `drawTheory()` assemble an 80-mark, 1 h 15 paper from the exam banks, grouped into numbered questions with parts.
+- **Multiple-choice mock** (`chemistry-year.html`, also Physics and Biology): `MC_TOPICS`, `buildMC()` build a 40-question Cambridge 0620 style paper from the quiz banks, in syllabus order.
 - **Mock papers** (`maths.html` and `cs-year.html`): `PAPERS`, `buildMock()` and `drawMock()` build Cambridge-pattern papers (Core 80 marks / 90 min, Extended 100 marks / 120 min) from drill generators plus the exam bank. See HANDOVER.md. `tools/check.py` verifies mark totals, duplicates and calculator rules.
 - **Progress** is stored in `localStorage` (keys `physpack-v1`, `chempack-v1`, `cspack-v1`) — per device only.
 - **Theme**: CSS tokens on `:root` with a `prefers-color-scheme: dark` block. Every colour must come from a token (diagrams included) so both themes work.
