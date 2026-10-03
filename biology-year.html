@@ -179,6 +179,10 @@ a{color:var(--accent)}
 .tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
+.qgroup{margin:18px 0 -6px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.qgroup small{color:var(--muted);font-family:var(--body);font-weight:400;font-size:.85rem}
 </style>
 </head>
 <body>
@@ -1563,15 +1567,361 @@ const DRILLS = {
   ]
 
 };
-let MOCK = [['char',0],['char',1],['cells',0],['cells',1],['move',0],['move',1],['molecules',0],['molecules',1],['enzymes',0],['enzymes',1],['plantnut',0],['plantnut',1],['nutr',0],['nutr',1],['transp',0],['transp',1],['blood',0],['blood',1],['disease',0],['disease',1],['resp',0],['resp',1],['excr',0],['excr',1],['coord',0],['coord',1],['drugs',0],['drugs',1],['repro',0],['repro',1],['inherit',0],['inherit',1],['select',0],['select',1],['ecosys',0],['ecosys',1],['human',0],['human',1]];
-const MOCK_N = MOCK.length;
-function drawMock(){
-  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
-  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
-  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
-  store.mock = MOCK; save();
+/* ---------- extra multiple-choice questions (original, Cambridge style) ---------- */
+const MQ = (q, c, wr, w, x) => { const o = shuffle([c, ...wr]); return Object.assign({ q, o, a: o.indexOf(c), w }, x || {}); };
+const MCX = {
+  char: [
+    MQ('A plant shoot grows towards a window. Which characteristic of living things does this show?', 'sensitivity', ['excretion', 'respiration', 'reproduction'], 'Detecting and responding to light is ==sensitivity==.'),
+    MQ('Which group of vertebrates has hair and mammary glands?', 'mammals', ['reptiles', 'birds', 'amphibians'], '==Mammals== have hair and feed their young on milk.'),
+    MQ('Which is the correct way to write the binomial name of the domestic cat?', 'Felis catus', ['felis Catus', 'Felis Catus', 'FELIS catus'], 'The ==genus== has a capital letter and the ==species== has a small letter: ==Felis catus==.'),
+    MQ('Which feature is used to place an animal in the group called arthropods?', 'jointed legs', ['a backbone', 'feathers', 'moist skin'], '==Arthropods== have jointed legs and an exoskeleton.')
+  ],
+  cells: [
+    MQ('Which part of a cell controls its activities and contains the genetic material?', 'nucleus', ['cytoplasm', 'cell membrane', 'mitochondrion'], 'The ==nucleus== contains the DNA.'),
+    MQ('Which structure is found in plant cells but not in animal cells?', 'cell wall', ['nucleus', 'cell membrane', 'mitochondrion'], 'Plant cells have a ==cell wall==, chloroplasts and a permanent vacuole.'),
+    MQ('A cell is drawn 60 mm long. Its actual length is 0.030 mm. What is the magnification of the drawing?', '× 2000', ['× 200', '× 0.0005', '× 1800'], 'magnification = image size ÷ actual size = 60 ÷ 0.030 = ==× 2000==.'),
+    MQ('Which list shows the levels of organisation from smallest to largest?', 'cell → tissue → organ → organ system', ['tissue → cell → organ → organ system', 'organ → tissue → cell → organ system', 'cell → organ → tissue → organ system'], 'Cells make ==tissues==, tissues make ==organs== and organs make ==organ systems==.')
+  ],
+  move: [
+    MQ('Which term describes the net movement of particles from a region of high concentration to a region of low concentration?', 'diffusion', ['osmosis', 'active transport', 'respiration'], '==Diffusion== is down a concentration gradient.'),
+    MQ('Osmosis is the movement of water molecules…', 'from a dilute solution to a concentrated solution through a partially permeable membrane', ['from a concentrated solution to a dilute solution through a partially permeable membrane', 'against a concentration gradient using energy', 'through a fully permeable wall only'], 'Water moves ==from high to low water potential==, from dilute to concentrated, through a ==partially permeable membrane==.'),
+    MQ('A plant cell is placed in pure water. What happens to the cell?', 'it becomes turgid', ['it becomes flaccid', 'it bursts', 'it shrinks'], 'Water enters by osmosis. The ==cell wall== stops it bursting, so the cell becomes ==turgid==.'),
+    MQ('Which process needs energy from respiration?', 'active transport', ['diffusion', 'osmosis', 'evaporation'], '==Active transport== moves particles ==against a concentration gradient== using energy.')
+  ],
+  molecules: [
+    MQ('Iodine solution is added to a food sample. Which colour shows that starch is present?', 'blue-black', ['brick red', 'purple', 'cloudy white'], 'Starch turns iodine solution ==blue-black==.'),
+    MQ('Which nutrient is needed mainly for growth and repair?', 'protein', ['carbohydrate', 'fat', 'fibre'], '==Protein== is used to make new cells and repair tissue.'),
+    MQ('Which elements are found in all carbohydrates?', 'carbon, hydrogen and oxygen', ['carbon and hydrogen only', 'carbon, hydrogen, oxygen and nitrogen', 'carbon and nitrogen only'], '==Carbohydrates== contain ==C, H and O==. Proteins also contain nitrogen.'),
+    MQ('Which test detects reducing sugars?', 'heat with Benedict’s solution', ['add iodine solution', 'add biuret solution', 'shake with ethanol and water'], 'Benedict’s solution and heat gives a ==brick-red precipitate== with reducing sugars.')
+  ],
+  enzymes: [
+    MQ('What is an enzyme?', 'a protein that speeds up a chemical reaction', ['a carbohydrate that provides energy', 'a hormone made in the pancreas', 'a living cell in the gut'], 'An enzyme is a ==biological catalyst== made of ==protein==.'),
+    MQ('Which enzyme digests starch?', 'amylase', ['protease', 'lipase', 'maltase only'], '==Amylase== breaks down starch into maltose.'),
+    MQ('Why does an enzyme stop working at a very high temperature?', 'its shape changes and it is denatured', ['it runs out of energy', 'it dissolves in water', 'it becomes a different substrate'], 'High temperature changes the ==shape of the active site==, so the enzyme is ==denatured==.'),
+    MQ('Which enzyme breaks down protein in the stomach?', 'protease', ['amylase', 'lipase', 'catalase'], '==Protease== (pepsin) digests protein into amino acids.')
+  ],
+  plantnut: [
+    MQ('Which word equation represents photosynthesis?', 'carbon dioxide + water → glucose + oxygen', ['glucose + oxygen → carbon dioxide + water', 'glucose + water → carbon dioxide + oxygen', 'oxygen + water → glucose + carbon dioxide'], 'Photosynthesis makes ==glucose and oxygen== from ==carbon dioxide and water== using light.'),
+    MQ('Which part of a leaf contains most chloroplasts?', 'palisade mesophyll', ['upper epidermis', 'spongy mesophyll', 'xylem'], 'The ==palisade layer== is packed with chloroplasts.'),
+    MQ('Which mineral ion is needed to make chlorophyll?', 'magnesium', ['calcium', 'sodium', 'chloride'], '==Magnesium== is needed for chlorophyll. ==Nitrate== is needed for amino acids.'),
+    MQ('A leaf has been decolourised and iodine solution is added. It turns blue-black. What does this show?', 'starch is present, so the leaf has photosynthesised', ['glucose is present', 'protein is present', 'the leaf has respired'], 'Starch is made from the glucose produced by ==photosynthesis==.')
+  ],
+  nutr: [
+    MQ('A lack of which nutrient causes scurvy?', 'vitamin C', ['vitamin D', 'iron', 'calcium'], '==Vitamin C== deficiency causes scurvy (bleeding gums).'),
+    MQ('In which part of the alimentary canal does most absorption of digested food take place?', 'small intestine', ['stomach', 'large intestine', 'oesophagus'], 'The ==small intestine== (ileum) has villi that give a large surface area.'),
+    MQ('Which organ produces bile?', 'liver', ['pancreas', 'gall bladder', 'stomach'], 'Bile is made in the ==liver== and stored in the gall bladder.'),
+    MQ('What is the function of bile?', 'it emulsifies fats and neutralises stomach acid', ['it digests protein', 'it digests starch', 'it absorbs water'], 'Bile ==emulsifies fats== (physical digestion) and is ==alkaline==.')
+  ],
+  transp: [
+    MQ('Which tissue transports water from the roots to the leaves?', 'xylem', ['phloem', 'cortex', 'epidermis'], '==Xylem== carries water and mineral ions up the plant.'),
+    MQ('What is transpiration?', 'loss of water vapour from the leaves', ['uptake of water by roots', 'movement of sucrose in phloem', 'loss of water from the roots'], '==Transpiration== is the loss of ==water vapour== from the leaves through the stomata.'),
+    MQ('Which condition increases the rate of transpiration?', 'high temperature', ['high humidity', 'darkness', 'still air'], 'A ==higher temperature==, wind, low humidity and light all increase transpiration.'),
+    MQ('Why do root hair cells absorb water and mineral ions efficiently?', 'they have a large surface area', ['they have thick walls', 'they contain chloroplasts', 'they have no nucleus'], 'The long ==root hair== gives a large surface area.')
+  ],
+  blood: [
+    MQ('Which type of blood vessel carries blood away from the heart?', 'artery', ['vein', 'capillary', 'vena cava'], '==Arteries== carry blood ==away== from the heart.'),
+    MQ('Which chamber of the heart pumps blood to the lungs?', 'right ventricle', ['left ventricle', 'right atrium', 'left atrium'], 'The ==right ventricle== pumps deoxygenated blood to the lungs.'),
+    MQ('Which part of the blood fights pathogens?', 'white blood cells', ['red blood cells', 'platelets', 'plasma proteins only'], '==White blood cells== ingest pathogens and make antibodies.'),
+    MQ('Which structures prevent the backflow of blood in veins?', 'valves', ['capillaries', 'muscle fibres', 'platelets'], '==Valves== keep blood moving in one direction.')
+  ],
+  disease: [
+    MQ('Which disease is caused by a virus?', 'HIV/AIDS', ['cholera', 'malaria', 'tuberculosis'], '==HIV== is a virus. Cholera and TB are bacterial; malaria is caused by a protist.'),
+    MQ('How does a vaccination protect a person from a disease?', 'it stimulates the body to make antibodies and memory cells', ['it kills the pathogen already in the body', 'it gives the person ready-made antibodies for life', 'it stops the pathogen entering the body'], 'A vaccine contains a ==weakened or dead pathogen== that triggers an ==immune response==.'),
+    MQ('Which cells produce antibodies?', 'lymphocytes', ['red blood cells', 'platelets', 'phagocytes'], '==Lymphocytes== (a type of white blood cell) make antibodies.'),
+    MQ('Antibiotics are used to treat infections caused by…', 'bacteria', ['viruses', 'all pathogens', 'protists only'], 'Antibiotics kill ==bacteria== but do not work on viruses.')
+  ],
+  resp: [
+    MQ('Which gas passes from the alveoli into the blood?', 'oxygen', ['carbon dioxide', 'nitrogen', 'water vapour only'], '==Oxygen== diffuses into the blood and ==carbon dioxide== diffuses out.'),
+    MQ('What happens to the diaphragm when a person breathes in?', 'it contracts and flattens', ['it relaxes and domes upwards', 'it contracts and domes upwards', 'it relaxes and flattens'], 'When you breathe in the ==diaphragm contracts and flattens==, so the chest volume increases.'),
+    MQ('Which word equation shows aerobic respiration?', 'glucose + oxygen → carbon dioxide + water', ['carbon dioxide + water → glucose + oxygen', 'glucose → lactic acid', 'glucose + water → oxygen + carbon dioxide'], '==Aerobic respiration== uses glucose and oxygen and releases energy.'),
+    MQ('Which gas turns limewater cloudy?', 'carbon dioxide', ['oxygen', 'nitrogen', 'hydrogen'], '==Carbon dioxide== makes limewater cloudy.')
+  ],
+  excr: [
+    MQ('In which organ is urea made?', 'liver', ['kidney', 'bladder', 'pancreas'], 'The ==liver== makes urea from excess amino acids.'),
+    MQ('What does the kidney remove from the blood?', 'urea and excess water', ['glucose and proteins', 'oxygen and nitrogen', 'red blood cells'], 'The kidney removes ==urea==, ==excess water== and ==salts== as urine.'),
+    MQ('Which blood vessel carries blood to the kidney?', 'renal artery', ['renal vein', 'hepatic vein', 'vena cava'], 'The ==renal artery== brings blood to the kidney.'),
+    MQ('Which waste product is excreted by the lungs?', 'carbon dioxide', ['urea', 'bile pigments', 'glucose'], 'The lungs excrete ==carbon dioxide==.')
+  ],
+  coord: [
+    MQ('Which type of neurone carries impulses from receptors to the central nervous system?', 'sensory neurone', ['motor neurone', 'relay neurone only', 'effector neurone'], '==Sensory neurones== carry impulses ==to== the CNS.'),
+    MQ('What is a reflex action?', 'a fast, automatic response to a stimulus', ['a slow, voluntary response', 'a response controlled by hormones', 'a response that needs thought'], 'A reflex is ==fast==, ==automatic== and ==protective==.'),
+    MQ('Which hormone lowers the blood glucose concentration?', 'insulin', ['adrenaline', 'testosterone', 'oestrogen'], '==Insulin== makes the liver store glucose as glycogen.'),
+    MQ('Which part of the eye contains the light receptors?', 'retina', ['iris', 'cornea', 'optic nerve'], 'The ==retina== contains rods and cones.'),
+    MQ('What happens to the pupil in bright light?', 'it gets smaller', ['it gets larger', 'it stays the same', 'it disappears'], 'In bright light the ==iris muscles contract==, so the pupil gets ==smaller==.'),
+    MQ('Which gland releases adrenaline?', 'adrenal gland', ['pancreas', 'testis', 'pituitary gland'], 'Adrenaline is released by the ==adrenal glands== above the kidneys.'),
+    MQ('Shoots grow towards a light source. What is this response called?', 'phototropism', ['gravitropism', 'photosynthesis', 'transpiration'], 'Growth towards light is ==positive phototropism==.'),
+    MQ('To focus on a near object, what happens to the lens of the eye?', 'it becomes thicker and more curved', ['it becomes thinner and flatter', 'it moves away from the retina', 'it does not change'], 'The ciliary muscles ==contract==, so the lens becomes ==thicker and more curved==.'),
+    MQ('What is homeostasis?', 'maintaining a constant internal environment', ['responding to a stimulus', 'making hormones', 'moving towards food'], '==Homeostasis== keeps conditions such as temperature and blood glucose steady.')
+  ],
+  drugs: [
+    MQ('Which substance in tobacco smoke causes addiction?', 'nicotine', ['tar', 'carbon monoxide', 'carbon dioxide'], '==Nicotine== is the addictive drug.'),
+    MQ('Which substance in tobacco smoke is a carcinogen?', 'tar', ['nicotine', 'oxygen', 'water vapour'], '==Tar== contains chemicals that cause cancer.'),
+    MQ('What are antibiotics?', 'drugs that kill bacteria', ['drugs that kill viruses', 'drugs that cause addiction', 'hormones that speed up the heart'], '==Antibiotics== kill bacteria and do not work on viruses.'),
+    MQ('Which of these is a depressant drug?', 'alcohol', ['caffeine', 'nicotine', 'adrenaline'], '==Alcohol== slows down the nervous system.')
+  ],
+  repro: [
+    MQ('Which part of a flower produces pollen?', 'anther', ['stigma', 'ovary', 'petal'], 'Pollen is produced in the ==anther==.'),
+    MQ('Where does fertilisation take place in a flowering plant?', 'in the ovule', ['on the stigma', 'in the anther', 'on the petal'], 'The male nucleus fuses with the female nucleus in the ==ovule==.'),
+    MQ('Which hormone is produced by the testes?', 'testosterone', ['oestrogen', 'insulin', 'adrenaline'], '==Testosterone== causes male secondary sexual characteristics.'),
+    MQ('Where does the embryo implant in the human female?', 'in the lining of the uterus', ['in the oviduct', 'in the ovary', 'in the vagina'], 'The embryo ==implants in the uterus lining==.')
+  ],
+  inherit: [
+    MQ('What is a gene?', 'a length of DNA that codes for a protein', ['a type of cell', 'a structure made of protein', 'a copy of a chromosome'], 'A gene is a ==length of DNA== that codes for a ==protein==.'),
+    MQ('A person has the genotype Bb. What is this called?', 'heterozygous', ['homozygous dominant', 'homozygous recessive', 'recessive'], 'Two ==different alleles== make a ==heterozygous== genotype.'),
+    MQ('How many chromosomes are there in a normal human body cell?', '46', ['23', '44', '92'], 'Human body cells have ==46== chromosomes (23 pairs).'),
+    MQ('Two heterozygous parents (Tt) have a child. What is the probability that the child is tt?', '25%', ['0%', '50%', '75%'], 'The cross gives ==1 TT : 2 Tt : 1 tt==, so tt is ==25%==.')
+  ],
+  select: [
+    MQ('Which feature shows continuous variation?', 'height', ['blood group', 'ability to roll the tongue', 'sex'], '==Height== can have any value in a range: continuous variation.'),
+    MQ('Farmers breed only the cows that give the most milk. What is this process?', 'selective breeding', ['natural selection', 'genetic modification', 'mutation'], 'People choose the parents: ==selective breeding==.'),
+    MQ('What is a mutation?', 'a random change in a gene or chromosome', ['a change caused only by the environment', 'a change in the number of offspring', 'a type of reproduction'], 'A mutation is a ==random change in DNA==.'),
+    MQ('Which statement about natural selection is correct?', 'organisms best adapted to the environment survive and pass on their alleles', ['organisms choose to change to suit the environment', 'all offspring in a population survive', 'the strongest organisms always survive'], '==Better adapted== individuals survive, reproduce and pass on ==alleles==.')
+  ],
+  ecosys: [
+    MQ('What is a producer in a food chain?', 'an organism that makes its own food by photosynthesis', ['an animal that eats plants', 'an organism that breaks down dead material', 'an animal that eats other animals'], 'A ==producer== is a green plant or alga.'),
+    MQ('In the food chain grass → rabbit → fox, which organism is the primary consumer?', 'rabbit', ['grass', 'fox', 'none of them'], 'The ==rabbit== eats the producer, so it is the ==primary consumer==.'),
+    MQ('Where does the energy in most food chains first come from?', 'the Sun', ['the soil', 'the producers’ respiration', 'decomposers'], 'Producers capture ==light energy from the Sun==.'),
+    MQ('Why is only a small amount of energy passed to the next trophic level?', 'most is lost as heat in respiration and in waste', ['most is used for photosynthesis', 'most is stored in the Sun', 'animals do not need energy'], 'Energy is lost through ==respiration (heat)==, ==movement== and waste.'),
+    MQ('Which process removes carbon dioxide from the atmosphere?', 'photosynthesis', ['respiration', 'combustion', 'decomposition'], '==Photosynthesis== uses CO₂. Respiration, combustion and decay release it.'),
+    MQ('Which phase of a population growth curve is described by birth rate equal to death rate?', 'stationary phase', ['lag phase', 'exponential phase', 'death phase'], 'In the ==stationary phase== the numbers stay roughly constant.')
+  ],
+  human: [
+    MQ('Which gas is mainly responsible for the enhanced greenhouse effect?', 'carbon dioxide', ['oxygen', 'nitrogen', 'argon'], 'Burning fossil fuels increases ==carbon dioxide==, which traps heat.'),
+    MQ('What is eutrophication?', 'a rise in nutrients in water that causes rapid growth of algae', ['a rise in oxygen in water', 'the death of fish from overfishing', 'a fall in the pH of water'], '==Fertiliser run-off== causes an ==algal bloom==, and later oxygen is used up.'),
+    MQ('Why does deforestation reduce biodiversity?', 'habitats are destroyed', ['more oxygen is released', 'more rain falls', 'trees grow faster'], 'Animals and plants lose their ==habitats==.'),
+    MQ('Which is a method of conserving an endangered species?', 'captive breeding', ['hunting', 'deforestation', 'monoculture'], '==Captive breeding== in zoos increases numbers.')
+  ]
+};
+
+/* ---------- new chapter: biotechnology and genetic modification ---------- */
+function svgGM(){
+  const box = (x, y, n, a, b, c) => `<rect x="${x}" y="${y}" width="230" height="96" rx="8" class="cardf" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + 115, y + 26, n, 'mid lbl')}${T(x + 115, y + 52, a, 'mid')}${T(x + 115, y + 72, b, 'mid')}${T(x + 115, y + 90, c || '', 'mid')}`;
+  const ar = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="acc" marker-end="url(#b-gm)"/>`;
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="Making human insulin with genetically modified bacteria in six steps">${arrowDefs('gm')}
+  ${box(20, 20, '1. Find the gene', 'Cut the human insulin gene', 'out of human DNA using', 'a restriction enzyme')}${box(320, 20, '2. Open a plasmid', 'The same enzyme cuts', 'a ring of bacterial DNA', '(a plasmid)')}${box(620, 20, '3. Join them', 'The gene is stuck into', 'the plasmid using', 'ligase (an enzyme)')}
+  ${box(620, 180, '4. Insert', 'The plasmid is put into', 'a bacterium', '')}${box(320, 180, '5. Multiply', 'The bacteria grow and', 'divide in a fermenter', 'and make insulin')}${box(20, 180, '6. Collect', 'The insulin is purified', 'and used to treat', 'people with diabetes')}
+  ${ar(250, 68, 320, 68)}${ar(550, 68, 620, 68)}${ar(735, 116, 735, 180)}${ar(620, 228, 550, 228)}${ar(320, 228, 250, 228)}</svg>`;
 }
-if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+function svgGrowth(){
+  return `<svg viewBox="0 0 980 280" role="img" aria-label="Bacterial population growth curve with lag, exponential, stationary and death phases">
+  <line x1="70" y1="220" x2="620" y2="220" class="ln"/><line x1="70" y1="220" x2="70" y2="30" class="ln"/>
+  <path d="M70 212 C115 212 135 208 165 196 C205 178 230 86 295 70 L440 68 C490 68 520 120 590 205" class="acc" fill="none"/>
+  <line x1="165" y1="220" x2="165" y2="40" class="thin" style="stroke-dasharray:4 4"/><line x1="295" y1="220" x2="295" y2="40" class="thin" style="stroke-dasharray:4 4"/><line x1="440" y1="220" x2="440" y2="40" class="thin" style="stroke-dasharray:4 4"/>
+  ${T(118, 50, 'A', 'mid hott')}${T(230, 50, 'B', 'mid hott')}${T(368, 50, 'C', 'mid hott')}${T(520, 50, 'D', 'mid hott')}${T(345, 250, 'time', 'mid lbl')}${T(34, 24, 'population size', 'lbl')}
+  ${T(650, 60, 'A  lag phase: cells adapt,', 'lbl')}${T(650, 80, 'little division', 'mut')}${T(650, 112, 'B  exponential (log) phase:', 'lbl')}${T(650, 132, 'fast division, steep slope', 'mut')}${T(650, 164, 'C  stationary phase:', 'lbl')}${T(650, 184, 'births = deaths', 'mut')}${T(650, 216, 'D  death phase: food runs out,', 'lbl')}${T(650, 236, 'waste builds up', 'mut')}</svg>`;
+}
+
+DRILLS.biotech = [
+  () => { const d = pick([10, 15, 20, 30]), k = pick([3, 4, 5, 6, 7]), T = d * k;
+    return { kind: 'num', q: `A bacterium divides into two every ${d} minutes. Starting from one bacterium, how many bacteria are there after ${T} minutes?`, ans: Math.pow(2, k), tol: 0, s: [['Number of divisions', `${T} ÷ ${d} = ${k}`], ['Doubling each time', `2 to the power ${k} = ${Math.pow(2, k)}`]] }; },
+  () => { const n = pick([10, 20, 50, 100]), k = pick([2, 3, 4, 5]);
+    return { kind: 'num', q: `A culture starts with ${n} bacteria. The population doubles ${k} times. How many bacteria are there now?`, ans: n * Math.pow(2, k), tol: 0, s: [['Each doubling', `× 2, ${k} times`], ['Answer', `${n} × ${Math.pow(2, k)} = ${n * Math.pow(2, k)}`]] }; },
+  () => { const it = pick([['breaks down pectin to give more fruit juice', 'pectinase'], ['joins a gene into a plasmid', 'ligase'], ['cuts DNA at a specific place', 'restriction enzyme'], ['removes protein stains in washing powder', 'protease'], ['changes lactose in milk', 'lactase']]);
+    return choiceItem(`Which enzyme ${it[0]}?`, it[1], ['pectinase', 'ligase', 'restriction enzyme', 'protease', 'lactase'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ' ' + it[0]]]); },
+  () => { const it = pick([['The cells are adapting and there is little division.', 'lag phase'], ['The bacteria divide rapidly and the curve is steep.', 'exponential (log) phase'], ['Births equal deaths and the curve is flat.', 'stationary phase'], ['Food has run out and numbers fall.', 'death phase']]);
+    return choiceItem(`${it[0]} Which phase of bacterial growth is this?`, it[1], ['lag phase', 'exponential (log) phase', 'stationary phase', 'death phase'].filter(x => x !== it[1]), [['Match', it[1]]]); }
+];
+
+CH.biotech = {
+  code: 'Topic 20', name: 'Biotechnology and genetic modification',
+  lede: 'Using yeast, bacteria and enzymes, and how genes are moved from one organism to another.',
+  drill: 'biotech',
+  learn: [
+    { h: 'Yeast and bacteria in food', list: ['==Biotechnology== means using living organisms (or parts of them) to make useful products.', '==Yeast== respires ==anaerobically== (fermentation): ==glucose → ethanol + carbon dioxide==.', 'In ==bread==, the CO₂ makes the dough rise. The ethanol evaporates when the bread is baked.', 'In ==brewing==, the ethanol is the product.', '==Bacteria== (Lactobacillus) change ==lactose== in milk into ==lactic acid==. This makes ==yoghurt==.', 'A ==fermenter== keeps ==temperature==, ==pH==, ==oxygen== and ==nutrients== at the best level for the microorganisms.'], f: ['glucose → ethanol + carbon dioxide'] },
+    { h: 'Enzymes in biotechnology', list: ['==Pectinase== breaks down pectin in fruit. This gives ==more juice== and a ==clearer== juice.', '==Biological washing powders== contain ==protease== and ==lipase==. They remove stains at ==low temperatures==, which saves energy.', '==Lactase== changes lactose into glucose and galactose, to make ==lactose-free milk==.', 'Enzymes are ==denatured== at high temperatures, so washing powders are used at about 40 °C.'] },
+    { h: 'Genetic modification', list: ['==Genetic modification== (genetic engineering) is ==changing the genes of an organism by adding a gene from another organism==.', 'Example: making ==human insulin==. The gene is ==cut out== of human DNA with a ==restriction enzyme==.', 'A bacterial ==plasmid== is cut with the same enzyme. The gene is joined in with ==ligase==. The plasmid goes into a ==bacterium==.', 'The bacteria ==multiply== in a fermenter and make insulin.', '==Why bacteria==: they ==reproduce rapidly==, they can make ==complex molecules==, they have ==plasmids== and there are few ==ethical== objections.', '==GM crops== include ==herbicide-resistant== crops, ==pest-resistant== crops and ==golden rice== (extra vitamin A).', '==Benefits==: higher yield, less pesticide, more nutrients. ==Concerns==: effects on wild species, allergies, cost and gene transfer.'] },
+    { h: 'Bacterial population growth', table: [['Phase', 'What happens'], ['A: lag', 'cells adapt, very little division'], ['B: exponential (log)', 'rapid division, steep slope'], ['C: stationary', 'births = deaths, nutrients running low'], ['D: death', 'food runs out and waste builds up']] }
+  ],
+  mistakes: ['Saying yeast makes ethanol by ==aerobic== respiration. Fermentation is ==anaerobic==.', 'Confusing a ==plasmid== with the main bacterial chromosome.', 'Saying genetic modification is the same as ==selective breeding==. Genes are moved between species.', 'Saying a ==washing powder enzyme works best at 90 °C==. It is denatured.', 'Saying the bacteria ==make== the insulin gene. The gene comes from ==human DNA==.'],
+  diagrams: [
+    { svg: svgGM, cap: 'Making ==human insulin== with ==genetically modified bacteria==.' },
+    { svg: svgGrowth, cap: 'The ==four phases== of bacterial population growth.' }
+  ],
+  worked: [
+    W('Describe how bacteria can be used to make human insulin.', 'Follow the steps in order: ==cut==, ==join==, ==insert==, ==grow==.', 'Use the words restriction enzyme, plasmid and ligase.', 'Cut, join, insert, grow',
+      [['Find the gene', 'The human insulin gene is cut out of human DNA with a restriction enzyme', ''], ['Open a plasmid', 'A plasmid from a bacterium is cut open with the same enzyme', ''], ['Join', 'The gene is joined into the plasmid using ligase', ''], ['Insert', 'The plasmid is put into a bacterium', ''], ['Grow', 'The bacteria multiply in a fermenter and make insulin, which is collected', '']],
+      [['1', 'cut gene out', 0], ['2', 'cut plasmid', 1], ['3', 'join with ligase', 2], ['4', 'into bacterium', 3], ['5', 'grow, collect', 4]], true),
+    W('Write the word equation for fermentation in yeast and explain how it makes bread rise.', 'Yeast respires ==anaerobically==. The gas is ==carbon dioxide==.', 'Say which product makes the dough rise.', 'Glucose → ethanol + CO₂',
+      [['Equation', 'glucose → ethanol + carbon dioxide', 'No oxygen is needed.'], ['The gas', 'Carbon dioxide forms bubbles in the dough', ''], ['Result', 'The bubbles make the dough expand, so it rises', 'The ethanol evaporates when baked.']],
+      [['Equation', 'glucose → ethanol + CO₂', 0], ['Gas', 'carbon dioxide', 1], ['Result', 'dough rises', 2]], true),
+    W('Explain why a biological washing powder is used at 40 °C and not at 90 °C.', 'Think about ==enzymes== and ==temperature==.', 'Use the word denatured.', 'Enzymes are denatured',
+      [['The powder', 'It contains enzymes such as protease and lipase that break down stains', ''], ['At 40 °C', 'The enzymes work well and save energy', 'It is close to their optimum temperature.'], ['At 90 °C', 'The enzymes are denatured: their shape changes so they no longer work', '']],
+      [['Enzymes', 'break down stains', 0], ['40 °C', 'work well', 1], ['90 °C', 'denatured', 2]], true),
+    W('A bacterium divides into two every 20 minutes. How many bacteria are there from one bacterium after 2 hours?', 'Count the ==number of divisions==. Each division ==doubles== the number.', 'Number of bacteria = 2 to the power of the number of divisions.', 'Doubling',
+      [['Time in minutes', '2 × 60 = 120 minutes', ''], ['Number of divisions', '120 ÷ 20 = 6', ''], ['Number of bacteria', '2 × 2 × 2 × 2 × 2 × 2 = 64', 'Each division doubles the number.']],
+      [['Time', '120 min', 0], ['Divisions', '6', 1], ['Bacteria', '64', 2]]),
+    W('Describe the shape of a bacterial growth curve and explain why the curve levels off.', 'Name the ==phases== in order.', 'Give a reason for the stationary phase.', 'Lag, exponential, stationary, death',
+      [['Lag', 'The population grows slowly while the bacteria adapt', ''], ['Exponential', 'The bacteria divide rapidly, so the curve is steep', ''], ['Stationary', 'The curve levels off because nutrients run low and waste builds up, so births equal deaths', ''], ['Death', 'The population falls as food runs out', '']],
+      [['A', 'lag', 0], ['B', 'exponential', 1], ['C', 'stationary', 2], ['D', 'death', 3]], true)
+  ],
+  quiz: [
+    MQ('Which process in yeast makes bread dough rise?', 'anaerobic respiration producing carbon dioxide', ['photosynthesis producing oxygen', 'aerobic respiration producing ethanol only', 'digestion of starch'], '==Fermentation== releases ==carbon dioxide== bubbles.'),
+    MQ('Which enzyme is used to make fruit juice clearer?', 'pectinase', ['amylase', 'lipase', 'catalase'], '==Pectinase== breaks down pectin.'),
+    MQ('Which structure is moved into a bacterium when making insulin?', 'a plasmid containing the human gene', ['a whole human chromosome', 'a human cell', 'a virus'], 'The ==plasmid== carries the human gene into the bacterium.'),
+    MQ('Which enzyme joins the gene into the plasmid?', 'ligase', ['restriction enzyme', 'amylase', 'protease'], '==Ligase== joins DNA. A ==restriction enzyme== cuts it.'),
+    MQ('Why are bacteria useful for genetic modification?', 'they reproduce rapidly', ['they never mutate', 'they have a nucleus', 'they are large cells'], 'They ==reproduce rapidly==, so a lot of product is made quickly.'),
+    MQ('Which is a benefit of GM crops?', 'higher yield', ['they have more genes of their own', 'they cannot cross-pollinate', 'they never need water'], 'Many GM crops give a ==higher yield== or need fewer pesticides.'),
+    MQ('Which phase of bacterial growth has the steepest slope?', 'exponential phase', ['lag phase', 'stationary phase', 'death phase'], 'In the ==exponential (log) phase== the cells divide rapidly.'),
+    MQ('Why do washing powders with enzymes work at low temperatures?', 'enzymes work well at about 40 °C', ['enzymes only work in cold water', 'enzymes are made of fat', 'enzymes are destroyed by water'], 'Enzymes have an optimum temperature and are ==denatured== if it is too high.')
+  ],
+  exam: [
+    { q: 'State three reasons why bacteria are useful for genetic modification.', m: 3,
+      p: ['They ==reproduce rapidly==', 'They can make ==complex molecules== (human proteins)', 'They contain ==plasmids== (easy to insert genes)', 'There are few ==ethical== issues (any three)'] },
+    { q: 'Describe how a gene for human insulin is put into a bacterium.', m: 4,
+      p: ['The gene is ==cut out== of human DNA with a ==restriction enzyme==', 'A ==plasmid== is cut with the ==same enzyme==', 'The gene is joined into the plasmid using ==ligase==', 'The plasmid is put into a ==bacterium=='] },
+    { q: 'State the word equation for fermentation in yeast and give one use of this reaction.', m: 3,
+      p: ['==glucose → ethanol== (reactant and one product)', '==+ carbon dioxide== (second product)', 'Use: ==bread making== / brewing (alcoholic drinks)'] },
+    { q: 'Suggest two advantages and one disadvantage of growing genetically modified crops.', m: 3,
+      p: ['Advantage: ==higher yield== / more food', 'Advantage: ==pest or herbicide resistance== / extra nutrients (second different advantage)', 'Disadvantage: may ==harm other species== / gene transfer to wild plants / allergies / cost'] },
+    { q: 'State two conditions that are controlled in a fermenter and explain why one of them is controlled.', m: 3,
+      p: ['==temperature==', '==pH== / oxygen / nutrients (a second condition)', 'Explanation: they must be at the ==optimum== so that ==enzymes work fastest== and the microorganisms grow quickly'] },
+    { q: 'The graph shows the growth of a population of bacteria in a flask. State three conditions that affect how steep the graph is in the exponential phase.', m: 3,
+      p: ['==temperature==', '==nutrient supply== (food)', '==pH== / ==oxygen== / ==space== / waste products (one more)'] }
+  ]
+};
+
+for (const k in MCX) CH[k].quiz.push(...MCX[k]);
+/* ---------- extra structured questions in the Cambridge style (original) ---------- */
+const EXTRA = {
+  char: [
+    { q: 'State two differences between amphibians and reptiles.', m: 2,
+      p: ['Amphibians have ==moist skin==; reptiles have ==dry, scaly skin==', 'Amphibian eggs are laid ==in water== (jelly); reptile eggs are laid ==on land== (leathery shell)'] },
+    { q: 'The scientific name of the common frog is Rana temporaria. State the genus and the species.', m: 2,
+      p: ['genus = ==Rana==', 'species = ==temporaria=='] }
+  ],
+  cells: [
+    { q: 'A drawing of a plant cell is 45 mm long. The actual length of the cell is 0.015 mm. Calculate the magnification of the drawing.', m: 3,
+      p: ['magnification = ==image size ÷ actual size==', '45 ÷ 0.015', '==× 3000=='] }
+  ],
+  move: [
+    { q: 'Name the process that moves particles across a membrane against a concentration gradient. Name the process in the cell that supplies the energy for it.', m: 2,
+      p: ['==active transport==', '==respiration=='] }
+  ],
+  transp: [
+    { q: 'Explain how an increase in wind speed affects the rate of transpiration.', m: 3,
+      p: ['Wind blows away the ==water vapour== near the leaf', 'This makes the ==concentration gradient steeper==', 'So water vapour ==diffuses out faster== through the stomata: the rate ==increases=='] },
+    { q: 'State two variables that should be kept constant in an investigation of the effect of wind speed on the rate of transpiration.', m: 2,
+      p: ['==temperature==', '==light intensity== / humidity / the same size of shoot (any two)'] }
+  ],
+  blood: [
+    { q: 'A heart beats 72 times in one minute. Calculate the time taken for one heartbeat.', m: 2,
+      p: ['60 ÷ 72', '==0.83 s== (0.8 s)'] }
+  ],
+  coord: [
+    { q: 'State two effects of adrenaline on the body.', m: 2,
+      p: ['The ==heart rate increases==', 'The ==pupils dilate== / breathing rate increases / more glucose is released (any two)'] }
+  ],
+  repro: [
+    { q: 'Describe two differences between a wind-pollinated flower and an insect-pollinated flower.', m: 2,
+      p: ['Insect-pollinated flowers have ==large, brightly coloured petals==; wind-pollinated flowers have small, dull petals', 'Insect-pollinated flowers have ==scent and nectar==; wind-pollinated flowers do not', 'Wind-pollinated flowers have ==feathery stigmas== and anthers that hang outside (any two differences)'] }
+  ],
+  inherit: [
+    { q: 'A person with the genotype AA and a person with the genotype Aa have a baby. Complete a genetic diagram and state the percentage chance that the baby has the genotype Aa.', m: 3,
+      p: ['Gametes: ==A and A== from one parent, ==A and a== from the other', 'Offspring: ==AA, AA, Aa, Aa==', '==50%== chance of Aa'] }
+  ],
+  ecosys: [
+    { q: 'The number of deer in a park rose from 35 to 140. Calculate the percentage increase in the number of deer.', m: 2,
+      p: ['Increase = 140 − 35 = ==105==', '105 ÷ 35 × 100 = ==300%=='] },
+    { q: 'State what is meant by an ecosystem.', m: 2,
+      p: ['A ==community of living organisms== (all the populations in an area)', 'and the ==non-living environment== that they interact with'] }
+  ],
+  human: [
+    { q: 'Describe reasons why a large mammal may become extinct in the wild.', m: 4,
+      p: ['==hunting== / poaching', '==habitat destruction== (for example deforestation)', '==pollution== / climate change', '==introduced predators or competitors== / disease / small populations with little variation (any four)'] }
+  ]
+};
+for (const k in EXTRA) CH[k].exam.push(...EXTRA[k]);
+
+/* ---------- multiple-choice paper in the Cambridge 0610 pattern ---------- */
+/* Measured from the May/June 2026 Paper 1 (Core): 40 questions, 40 marks, 45 minutes, one mark each, in syllabus order:
+   characteristics and cells, movement in and out of cells, enzymes, plants, human nutrition and transport, disease, gas exchange, coordination, reproduction, inheritance, ecology, biotechnology. */
+const MC_TOPICS = [
+  { k: 'char', n: 'Classification', core: 1 }, { k: 'cells', n: 'Cells', core: 2 }, { k: 'move', n: 'Diffusion and osmosis', core: 2 }, { k: 'molecules', n: 'Biological molecules', core: 1 },
+  { k: 'enzymes', n: 'Enzymes', core: 2 }, { k: 'plantnut', n: 'Photosynthesis', core: 2 }, { k: 'nutr', n: 'Human nutrition', core: 2 }, { k: 'transp', n: 'Transport in plants', core: 3 },
+  { k: 'blood', n: 'Blood and heart', core: 3 }, { k: 'disease', n: 'Disease and immunity', core: 1 }, { k: 'resp', n: 'Gas exchange and respiration', core: 2 }, { k: 'excr', n: 'Excretion', core: 1 },
+  { k: 'coord', n: 'Coordination', core: 5 }, { k: 'drugs', n: 'Drugs', core: 1 }, { k: 'repro', n: 'Reproduction', core: 3 }, { k: 'inherit', n: 'Inheritance', core: 2 },
+  { k: 'select', n: 'Variation and selection', core: 1 }, { k: 'ecosys', n: 'Ecosystems', core: 4 }, { k: 'human', n: 'Human influences', core: 1 }, { k: 'biotech', n: 'Biotechnology', core: 1 }
+];
+const MC_PAPERS = { core: { name: 'Paper 1', tier: 'Core', mins: 45 } };
+const MC_POOL = {}; MC_TOPICS.forEach(t => { MC_POOL[t.k] = CH[t.k].quiz.map((q, i) => ({ k: t.k, i, q })); });
+function buildMC(type){ let q; for (let i = 0; i < 12; i++) { q = buildMCOnce(type); if (q.length === 40 && new Set(q.map(x => x.q)).size === 40) break; } return q; }
+function buildMCOnce(type){
+  const seen = store.mcseen = store.mcseen || {}, out = [], spare = [];
+  MC_TOPICS.forEach(t => { const n = t.core; const pool = (MC_POOL[t.k] || []).map(x => ({ x, s: (seen[x.k + '-' + x.i] || 0) * 2 + Math.random() * 0.9 })).sort((a, b) => a.s - b.s).map(y => y.x);
+    pool.slice(0, n).forEach(x => out.push({ x, t: t.k })); pool.slice(n).forEach(x => spare.push({ x, t: t.k })); const short = n - Math.min(n, pool.length); for (let j = 0; j < short; j++) out.push({ x: null, t: t.k }); });
+  const used = new Set(out.filter(o => o.x).map(o => o.x.k + '-' + o.x.i)); const fill = shuffle(spare.filter(s => !used.has(s.x.k + '-' + s.x.i)));
+  const items = out.map(o => { const e = o.x || (fill.length ? fill.shift().x : null); return e && { e, t: o.t }; }).filter(Boolean);
+  return items.map(({ e, t }) => { const q = e.q, right = q.o[q.a], o = shuffle(q.o); seen[e.k + '-' + e.i] = (seen[e.k + '-' + e.i] || 0) + 1; return { q: q.q, o, a: o.indexOf(right), w: q.w, ch: e.k, t }; });
+}
+let MCQ = [], mcTimer = null, mcLeft = 45 * 60;
+function drawMC(type){
+  type = MC_PAPERS[type] ? type : 'core';
+  MCQ = buildMC(type); store.mctype = type; store.mcq = MCQ; store.mcans = MCQ.map(() => null); store.mcdone = false; mcLeft = MC_PAPERS[type].mins * 60; save();
+}
+if (Array.isArray(store.mcq) && store.mcq.length === 40 && MC_PAPERS[store.mctype] && Array.isArray(store.mcans)) MCQ = store.mcq; else drawMC('core');
+function renderMC(){
+  const P = MC_PAPERS[store.mctype];
+  const done = store.mcdone, score = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0), answered = store.mcans.filter(x => x != null).length;
+  const byTopic = MC_TOPICS.map(t => { const idx = MCQ.map((q, i) => [q, i]).filter(([q]) => q.t === t.k); return [t.n, idx.filter(([q, i]) => store.mcans[i] === q.a).length, idx.length]; }).filter(r => r[2]);
+  const cards = MCQ.map((q, i) => `<div class="card" data-mcq="${i}"><span class="eyebrow">Question ${i + 1}</span><p class="q">${q.q}</p><div class="opts">${q.o.map((o, j) => `<button class="opt${store.mcans[i] === j ? ' sel' : ''}${done && j === q.a ? ' right' : ''}${done && store.mcans[i] === j && j !== q.a ? ' wrong' : ''}" data-mco="${j}" ${done ? 'disabled' : ''}><b>${'ABCD'[j]}</b> ${o}</button>`).join('')}</div>${done ? `<p class="why">${store.mcans[i] == null ? 'Not answered. ' : ''}${fmt(q.w)}</p>` : ''}</div>`).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0610 pattern</span><h2>Multiple-choice paper</h2>
+    <p class="lede">${P.name} style, ${P.tier}: 40 questions, 40 marks, ${P.mins} minutes. The questions follow the syllabus order, as in the real paper.</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>There are ==forty questions==. Answer all of them.</li>
+      <li>Each question has ==four possible answers A, B, C and D==. Choose the one you think is correct.</li>
+      <li>Each correct answer scores ==one mark==. No marks are taken off for a wrong answer.</li>
+      <li>You ==may use a calculator==. Rough working goes on paper.</li>
+      <li>This pack covers the ==Core== course. The real Paper 1 is the Core paper.</li></ul></div>
+    <div class="card"><div class="scorebar"><div class="timer" id="mclock">${fmtTime(mcLeft)}</div><div class="big-score">${done ? score + '/40' : answered + '/40 answered'}</div></div>
+      <div class="row"><button class="btn primary" id="mcgo">${mcTimer ? 'Pause' : 'Start timer'}</button><button class="btn ghost" id="mcmark">${done ? 'Marked' : 'Finish and mark my paper'}</button><button class="btn ghost" id="mcnew">New paper (different questions)</button></div></div>
+    ${done ? `<div class="card"><h3>Your result: ${score} out of 40</h3><p class="note">${score >= 32 ? 'Excellent.' : score >= 24 ? 'Good. Read the explanations for the ones you missed.' : 'Keep practising. Read the explanations, then revise the chapters shown below.'}</p>${byTopic.map(r => `<div class="prog"><div class="pl"><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div><div class="bar"><i style="width:${Math.round(100 * r[1] / r[2])}%"></i></div></div>`).join('')}</div>` : ''}
+    ${cards}</div>`.replace(/==(.+?)==/g, '<mark class="kw">$1</mark>');
+}
+function bindMC(){
+  const v = document.getElementById('view');
+  document.getElementById('mcgo').onclick = () => {
+    if (mcTimer) { clearInterval(mcTimer); mcTimer = null; document.getElementById('mcgo').textContent = 'Resume'; return; }
+    document.getElementById('mcgo').textContent = 'Pause';
+    mcTimer = setInterval(() => { mcLeft = Math.max(0, mcLeft - 1); const c = document.getElementById('mclock'); if (c) { c.textContent = mcLeft ? fmtTime(mcLeft) : 'Time up'; c.classList.toggle('low', mcLeft < 300); } if (!mcLeft) { clearInterval(mcTimer); mcTimer = null; } }, 1000);
+  };
+  document.getElementById('mcmark').onclick = () => { if (store.mcdone) return; clearInterval(mcTimer); mcTimer = null; store.mcdone = true; const sc = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0); store.mcbest = Math.max(store.mcbest || 0, sc); save(); render(); window.scrollTo(0, 0); };
+  document.getElementById('mcnew').onclick = () => { clearInterval(mcTimer); mcTimer = null; drawMC(store.mctype); render(); window.scrollTo(0, 0); };
+  v.querySelectorAll('[data-mco]').forEach(b => b.onclick = () => { if (store.mcdone) return; const i = +b.closest('[data-mcq]').dataset.mcq, j = +b.dataset.mco; store.mcans[i] = store.mcans[i] === j ? null : j; save();
+    b.closest('.opts').querySelectorAll('.opt').forEach((x, k) => x.classList.toggle('sel', store.mcans[i] === k)); document.querySelector('.big-score').textContent = store.mcans.filter(x => x != null).length + '/40 answered'; });
+}
+
+/* ---------- structured theory paper in the Cambridge 0610 pattern ---------- */
+/* Measured from the May/June 2026 Paper 3 (Core): 80 marks, 1 hour 15 minutes, 8 questions of 7 to 12 marks (8, 11, 12, 9, 7, 11, 11, 11), answer all, syllabus order.
+   Each question has parts (a), (b), (c) and mixes recall, tables, data and calculations. */
+const TH_PAPERS = { core: { name: 'Paper 3', tier: 'Core', title: 'Theory (Core)', mins: 75, blocks: 8 } };
+const TH_CLUSTERS = [['char', 'cells'], ['move', 'molecules', 'enzymes'], ['plantnut', 'transp'], ['nutr', 'blood'], ['disease', 'resp', 'excr'], ['coord', 'drugs'], ['repro', 'inherit'], ['select', 'ecosys', 'human', 'biotech']];
+function buildTheory(type){
+  const seen = store.thseen = store.thseen || {}; let best = null;
+  for (let n = 0; n < 40000 && !best; n++) {
+    let total = 0, ok = true; const blocks = [];
+    for (const ks of TH_CLUSTERS) {
+      const lead = pickLead(ks, seen), all = [];
+      ks.forEach(k => CH[k].exam.forEach((q, i) => all.push({ k, i, m: q.m, lead: k === lead })));
+      const c = pick([3, 4, 4, 5]);
+      const picked = all.map(x => ({ x, s: (x.lead ? 0 : 6) + (seen[x.k + '-' + x.i] || 0) * 2 + Math.random() * 4 })).sort((p, q) => p.s - q.s).slice(0, c).map(y => y.x).sort((p, q) => p.m - q.m);
+      const bm = picked.reduce((s, x) => s + x.m, 0); if (bm < 7 || bm > 12) { ok = false; break; } total += bm; blocks.push(picked);
+    }
+    if (ok && total === 80) best = blocks;
+  }
+  const parts = []; (best || []).forEach((b, bi) => { const qm = b.reduce((s, x) => s + x.m, 0); b.forEach((x, pi) => { seen[x.k + '-' + x.i] = (seen[x.k + '-' + x.i] || 0) + 1; parts.push([x.k, x.i, bi + 1, 'abcde'[pi], qm]); }); });
+  return parts;
+}
+function pickLead(ks, seen){ return ks.map(k => ({ k, s: CH[k].exam.reduce((a, _, i) => a + (seen[k + '-' + i] || 0), 0) + Math.random() * 3 })).sort((a, b) => a.s - b.s)[0].k; }
+let THQ = [];
+const thRebuild = parts => parts.map(([k, i, qn, lab, qm]) => Object.assign({}, CH[k].exam[i], { ch: k, qn, lab, qm, lbl: qn + (lab ? ' (' + lab + ')' : '') }));
+function drawTheory(type){
+  type = TH_PAPERS[type] ? type : 'core';
+  const parts = buildTheory(type); store.thtype = type; store.thq = parts; THQ = thRebuild(parts); left = TH_PAPERS[type].mins * 60;
+  Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save();
+}
+(function(){ if (Array.isArray(store.thq) && TH_PAPERS[store.thtype] && store.thq.length && store.thq.every(([k, i]) => CH[k] && CH[k].exam[i])) THQ = thRebuild(store.thq); })();
+
 
 /* ---------- worked examples: live working table and notes ---------- */
 for (const key in CH) CH[key].worked.forEach(w => {
@@ -1579,7 +1929,7 @@ for (const key in CH) CH[key].worked.forEach(w => {
   w.s.forEach((st, j) => { st[3] = () => wkBoard(w, j); });
 });
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['resp','Humans','Gas exchange'],['excr','Humans','Excretion'],['coord','Humans','Coordination'],['drugs','Humans','Drugs'],['repro','Genetics','Reproduction'],['inherit','Genetics','Inheritance'],['select','Genetics','Variation & selection'],['ecosys','Ecology','Ecosystems'],['human','Ecology','Human influences'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['char','Living things','Classification'],['cells','Cells','Cells'],['move','Cells','Diffusion & osmosis'],['molecules','Chemistry of life','Molecules'],['enzymes','Chemistry of life','Enzymes'],['plantnut','Plants','Photosynthesis'],['nutr','Humans','Nutrition'],['transp','Plants','Transport in plants'],['blood','Humans','Blood & heart'],['disease','Humans','Disease & immunity'],['resp','Humans','Gas exchange'],['excr','Humans','Excretion'],['coord','Humans','Coordination'],['drugs','Humans','Drugs'],['repro','Genetics','Reproduction'],['inherit','Genetics','Inheritance'],['select','Genetics','Variation & selection'],['ecosys','Ecology','Ecosystems'],['human','Ecology','Human influences'],['biotech','Genetics','Biotechnology'],['mc','','MC paper'],['mock','','Theory paper']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1593,16 +1943,16 @@ document.getElementById('tabs').addEventListener('click', e => {
 function examScore(key, list){ let got = 0, tot = 0; list.forEach((q,i) => { tot += q.m; got += Math.min(q.m, (store.ticks[key+'-'+i] || []).length); }); return [got, tot]; }
 function render(){
   const v = document.getElementById('view');
-  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
+  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : cur === 'mc' ? renderMC() : renderChapter(cur);
   bindView();
 }
-const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease','resp','excr','coord','drugs','repro','inherit','select','ecosys','human'];
+const KEYS = ['char','cells','move','molecules','enzymes','plantnut','nutr','transp','blood','disease','resp','excr','coord','drugs','repro','inherit','select','ecosys','human','biotech'];
 function renderStart(){
   const rows = KEYS.map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Biology 0610</span><h2>Biology full-year pack</h2>
-  <p class="lede">The whole Cambridge 0610 course in nineteen topics, in syllabus order: living things, cells, movement of substances, molecules, enzymes, plants, humans, genetics and ecology. Work through each tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">The whole Cambridge 0610 course in nineteen topics, in syllabus order: living things, cells, movement of substances, molecules, enzymes, plants, humans, genetics and ecology. Work through each tab from left to right, then try the multiple-choice paper and the theory paper.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each topic</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords and rules examiners look for.</div>
@@ -1650,7 +2000,7 @@ function updateBoard(wk, items){
 
 function renderChapter(k){
   const c = CH[k];
-  const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],['drill','Drill'],['quiz','Quiz'],['exam','Exam Qs']];
+  const subs = [['learn','Learn'],['diagrams','Diagrams'],['worked','Worked'],...(c.drill?[['drill','Drill']]:[]),['quiz','Quiz'],['exam','Exam Qs']];
   let body = '';
   if (sub_ === 'learn') body = c.learn.map(cardHTML).join('') + `<div class="card mistakes"><h3>Mistakes that lose marks</h3><ul>${c.mistakes.map(l=>`<li>${fmt(l)}</li>`).join('')}</ul></div>`;
   if (sub_ === 'diagrams') body = c.diagrams.map(d => `<figure><div class="svgbox">${d.svg()}</div><figcaption>${fmt(d.cap)}</figcaption></figure>`).join('');
@@ -1669,28 +2019,36 @@ function renderChapter(k){
 }
 function examCard(key, q, i){
   const ticks = store.ticks[key] || []; const open = store.ticks['open-'+key];
-  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${i+1}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
+  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${q.lbl || (i+1)}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
     <p class="q">${q.q}</p>
     <div class="row"><button class="btn primary" data-ms>${open?'Hide mark scheme':'Show mark scheme'}</button><span class="got">${ticks.length?Math.min(ticks.length,q.m)+'/'+q.m:''}</span></div>
     <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
     ${q.p.map((p,j) => `<button class="point" aria-pressed="${ticks.includes(j)}" data-pt="${j}"><span class="box">✓</span><span>${fmt(p)}</span></button>`).join('')}</div></div>`;
 }
-let timer = null, left = 45*60;
+let timer = null, left = 75*60;
 const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
 function renderMock(){
-  const list = MOCK.map(([k,i]) => CH[k].exam[i]); const [g,t] = examScore('mock', list);
-  return `<div class="chhead fadein"><span class="eyebrow">All eight topics</span><h2>Mini mock</h2>
-    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself.</p></div>
+  if (!THQ.length) drawTheory(store.thtype || 'core');
+  const P = TH_PAPERS[store.thtype], list = THQ, [g,t] = examScore('mock', list), perMin = (P.mins / t).toFixed(2);
+  let last = 0; const cards = list.map((q, i) => { let h = ''; if (q.qn !== last) { last = q.qn; const names = [...new Set(list.filter(x => x.qn === q.qn).map(x => CH[x.ch].name))].join(', '); h = `<h3 class="qgroup">Question ${q.qn} <span class="pm">[${q.qm} marks]</span><small>${names}</small></h3>`; } return h + examCard('mock-' + i, q, i); }).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0610 pattern</span><h2>Theory paper</h2>
+    <p class="lede">${P.name} style, ${P.title}: ${t} marks, ${P.mins} minutes, ${list[list.length-1].qn} questions with parts, in the order of the syllabus, like the real paper.</p></div>
     <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==1 hour 15 minutes==. Total: ==${t} marks==.</li>
+      <li>Answer ==all== the questions on paper. The marks for each part are shown in brackets.</li>
+      <li>You ==may use a calculator==. ==Show all your working== and use the ==correct units==.</li>
+      <li>That is about ${perMin} minutes per mark.</li>
+      <li>This pack covers the ==Core== course. The real Paper 3 is the Core theory paper.</li></ul></div>
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
-      <p class="note">45 minutes. About 1 minute per mark, plus time to check.</p></div>
-    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New paper (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div></div>
+    ${cards}</div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
 }
 let quizScore = 0;
 function bindView(){
   quizScore = 0;
-  if (cur !== 'start' && cur !== 'mock' && sub_ === 'drill') newDrill();
+  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && sub_ === 'drill') newDrill();
+  if (cur === 'mc') bindMC();
   if (cur === 'mock') {
     document.getElementById('tgo').onclick = () => {
       if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
@@ -1699,8 +2057,8 @@ function bindView(){
         if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
-    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 45*60; render(); };
-    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = TH_PAPERS[store.thtype].mins*60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; drawTheory(store.thtype); render(); };
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
@@ -1728,7 +2086,7 @@ document.getElementById('view').addEventListener('click', e => {
     if (pt) { const j = +pt.dataset.pt; let arr = store.ticks[key] || []; arr = arr.includes(j) ? arr.filter(x => x !== j) : [...arr, j];
       store.ticks[key] = arr; save(); pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const list = cur === 'mock' ? THQ : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list); const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt; } }
 });
 

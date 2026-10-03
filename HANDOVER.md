@@ -98,3 +98,10 @@ Measured from Physics May/June 2026 papers 11, 21, 31 and 41:
 - `physics-year.html` now has an **MC paper** tab (`MC_TOPICS`, `buildMC`, `renderMC`, ported from `chemistry-year.html`; 20 topics, about 290 questions in the pool; items flagged `x:1` and the `momentum` chapter are Extended-only) and a **Theory paper** tab (`TH_PAPERS`, `TH_CLUSTERS`, `buildTheory`, `drawTheory`) that assembles 80 marks from the exam banks, grouping 1 to 4 questions into a numbered question of 4 to 12 marks. About 45 new exam questions (`EXTRA`) were added.
 - New chapters from the gaps the papers showed: **Static electricity** (`static`) and **Circuit components** (`comps`: thermistor, LDR, diode, potential divider, e.m.f.).
 - Known mismatch: older Physics chapters and drills use g = 10 N/kg while Cambridge papers say 9.8. The MC paper states 9.8. Review drills when convenient.
+
+### Biology (3 Oct 2026)
+From 0610 May/June 2026 Paper 1 (11) and Paper 3 (31):
+- **Paper 1 (Core)**: 40 multiple-choice questions, 40 marks, 45 minutes, syllabus order. **Paper 3 (Core)**: 80 marks, 1 h 15, 8 questions of 7 to 12 marks (8, 11, 12, 9, 7, 11, 11, 11) with parts and some data work.
+- `biology-year.html` now has an **MC paper** tab and a **Theory paper** tab (Core only; the pack covers the Core course, and no Paper 2 or 4 Extended content has been added). `buildTheory` forms 8 questions from 8 topic clusters (`TH_CLUSTERS`) so each question is about one chapter's exam bank (7 to 12 marks) and the paper totals exactly 80.
+- New chapter **Biotechnology and genetic modification** (`biotech`, Topic 20): yeast and fermentation, enzymes in industry, making insulin with bacteria, GM crops, bacterial growth phases. About 90 new MC questions and 13 new exam questions were added.
+- Not yet done: Biology Paper 2 / 4 (Extended) and the practical papers 5 and 6.
