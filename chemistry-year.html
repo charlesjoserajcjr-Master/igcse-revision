@@ -2141,6 +2141,80 @@ const EXTRA = {
 };
 for (const k in EXTRA) CH[k].exam.push(...EXTRA[k]);
 
+/* ---------- more structured questions so the Theory papers repeat less (original) ---------- */
+const EXTRA2 = {
+  states: [
+    { q: 'Describe the arrangement and the movement of the particles in a liquid.', m: 3, p: ['The particles are ==close together== (touching) but ==not in a regular pattern==', 'They can ==move past one another==', 'They move randomly and constantly'] },
+    { q: 'Explain, using the particle model, why gases mix by diffusion faster than liquids.', m: 3, p: ['Gas particles move ==faster== and are ==far apart==', 'There are ==fewer collisions== to slow them down', 'So they spread out and mix more quickly'] }
+  ],
+  atoms: [
+    { q: 'State the number of protons, neutrons and electrons in an atom of ²³₁₁Na.', m: 3, p: ['protons = ==11==', 'neutrons = 23 − 11 = ==12==', 'electrons = ==11=='] },
+    { q: 'Explain why isotopes of an element have the same chemical properties.', m: 2, p: ['They have the same number of ==electrons== (the same electronic configuration)', 'Chemical properties depend on the ==outer shell electrons=='] }
+  ],
+  bonding: [
+    { q: 'Describe the bonding in a molecule of water.', m: 3, p: ['The bonds are ==covalent==', 'Oxygen ==shares a pair of electrons== with each hydrogen atom', 'Oxygen has ==two lone pairs== so it has 8 outer electrons'] },
+    { q: 'Explain why diamond is very hard but graphite is soft and conducts electricity.', m: 4, p: ['In diamond each carbon is bonded to ==four== others in a giant covalent lattice', 'The bonds are strong in all directions, so diamond is ==hard==', 'In graphite the carbon atoms are in ==layers== held by weak forces, so the layers slide', 'Graphite has ==delocalised electrons== that carry charge'] }
+  ],
+  displace: [
+    { q: 'Magnesium is added to copper(II) sulfate solution. Predict whether a reaction happens, explain your answer and write the word equation.', m: 3, p: ['A reaction ==does happen==: magnesium is ==more reactive than copper==', 'Magnesium ==displaces== copper from the solution', 'magnesium + copper(II) sulfate → ==magnesium sulfate + copper=='] },
+    { q: 'Describe the observations when zinc is added to blue copper(II) sulfate solution.', m: 3, p: ['A ==pink-brown solid== (copper) forms', 'The blue colour ==fades== to colourless', 'The temperature rises (an ==exothermic== reaction)'] }
+  ],
+  salts: [
+    { q: 'Describe how to prepare pure, dry crystals of copper(II) sulfate from copper(II) oxide and dilute sulfuric acid.', m: 4, p: ['Warm the acid and add ==excess copper(II) oxide==, stirring', '==Filter== to remove the excess oxide', 'Heat the filtrate to the ==point of crystallisation== and leave to cool', '==Dry== the crystals between filter paper'] },
+    { q: 'Describe how to prepare a pure, dry sample of the insoluble salt barium sulfate.', m: 3, p: ['Mix ==barium chloride== solution and ==sodium sulfate== solution (precipitation)', '==Filter== to collect the precipitate', '==Wash== with distilled water and dry'] }
+  ],
+  sepn: [
+    { q: 'Explain how a melting point can be used to test the purity of a substance.', m: 2, p: ['A pure substance has a ==sharp, fixed melting point==', 'An impure substance melts over a ==range== and at a lower temperature'] }
+  ],
+  eqn: [
+    { q: 'Balance the equation: Fe₂O₃ + CO → Fe + CO₂', m: 2, p: ['==3CO== and ==3CO₂==', '==2Fe=='] },
+    { q: 'Write the word equation and the balanced symbol equation, with state symbols, for hydrochloric acid reacting with sodium hydroxide.', m: 3, p: ['hydrochloric acid + sodium hydroxide → ==sodium chloride + water==', '==HCl + NaOH → NaCl + H₂O==', 'State symbols ==(aq), (aq), (aq), (l)=='] }
+  ],
+  mole: [
+    { q: 'Calculate the mass of 0.25 mol of calcium carbonate, CaCO₃. [M<sub>r</sub>: CaCO₃, 100]', m: 2, p: ['mass = ==moles × M<sub>r</sub>== = 0.25 × 100', '==25 g=='] },
+    { q: 'In a titration, 25.0 cm³ of sodium hydroxide of concentration 0.100 mol/dm³ is neutralised by 20.0 cm³ of hydrochloric acid. Calculate the concentration of the acid. NaOH + HCl → NaCl + H₂O', m: 4, x: 1, p: ['moles of NaOH = 0.0250 × 0.100 = ==0.00250 mol==', 'The ratio is 1 : 1, so moles of HCl = ==0.00250 mol==', 'volume of acid = 0.0200 dm³', 'concentration = 0.00250 ÷ 0.0200 = ==0.125 mol/dm³=='] }
+  ],
+  emp: [
+    { q: 'Calculate the percentage by mass of nitrogen in ammonium nitrate, NH₄NO₃. [A<sub>r</sub>: H, 1; N, 14; O, 16]', m: 3, p: ['M<sub>r</sub> = 14 + 4 + 14 + 48 = ==80==', 'Mass of nitrogen = 28', '28 ÷ 80 × 100 = ==35%=='] },
+    { q: '2.4 g of magnesium combines with 1.6 g of oxygen. Calculate the empirical formula of magnesium oxide. [A<sub>r</sub>: Mg, 24; O, 16]', m: 3, p: ['Mg: 2.4 ÷ 24 = ==0.1==; O: 1.6 ÷ 16 = ==0.1==', 'Ratio ==1 : 1==', '==MgO=='] }
+  ],
+  redox: [
+    { q: 'State what is meant by a reducing agent and name the reducing agent in the blast furnace.', m: 2, p: ['A substance that ==reduces== another substance (and is itself oxidised)', '==Carbon monoxide== (or carbon)'] },
+    { q: 'Explain why the reaction Fe + CuSO₄ → FeSO₄ + Cu is a redox reaction.', m: 3, x: 1, p: ['Iron ==loses electrons==, so it is ==oxidised==', 'Copper(II) ions ==gain electrons==, so they are ==reduced==', 'Both oxidation and reduction happen, so it is ==redox=='] }
+  ],
+  energ: [
+    { q: 'Describe how to measure the temperature change when an acid is neutralised by an alkali.', m: 3, p: ['Put a measured volume of acid in a ==polystyrene cup== and record its temperature', 'Add the alkali and ==stir==', 'Record the ==highest temperature==; the change = final − initial'] },
+    { q: 'Give one example of an exothermic process and one example of an endothermic process.', m: 2, p: ['exothermic: ==combustion== / neutralisation / respiration', 'endothermic: ==thermal decomposition== / dissolving ammonium nitrate / photosynthesis'] }
+  ],
+  electro: [
+    { q: 'Describe how copper is purified by electrolysis. Name the anode, the cathode and the electrolyte.', m: 4, p: ['The ==impure copper== is the anode', 'A piece of ==pure copper== is the cathode', 'The electrolyte is ==aqueous copper(II) sulfate==', 'Copper dissolves from the anode and is ==deposited on the cathode=='] }
+  ],
+  metals: [
+    { q: 'Explain why alloys are harder than pure metals.', m: 3, p: ['The atoms of the added metal are a ==different size==', 'They ==disrupt the regular layers==', 'So the layers ==cannot slide== over each other easily'] },
+    { q: 'Describe three ways of preventing rusting.', m: 3, p: ['==Painting==, greasing or plastic coating to keep out oxygen and water', '==Galvanising== (a coating of zinc)', '==Sacrificial protection== with a more reactive metal such as zinc or magnesium'] }
+  ],
+  air: [
+    { q: 'State the approximate composition of clean, dry air.', m: 3, p: ['about ==78% nitrogen==', 'about ==21% oxygen==', 'small amounts of ==argon and carbon dioxide==, with trace gases'] },
+    { q: 'State two pollutants made by car engines and one harmful effect of each.', m: 4, p: ['==carbon monoxide==', 'it is ==toxic== (reduces oxygen carried by the blood)', '==oxides of nitrogen==', 'they cause ==acid rain== / breathing problems'] }
+  ],
+  fert: [
+    { q: 'State the reaction, the conditions and the catalyst used in the Haber process.', m: 4, p: ['nitrogen + hydrogen ⇌ ==ammonia==', 'Temperature about ==450 °C==', 'Pressure about ==200 atmospheres==', 'An ==iron== catalyst'] },
+    { q: 'Explain why a high pressure and a moderate temperature are used in the Haber process.', m: 3, x: 1, p: ['High pressure favours the ==forward reaction== (fewer gas molecules) and gives a faster rate', 'A low temperature gives a higher yield but a ==slow rate==', 'So a ==compromise== temperature of about 450 °C is used'] }
+  ],
+  organics: [
+    { q: 'Describe how ethanol is made from ethene.', m: 3, p: ['Ethene reacts with ==steam== (hydration)', 'At about ==300 °C== and high pressure with a ==phosphoric acid== catalyst', '==C₂H₄ + H₂O → C₂H₅OH=='] },
+    { q: 'State two uses of ethanol.', m: 2, p: ['As a ==solvent==', 'As a ==fuel== / in alcoholic drinks'] }
+  ],
+  macro: [
+    { q: 'Describe how poly(ethene) is formed from ethene.', m: 3, p: ['Many ethene molecules join: ==addition polymerisation==', 'The ==C=C double bond opens==', 'A long chain with the repeat unit ==–CH₂–CH₂–== forms'] },
+    { q: 'Describe the structure of a protein.', m: 3, p: ['A polymer of ==amino acids==', 'Joined by ==peptide links== (amide links)', 'Made by ==condensation polymerisation==, with water lost'] }
+  ],
+  analysis: [
+    { q: 'Describe how to test for chloride, bromide and iodide ions in solution.', m: 3, p: ['Add ==dilute nitric acid== and then ==aqueous silver nitrate==', '==White== precipitate = chloride; ==cream== precipitate = bromide', '==Yellow== precipitate = iodide'] }
+  ]
+};
+for (const k in EXTRA2) CH[k].exam.push(...EXTRA2[k]);
+
 /* ---------- structured theory papers in the Cambridge 0620 pattern ---------- */
 /* Measured from the May/June 2026 papers: Paper 3 (Core) 0620/31 and Paper 4 (Extended) 0620/41, 80 marks, 1 hour 15 minutes, answer all questions.
    Each paper has 7 questions of 7 to 16 marks (Core 10, 11, 12, 12, 9, 16, 10; Extended 7, 10, 10, 10, 15, 16, 12), in syllabus order, with parts (a), (b), (c) mixing recall, equations, calculations and explanations. */

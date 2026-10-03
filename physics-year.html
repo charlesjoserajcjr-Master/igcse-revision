@@ -2125,6 +2125,99 @@ const EXTRA = {
 };
 for (const k in EXTRA) CH[k].exam.push(...EXTRA[k]);
 
+/* ---------- more structured questions so the Theory papers repeat less (original) ---------- */
+const EXTRA2 = {
+  meas: [
+    { q: 'A micrometer screw gauge has a zero error of +0.02 mm. It reads 0.58 mm for the diameter of a wire. State the corrected diameter and explain why the zero error is subtracted.', m: 3,
+      p: ['Corrected diameter = 0.58 − 0.02 = ==0.56 mm==', 'The gauge reads ==0.02 mm too high== even with nothing in it', 'So the zero error is ==subtracted from every reading=='] },
+    { q: 'State three base quantities and the SI unit of each.', m: 3,
+      p: ['==length (metre)==', '==mass (kilogram)==', '==time (second)== / current (ampere) / temperature (kelvin) (any three pairs)'] }
+  ],
+  motion: [
+    { q: 'A car travelling at 20 m/s brakes and stops uniformly in 8.0 s. Calculate its deceleration and its stopping distance.', m: 4,
+      p: ['a = (v − u) ÷ t = (0 − 20) ÷ 8.0', '==−2.5 m/s²== (deceleration 2.5 m/s²)', 'Distance = average speed × time = 10 × 8.0 (or the area of the triangle)', '==80 m=='] },
+    { q: 'A speed–time graph is a horizontal line at 12 m/s for 5.0 s and then a straight line down to zero in 3.0 s. Describe the motion.', m: 3,
+      p: ['The object moves at a ==constant speed of 12 m/s== for 5.0 s', 'Then it ==decelerates uniformly==', 'It ==stops== after a further 3.0 s'] }
+  ],
+  density: [
+    { q: 'Describe how to find the density of a liquid using a balance and a measuring cylinder.', m: 4,
+      p: ['Measure the ==mass of the empty measuring cylinder==', 'Add some liquid and read the ==volume==', 'Measure the mass of the cylinder and liquid and ==subtract== to find the mass of liquid', 'density = ==mass ÷ volume=='] },
+    { q: 'A stone of mass 85 g is lowered into a measuring cylinder. The water level rises from 40 cm³ to 65 cm³. Calculate the density of the stone.', m: 3,
+      p: ['Volume = 65 − 40 = ==25 cm³==', 'density = mass ÷ volume = 85 ÷ 25', '==3.4 g/cm³=='] }
+  ],
+  forces: [
+    { q: 'A box of mass 20 kg is pushed along the floor by a force of 90 N. The friction force is 40 N. Calculate the resultant force and the acceleration of the box.', m: 3,
+      p: ['Resultant force = 90 − 40 = ==50 N==', 'a = ==F ÷ m== = 50 ÷ 20', '==2.5 m/s²=='] },
+    { q: 'State Newton’s first law of motion and use it to explain why passengers move forward when a car brakes suddenly.', m: 3,
+      p: ['An object stays at rest or keeps moving at ==constant velocity== unless a ==resultant force== acts on it', 'The car slows down because of the brakes', 'The passengers ==keep moving at the same velocity== (inertia), so they move forward relative to the car'] },
+    { q: 'A spring extends by 4.0 cm when a force of 6.0 N is applied. The limit of proportionality is not exceeded. Calculate the extension when the force is 9.0 N.', m: 3,
+      p: ['Extension is ==proportional== to force (Hooke’s law)', 'k = 6.0 ÷ 4.0 = 1.5 N/cm; x = 9.0 ÷ 1.5', '==6.0 cm=='] },
+    { q: 'Describe how to find the centre of mass of an irregular piece of card.', m: 4,
+      p: ['Make a small ==hole near the edge== and hang the card from a pin', 'Hang a ==plumb line== from the pin and draw the vertical line', 'Repeat with a ==second hole==', 'The centre of mass is where the lines ==cross=='] },
+    { q: 'A force of 12 N acts at a perpendicular distance of 0.40 m from a pivot. Calculate the moment and state the principle of moments.', m: 3,
+      p: ['moment = ==force × perpendicular distance== = 12 × 0.40 = ==4.8 N m==', 'When in equilibrium the ==sum of the clockwise moments== equals', 'the ==sum of the anticlockwise moments== about the pivot'] }
+  ],
+  momentum: [
+    { q: 'A force of 40 N acts for 0.50 s on a trolley of mass 2.0 kg that is at rest. Calculate the impulse and the final velocity of the trolley.', m: 3, x: 1,
+      p: ['impulse = ==F × t== = 40 × 0.50 = ==20 N s==', 'change in momentum = 20 kg m/s', 'v = 20 ÷ 2.0 = ==10 m/s=='] },
+    { q: 'State the principle of conservation of momentum and use it to explain the recoil of a gun.', m: 3, x: 1,
+      p: ['The total momentum before a collision equals the total momentum after, in a ==closed system==', 'Before firing the total momentum is ==zero==', 'The bullet moves forward, so the gun moves ==backwards== with an equal and opposite momentum'] },
+    { q: 'A ball of mass 0.20 kg moving at 6.0 m/s hits a wall and rebounds at 4.0 m/s. Calculate the change in momentum of the ball.', m: 3, x: 1,
+      p: ['Taking the first direction as positive, the initial momentum is ==+1.2 kg m/s==', 'The final momentum is ==−0.80 kg m/s==', 'The change is ==−2.0 kg m/s== (a size of 2.0 kg m/s)'] }
+  ],
+  energy: [
+    { q: 'A pendulum swings from one side to the other. Describe the energy transfers and explain how this shows the conservation of energy.', m: 3,
+      p: ['At the highest point the energy is in the ==gravitational potential store==', 'At the lowest point it is mostly in the ==kinetic store==', 'The total stays constant (apart from small losses as ==thermal energy== to the surroundings)'] },
+    { q: 'A 60 W lamp is switched on for 2.0 hours. Calculate the energy used in kW h and the cost at $0.30 per kW h.', m: 3,
+      p: ['Energy = 0.060 kW × 2.0 h = ==0.12 kW h==', 'cost = 0.12 × 0.30', '==$0.036== (3.6 cents)'] }
+  ],
+  pressure: [
+    { q: 'Explain why a tractor with wide tyres does not sink into soft ground.', m: 3,
+      p: ['pressure = ==force ÷ area==', 'Wide tyres give a ==larger area==', 'So the ==pressure on the ground is smaller=='] },
+    { q: 'Atmospheric pressure is 1.0 × 10⁵ Pa. Calculate the force on a window of width 1.2 m and height 0.80 m.', m: 3,
+      p: ['Area = 1.2 × 0.80 = ==0.96 m²==', 'F = ==p × A== = 1.0 × 10⁵ × 0.96', '==9.6 × 10⁴ N=='] },
+    { q: 'Explain why the pressure in a liquid increases with depth.', m: 3,
+      p: ['Deeper in the liquid there is ==more liquid above==', 'So there is more ==weight== pressing down', 'This is shown by ==p = ρ × g × h== (pressure increases with h)'] }
+  ],
+  particles: [
+    { q: 'Describe an experiment to show Brownian motion and state what is observed.', m: 3,
+      p: ['Smoke particles in a ==smoke cell== are viewed through a microscope', 'The bright specks move in a ==random, jerky== way', 'They are hit by fast-moving ==air molecules== from all sides'] },
+    { q: 'Explain, in terms of particles, why the pressure of a gas increases when its volume is decreased at constant temperature.', m: 3,
+      p: ['The particles have ==less space==', 'So they hit the walls ==more often== (more collisions per second)', 'So the ==force per unit area increases=='] },
+    { q: 'A gas has a volume of 20 cm³ at a pressure of 150 kPa. The volume is changed to 12 cm³ at constant temperature. Calculate the new pressure.', m: 3, x: 1,
+      p: ['p₁V₁ = ==p₂V₂==', '150 × 20 = p₂ × 12', '==250 kPa=='] }
+  ],
+  thermprop: [
+    { q: 'Describe an experiment to measure the specific heat capacity of a metal block.', m: 4, x: 1,
+      p: ['Use a block of ==known mass== with an electric heater and a thermometer', 'Measure the ==current, p.d. and time== so that E = I V t', 'Measure the ==temperature rise==', 'c = ==E ÷ (m × Δθ)=='] },
+    { q: 'Explain why the temperature of boiling water stays constant even though energy is still being supplied.', m: 3,
+      p: ['The energy is used to ==break the forces between the particles==', 'It is not used to increase the ==kinetic energy== of the particles', 'So the temperature stays ==constant== until all the liquid has boiled'] },
+    { q: 'A 2.0 kW kettle heats 1.5 kg of water from 20 °C to 100 °C. The specific heat capacity of water is 4200 J/(kg °C). Calculate the energy needed and the time taken, assuming no energy is lost.', m: 4, x: 1,
+      p: ['E = ==m × c × Δθ== = 1.5 × 4200 × 80', '==5.04 × 10⁵ J==', 't = E ÷ P = 5.04 × 10⁵ ÷ 2000', '==252 s== (about 4.2 minutes)'] }
+  ],
+  waves: [
+    { q: 'Describe how to measure the speed of water waves in a ripple tank.', m: 4,
+      p: ['Use a ==stroboscope== (or a still photo) to see the waves apparently stopped', 'Measure the ==wavelength== (distance across several waves ÷ the number of waves)', 'Measure the ==frequency== (count the waves per second)', 'Calculate ==speed = frequency × wavelength=='] },
+    { q: 'Describe a transverse wave. State what is meant by its wavelength and its amplitude.', m: 3,
+      p: ['The vibrations are ==at right angles== to the direction of travel', 'The ==wavelength== is the distance between two adjacent crests', 'The ==amplitude== is the maximum displacement from the rest position'] },
+    { q: 'Describe what happens to water waves as they move from deep water into shallow water.', m: 3,
+      p: ['The waves ==slow down==', 'The ==wavelength decreases==', 'The ==frequency stays the same== (the direction changes if the waves meet the boundary at an angle)'] }
+  ],
+  static: [
+    { q: 'Describe an experiment to show that there are two types of electric charge.', m: 3,
+      p: ['Charge a ==polythene rod== by rubbing and hang it from a thread', 'Bring a second charged polythene rod near: they ==repel==', 'Bring a charged ==acetate== rod near: they ==attract==, so there are two types of charge'] },
+    { q: 'Explain why a plastic rod can be charged by rubbing when it is held in the hand, but a metal rod cannot.', m: 3,
+      p: ['Plastic is an ==insulator==: the charge stays on it', 'Metal is a ==conductor==: the charge flows through the metal', 'It then flows ==through the body to the ground== (earth), so the rod does not stay charged'] }
+  ],
+  comps: [
+    { q: 'Describe how to investigate how the current in a resistor depends on the potential difference across it.', m: 4,
+      p: ['Connect an ==ammeter in series== with the resistor and a ==voltmeter in parallel== across it', 'Change the p.d. with a ==variable resistor== (or power supply)', 'Record ==current and p.d.== for several values', 'Plot ==I against V==: a straight line through the origin for a fixed resistor'] },
+    { q: 'A fire alarm uses a thermistor in a potential divider. Explain how the circuit detects a fire.', m: 3,
+      p: ['When the temperature rises the thermistor’s resistance ==decreases==', 'The ==p.d. across the thermistor falls== (and across the fixed resistor rises)', 'This change ==switches on the alarm== circuit'] }
+  ]
+};
+for (const k in EXTRA2) CH[k].exam.push(...EXTRA2[k]);
+
 /* ---------- multiple-choice papers in the Cambridge 0625 pattern ---------- */
 /* Measured from the May/June 2026 papers: Paper 1 (Core) and Paper 2 (Extended), 40 questions, 40 marks, 45 minutes, one mark each.
    Questions follow the syllabus order: motion, forces and energy; thermal physics; waves; electricity and magnetism; nuclear physics; space physics. */

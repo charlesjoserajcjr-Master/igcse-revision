@@ -2076,6 +2076,91 @@ const BIOX = {
 };
 for (const k in BIOX) { CH[k].learn.push(...BIOX[k].cards); CH[k].quiz.push(...BIOX[k].mc); CH[k].exam.push(...BIOX[k].exam); }
 
+/* ---------- more structured questions so the Theory papers repeat less (original) ---------- */
+const EXTRA2 = {
+  char: [
+    { q: 'State two features of mammals.', m: 2, p: ['They have ==hair or fur==', 'They have ==mammary glands== and give birth to live young (any two features)'] },
+    { q: 'Explain how a dichotomous key is used to identify an organism.', m: 3, p: ['A key is a series of ==paired statements==', 'Each gives two choices about ==observable features==', 'You follow the choices until you reach the ==name== of the organism'] }
+  ],
+  cells: [
+    { q: 'State the function of (a) the nucleus, (b) the cell membrane and (c) the mitochondria.', m: 3, p: ['nucleus: ==controls the cell== / contains the DNA', 'cell membrane: ==controls what enters and leaves== the cell', 'mitochondria: the site of ==aerobic respiration=='] },
+    { q: 'Describe how the cells of the palisade layer are adapted for photosynthesis.', m: 3, p: ['They contain many ==chloroplasts==', 'They are tall and packed together near the ==top of the leaf== to absorb light', 'They have a thin wall and large vacuole so chloroplasts sit near the edge'] }
+  ],
+  move: [
+    { q: 'Describe an experiment using potato cylinders to investigate osmosis.', m: 4, p: ['Cut ==identical== potato cylinders and measure their ==mass== (or length)', 'Place them in ==different concentrations== of sugar solution for the same time', 'Dry them gently and ==measure again==', 'Calculate the ==percentage change in mass=='] },
+    { q: 'Explain why a plant cell becomes turgid when placed in pure water.', m: 3, p: ['Water enters the cell by ==osmosis==', 'The ==vacuole expands== and pushes on the cell wall', 'The ==cell wall resists==, so the cell becomes firm (turgid)'] }
+  ],
+  molecules: [
+    { q: 'Describe the test for reducing sugars and the result of a positive test.', m: 3, p: ['Add ==Benedict’s solution== to the sample', '==Heat== in a water bath', 'The colour changes from blue to a ==brick-red== precipitate'] },
+    { q: 'Describe how to test a food sample for fat.', m: 3, p: ['Mix the sample with ==ethanol== and shake', 'Pour the liquid into ==water==', 'A ==cloudy white emulsion== shows that fat is present'] }
+  ],
+  enzymes: [
+    { q: 'Describe an investigation of the effect of temperature on the digestion of starch by amylase.', m: 4, p: ['Mix ==amylase and starch== at different temperatures in water baths', 'Test samples at regular times with ==iodine solution==', 'Record the time when the iodine stays ==orange-brown== (no starch left)', 'Keep the ==pH and volumes== the same'] },
+    { q: 'State what is meant by an enzyme and name the product of the digestion of starch by amylase.', m: 3, p: ['An enzyme is a ==biological catalyst== (a protein)', 'It ==speeds up== a reaction and is not used up', 'Amylase digests starch to ==maltose=='] }
+  ],
+  plantnut: [
+    { q: 'Describe how to test a leaf for starch.', m: 4, p: ['Put the leaf in ==boiling water== to stop reactions', 'Boil it in ==ethanol== (in a water bath) to remove the chlorophyll', 'Rinse it in water', 'Add ==iodine solution==: blue-black shows starch'] },
+    { q: 'Explain why a leaf is thin and has a large surface area.', m: 3, p: ['A large ==surface area== absorbs more light', 'It is ==thin==, so light and carbon dioxide reach the cells with a short diffusion distance', 'Air spaces and stomata let ==carbon dioxide diffuse== in'] }
+  ],
+  nutr: [
+    { q: 'Give one source and one function of vitamin C and of calcium.', m: 4, p: ['vitamin C source: ==citrus fruits==', 'vitamin C function: prevents ==scurvy== (healthy gums and skin)', 'calcium source: ==milk or cheese==', 'calcium function: strong ==bones and teeth=='] },
+    { q: 'Describe the role of the stomach in digestion.', m: 3, p: ['Muscular walls ==churn== the food (physical digestion)', '==Hydrochloric acid== kills bacteria and gives the right pH for protease', '==Protease== digests protein'] }
+  ],
+  transp: [
+    { q: 'Describe how water moves from the soil to the air through a plant.', m: 4, p: ['Water enters the ==root hair cells== by osmosis', 'It crosses the cortex into the ==xylem==', 'It is pulled up the xylem as water ==evaporates== from the leaf', 'Water vapour leaves through the ==stomata== (transpiration)'] },
+    { q: 'Describe how a potometer can be used to measure the rate of transpiration.', m: 3, p: ['Cut the shoot ==under water== and fit it to the potometer without air bubbles', 'Record the ==distance moved by the air bubble== in a set time', 'Compare different conditions, keeping the ==other variables the same=='] }
+  ],
+  blood: [
+    { q: 'Describe the path of blood from the right atrium through the lungs to the left atrium.', m: 4, p: ['Right atrium to the ==right ventricle==', 'Pumped along the ==pulmonary artery== to the lungs', 'Gas exchange happens; blood returns in the ==pulmonary vein==', 'It enters the ==left atrium=='] },
+    { q: 'State three differences between arteries and veins.', m: 3, p: ['Arteries carry blood ==away from== the heart; veins carry it ==towards== the heart', 'Arteries have ==thick muscular walls==; veins have thin walls', 'Veins have ==valves==; arteries do not (any three)'] }
+  ],
+  disease: [
+    { q: 'Describe three ways in which the body defends itself against pathogens.', m: 3, p: ['The ==skin== is a barrier / mucus and cilia trap pathogens', '==Stomach acid== kills pathogens', '==White blood cells== ingest pathogens or make antibodies'] },
+    { q: 'State what is meant by a transmissible disease and describe two ways such a disease can spread.', m: 3, p: ['A disease caused by a ==pathogen== that can pass from one person to another', 'By ==direct contact== / droplets / body fluids', 'By ==contaminated water or food== / vectors such as mosquitoes'] }
+  ],
+  resp: [
+    { q: 'Describe how the structure of the alveoli makes gas exchange efficient.', m: 4, p: ['A large ==surface area== (millions of alveoli)', '==Thin walls== (one cell thick)', 'A rich ==blood supply== (capillaries)', 'Moist surfaces; ==ventilation== keeps a steep concentration gradient'] },
+    { q: 'Describe an experiment to show that carbon dioxide is produced in respiration.', m: 3, p: ['Breathe out through a tube into ==limewater==', 'The limewater turns ==cloudy==', 'Compare with ==air from a pump== (a control)'] }
+  ],
+  excr: [
+    { q: 'Name three excretory products and the organ that excretes each.', m: 3, p: ['==carbon dioxide== – lungs', '==urea== – kidneys (in urine)', 'excess ==water or salts== – kidneys / skin'] },
+    { q: 'Describe how a kidney dialysis machine works.', m: 3, p: ['Blood passes along a ==partially permeable membrane==', '==Urea and excess salts diffuse== into the dialysis fluid', 'The fluid has normal levels of ==glucose and salts==, so useful substances are not lost'] }
+  ],
+  coord: [
+    { q: 'Describe the pathway of a reflex action when a hand touches a hot object.', m: 4, p: ['A ==receptor== in the skin detects the heat', 'A ==sensory neurone== carries the impulse to the spinal cord', 'A ==relay neurone== passes it on', 'A ==motor neurone== sends it to the muscle (effector), which contracts'] },
+    { q: 'State two differences between nervous control and hormonal control.', m: 2, p: ['Nervous: ==fast==; hormonal: slower', 'Nervous: ==short-lived== effect; hormonal: longer-lasting (nerve impulses vs chemicals in the blood)'] }
+  ],
+  drugs: [
+    { q: 'State three effects of alcohol on the body.', m: 3, p: ['==Slower reactions== and loss of self-control', 'Damage to the ==liver==', '==Addiction== / damage to the brain / unsafe behaviour (any three)'] },
+    { q: 'Explain why antibiotics do not cure influenza.', m: 2, p: ['Influenza is caused by a ==virus==', 'Antibiotics only kill ==bacteria== and do not affect viruses'] }
+  ],
+  repro: [
+    { q: 'Describe the events from pollination to the formation of a seed.', m: 4, p: ['==Pollen== lands on the stigma', 'A ==pollen tube== grows to the ovule', '==Fertilisation==: the male nucleus fuses with the female nucleus', 'The ovule becomes the ==seed== and the ovary becomes the ==fruit=='] },
+    { q: 'State the function of the testes, the ovaries and the uterus.', m: 3, p: ['testes: make ==sperm== and testosterone', 'ovaries: make ==eggs== and oestrogen', 'uterus: where the ==fetus develops=='] }
+  ],
+  inherit: [
+    { q: 'In pea plants the allele for tall (T) is dominant to the allele for short (t). Two heterozygous plants are crossed. Show the cross and state the ratio of tall to short.', m: 4, p: ['Parents ==Tt × Tt==', 'Gametes ==T, t== and ==T, t==', 'Offspring ==TT, Tt, Tt, tt==', '==3 tall : 1 short=='] },
+    { q: 'State what is meant by genotype and by phenotype.', m: 2, p: ['==genotype==: the alleles an organism has', '==phenotype==: the observable feature'] }
+  ],
+  select: [
+    { q: 'Describe how selective breeding could be used to produce cows that give more milk.', m: 4, p: ['Choose cows (and bulls) with a ==high milk yield==', '==Breed== them together', 'Choose the ==best offspring== to breed', '==Repeat== over many generations'] },
+    { q: 'Describe two types of variation and give an example of each.', m: 3, p: ['==Continuous variation==: a range of values (for example height)', '==Discontinuous variation==: distinct groups (for example blood group)', 'Variation can be caused by genes, the environment or both'] }
+  ],
+  ecosys: [
+    { q: 'Describe a food chain with four organisms. Name the producer and the primary consumer.', m: 4, p: ['A food chain such as ==grass → rabbit → fox → eagle==', 'The ==producer== is the grass', 'The ==primary consumer== is the rabbit', 'Arrows show the direction of ==energy transfer=='] },
+    { q: 'Describe the carbon cycle.', m: 4, p: ['==Photosynthesis== removes carbon dioxide from the air', '==Respiration== returns carbon dioxide', '==Feeding== passes carbon along the food chain', '==Combustion== and decomposition release carbon dioxide'] }
+  ],
+  human: [
+    { q: 'Describe how the use of insecticides can harm a food web.', m: 3, p: ['Insecticides also kill ==useful insects==', 'They ==build up in food chains== (accumulate)', 'They harm ==predators== such as birds, so biodiversity falls'] },
+    { q: 'State three ways in which people can reduce their impact on the environment.', m: 3, p: ['==Recycle== paper, plastic and glass', '==Reduce use of fossil fuels== / use public transport', '==Save water or energy== / plant trees / avoid waste (any three)'] }
+  ],
+  biotech: [
+    { q: 'Describe how yoghurt is made using bacteria.', m: 4, p: ['The milk is ==heated== to kill unwanted bacteria and then cooled', '==Lactobacillus== bacteria are added', 'It is kept warm; the bacteria change ==lactose to lactic acid==', 'The ==lactic acid== makes the milk thicken'] },
+    { q: 'Suggest two benefits of using enzymes in biological washing powders.', m: 2, p: ['They work at ==low temperatures==, so ==energy is saved==', 'They remove ==protein and fat stains== that ordinary detergents leave'] }
+  ]
+};
+for (const k in EXTRA2) CH[k].exam.push(...EXTRA2[k]);
+
 /* ---------- multiple-choice paper in the Cambridge 0610 pattern ---------- */
 /* Measured from the May/June 2026 Paper 1 (Core): 40 questions, 40 marks, 45 minutes, one mark each, in syllabus order:
    characteristics and cells, movement in and out of cells, enzymes, plants, human nutrition and transport, disease, gas exchange, coordination, reproduction, inheritance, ecology, biotechnology. */
