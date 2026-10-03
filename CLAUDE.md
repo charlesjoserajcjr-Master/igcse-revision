@@ -12,7 +12,7 @@ Live site (GitHub Pages, branch `main`, root): https://charlesjoserajcjr-master.
 | `physics.html` | Physics pack: Ch 9 Density, Ch 10 Thermal energy transfer, Ch 11 Sound. Oldest engine (see below). |
 | `chemistry.html` | Chemistry pack: Ch 4 Atoms and periodic table, Ch 5 Bonding, Ch 6 Displacement, Ch 7 Salts. |
 | `maths.html` | Maths pack (0580): equations, angles, statistics, shapes, fractions, sequences, ratio, probability. Built on the chemistry engine plus `text`/`frac` drill kinds. Worked examples carry `intro`, `tip`, `f`, per-step why and `r` rows for the side table. |
-| `physics-year.html`, `chemistry-year.html`, `cs-year.html` | Full-year packs. Start as copies of the Term 1 packs (own progress keys `physyear-v1`, `chemyear-v1`, `csyear-v1`) and grow chapter by chapter in syllabus order. |
+| `physics-year.html`, `chemistry-year.html`, `cs-year.html` | Full-year packs (Physics and Chemistry have a multiple-choice paper; Physics also a Cambridge-pattern Theory paper). Start as copies of the Term 1 packs (own progress keys `physyear-v1`, `chemyear-v1`, `csyear-v1`) and grow chapter by chapter in syllabus order. |
 | `biology-year.html` | Full-year Biology pack (0610), built from the maths engine with its own diagram helpers (`T`, `arrowDefs`). Key `biopack-v1`. 19 topics: the whole core course. |
 | `cs.html` | Computer Science pack (0478): Ch 1 Data representation, Ch 2 Data transmission, Ch 10 Boolean logic. Newest engine. |
 | `tools/check.py` | Headless-browser test: clicks every tab, self-checks every drill generator, screenshots diagrams. Run it before every push. |

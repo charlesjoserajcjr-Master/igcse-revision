@@ -30,6 +30,10 @@ svg .mono{font-family:var(--mono)}
 .tabarrow{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.pm{color:var(--muted);font-family:var(--mono);font-size:.85em;white-space:nowrap}
+.qgroup{margin:18px 0 -6px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.qgroup small{color:var(--muted);font-family:var(--body);font-weight:400;font-size:.85rem}
 </style>
 <title>Physics Full-Year Pack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1657,18 +1661,569 @@ const DRILLS = {
   ]
 };
 
-let MOCK = [['density',0],['density',1],['density',3],['thermal',1],['thermal',2],['thermal',3],['sound',1],['sound',2],['sound',3],['sound',5]];
-const MOCK_N = MOCK.length;
-function drawMock(){
-  const keys = Object.keys(CH), per = Math.ceil(MOCK_N / keys.length), pool = [];
-  keys.forEach(k => shuffle(CH[k].exam.map((_, i) => i)).slice(0, per).forEach(i => pool.push([k, i])));
-  MOCK = shuffle(pool).slice(0, MOCK_N).sort((a, b) => keys.indexOf(a[0]) - keys.indexOf(b[0]) || a[1] - b[1]);
-  store.mock = MOCK; save();
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+/* ---------- extra multiple-choice questions (original, Cambridge style) ---------- */
+const MQ = (q, c, wr, w, x) => { const o = shuffle([c, ...wr]); return Object.assign({ q, o, a: o.indexOf(c), w }, x || {}); };
+const MCX = {
+  meas: [
+    MQ('A student converts 2.5 km into metres. What is the answer?', '2500 m', ['25 m', '250 m', '25 000 m'], '1 km = 1000 m, so 2.5 × 1000 = ==2500 m==.'),
+    MQ('Which instrument gives the most accurate measurement of the thickness of a thin wire?', 'micrometer screw gauge', ['metre rule', 'measuring cylinder', 'stopwatch'], 'A ==micrometer screw gauge== reads to 0.01 mm.'),
+    MQ('A pendulum makes 20 oscillations in 36 s. What is its period?', '1.8 s', ['0.56 s', '16 s', '720 s'], 'Period = time for one oscillation = 36 ÷ 20 = ==1.8 s==.'),
+    MQ('Why is the time for many oscillations measured rather than for one?', 'to reduce the effect of reaction-time error', ['to make the pendulum swing faster', 'to make the period longer', 'to remove the need for a stopwatch'], 'The same ==reaction-time error== is spread over many swings, so the percentage error is smaller.'),
+    MQ('Which quantity is a scalar?', 'energy', ['velocity', 'force', 'displacement'], '==Energy== has size only. Velocity, force and displacement have direction too.'),
+    MQ('What is 5.0 × 10³ g in kilograms?', '5.0 kg', ['0.50 kg', '50 kg', '5000 kg'], '1000 g = 1 kg, so 5000 g = ==5.0 kg==.')
+  ],
+  motion: [
+    MQ('A car travels 150 m in 6.0 s at a constant speed. What is its speed?', '25 m / s', ['0.040 m / s', '900 m / s', '156 m / s'], 'speed = distance ÷ time = 150 ÷ 6.0 = ==25 m/s==.'),
+    MQ('What does the gradient of a speed–time graph represent?', 'acceleration', ['distance travelled', 'average speed', 'time taken'], 'The ==gradient== of a speed–time graph is the ==acceleration==.'),
+    MQ('What does the area under a speed–time graph represent?', 'distance travelled', ['acceleration', 'speed', 'force'], 'The ==area== under a speed–time graph is the ==distance travelled==.'),
+    MQ('A horizontal straight line on a distance–time graph shows that the object is…', 'stationary', ['moving at constant speed', 'accelerating', 'decelerating'], 'The distance is not changing, so the object is ==stationary==.'),
+    MQ('An object speeds up from 4.0 m / s to 16 m / s in 3.0 s. What is its acceleration?', '4.0 m / s²', ['0.25 m / s²', '12 m / s²', '36 m / s²'], 'a = change in speed ÷ time = (16 − 4.0) ÷ 3.0 = ==4.0 m/s²==.'),
+    MQ('Which quantity is a vector?', 'velocity', ['speed', 'distance', 'mass'], '==Velocity== has size and direction.'),
+    MQ('A stone falls freely near the Earth’s surface and air resistance is negligible. What is true about its acceleration?', 'It is constant at about 9.8 m / s².', ['It increases all the time.', 'It is zero.', 'It decreases all the time.'], 'Free fall has a ==constant acceleration== of about ==9.8 m/s²==.'),
+    MQ('A car decelerates uniformly to rest. What does its speed–time graph look like?', 'a straight line sloping downwards', ['a horizontal line', 'a straight line sloping upwards', 'a curve that gets steeper'], 'Uniform deceleration is a ==straight line sloping down==.'),
+    MQ('A skydiver reaches terminal velocity when…', 'air resistance equals her weight', ['her weight is zero', 'air resistance is zero', 'her acceleration is 9.8 m / s²'], 'The ==resultant force is zero==, so the speed stays constant.'),
+    MQ('A car moving at 5.0 m / s accelerates uniformly at 2.0 m / s² for 4.0 s. What is its final speed?', '13 m / s', ['8.0 m / s', '3.0 m / s', '40 m / s'], 'v = u + at = 5.0 + 2.0 × 4.0 = ==13 m/s==.', { x: 1 })
+  ],
+  forces: [
+    MQ('Take g = 9.8 N / kg. What is the weight of a 5.0 kg mass?', '49 N', ['0.51 N', '5.0 N', '14.8 N'], 'W = m × g = 5.0 × 9.8 = ==49 N==.'),
+    MQ('A 12 N force acts to the right and a 5 N force acts to the left on the same object. What is the resultant force?', '7 N to the right', ['7 N to the left', '17 N to the right', '60 N to the right'], '12 − 5 = ==7 N to the right==.'),
+    MQ('A resultant force of 20 N acts on a mass of 4.0 kg. What is its acceleration?', '5.0 m / s²', ['0.20 m / s²', '16 m / s²', '80 m / s²'], 'a = F ÷ m = 20 ÷ 4.0 = ==5.0 m/s²==.'),
+    MQ('A spring extends by 2.0 cm when a load of 4.0 N is added. The spring obeys Hooke’s law. What is the extension for a load of 10 N?', '5.0 cm', ['0.80 cm', '8.0 cm', '20 cm'], 'Extension is ==proportional== to load: 2.0 × (10 ÷ 4.0) = ==5.0 cm==.'),
+    MQ('The force of friction on a sliding box acts…', 'in the opposite direction to its motion', ['in the same direction as its motion', 'at right angles to its motion', 'downwards only'], '==Friction opposes motion==.'),
+    MQ('An astronaut travels from the Earth to the Moon. What happens to her mass and weight?', 'mass stays the same and weight decreases', ['mass decreases and weight decreases', 'mass stays the same and weight stays the same', 'mass decreases and weight stays the same'], '==Mass== does not depend on place. ==Weight== depends on the gravitational field strength, which is smaller on the Moon.'),
+    MQ('A car travels along a straight road at a constant speed. The driving force is 500 N. What is the total resistive force on the car?', '500 N', ['0 N', '250 N', 'more than 500 N'], 'The forces are balanced, so the resistive force equals the driving force: ==500 N==.'),
+    MQ('A force of 4.0 N acts at a perpendicular distance of 0.50 m from a pivot. What is the moment of the force?', '2.0 N m', ['0.13 N m', '8.0 N m', '4.5 N m'], 'moment = force × perpendicular distance = 4.0 × 0.50 = ==2.0 N m==.'),
+    MQ('A lorry is loaded with heavy boxes. Where should the boxes be placed to make the lorry most stable?', 'low down', ['high up', 'at the front only', 'at the edge of the roof'], 'A ==low centre of mass== and a wide base make an object more stable.'),
+    MQ('According to Newton’s first law, an object with no resultant force acting on it…', 'stays at rest or moves at constant velocity', ['always slows down', 'always speeds up', 'always moves in a circle'], 'No resultant force means ==no change in velocity==.'),
+    MQ('Which unit is used for force?', 'newton', ['kilogram', 'joule', 'pascal'], 'The unit of force is the ==newton (N)==.')
+  ],
+  density: [
+    MQ('A block has a mass of 120 g and a volume of 40 cm³. What is its density?', '3.0 g / cm³', ['0.33 g / cm³', '80 g / cm³', '4800 g / cm³'], 'density = mass ÷ volume = 120 ÷ 40 = ==3.0 g/cm³==.'),
+    MQ('Water has a density of 1.00 g / cm³ and oil has a density of 0.80 g / cm³. An object floats in water but sinks in oil. What is its density?', 'between 0.80 g / cm³ and 1.00 g / cm³', ['less than 0.80 g / cm³', 'greater than 1.00 g / cm³', 'exactly 1.00 g / cm³'], 'It sinks in oil, so it is ==denser than 0.80==. It floats in water, so it is ==less dense than 1.00==.'),
+    MQ('Aluminium has a density of 2.7 g / cm³. What is the mass of 50 cm³ of aluminium?', '135 g', ['18.5 g', '52.7 g', '0.054 g'], 'mass = density × volume = 2.7 × 50 = ==135 g==.'),
+    MQ('Which method finds the volume of a small irregular stone?', 'lower it into a measuring cylinder of water and note the rise', ['measure its sides with a ruler', 'weigh it on a balance', 'time how long it takes to sink'], 'This is the ==displacement method==: the rise in water level equals the volume of the stone.'),
+    MQ('A liquid has a density of 1000 kg / m³. What is this in g / cm³?', '1.0 g / cm³', ['0.10 g / cm³', '10 g / cm³', '1000 g / cm³'], '1000 kg/m³ = ==1.0 g/cm³==.')
+  ],
+  energy: [
+    MQ('A mass of 2.0 kg moves at 3.0 m / s. What is its kinetic energy?', '9.0 J', ['3.0 J', '6.0 J', '18 J'], 'KE = ½mv² = ½ × 2.0 × 3.0² = ==9.0 J==.'),
+    MQ('Take g = 9.8 N / kg. A mass of 3.0 kg is lifted through a height of 2.0 m. What is the gain in gravitational potential energy?', '59 J', ['6.0 J', '29 J', '12 J'], 'ΔGPE = mgh = 3.0 × 9.8 × 2.0 = ==59 J==.'),
+    MQ('Which energy resource is renewable?', 'wind', ['coal', 'natural gas', 'nuclear fuel'], '==Wind== will not run out. Fossil fuels and uranium are finite.'),
+    MQ('A machine takes in 200 J of energy and transfers 50 J usefully. What is its efficiency?', '25%', ['4.0%', '75%', '150%'], 'efficiency = useful ÷ input = 50 ÷ 200 = ==25%==.'),
+    MQ('A motor does 600 J of work in 20 s. What is its power?', '30 W', ['0.033 W', '620 W', '12 000 W'], 'power = work ÷ time = 600 ÷ 20 = ==30 W==.'),
+    MQ('A force of 40 N moves an object 5.0 m in the direction of the force. How much work is done?', '200 J', ['8.0 J', '45 J', '0.125 J'], 'work = force × distance = 40 × 5.0 = ==200 J==.'),
+    MQ('A car brakes to a stop. Where does most of its kinetic energy go?', 'the internal energy store of the brakes', ['the chemical store of the fuel', 'the gravitational store of the car', 'the elastic store of the tyres'], 'Friction makes the brakes hotter, so the ==internal (thermal) energy== store increases.'),
+    MQ('Which energy resource does not get its energy originally from the Sun?', 'geothermal', ['wind', 'hydroelectric', 'biofuel'], '==Geothermal== energy comes from heat produced inside the Earth.', { x: 1 })
+  ],
+  pressure: [
+    MQ('A force of 200 N acts on an area of 0.50 m². What is the pressure?', '400 Pa', ['100 Pa', '0.0025 Pa', '200.5 Pa'], 'p = F ÷ A = 200 ÷ 0.50 = ==400 Pa==.'),
+    MQ('Why do snowshoes stop a person sinking into soft snow?', 'they spread the weight over a larger area', ['they make the person lighter', 'they increase the force on the snow', 'they reduce the area so the pressure is less'], 'A ==larger area== gives a ==smaller pressure== for the same weight.'),
+    MQ('A knife is sharpened. What happens to the pressure it exerts for the same force?', 'It increases because the area decreases.', ['It increases because the area increases.', 'It decreases because the area decreases.', 'It stays the same.'], 'p = F ÷ A. A ==smaller area== gives a ==larger pressure==.'),
+    MQ('Which two factors affect the pressure in a liquid?', 'depth and density of the liquid', ['mass and volume of the container', 'width and shape of the container', 'colour and temperature only'], 'Pressure in a liquid depends on the ==depth== and the ==density== (and g).'),
+    MQ('What is the unit of pressure?', 'pascal', ['newton', 'joule', 'watt'], 'The pascal (Pa) is one ==newton per square metre==.'),
+    MQ('Take g = 9.8 N / kg. The density of water is 1000 kg / m³. What is the pressure due to the water at a depth of 10 m?', '98 000 Pa', ['980 Pa', '9800 Pa', '1 000 000 Pa'], 'p = ρgh = 1000 × 9.8 × 10 = ==98 000 Pa==.', { x: 1 })
+  ],
+  particles: [
+    MQ('How does a gas cause pressure on the walls of its container?', 'particles collide with the walls', ['particles stick to the walls', 'particles are heavier than the walls', 'particles push each other apart only'], 'The ==collisions== of particles with the walls produce a force, so a pressure.'),
+    MQ('The volume of a fixed mass of gas is halved at constant temperature. What happens to its pressure?', 'It doubles.', ['It halves.', 'It stays the same.', 'It quadruples.'], 'p × V is constant, so halving V ==doubles p==.'),
+    MQ('What does Brownian motion show?', 'molecules of a fluid move randomly and hit larger particles', ['smoke particles are alive', 'molecules are at rest', 'all particles move in straight lines for ever'], 'Fast, random ==molecule collisions== push the visible particles about.'),
+    MQ('In which state are the particles close together but able to slide past each other?', 'liquid', ['solid', 'gas', 'none of them'], 'In a ==liquid== the particles touch but can move past one another.'),
+    MQ('The temperature of a gas increases. What happens to the average speed of its particles?', 'It increases.', ['It decreases.', 'It stays the same.', 'It becomes zero.'], 'Higher temperature means a ==higher average kinetic energy==, so a higher average speed.'),
+    MQ('Why can a gas be compressed easily?', 'there are large gaps between the particles', ['the particles are very small and heavy', 'the particles are held in fixed positions', 'the particles have no mass'], 'The particles are ==far apart==, so they can be pushed closer together.'),
+    MQ('What is 27 °C in kelvin?', '300 K', ['246 K', '27 K', '3.7 K'], 'kelvin = °C + 273 = ==300 K==.'),
+    MQ('Which statement about evaporation is correct?', 'It happens at the surface of a liquid at any temperature.', ['It happens only at the boiling point.', 'It happens throughout the liquid.', 'It happens only in a vacuum.'], 'The fastest molecules escape from the ==surface== at any temperature.'),
+    MQ('A fixed mass of gas has a pressure of 100 kPa and a volume of 6.0 cm³. It is compressed to 3.0 cm³ at constant temperature. What is the new pressure?', '200 kPa', ['50 kPa', '100 kPa', '300 kPa'], 'p₁V₁ = p₂V₂, so p₂ = 100 × 6.0 ÷ 3.0 = ==200 kPa==.', { x: 1 })
+  ],
+  thermprop: [
+    MQ('What is the specific heat capacity of a substance?', 'the energy needed to raise the temperature of 1 kg by 1 °C', ['the energy needed to melt 1 kg', 'the temperature rise when 1 J is added', 'the total energy stored in the substance'], '==Specific heat capacity== is the energy needed to raise ==1 kg== by ==1 °C==.'),
+    MQ('Water has a specific heat capacity of 4200 J / (kg °C). How much energy is needed to heat 2.0 kg of water by 10 °C?', '84 000 J', ['8400 J', '420 J', '2100 J'], 'E = mcΔθ = 2.0 × 4200 × 10 = ==84 000 J==.', { x: 1 }),
+    MQ('Why does a bimetallic strip bend when it is heated?', 'the two metals expand by different amounts', ['the two metals melt', 'the two metals contract by the same amount', 'the strip becomes heavier'], 'One metal ==expands more== than the other, so the strip bends.'),
+    MQ('A pure liquid is boiling. What happens to its temperature while it boils?', 'It stays constant.', ['It rises steadily.', 'It falls steadily.', 'It rises and falls.'], 'The energy supplied is used to ==break the bonds== between particles, not to raise the temperature.'),
+    MQ('What is the energy used for during melting?', 'to overcome the forces between the particles', ['to raise the temperature of the solid', 'to make the particles smaller', 'to remove electrons from atoms'], 'It is ==latent heat==: it separates the particles without a temperature rise.'),
+    MQ('Which list shows the order of expansion when heated, from most to least, for equal volumes and equal temperature rise?', 'gas, liquid, solid', ['solid, liquid, gas', 'liquid, solid, gas', 'gas, solid, liquid'], '==Gases expand the most==, solids the least.'),
+    MQ('Why does the liquid in a liquid-in-glass thermometer rise when the temperature rises?', 'the liquid expands', ['the glass shrinks', 'the liquid evaporates', 'the liquid becomes more dense'], 'The liquid ==expands== up the narrow tube.'),
+    MQ('The specific latent heat of fusion of ice is 3.3 × 10⁵ J / kg. How much energy melts 0.60 kg of ice at 0 °C?', '2.0 × 10⁵ J', ['5.5 × 10⁵ J', '3.3 × 10⁵ J', '2.0 × 10⁶ J'], 'E = mL = 0.60 × 3.3 × 10⁵ = ==1.98 × 10⁵ ≈ 2.0 × 10⁵ J==.', { x: 1 })
+  ],
+  thermal: [
+    MQ('Which surface is the best emitter of infrared radiation?', 'dull black', ['shiny black', 'shiny white', 'dull white'], '==Dull black== surfaces are the best emitters and absorbers.'),
+    MQ('Cooking pans have metal bodies and plastic handles. Why?', 'metal is a good conductor and plastic is a poor conductor', ['metal is a poor conductor and plastic is a good conductor', 'both are good conductors', 'both are poor conductors'], 'The ==metal conducts heat== to the food. The ==plastic insulates== the hand.'),
+    MQ('Why can convection not happen in a solid?', 'the particles cannot flow', ['solids have no particles', 'solids are too dense to heat up', 'solids reflect all radiation'], 'Convection needs ==fluid== that can flow. Particles in a solid only vibrate.'),
+    MQ('How does thermal energy travel from the Sun to the Earth?', 'by radiation', ['by conduction', 'by convection', 'by evaporation'], 'Space is a ==vacuum==, so only ==radiation== can cross it.'),
+    MQ('Why does the air above a heater rise?', 'it expands and becomes less dense', ['it becomes heavier', 'it condenses', 'it conducts upwards'], 'Warm air is ==less dense== than the cooler air around it, so it rises.'),
+    MQ('Why are metals better conductors of thermal energy than non-metals?', 'they have free electrons', ['they have larger atoms', 'they are always solid', 'they have no particles that vibrate'], '==Free electrons== carry energy through the metal quickly.'),
+    MQ('The walls of a vacuum flask are silvered. What does this reduce?', 'energy transfer by radiation', ['energy transfer by conduction through the vacuum', 'evaporation of the liquid only', 'convection through the vacuum'], 'Shiny silver is a ==poor emitter and absorber== of radiation.'),
+    MQ('Why do birds fluff up their feathers in cold weather?', 'to trap a layer of air, which is a poor conductor', ['to let more air circulate', 'to absorb more radiation', 'to increase the evaporation of sweat'], '==Trapped air== is a ==poor conductor== and cannot circulate, so it insulates.')
+  ],
+  sound: [
+    MQ('In which material is the speed of sound greatest?', 'steel', ['water', 'air', 'a vacuum'], 'Sound travels ==fastest in solids== because the particles are closest.'),
+    MQ('A sound has a frequency of 680 Hz and a speed of 340 m / s. What is its wavelength?', '0.50 m', ['2.0 m', '0.002 m', '231 200 m'], 'λ = v ÷ f = 340 ÷ 680 = ==0.50 m==.'),
+    MQ('A person shouts and hears an echo 2.0 s later. The speed of sound is 340 m / s. How far away is the wall?', '340 m', ['170 m', '680 m', '1360 m'], 'The sound travels there and back in 2.0 s, so there takes 1.0 s: 340 × 1.0 = ==340 m==.'),
+    MQ('A louder sound has a greater…', 'amplitude', ['frequency', 'wavelength', 'speed'], 'Loudness depends on ==amplitude==. Pitch depends on frequency.'),
+    MQ('What is the range of frequencies that a healthy young person can hear?', '20 Hz to 20 000 Hz', ['2 Hz to 2000 Hz', '200 Hz to 2 000 000 Hz', '20 000 Hz to 200 000 Hz'], 'The normal range is ==20 Hz to 20 kHz==.')
+  ],
+  waves: [
+    MQ('A wave has a frequency of 50 Hz and a wavelength of 4.0 m. What is its speed?', '200 m / s', ['0.080 m / s', '12.5 m / s', '54 m / s'], 'v = fλ = 50 × 4.0 = ==200 m/s==.'),
+    MQ('In a transverse wave, the vibrations are…', 'at right angles to the direction of travel', ['parallel to the direction of travel', 'in a circle', 'zero'], 'Transverse waves vibrate ==perpendicular== to the direction of travel, for example light.'),
+    MQ('What is the amplitude of a wave?', 'the maximum displacement from the rest position', ['the distance between two peaks', 'the number of waves per second', 'the time for one wave'], '==Amplitude== is the maximum ==displacement== from the undisturbed position.'),
+    MQ('A wave has a frequency of 25 Hz. What is its period?', '0.040 s', ['25 s', '0.25 s', '4.0 s'], 'T = 1 ÷ f = 1 ÷ 25 = ==0.040 s==.'),
+    MQ('When is diffraction of a wave through a gap most noticeable?', 'when the gap is about the same size as the wavelength', ['when the gap is much larger than the wavelength', 'when the gap is closed', 'when the wave is very fast'], 'Diffraction is greatest when the gap is ==similar to the wavelength==.'),
+    MQ('Waves transfer…', 'energy without transferring matter', ['matter without energy', 'both energy and matter', 'neither energy nor matter'], 'Waves ==transfer energy== but the medium itself does not travel along.'),
+    MQ('Water waves of wavelength 0.20 m travel at 0.50 m / s. What is their frequency?', '2.5 Hz', ['0.10 Hz', '0.40 Hz', '10 Hz'], 'f = v ÷ λ = 0.50 ÷ 0.20 = ==2.5 Hz==.'),
+    MQ('Water waves move from deep water into shallow water. Which quantity does not change?', 'frequency', ['speed', 'wavelength', 'direction always'], 'The ==frequency== is set by the source and does not change. Speed and wavelength decrease.')
+  ],
+  light: [
+    MQ('A ray hits a plane mirror with an angle of incidence of 35°. What is the angle of reflection?', '35°', ['55°', '70°', '145°'], 'angle of reflection = angle of incidence = ==35°==.'),
+    MQ('Which statement describes the image in a plane mirror?', 'virtual, the same size and as far behind the mirror as the object is in front', ['real and enlarged', 'virtual and diminished', 'real and upside down'], 'The image is ==virtual==, ==same size== and ==laterally inverted==.'),
+    MQ('Why does a ray of light change direction when it passes from air into glass?', 'its speed changes', ['its frequency changes', 'its colour changes', 'it loses energy'], 'Light ==slows down== in glass, so it refracts.'),
+    MQ('Which conditions are needed for total internal reflection?', 'light travels from a denser to a less dense material at an angle greater than the critical angle', ['light travels from a less dense to a denser material at any angle', 'light hits a mirror at a small angle', 'light travels in a vacuum'], 'Both: ==denser to less dense== and ==angle greater than the critical angle==.'),
+    MQ('Which device relies on total internal reflection?', 'optical fibre', ['plane mirror', 'filament lamp', 'solar cell'], '==Optical fibres== keep light inside the glass by total internal reflection.'),
+    MQ('What is the focal length of a converging lens?', 'the distance from the lens to the principal focus', ['the distance from the lens to the object', 'the thickness of the lens', 'the distance between the two faces'], 'The ==focal length== is the distance from the ==lens centre== to the ==principal focus==.'),
+    MQ('A glass block has a critical angle of 42°. A ray inside the glass hits the surface at 50°. What happens?', 'total internal reflection', ['the ray passes straight through', 'the ray refracts towards the normal', 'the ray is absorbed'], '50° is ==greater than the critical angle== 42°, so the ray is totally internally reflected.'),
+    MQ('A ray travels from air into glass. The angle of incidence is 45° and the angle of refraction is 30°. What is the refractive index of the glass?', '1.4', ['0.71', '1.5', '2.0'], 'n = sin i ÷ sin r = 0.707 ÷ 0.500 = ==1.4==.', { x: 1 }),
+    MQ('White light passes through a prism. Which colour is refracted the most?', 'violet', ['red', 'green', 'yellow'], '==Violet== has the shortest wavelength and bends the most.')
+  ],
+  emspec: [
+    MQ('What is the speed of all electromagnetic waves in a vacuum?', '3.0 × 10⁸ m / s', ['3.0 × 10⁵ m / s', '340 m / s', '3.0 × 10¹⁰ m / s'], 'All EM waves travel at ==3.0 × 10⁸ m/s== in a vacuum.'),
+    MQ('Which electromagnetic wave has the highest frequency?', 'gamma rays', ['radio waves', 'visible light', 'microwaves'], 'The order of increasing frequency ends with ==gamma rays==.'),
+    MQ('Which radiation is used to sterilise medical equipment and to treat cancer?', 'gamma rays', ['radio waves', 'infrared', 'microwaves'], '==Gamma rays== kill bacteria and cancer cells.'),
+    MQ('A television remote control uses…', 'infrared', ['X-rays', 'ultraviolet', 'gamma rays'], 'Remote controls send ==infrared== signals.'),
+    MQ('Which danger is linked to too much ultraviolet radiation?', 'skin cancer', ['burns from radio waves', 'deafness', 'heating the body’s cells from the inside'], '==UV== can damage skin cells and cause ==skin cancer== and eye damage.'),
+    MQ('Which electromagnetic wave has the longest wavelength?', 'radio waves', ['gamma rays', 'X-rays', 'ultraviolet'], '==Radio waves== have the longest wavelength and the lowest frequency.'),
+    MQ('Which radiation is used to make shadow images of bones?', 'X-rays', ['microwaves', 'infrared', 'radio waves'], '==X-rays== pass through soft tissue but are absorbed by bone.'),
+    MQ('Light has a frequency of 6.0 × 10¹⁴ Hz. The speed of light is 3.0 × 10⁸ m / s. What is its wavelength?', '5.0 × 10⁻⁷ m', ['2.0 × 10⁶ m', '1.8 × 10²³ m', '5.0 × 10⁻⁶ m'], 'λ = v ÷ f = 3.0 × 10⁸ ÷ 6.0 × 10¹⁴ = ==5.0 × 10⁻⁷ m==.'),
+    MQ('What do all electromagnetic waves have in common?', 'they are transverse and travel at the same speed in a vacuum', ['they are longitudinal', 'they need a medium', 'they have the same wavelength'], 'All EM waves are ==transverse== and have the same speed in a vacuum.')
+  ],
+  circuits: [
+    MQ('A charge of 30 C passes a point in 10 s. What is the current?', '3.0 A', ['0.33 A', '300 A', '40 A'], 'I = Q ÷ t = 30 ÷ 10 = ==3.0 A==.'),
+    MQ('A resistor has a p.d. of 12 V across it and a current of 0.50 A. What is its resistance?', '24 Ω', ['6.0 Ω', '0.042 Ω', '12.5 Ω'], 'R = V ÷ I = 12 ÷ 0.50 = ==24 Ω==.'),
+    MQ('Two resistors of 2.0 Ω and 3.0 Ω are connected in series. What is the total resistance?', '5.0 Ω', ['1.2 Ω', '6.0 Ω', '0.83 Ω'], 'In series, resistances ==add==: 2.0 + 3.0 = ==5.0 Ω==.'),
+    MQ('Two resistors of 6.0 Ω and 12 Ω are connected in parallel. What is the total resistance?', '4.0 Ω', ['18 Ω', '9.0 Ω', '2.0 Ω'], '1/R = 1/6 + 1/12 = 3/12, so R = ==4.0 Ω==. It is smaller than either resistor.'),
+    MQ('A device uses a current of 2.0 A from a 230 V supply. What is its power?', '460 W', ['115 W', '0.0087 W', '232 W'], 'P = IV = 2.0 × 230 = ==460 W==.'),
+    MQ('A 100 W lamp is on for 60 s. How much energy does it transfer?', '6000 J', ['1.7 J', '160 J', '0.60 J'], 'E = Pt = 100 × 60 = ==6000 J==.'),
+    MQ('An appliance has a power of 2.3 kW and is connected to a 230 V supply. Which fuse is the best choice?', '13 A', ['3 A', '5 A', '30 A'], 'I = P ÷ V = 2300 ÷ 230 = 10 A. Use the ==next fuse above 10 A==: ==13 A==.'),
+    MQ('What is the purpose of the earth wire?', 'to carry current safely to the ground if the casing becomes live', ['to carry the normal current', 'to complete the circuit for the appliance', 'to reduce the voltage'], 'The ==earth wire== gives a safe path to the ground so the fuse blows.'),
+    MQ('Why is the switch placed in the live wire?', 'so that the appliance is not live when switched off', ['so that the neutral wire is safe', 'so that the current is reduced', 'so that the fuse is not needed'], 'It makes the appliance ==disconnected from the live voltage== when off.'),
+    MQ('Electricity costs 8 rupees per kWh. A 3 kW heater is on for 2 hours. What is the cost?', '48 rupees', ['12 rupees', '24 rupees', '6 rupees'], 'Energy = 3 × 2 = 6 kWh. Cost = 6 × 8 = ==48 rupees==.'),
+    MQ('Two identical lamps are connected in parallel across a 6.0 V battery. What is the p.d. across each lamp?', '6.0 V', ['3.0 V', '12 V', '0 V'], 'In parallel, each branch has the ==same p.d. as the supply==.'),
+    MQ('What is the electromotive force (e.m.f.) of a cell?', 'the electrical work done by the cell on each unit of charge', ['the current in the cell', 'the resistance of the cell', 'the energy stored per unit mass'], 'e.m.f. is the ==energy transferred to each coulomb== of charge by the source.')
+  ],
+  magnet: [
+    MQ('Which material can be permanently magnetised?', 'steel', ['soft iron', 'copper', 'plastic'], '==Steel== keeps its magnetism. Soft iron loses it easily.'),
+    MQ('What is the direction of the magnetic field outside a bar magnet?', 'from the north pole to the south pole', ['from the south pole to the north pole', 'in circles around the north pole', 'there is no direction'], 'Field lines run from ==N to S== outside the magnet.'),
+    MQ('What happens when two north poles are brought close together?', 'they repel', ['they attract', 'nothing happens', 'they become south poles'], '==Like poles repel==.'),
+    MQ('Which change makes an electromagnet stronger?', 'more turns on the coil', ['using a plastic core', 'reducing the current', 'using fewer turns'], 'More turns, a larger current or a soft-iron core all ==increase the strength==.'),
+    MQ('A transformer has 600 turns on the primary coil and 150 turns on the secondary. The primary voltage is 240 V. What is the secondary voltage?', '60 V', ['960 V', '38 V', '240 V'], 'Vp ÷ Vs = Np ÷ Ns, so Vs = 240 × 150 ÷ 600 = ==60 V==.'),
+    MQ('The current in a wire in a magnetic field is reversed. What happens to the force on the wire?', 'it reverses', ['it doubles', 'it stays the same', 'it becomes zero'], 'Reversing the current ==reverses the force==.'),
+    MQ('What does a simple a.c. generator produce?', 'an alternating e.m.f. by electromagnetic induction', ['a steady e.m.f. by chemical reaction', 'light by heating a filament', 'a magnetic field by static charge'], 'A rotating coil in a field ==induces an alternating e.m.f.==.'),
+    MQ('What is the purpose of a step-up transformer in power transmission?', 'to increase the voltage and decrease the current', ['to increase the current and decrease the voltage', 'to change a.c. into d.c.', 'to store energy'], 'High voltage means ==low current==, so less energy is wasted as heat in the cables.'),
+    MQ('Which change would increase the e.m.f. induced when a magnet is pushed into a coil?', 'moving the magnet faster', ['using a weaker magnet', 'using fewer turns', 'holding the magnet still'], 'Faster movement means ==faster cutting of field lines==, so a larger e.m.f.'),
+    MQ('Why do transformers have an iron core?', 'to concentrate the magnetic field between the coils', ['to make the coils lighter', 'to make the voltage constant', 'to stop current flowing'], 'The ==iron core== links the magnetic field from the primary to the secondary.')
+  ],
+  momentum: [
+    MQ('A mass of 2.0 kg moves at 5.0 m / s. What is its momentum?', '10 kg m / s', ['2.5 kg m / s', '0.40 kg m / s', '25 kg m / s'], 'p = mv = 2.0 × 5.0 = ==10 kg m/s==.'),
+    MQ('What is equal to the impulse acting on an object?', 'the change in momentum', ['the change in kinetic energy', 'the change in mass', 'the weight of the object'], '==Impulse = change in momentum = F × t==.'),
+    MQ('A force of 20 N acts on an object for 3.0 s. What is the impulse?', '60 N s', ['6.7 N s', '23 N s', '17 N s'], 'impulse = F × t = 20 × 3.0 = ==60 N s==.'),
+    MQ('A 0.50 kg ball changes velocity from 2.0 m / s to 10 m / s in a straight line. What is the change in momentum?', '4.0 kg m / s', ['1.0 kg m / s', '6.0 kg m / s', '24 kg m / s'], 'Δp = m(v − u) = 0.50 × 8.0 = ==4.0 kg m/s==.'),
+    MQ('A crumple zone makes a car safer because it…', 'increases the time of the collision, so reduces the force', ['decreases the time of the collision', 'increases the momentum change', 'makes the car heavier'], 'F = Δp ÷ t. A ==longer time== gives a ==smaller force== for the same change in momentum.'),
+    MQ('A 2.0 kg trolley at 3.0 m / s hits a stationary 1.0 kg trolley and they stick together. What is their velocity after the collision?', '2.0 m / s', ['1.0 m / s', '3.0 m / s', '6.0 m / s'], 'Momentum before = 2.0 × 3.0 = 6.0. After: 3.0 × v = 6.0, so v = ==2.0 m/s==.')
+  ],
+  nuclear: [
+    MQ('What is an alpha particle?', 'a helium nucleus', ['an electron', 'a high-energy photon', 'a neutron'], 'An alpha particle is ==2 protons and 2 neutrons==: a ==helium nucleus==.'),
+    MQ('Which radiation is the most strongly ionising?', 'alpha', ['beta', 'gamma', 'all are equal'], '==Alpha== is the most ionising and the least penetrating.'),
+    MQ('Which radiation is the most penetrating?', 'gamma', ['alpha', 'beta', 'none can pass through paper'], '==Gamma== passes through paper and aluminium; thick lead or concrete reduces it.'),
+    MQ('A sample has a mass of 80 g of a radioactive isotope with a half-life of 6.0 hours. How much remains after 12 hours?', '20 g', ['40 g', '10 g', '0 g'], '12 h is two half-lives: 80 → 40 → ==20 g==.'),
+    MQ('What does the proton number of an atom tell you?', 'the number of protons in the nucleus', ['the number of neutrons', 'the total number of nucleons', 'the number of orbits'], 'Proton number = ==number of protons==.'),
+    MQ('Isotopes of an element have the same number of…', 'protons but different numbers of neutrons', ['neutrons but different numbers of protons', 'nucleons but different numbers of protons', 'electrons but different numbers of protons'], 'Isotopes: ==same protons==, ==different neutrons==.'),
+    MQ('Which is a source of natural background radiation?', 'radon gas from rocks', ['medical X-rays', 'nuclear power stations', 'nuclear weapons tests'], '==Radon== and ==cosmic rays== are natural. The others are man-made.'),
+    MQ('Which precaution is used when handling a radioactive source?', 'use tongs and store it in a lead-lined box', ['hold it close to look at it', 'store it in a paper bag', 'keep it in a pocket'], 'Keep the source ==far away==, handle with ==tongs== and ==shield== it.'),
+    MQ('A uranium nucleus ²³⁸U (proton number 92) emits an alpha particle. What are the nucleon number and proton number of the new nucleus?', '234 and 90', ['236 and 92', '238 and 93', '234 and 92'], 'Alpha: nucleon number falls by 4 and proton number by 2: ==234 and 90==.'),
+    MQ('In the alpha-particle scattering experiment, most alpha particles passed straight through the gold foil. What does this show?', 'the atom is mostly empty space', ['the nucleus is large', 'the electrons are positive', 'the foil is not made of atoms'], 'Most passed through, so the atom is ==mostly empty space==. A few were deflected by a small positive nucleus.')
+  ],
+  space: [
+    MQ('A light-year is a unit of…', 'distance', ['time', 'speed', 'brightness'], 'It is the ==distance light travels in one year==.'),
+    MQ('Which force keeps the planets in orbit around the Sun?', 'gravity', ['friction', 'magnetism', 'air resistance'], 'The Sun’s ==gravitational force== pulls the planets towards it.'),
+    MQ('What will the Sun become at the end of its life?', 'a red giant and then a white dwarf', ['a supernova and then a neutron star', 'a black hole', 'a nebula and then a protostar'], 'A star of the Sun’s mass becomes a ==red giant==, then a ==white dwarf==.'),
+    MQ('Approximately how long does the Moon take to orbit the Earth?', '28 days', ['24 hours', '365 days', '12 hours'], 'About ==one month (28 days)==.'),
+    MQ('What is a galaxy?', 'a large collection of billions of stars', ['a group of planets', 'the same as the Solar System', 'a single star with its planets'], 'A galaxy has ==billions of stars==, held together by gravity.'),
+    MQ('What happens to the wavelength of light from a distant galaxy that is moving away from us?', 'it increases', ['it decreases', 'it stays the same', 'it becomes zero'], 'This is ==redshift==: the wavelength gets longer.'),
+    MQ('Which planet lies between Mars and Saturn?', 'Jupiter', ['Venus', 'Mercury', 'Neptune'], 'The order is Mercury, Venus, Earth, Mars, ==Jupiter==, Saturn, Uranus, Neptune.'),
+    MQ('A planet orbits the Sun with orbital radius r and orbital time T. Which expression gives its average orbital speed?', '2πr ÷ T', ['r ÷ T', '2πT ÷ r', 'πr² ÷ T'], 'Distance in one orbit is the circumference 2πr, so speed = ==2πr ÷ T==.'),
+    MQ('What is the cosmic microwave background radiation evidence for?', 'the Big Bang', ['the Moon’s orbit', 'the life cycle of the Sun', 'the age of the Earth'], 'It is ==radiation left from the early Universe==, evidence for the ==Big Bang==.'),
+    MQ('What type of object may form after a massive star explodes as a supernova?', 'a neutron star or a black hole', ['a white dwarf', 'a red giant', 'a nebula'], 'A very massive star ends as a ==neutron star== or a ==black hole==.')
+  ],
+  static: [
+    MQ('A glass rod is rubbed with silk and becomes positively charged. What has happened?', 'electrons moved from the rod to the silk', ['electrons moved from the silk to the rod', 'protons moved from the rod to the silk', 'protons moved from the silk to the rod'], 'The rod ==lost electrons==, so it is positive. Only electrons move.'),
+    MQ('A negatively charged rod is brought near a negatively charged hanging ball. What is seen?', 'the ball moves away from the rod', ['the ball moves towards the rod', 'the ball does not move', 'the ball becomes neutral'], '==Like charges repel==.'),
+    MQ('Which material is an electrical insulator?', 'polythene', ['copper', 'steel', 'aluminium'], '==Polythene== (a plastic) does not let charge flow. Metals are conductors.'),
+    MQ('The electric field between two oppositely charged parallel plates is uniform. What does this mean for the field lines?', 'they are straight, parallel and equally spaced', ['they cross in the middle', 'they curve towards one plate', 'they get closer near the middle'], 'A ==uniform field== has the same strength everywhere, so the lines are ==parallel and equally spaced==.'),
+    MQ('Why do clothes sometimes cling together after being in a tumble dryer?', 'rubbing transfers electrons so the clothes have opposite charges', ['the clothes become magnetic', 'the clothes become hotter', 'the clothes lose protons'], '==Friction== transfers ==electrons==, so the clothes become oppositely charged and attract.')
+  ],
+  comps: [
+    MQ('A thermistor is in series with a resistor and a battery. The temperature of the thermistor rises. What happens to the current?', 'it increases', ['it decreases', 'it stays the same', 'it becomes zero'], 'The thermistor’s resistance ==decreases==, so the total resistance falls and the current ==increases==.'),
+    MQ('Which component is used to switch on a street lamp automatically when it gets dark?', 'a light-dependent resistor (LDR) in a potential divider', ['a diode in series with a fuse', 'a variable resistor in parallel', 'a thermistor in a potential divider'], 'An ==LDR== changes its resistance with light, so the output p.d. changes and can switch the lamp.'),
+    MQ('A 9.0 V supply is connected across a 100 Ω resistor and a 200 Ω resistor in series. What is the p.d. across the 200 Ω resistor?', '6.0 V', ['3.0 V', '4.5 V', '9.0 V'], 'Vout = V × R₂ ÷ (R₁ + R₂) = 9.0 × 200 ÷ 300 = ==6.0 V==.', { x: 1 }),
+    MQ('Why is a resistor connected in series with an LED?', 'to limit the current so the LED is not damaged', ['to make the LED brighter', 'to change a.c. into d.c.', 'to store charge'], 'A large current could ==damage the LED==. The resistor ==limits the current==.'),
+    MQ('Which meter is connected in parallel with a component to measure the p.d. across it?', 'voltmeter', ['ammeter', 'ohmmeter in series', 'joulemeter in series'], 'A ==voltmeter== is connected in ==parallel==.')
+  ]
+};
+
+/* ---------- new chapters: static electricity, circuit components ---------- */
+function svgStatic(){
+  const dirs = [0, 45, 90, 135, 180, 225, 270, 315].map(d => d * Math.PI / 180);
+  const out = (cx, cy) => dirs.map(t => `<line x1="${(cx + 22 * Math.cos(t)).toFixed(1)}" y1="${(cy + 22 * Math.sin(t)).toFixed(1)}" x2="${(cx + 72 * Math.cos(t)).toFixed(1)}" y2="${(cy + 72 * Math.sin(t)).toFixed(1)}" class="acc" marker-end="url(#b-st)"/>`).join('');
+  const inn = (cx, cy) => dirs.map(t => `<line x1="${(cx + 72 * Math.cos(t)).toFixed(1)}" y1="${(cy + 72 * Math.sin(t)).toFixed(1)}" x2="${(cx + 22 * Math.cos(t)).toFixed(1)}" y2="${(cy + 22 * Math.sin(t)).toFixed(1)}" class="acc" marker-end="url(#b-st)"/>`).join('');
+  const lines = [0, 1, 2, 3, 4].map(i => `<line x1="${548 + i * 38}" y1="64" x2="${548 + i * 38}" y2="168" class="acc" marker-end="url(#b-st)"/>`).join('');
+  return `<svg viewBox="0 0 780 270" role="img" aria-label="Electric field lines around a positive charge, a negative charge and between parallel plates">${arrowDefs('st')}
+  ${out(100, 120)}<circle cx="100" cy="120" r="18" class="part"/>${T(100, 126, '+', 'mid lbl')}${T(100, 226, 'positive charge:', 'mid lbl')}${T(100, 246, 'lines point away', 'mid mut')}
+  ${inn(300, 120)}<circle cx="300" cy="120" r="18" class="part"/>${T(300, 126, '−', 'mid lbl')}${T(300, 226, 'negative charge:', 'mid lbl')}${T(300, 246, 'lines point towards', 'mid mut')}
+  <line x1="530" y1="50" x2="740" y2="50" class="ln"/><line x1="530" y1="182" x2="740" y2="182" class="ln"/>${lines}
+  ${T(635, 40, '+  +  +  +  +  +', 'mid hott')}${T(635, 202, '−  −  −  −  −  −', 'mid acct')}${T(635, 232, 'parallel plates: uniform field', 'mid lbl')}${T(635, 252, 'equal spacing, straight lines', 'mid mut')}</svg>`;
 }
-if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
+function svgDivider(){
+  const arr = `<line x1="110" y1="30" x2="400" y2="30" class="ln"/><line x1="110" y1="250" x2="480" y2="250" class="ln"/><line x1="110" y1="30" x2="110" y2="115" class="ln"/><line x1="110" y1="165" x2="110" y2="250" class="ln"/>`;
+  return `<svg viewBox="0 0 780 280" role="img" aria-label="Potential divider circuit with two resistors and a voltmeter across the second resistor">
+  ${arr}<line x1="88" y1="115" x2="132" y2="115" class="ln"/><line x1="98" y1="132" x2="122" y2="132" class="ln" style="stroke-width:5"/><line x1="88" y1="150" x2="132" y2="150" class="ln"/><line x1="98" y1="165" x2="122" y2="165" class="ln" style="stroke-width:5"/>
+  <line x1="400" y1="30" x2="400" y2="62" class="ln"/><rect x="384" y="62" width="32" height="56" class="part"/><line x1="400" y1="118" x2="400" y2="150" class="ln"/>
+  <rect x="384" y="150" width="32" height="56" class="part"/><line x1="400" y1="206" x2="400" y2="250" class="ln"/>
+  <line x1="400" y1="134" x2="480" y2="134" class="ln"/><line x1="480" y1="134" x2="480" y2="156" class="ln"/><circle cx="480" cy="174" r="18" class="part"/>${T(480, 180, 'V', 'mid lbl')}<line x1="480" y1="192" x2="480" y2="250" class="ln"/>
+  ${T(60, 144, 'V', 'end lbl')}${T(364, 96, 'R₁', 'end lbl')}${T(364, 184, 'R₂', 'end lbl')}${T(510, 158, 'Vout', 'lbl')}
+  ${T(560, 56, 'Series: the same current,', 'lbl')}${T(560, 78, 'but the p.d. is shared.', 'lbl')}${T(560, 114, 'Vout = V × R₂ ÷ (R₁ + R₂)', 'mono acct')}
+  ${T(560, 148, 'Bigger R₂ → bigger share.', 'mut')}${T(560, 172, 'Swap R₂ for an LDR or thermistor:', 'mut')}${T(560, 194, 'Vout now changes with light', 'mut')}${T(560, 214, 'or temperature.', 'mut')}</svg>`;
+}
+function svgSensors(){
+  return `<svg viewBox="0 0 780 260" role="img" aria-label="Graphs of resistance against temperature for a thermistor and resistance against light intensity for an LDR">
+  <line x1="60" y1="210" x2="340" y2="210" class="ln"/><line x1="60" y1="210" x2="60" y2="40" class="ln"/><path d="M60 60 C 110 170, 190 200, 330 206" class="acc" fill="none"/>
+  ${T(200, 238, 'temperature', 'mid lbl')}${T(40, 32, 'resistance', 'lbl')}${T(200, 24, 'Thermistor', 'mid hott')}${T(190, 110, 'hotter →', 'mut')}${T(190, 128, 'lower resistance', 'mut')}
+  <line x1="450" y1="210" x2="730" y2="210" class="ln"/><line x1="450" y1="210" x2="450" y2="40" class="ln"/><path d="M450 60 C 500 170, 580 200, 720 206" class="acc" fill="none"/>
+  ${T(590, 238, 'light intensity', 'mid lbl')}${T(430, 32, 'resistance', 'lbl')}${T(590, 24, 'LDR', 'mid hott')}${T(580, 110, 'brighter →', 'mut')}${T(580, 128, 'lower resistance', 'mut')}</svg>`;
+}
+
+CH.static = {
+  code: 'Topic 4', name: 'Static electricity',
+  lede: 'Charging by rubbing, attraction and repulsion, electric fields and the dangers of static.',
+  learn: [
+    { h: 'Charging by friction', list: ['Atoms contain ==positive protons==, ==negative electrons== and neutral neutrons.', 'Only ==electrons== move. Protons stay in the nucleus.', 'Rub two ==insulators== together. ==Electrons are transferred== from one to the other.', 'The one that ==gains electrons== becomes ==negatively charged==. The one that ==loses electrons== becomes ==positively charged==.', 'Example: a polythene rod rubbed with a cloth gains electrons, so the rod is negative and the cloth is positive.', 'The two objects end up with ==equal and opposite== charges.'] },
+    { h: 'Attraction and repulsion', table: [['Charges', 'Force'], ['like (+ and +, or − and −)', 'repel'], ['unlike (+ and −)', 'attract'], ['charged object and uncharged insulator', 'attract (induction)']] },
+    { h: 'Charge and conductors', list: ['A charged rod near ==uncharged paper== makes the charges in the paper ==separate== (==induction==).', 'The ==opposite== charge is nearer the rod, so the paper is ==attracted==.', '==Metals== are ==conductors==: charge flows through them. Plastic, glass and rubber are ==insulators==.', 'An ==earth== connection lets charge flow away to the ground.', 'A flow of charge is a ==current==: I = Q ÷ t.'] },
+    { h: 'Electric fields', list: ['An ==electric field== is a ==region where an electric charge experiences a force==.', 'The direction of the field is the direction of the force on a ==positive charge==.', 'Field lines point ==away from positive== and ==towards negative==.', 'Lines that are ==closer together== show a ==stronger field==.', 'Between ==parallel plates== the field is ==uniform==: straight, equally spaced lines.'] },
+    { h: 'Uses and dangers', list: ['==Uses==: paint spraying (the droplets have the same charge so they spread out), photocopiers and ==dust removal== in chimneys.', '==Dangers==: a ==spark== can ignite fuel vapour. Lightning is a huge spark.', 'Aircraft and fuel tankers are ==earthed== before refuelling so charge cannot build up.'] }
+  ],
+  mistakes: ['Saying ==protons move== when something is charged. Only ==electrons== move.', 'Saying a negative rod has ==gained protons==. It has gained electrons.', 'Forgetting that ==like charges repel== and ==unlike charges attract==.', 'Drawing field lines that ==cross== or have ==no arrows==.', 'Drawing field arrows ==into== a positive charge. They go away from it.'],
+  diagrams: [{ svg: svgStatic, cap: '==Field lines== go away from positive charge and towards negative charge. Between ==parallel plates== the field is uniform.' }],
+  worked: [
+    W('A polythene rod is rubbed with a cloth and becomes negatively charged. Explain how.', 'Only ==electrons== move. Say who ==gains== and who ==loses== them.', 'Name the particle that moves. Never say protons move.', 'Charging by friction',
+      [['Start', 'The rod and the cloth are both neutral: equal numbers of protons and electrons', ''], ['Rubbing', 'Electrons are transferred from the cloth to the rod', 'Friction makes electrons move across.'], ['The rod', 'It has gained electrons, so it has more electrons than protons: negative', ''], ['The cloth', 'It has lost electrons, so it is positive', 'Equal and opposite charges.']],
+      [['Start', 'both neutral', -1], ['Electrons move', 'cloth → rod', 1], ['Rod', 'negative', 2], ['Cloth', 'positive', 3]], true),
+    W('A negatively charged rod is brought near a negatively charged ball hanging on a thread. What happens? Explain.', '==Like charges repel==.', 'State what you see, then give the reason.', 'Like charges repel',
+      [['What happens', 'The ball moves away from the rod', ''], ['Why', 'Both have the same (negative) charge', ''], ['Rule', 'Like charges repel', 'Unlike charges would attract.']],
+      [['Observation', 'ball moves away', 0], ['Charges', 'both negative', 1], ['Rule', 'like repel', 2]], true),
+    W('A charged balloon sticks to an uncharged wall. Explain why.', 'This is ==induction==. The charges in the wall ==separate==.', 'Opposite charge is nearer, so attraction wins.', 'Induction',
+      [['Balloon', 'The balloon is negatively charged', ''], ['In the wall', 'Electrons in the wall are pushed away; the surface near the balloon becomes positive', 'The charges separate.'], ['Forces', 'The nearer opposite charge attracts more strongly than the farther like charge repels', ''], ['Result', 'The balloon is attracted to the wall and sticks', '']],
+      [['Balloon', 'negative', -1], ['Wall surface', 'positive (induced)', 1], ['Net force', 'attraction', 3]], true),
+    W('A current of 0.20 A flows for 30 s. How much charge flows past a point?', '==Charge = current × time==.', 'Charge is measured in coulombs (C).', 'Q = I × t',
+      [['Write the formula', 'Q = I × t', ''], ['Substitute', 'Q = 0.20 × 30', ''], ['Answer with unit', 'Q = 6.0 C', '']],
+      [['I, t', '0.20 A, 30 s', -1], ['Q', '6.0 C', 2]]),
+    W('Describe the electric field between two oppositely charged parallel metal plates.', 'The field is ==uniform== and goes from ==positive== to ==negative==.', 'Say what the lines look like, and which way the arrows point.', 'Uniform field',
+      [['Direction', 'The field lines point from the positive plate to the negative plate', 'The direction of force on a positive charge.'], ['Shape', 'The lines are straight, parallel and at right angles to the plates', ''], ['Strength', 'The lines are equally spaced, so the field is uniform', 'The same strength everywhere between the plates.']],
+      [['Direction', '+ plate to − plate', 0], ['Lines', 'straight and parallel', 1], ['Strength', 'uniform', 2]], true)
+  ],
+  quiz: [
+    MQ('A polythene rod becomes negatively charged when rubbed with a cloth. This is because it has…', 'gained electrons', ['lost electrons', 'gained protons', 'lost protons'], 'Only ==electrons== move. The rod ==gained electrons==.'),
+    MQ('Two positively charged balls are brought close together. They…', 'repel each other', ['attract each other', 'do nothing', 'become neutral'], '==Like charges repel==.'),
+    MQ('Which object can be charged by rubbing?', 'a plastic ruler', ['a copper wire held in the hand', 'an iron nail in the hand', 'a steel spoon in the hand'], 'An ==insulator== keeps the charge. Held metals let charge flow away.'),
+    MQ('The direction of an electric field at a point is the direction of the force on a…', 'positive charge', ['negative charge', 'neutron', 'neutral atom'], 'By definition, the field points the way a ==positive charge== would be pushed.'),
+    MQ('Electric field lines are closest together where the field is…', 'strongest', ['weakest', 'zero', 'uniform only'], 'Closer lines mean a ==stronger field==.'),
+    MQ('Why is an aircraft earthed during refuelling?', 'so that charge cannot build up and cause a spark', ['so that the fuel flows faster', 'to make the aircraft heavier', 'to keep the fuel cold'], 'A spark could ==ignite fuel vapour==. Earthing lets the charge flow away safely.'),
+    MQ('A charged rod picks up small pieces of uncharged paper. Why?', 'the charges in the paper are separated by the rod', ['the paper has become magnetic', 'the paper is heavier than the rod', 'the rod has made the paper hot'], 'This is ==induction==: the nearer charge on the paper is opposite, so it is attracted.')
+  ],
+  exam: [
+    { q: 'Describe how a plastic rod becomes positively charged when it is rubbed with a cloth.', m: 3,
+      p: ['The rod and cloth are ==rubbed together==', '==Electrons== are transferred from the rod to the cloth', 'The rod has ==lost electrons==, so it has more protons than electrons: ==positive=='] },
+    { q: 'State what is meant by an electric field. State the direction of the field lines around a negative charge.', m: 2,
+      p: ['A region where a ==charge experiences a force==', 'The lines point ==towards== the negative charge'] },
+    { q: 'A negatively charged sphere hangs from an insulating thread. A negatively charged rod is brought close to it. Describe and explain what happens to the sphere.', m: 3,
+      p: ['The sphere ==moves away== from the rod', 'Both have the ==same (negative) charge==', '==Like charges repel=='] },
+    { q: 'Explain how static charge could cause danger when an aircraft is refuelled, and how the danger is prevented.', m: 3,
+      p: ['Fuel flowing / friction builds up ==charge==', 'A ==spark== could ignite the fuel vapour', 'The aircraft is ==earthed== (joined to the ground by a conductor) so the charge flows away'] },
+    { q: 'A positively charged metal sphere has the same size and the same amount of charge as a negatively charged metal rod. They touch. Describe and explain what happens to the charge on the sphere.', m: 3, x: 1,
+      p: ['==Electrons== move from the rod to the sphere', 'The ==negative charge cancels the positive charge==', 'The sphere ends up ==neutral== (no overall charge)'] }
+  ]
+};
+
+CH.comps = {
+  code: 'Topic 4', name: 'Circuit components',
+  lede: 'Thermistors, LDRs, diodes, potential dividers, e.m.f. and electrical safety devices.',
+  learn: [
+    { h: 'Components and what they do', table: [['Component', 'What it does'], ['fixed resistor', 'limits the current'], ['variable resistor', 'changes the current by changing the resistance'], ['thermistor', 'resistance ==decreases== when the temperature rises'], ['LDR', 'resistance ==decreases== when the light gets brighter'], ['diode', 'lets current flow in ==one direction only=='], ['LED', 'a diode that ==gives out light=='], ['fuse', 'melts and ==breaks the circuit== if the current is too large']] },
+    { h: 'Potential divider', list: ['Two resistors in ==series== share the supply p.d. The current is the ==same== through both.', 'The ==bigger resistor== gets the ==bigger share== of the p.d.', '==Vout = V × R₂ ÷ (R₁ + R₂)== (Vout across R₂).', 'Replace one resistor with a ==thermistor== or ==LDR== and Vout changes with ==temperature== or ==light==.', 'Uses: automatic street lights (LDR), fire alarms and thermostats (thermistor).'], f: 'Vout = V × R₂ ÷ (R₁ + R₂)' },
+    { h: 'e.m.f. and p.d.', list: ['==e.m.f.== is the ==electrical work done by a source in moving unit charge round a complete circuit==. E = W ÷ Q.', '==p.d.== is the ==work done by unit charge== passing through a component. V = W ÷ Q.', 'Both are measured in ==volts (V)==. 1 V = 1 joule per coulomb.', 'Charge: Q = I × t. Energy: E = I × V × t.'], f: 'E = W ÷ Q     Q = I × t     E = I V t' },
+    { h: 'Safety devices', list: ['A ==fuse== goes in the ==live wire==. Choose a fuse rated ==just above== the normal current.', 'A ==trip switch== (circuit breaker) switches off when the current is too big. It can be ==reset== and acts ==faster== than a fuse.', 'The ==earth wire== carries current safely to the ground if the metal casing becomes live.', 'A ==double-insulated== appliance has a plastic casing, so it ==needs no earth wire==.'] }
+  ],
+  mistakes: ['Saying a thermistor’s resistance ==increases== when it gets hot. It decreases.', 'Putting the voltmeter in ==series== with the resistor.', 'Using ==kΩ== as if it were Ω in a potential divider. If both are in kΩ the ratio works without converting.', 'Saying the fuse goes in the ==neutral== or ==earth== wire. It goes in the live wire.', 'Saying a diode lets current flow ==both ways==.'],
+  diagrams: [
+    { svg: svgDivider, cap: 'A ==potential divider==: the supply p.d. is shared between R₁ and R₂ in proportion to their resistances.' },
+    { svg: svgSensors, cap: 'A ==thermistor== and an ==LDR==: the resistance ==decreases== as temperature or light increases.' }
+  ],
+  worked: [
+    W('A potential divider has a 6.0 V supply with R₁ = 2.0 kΩ and R₂ = 4.0 kΩ. Calculate Vout across R₂.', 'Use ==Vout = V × R₂ ÷ (R₁ + R₂)==.', 'If both resistances are in kΩ, the units cancel.', 'Vout = V × R₂ ÷ (R₁ + R₂)',
+      [['Write the formula', 'Vout = V × R₂ ÷ (R₁ + R₂)', ''], ['Substitute', 'Vout = 6.0 × 4.0 ÷ (2.0 + 4.0)', ''], ['Work out', 'Vout = 24 ÷ 6.0', ''], ['Answer with unit', 'Vout = 4.0 V', 'R₂ is the larger resistor, so it gets the larger share (4.0 V of 6.0 V).']],
+      [['V, R₁, R₂', '6.0 V, 2.0 kΩ, 4.0 kΩ', -1], ['R₁ + R₂', '6.0 kΩ', 1], ['Vout', '4.0 V', 3]]),
+    W('A thermistor and a fixed resistor are in series across a battery. A voltmeter is across the fixed resistor. The temperature rises. What happens to the voltmeter reading? Explain.', 'Follow the chain: ==resistance of the thermistor==, then the ==current==, then the ==p.d.==.', 'Give the chain in order.', 'Thermistor chain',
+      [['Thermistor', 'Its resistance decreases when the temperature rises', ''], ['Total resistance', 'The total resistance of the circuit decreases', ''], ['Current', 'The current increases (I = V ÷ R)', ''], ['Reading', 'The p.d. across the fixed resistor = I × R increases, so the reading goes up', 'The fixed resistor now gets a bigger share.']],
+      [['Thermistor R', 'decreases', 0], ['Total R', 'decreases', 1], ['Current', 'increases', 2], ['Reading', 'increases', 3]], true),
+    W('An LED is in series with a 330 Ω resistor and a 5.0 V supply. The p.d. across the LED is 2.0 V. Calculate the current.', 'The supply p.d. is ==shared==. Find the p.d. across the resistor first.', 'Voltages in series add up to the supply voltage.', 'V = I × R',
+      [['p.d. across the resistor', '5.0 − 2.0 = 3.0 V', 'The two p.d.s add up to 5.0 V.'], ['Write the formula', 'I = V ÷ R', ''], ['Substitute', 'I = 3.0 ÷ 330', ''], ['Answer with unit', 'I = 0.0091 A (9.1 mA)', '']],
+      [['Resistor p.d.', '3.0 V', 0], ['I', '0.0091 A', 3]]),
+    W('A device on a 230 V supply has a current of 2.0 A for 5.0 minutes. Calculate the charge and the energy transferred.', '==Q = I × t== and ==E = Q × V==.', 'Change minutes into seconds first.', 'Q = It, E = QV',
+      [['Time in seconds', 't = 5.0 × 60 = 300 s', ''], ['Charge', 'Q = I × t = 2.0 × 300 = 600 C', ''], ['Energy', 'E = Q × V = 600 × 230', ''], ['Answer with unit', 'E = 138 000 J', '= 1.4 × 10⁵ J to 2 s.f.']],
+      [['t', '300 s', 0], ['Q', '600 C', 1], ['E', '138 000 J', 3]]),
+    W('State the difference between e.m.f. and potential difference.', 'Say ==where== the work is done.', 'Both use work done per unit charge.', 'e.m.f. and p.d.',
+      [['e.m.f.', 'The electrical work done by the source on each unit of charge as it goes round the circuit', 'Energy is put into the charge.'], ['p.d.', 'The work done by each unit of charge as it passes through a component', 'Energy is taken out of the charge.'], ['Units', 'Both in volts: 1 V = 1 J per C', '']],
+      [['e.m.f.', 'source gives energy', 0], ['p.d.', 'component takes energy', 1], ['Units', 'volts', 2]], true)
+  ],
+  quiz: [
+    MQ('What happens to the resistance of a thermistor when its temperature rises?', 'it decreases', ['it increases', 'it stays the same', 'it becomes infinite'], 'A thermistor’s resistance ==decreases== as it gets hotter.'),
+    MQ('What happens to the resistance of an LDR in bright light?', 'it decreases', ['it increases', 'it stays the same', 'it becomes zero in the dark'], 'An LDR’s resistance ==decreases== as the light gets brighter.'),
+    MQ('A diode allows current to flow…', 'in one direction only', ['in both directions', 'only when it is hot', 'only when it is in the dark'], 'A ==diode== conducts in ==one direction== only.'),
+    MQ('Two equal resistors are in series with a 6.0 V supply. What is the p.d. across one of them?', '3.0 V', ['6.0 V', '12 V', '1.5 V'], 'Equal resistors share the p.d. equally: ==3.0 V== each.'),
+    MQ('What does a fuse do?', 'melts and breaks the circuit if the current is too large', ['increases the voltage', 'stores charge', 'stops current in the earth wire'], 'It ==melts== and ==breaks the circuit==.'),
+    MQ('A double-insulated appliance does not need…', 'an earth wire', ['a live wire', 'a neutral wire', 'a switch'], 'The ==plastic casing== cannot become live, so no earth wire is needed.'),
+    MQ('Which is an advantage of a trip switch over a fuse?', 'it can be reset after it trips', ['it never breaks the circuit', 'it is cheaper', 'it does not need a current'], 'A trip switch can be ==reset== and works faster.'),
+    MQ('The unit of e.m.f. is the…', 'volt', ['ampere', 'ohm', 'coulomb'], 'e.m.f. is measured in ==volts==.')
+  ],
+  exam: [
+    { q: 'Describe how the resistance of a thermistor changes with temperature. State one use of a thermistor.', m: 2,
+      p: ['The resistance ==decreases== as the temperature increases', 'Use: ==thermostat / fire alarm / temperature sensor== (any one)'] },
+    { q: 'A potential divider has a 12 V supply with R₁ = 8.0 kΩ and R₂ = 4.0 kΩ. Calculate the potential difference across R₂.', m: 3, x: 1,
+      p: ['Vout = ==V × R₂ ÷ (R₁ + R₂)==', '12 × 4.0 ÷ (8.0 + 4.0)', '==4.0 V=='] },
+    { q: 'State two advantages of using a trip switch instead of a fuse.', m: 2,
+      p: ['It can be ==reset== (a fuse must be replaced)', 'It ==operates faster== / switches off more quickly'] },
+    { q: 'An LED is connected in series with a 150 Ω resistor and a 4.5 V battery. The p.d. across the LED is 1.5 V. Calculate the current in the circuit.', m: 3,
+      p: ['p.d. across resistor = 4.5 − 1.5 = ==3.0 V==', 'I = ==V ÷ R== = 3.0 ÷ 150', '==0.020 A=='] },
+    { q: 'State what is meant by (a) e.m.f. and (b) potential difference.', m: 2, x: 1,
+      p: ['e.m.f. is the ==electrical work done by a source== in moving ==unit charge== round a complete circuit', 'p.d. is the ==work done by unit charge== in passing through a component'] }
+  ]
+};
+
+for (const k in MCX) CH[k].quiz.push(...MCX[k]);
+/* ---------- extra structured questions in the Cambridge style (original) ---------- */
+const EXTRA = {
+  meas: [
+    { q: 'Describe how to find a value for the average thickness of one sheet of paper using a metre rule.', m: 3,
+      p: ['Make a ==stack of many sheets== and measure the ==thickness of the stack==', '==Divide== the thickness of the stack by the ==number of sheets==', 'Using many sheets reduces the ==percentage error== (one sheet is too thin to measure)'] }
+  ],
+  motion: [
+    { q: 'A skier accelerates uniformly from rest to 8.0 m/s in 4.0 s, then moves at a constant 8.0 m/s for 8.0 s. Calculate the total distance travelled.', m: 3,
+      p: ['Distance = ==area under the speed–time graph==', 'First part: ½ × 4.0 × 8.0 = 16 m. Second part: 8.0 × 8.0 = 64 m', '==80 m=='] },
+    { q: 'A cyclist travels 600 m in 40 s, then 200 m in 20 s. Calculate the average speed for the whole journey.', m: 3,
+      p: ['Average speed = ==total distance ÷ total time==', '(600 + 200) ÷ (40 + 20) = 800 ÷ 60', '==13 m/s== (13.3)'] },
+    { q: 'A car accelerates uniformly from 12 m/s to 30 m/s at 1.5 m/s². Calculate the time taken.', m: 2, x: 1,
+      p: ['t = ==(v − u) ÷ a== = (30 − 12) ÷ 1.5', '==12 s=='] }
+  ],
+  waves: [
+    { q: 'In a ripple tank, 12 waves pass a point in 3.0 s. The wavelength is 0.040 m. Calculate the frequency and the wave speed.', m: 3,
+      p: ['f = 12 ÷ 3.0 = ==4.0 Hz==', 'v = ==f × λ==', '= 4.0 × 0.040 = ==0.16 m/s=='] }
+  ],
+  pressure: [
+    { q: 'A person of weight 600 N stands on two shoes. The area of each shoe in contact with the floor is 0.020 m². Calculate the pressure on the floor.', m: 3,
+      p: ['Total area = 2 × 0.020 = ==0.040 m²==', 'p = ==F ÷ A== = 600 ÷ 0.040', '==15 000 Pa== (15 kPa)'] }
+  ],
+  thermprop: [
+    { q: 'The specific latent heat of vaporisation of water is 2.3 × 10⁶ J/kg. Calculate the energy needed to change 0.20 kg of water at 100 °C into steam at 100 °C.', m: 3, x: 1,
+      p: ['E = ==m × L==', '0.20 × 2.3 × 10⁶', '==4.6 × 10⁵ J=='] }
+  ],
+  thermal: [
+    { q: 'A solar water heater has black pipes behind glass. Explain why the pipes are painted black and how the water is heated.', m: 3,
+      p: ['Black surfaces are ==good absorbers== of infrared radiation', 'The pipes ==absorb radiation== from the Sun and become hot', 'Thermal energy is ==conducted== from the pipes to the water'] },
+    { q: 'At the coast, a breeze blows from the sea towards the land during the day. Explain how the breeze forms.', m: 4,
+      p: ['The land heats up ==faster== than the sea', 'The air above the land is heated, ==expands== and becomes ==less dense==', 'The warm air ==rises==', 'Cooler, denser air from the sea moves in to replace it: a ==convection current=='] }
+  ],
+  energy: [
+    { q: 'A student lifts a box of mass 2.5 kg through a height of 1.2 m. The gravitational field strength is 9.8 N/kg. Calculate the work done against gravity.', m: 3,
+      p: ['W = ==m × g × h==', '2.5 × 9.8 × 1.2', '==29 J== (29.4)'] },
+    { q: 'A motor has an input power of 400 W and a useful output power of 300 W. Calculate the efficiency of the motor. State what happens to the wasted energy.', m: 3,
+      p: ['efficiency = ==useful output ÷ input== × 100', '300 ÷ 400 × 100 = ==75%==', 'The wasted energy is transferred as ==thermal energy== to the surroundings'] },
+    { q: 'A ball is thrown vertically upwards. Describe the energy transfers as it rises to its highest point. Ignore air resistance.', m: 3,
+      p: ['The ==kinetic energy== store ==decreases==', 'The ==gravitational potential energy== store ==increases==', 'The energy is ==transferred by the force of gravity== (mechanical working); the total energy stays constant'] },
+    { q: 'State two disadvantages of generating electricity by burning fossil fuels.', m: 2,
+      p: ['Produces ==carbon dioxide==, which causes ==global warming==', 'Produces ==sulfur dioxide==, which causes ==acid rain==', 'Fossil fuels are ==non-renewable== and will run out (any two)'] },
+    { q: 'Describe how a hydroelectric power station generates electricity.', m: 4,
+      p: ['Water is stored at a ==height== (gravitational potential energy store)', 'The water ==flows down== through pipes', 'The moving water turns a ==turbine==', 'The turbine turns a ==generator== which produces electricity'] }
+  ],
+  light: [
+    { q: 'Describe an experiment to show that the angle of incidence equals the angle of reflection at a plane mirror.', m: 4,
+      p: ['Use a ==ray box== (or pins) and a ==plane mirror==; draw a ==normal== on the paper', 'Mark the ==incident ray== and the ==reflected ray== on the paper', 'Measure both angles from the normal with a ==protractor==', 'Repeat for different angles: the angles are ==equal=='] },
+    { q: 'A ray of light enters a glass block. The angle of incidence is 40° and the angle of refraction is 25°. Calculate the refractive index of the glass.', m: 3, x: 1,
+      p: ['n = ==sin i ÷ sin r==', 'sin 40° ÷ sin 25° = 0.643 ÷ 0.423', '==1.5=='] },
+    { q: 'State what is meant by the critical angle. Give one use of total internal reflection.', m: 3,
+      p: ['The critical angle is the ==angle of incidence in the denser material== for which the angle of refraction is ==90°==', 'For larger angles the light is ==totally internally reflected==', 'Use: ==optical fibres== / prisms in binoculars / reflectors (any one)'] },
+    { q: 'A converging lens focuses light from a distant object. Name the point where the rays meet and the distance from the lens to this point.', m: 2,
+      p: ['The point is the ==principal focus== (focal point)', 'The distance is the ==focal length=='] },
+    { q: 'Describe the image formed by a plane mirror.', m: 3,
+      p: ['The image is ==virtual== (cannot be put on a screen)', 'The image is the ==same size== as the object', 'It is as far ==behind the mirror== as the object is in front', '==Laterally inverted== (left and right swapped)'] }
+  ],
+  emspec: [
+    { q: 'A microwave oven uses waves of frequency 2.4 × 10⁹ Hz. The speed of electromagnetic waves is 3.0 × 10⁸ m/s. Calculate the wavelength.', m: 3,
+      p: ['λ = ==v ÷ f==', '3.0 × 10⁸ ÷ 2.4 × 10⁹', '==0.13 m== (0.125)'] },
+    { q: 'State one use and one danger of ultraviolet radiation.', m: 2,
+      p: ['Use: ==sterilising water== / detecting forged banknotes / sun tanning lamps (any one)', 'Danger: ==skin cancer== / eye damage (any one)'] },
+    { q: 'State two properties that all electromagnetic waves have in common.', m: 2,
+      p: ['They are ==transverse== waves', 'They travel at the ==same speed in a vacuum== (3.0 × 10⁸ m/s)', 'They ==transfer energy== / can travel through a vacuum (any two)'] },
+    { q: 'Explain why gamma rays can be used to sterilise medical equipment but must be handled with care.', m: 3,
+      p: ['Gamma rays ==kill bacteria==', 'They are ==ionising== (high energy)', 'They can ==damage living cells== / cause cancer, so sources are shielded'] },
+    { q: 'A radio station broadcasts waves of wavelength 1500 m. The speed is 3.0 × 10⁸ m/s. Calculate the frequency.', m: 3,
+      p: ['f = ==v ÷ λ==', '3.0 × 10⁸ ÷ 1500', '==2.0 × 10⁵ Hz=='] }
+  ],
+  circuits: [
+    { q: 'A lamp is rated 12 V, 24 W. Calculate the current in the lamp and the resistance of the lamp when it is working normally.', m: 4,
+      p: ['I = ==P ÷ V== = 24 ÷ 12', '==2.0 A==', 'R = ==V ÷ I== = 12 ÷ 2.0', '==6.0 Ω=='] },
+    { q: 'A 4.0 Ω resistor and a 12 Ω resistor are connected in parallel to a 6.0 V battery. Calculate the combined resistance and the total current from the battery.', m: 4,
+      p: ['1 ÷ R = 1 ÷ 4.0 + 1 ÷ 12 = ==4 ÷ 12==', 'R = ==3.0 Ω==', 'I = V ÷ R = 6.0 ÷ 3.0', '==2.0 A=='] },
+    { q: 'Describe how to measure the resistance of a resistor in the laboratory.', m: 4,
+      p: ['Connect an ==ammeter in series== with the resistor', 'Connect a ==voltmeter in parallel== across the resistor', 'Read the ==current== and the ==p.d.==', 'Calculate ==R = V ÷ I== (repeat and take an average)'] },
+    { q: 'State three safety features of a mains-powered appliance.', m: 3,
+      p: ['A ==fuse== in the live wire', 'An ==earth wire== connected to the metal casing', 'An ==insulated== cable or casing / a ==switch in the live wire== (any three)'] }
+  ],
+  magnet: [
+    { q: 'Describe how to plot the magnetic field pattern around a bar magnet using a plotting compass.', m: 3,
+      p: ['Place the magnet on paper and put the ==plotting compass== near one pole', 'Mark the ==ends of the needle== with pencil dots, then move the compass so it starts at the last dot', 'Join the dots to make a ==field line== and add ==arrows from N to S=='] },
+    { q: 'Explain why a transformer does not work with a direct current (d.c.) supply.', m: 3,
+      p: ['A d.c. supply gives a ==constant current== in the primary coil', 'The magnetic field in the core is ==not changing==', 'So ==no e.m.f. is induced== in the secondary coil'] },
+    { q: 'State the difference between a permanent magnet and a temporary magnet. Name a suitable material for each.', m: 3,
+      p: ['A permanent magnet ==keeps its magnetism==; a temporary magnet ==loses its magnetism== when the field is removed', 'Permanent: ==steel==', 'Temporary: ==soft iron=='] },
+    { q: 'State two ways to increase the force on the coil of a d.c. motor.', m: 2,
+      p: ['Increase the ==current==', 'Use a ==stronger magnet==', 'Increase the ==number of turns== on the coil (any two)'] },
+    { q: 'A transformer steps down 230 V to 12 V. The primary coil has 1150 turns. Calculate the number of turns on the secondary coil.', m: 3,
+      p: ['Vp ÷ Vs = ==Np ÷ Ns==', 'Ns = 1150 × 12 ÷ 230', '==60 turns=='] }
+  ],
+  nuclear: [
+    { q: 'An atom of sodium has 11 protons and 12 neutrons. State its proton number and its nucleon number.', m: 2,
+      p: ['proton number = ==11==', 'nucleon number = 11 + 12 = ==23=='] },
+    { q: 'Describe the results of the alpha-particle scattering experiment and what they show about the atom.', m: 3,
+      p: ['==Most== alpha particles passed straight through: the atom is ==mostly empty space==', '==A few== were deflected through large angles: the nucleus is ==positively charged==', '==Very few== bounced back: the nucleus is ==small and dense=='] },
+    { q: 'A radioactive isotope has a half-life of 20 minutes. The count rate from a sample is 640 counts/minute. Calculate the count rate after 1 hour. Ignore background radiation.', m: 3,
+      p: ['60 minutes is ==3 half-lives==', '640 → 320 → 160 → 80', '==80 counts/minute=='] },
+    { q: 'State two safety precautions when using a radioactive source.', m: 2,
+      p: ['Handle with ==tongs== (do not touch)', 'Keep it in a ==lead-lined box== when not in use', 'Keep it ==far from the body== / point it away / limit the time of use (any two)'] },
+    { q: 'Radium-226 has 88 protons. It decays by emitting an alpha particle to form radon. State the nucleon number and the proton number of the radon nucleus.', m: 2,
+      p: ['nucleon number = 226 − 4 = ==222==', 'proton number = 88 − 2 = ==86=='] },
+    { q: 'Explain why a source of beta radiation is used to monitor the thickness of paper in a factory.', m: 3,
+      p: ['Beta radiation is ==partly absorbed== by the paper', 'The ==count rate== at the detector depends on the thickness', 'Alpha would be ==all absorbed== and gamma would ==pass straight through== (so they are not suitable)'] }
+  ],
+  space: [
+    { q: 'Name the force that keeps the Moon in orbit around the Earth. State the time the Moon takes for one orbit.', m: 2,
+      p: ['==Gravity== (gravitational force)', 'About ==28 days== (one month)'] },
+    { q: 'Describe the life cycle of a star that is much more massive than the Sun.', m: 4,
+      p: ['A ==nebula== is pulled together by gravity to form a ==protostar==', 'Fusion starts: the star is stable on the ==main sequence==', 'It becomes a ==red supergiant==, then explodes as a ==supernova==', 'It leaves a ==neutron star== or a ==black hole=='] },
+    { q: 'Light takes 1.3 s to travel from the Moon to the Earth. The speed of light is 3.0 × 10⁸ m/s. Calculate the distance from the Earth to the Moon.', m: 3,
+      p: ['distance = ==speed × time==', '3.0 × 10⁸ × 1.3', '==3.9 × 10⁸ m=='] },
+    { q: 'Describe the evidence that supports the Big Bang theory.', m: 4,
+      p: ['Light from distant galaxies is ==red-shifted== (longer wavelength)', 'So galaxies are ==moving away== from us and the Universe is ==expanding==', 'The ==cosmic microwave background radiation== is observed from all directions', 'It is ==left over from the early hot Universe== (the Big Bang)'] },
+    { q: 'A planet orbits the Sun at an average distance of 7.8 × 10¹¹ m. It takes 3.7 × 10⁸ s for one orbit. Calculate its orbital speed.', m: 3,
+      p: ['v = ==2πr ÷ T==', '2 × π × 7.8 × 10¹¹ ÷ 3.7 × 10⁸', '==1.3 × 10⁴ m/s=='] }
+  ]
+};
+for (const k in EXTRA) CH[k].exam.push(...EXTRA[k]);
+
+/* ---------- multiple-choice papers in the Cambridge 0625 pattern ---------- */
+/* Measured from the May/June 2026 papers: Paper 1 (Core) and Paper 2 (Extended), 40 questions, 40 marks, 45 minutes, one mark each.
+   Questions follow the syllabus order: motion, forces and energy; thermal physics; waves; electricity and magnetism; nuclear physics; space physics. */
+const MC_TOPICS = [
+  { k: 'meas', n: 'Measurement', core: 1, ext: 1 }, { k: 'motion', n: 'Motion', core: 2, ext: 2 }, { k: 'forces', n: 'Forces', core: 3, ext: 3 }, { k: 'density', n: 'Density', core: 1, ext: 0 },
+  { k: 'momentum', n: 'Momentum', core: 0, ext: 1 }, { k: 'energy', n: 'Energy, work and power', core: 2, ext: 1 }, { k: 'pressure', n: 'Pressure', core: 1, ext: 1 },
+  { k: 'particles', n: 'Particles and gases', core: 2, ext: 3 }, { k: 'thermprop', n: 'Thermal properties', core: 2, ext: 1 }, { k: 'thermal', n: 'Thermal energy transfer', core: 3, ext: 3 },
+  { k: 'waves', n: 'Waves', core: 2, ext: 2 }, { k: 'light', n: 'Light', core: 2, ext: 2 }, { k: 'emspec', n: 'Electromagnetic spectrum', core: 3, ext: 2 }, { k: 'sound', n: 'Sound', core: 1, ext: 2 },
+  { k: 'magnet', n: 'Magnetism', core: 3, ext: 3 }, { k: 'static', n: 'Static electricity', core: 1, ext: 1 }, { k: 'circuits', n: 'Electric circuits', core: 4, ext: 3 }, { k: 'comps', n: 'Circuit components', core: 2, ext: 2 },
+  { k: 'nuclear', n: 'Radioactivity', core: 3, ext: 5 }, { k: 'space', n: 'Space physics', core: 2, ext: 2 }
+];
+const MC_PAPERS = { core: { name: 'Paper 1', tier: 'Core', mins: 45 }, ext: { name: 'Paper 2', tier: 'Extended', mins: 45 } };
+const MC_EXT_CH = ['momentum'];
+const MC_POOL = {}; MC_TOPICS.forEach(t => { MC_POOL[t.k] = CH[t.k].quiz.map((q, i) => ({ k: t.k, i, q, ext: !!q.x || MC_EXT_CH.includes(t.k) })); });
+function buildMC(type){ let q; for (let i = 0; i < 12; i++) { q = buildMCOnce(type); if (q.length === 40 && new Set(q.map(x => x.q)).size === 40) break; } return q; }
+function buildMCOnce(type){
+  const tier = MC_PAPERS[type].tier, seen = store.mcseen = store.mcseen || {}, out = [], spare = [];
+  MC_TOPICS.forEach(t => { const n = tier === 'Core' ? t.core : t.ext; const pool = (MC_POOL[t.k] || []).filter(x => tier === 'Extended' || !x.ext)
+      .map(x => ({ x, s: (seen[x.k + '-' + x.i] || 0) * 2 - (tier === 'Extended' && x.ext ? 1 : 0) + Math.random() * 0.9 })).sort((a, b) => a.s - b.s).map(y => y.x);
+    pool.slice(0, n).forEach(x => out.push({ x, t: t.k })); pool.slice(n).forEach(x => spare.push({ x, t: t.k })); const short = n - Math.min(n, pool.length); for (let j = 0; j < short; j++) out.push({ x: null, t: t.k }); });
+  const used = new Set(out.filter(o => o.x).map(o => o.x.k + '-' + o.x.i)); const fill = shuffle(spare.filter(s => !used.has(s.x.k + '-' + s.x.i)));
+  const items = out.map(o => { const e = o.x || (fill.length ? fill.shift().x : null); return e && { e, t: o.t }; }).filter(Boolean);
+  return items.map(({ e, t }) => { const q = e.q, right = q.o[q.a], o = shuffle(q.o); seen[e.k + '-' + e.i] = (seen[e.k + '-' + e.i] || 0) + 1; return { q: q.q, o, a: o.indexOf(right), w: q.w, ch: e.k, t }; });
+}
+let MCQ = [], mcTimer = null, mcLeft = 45 * 60;
+function drawMC(type){
+  type = MC_PAPERS[type] ? type : (MC_PAPERS[store.mctype] ? store.mctype : 'core');
+  MCQ = buildMC(type); store.mctype = type; store.mcq = MCQ; store.mcans = MCQ.map(() => null); store.mcdone = false; mcLeft = MC_PAPERS[type].mins * 60; save();
+}
+if (Array.isArray(store.mcq) && store.mcq.length === 40 && MC_PAPERS[store.mctype] && Array.isArray(store.mcans)) MCQ = store.mcq; else drawMC(store.mctype || 'core');
+function renderMC(){
+  const P = MC_PAPERS[store.mctype], types = Object.keys(MC_PAPERS).map(k => `<button class="btn ${k === store.mctype ? 'primary' : 'ghost'}" data-mctype="${k}">${MC_PAPERS[k].name} · ${MC_PAPERS[k].tier}</button>`).join('');
+  const done = store.mcdone, score = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0), answered = store.mcans.filter(x => x != null).length;
+  const byTopic = MC_TOPICS.map(t => { const idx = MCQ.map((q, i) => [q, i]).filter(([q]) => q.t === t.k); return [t.n, idx.filter(([q, i]) => store.mcans[i] === q.a).length, idx.length]; }).filter(r => r[2]);
+  const cards = MCQ.map((q, i) => `<div class="card" data-mcq="${i}"><span class="eyebrow">Question ${i + 1}</span><p class="q">${q.q}</p><div class="opts">${q.o.map((o, j) => `<button class="opt${store.mcans[i] === j ? ' sel' : ''}${done && j === q.a ? ' right' : ''}${done && store.mcans[i] === j && j !== q.a ? ' wrong' : ''}" data-mco="${j}" ${done ? 'disabled' : ''}><b>${'ABCD'[j]}</b> ${o}</button>`).join('')}</div>${done ? `<p class="why">${store.mcans[i] == null ? 'Not answered. ' : ''}${fmt(q.w)}</p>` : ''}</div>`).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0625 pattern</span><h2>Multiple-choice paper</h2>
+    <p class="lede">${P.name} style, ${P.tier}: 40 questions, 40 marks, ${P.mins} minutes. The questions follow the syllabus order, as in the real paper.</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Core: simpler recall and short calculations. Extended: more calculations and explanations. Ask your teacher which tier you sit.</p></div>
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>There are ==forty questions==. Answer all of them.</li>
+      <li>Each question has ==four possible answers A, B, C and D==. Choose the one you think is correct.</li>
+      <li>Each correct answer scores ==one mark==. No marks are taken off for a wrong answer.</li>
+      <li>You ==may use a calculator==. Rough working goes on paper.</li>
+      <li>Take the weight of 1.0 kg to be ==9.8 N== (acceleration of free fall = 9.8 m/s²).</li></ul></div>
+    <div class="card"><div class="scorebar"><div class="timer" id="mclock">${fmtTime(mcLeft)}</div><div class="big-score">${done ? score + '/40' : answered + '/40 answered'}</div></div>
+      <div class="row"><button class="btn primary" id="mcgo">${mcTimer ? 'Pause' : 'Start timer'}</button><button class="btn ghost" id="mcmark">${done ? 'Marked' : 'Finish and mark my paper'}</button><button class="btn ghost" id="mcnew">New paper (different questions)</button></div></div>
+    ${done ? `<div class="card"><h3>Your result: ${score} out of 40</h3><p class="note">${score >= 32 ? 'Excellent.' : score >= 24 ? 'Good. Read the explanations for the ones you missed.' : 'Keep practising. Read the explanations, then revise the chapters shown below.'}</p>${byTopic.map(r => `<div class="prog"><div class="pl"><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div><div class="bar"><i style="width:${Math.round(100 * r[1] / r[2])}%"></i></div></div>`).join('')}</div>` : ''}
+    ${cards}</div>`.replace(/==(.+?)==/g, '<mark class="kw">$1</mark>');
+}
+function bindMC(){
+  const v = document.getElementById('view');
+  document.getElementById('mcgo').onclick = () => {
+    if (mcTimer) { clearInterval(mcTimer); mcTimer = null; document.getElementById('mcgo').textContent = 'Resume'; return; }
+    document.getElementById('mcgo').textContent = 'Pause';
+    mcTimer = setInterval(() => { mcLeft = Math.max(0, mcLeft - 1); const c = document.getElementById('mclock'); if (c) { c.textContent = mcLeft ? fmtTime(mcLeft) : 'Time up'; c.classList.toggle('low', mcLeft < 300); } if (!mcLeft) { clearInterval(mcTimer); mcTimer = null; } }, 1000);
+  };
+  document.getElementById('mcmark').onclick = () => { if (store.mcdone) return; clearInterval(mcTimer); mcTimer = null; store.mcdone = true; const sc = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0); store.mcbest = Math.max(store.mcbest || 0, sc); save(); render(); window.scrollTo(0, 0); };
+  document.getElementById('mcnew').onclick = () => { clearInterval(mcTimer); mcTimer = null; drawMC(store.mctype); render(); window.scrollTo(0, 0); };
+  v.querySelectorAll('[data-mctype]').forEach(b => b.onclick = () => { clearInterval(mcTimer); mcTimer = null; drawMC(b.dataset.mctype); render(); });
+  v.querySelectorAll('[data-mco]').forEach(b => b.onclick = () => { if (store.mcdone) return; const i = +b.closest('[data-mcq]').dataset.mcq, j = +b.dataset.mco; store.mcans[i] = store.mcans[i] === j ? null : j; save();
+    b.closest('.opts').querySelectorAll('.opt').forEach((x, k) => x.classList.toggle('sel', store.mcans[i] === k)); document.querySelector('.big-score').textContent = store.mcans.filter(x => x != null).length + '/40 answered'; });
+}
+
+/* ---------- structured theory papers in the Cambridge 0625 pattern ---------- */
+/* Measured from the May/June 2026 papers: Paper 3 (Core) and Paper 4 (Extended), 80 marks, 1 hour 15 minutes, answer all questions.
+   Core has 11 questions and Extended has 10. Each question is 4 to 12 marks with parts (a), (b), (c), and the topics follow the syllabus order. */
+const TH_PAPERS = { core: { name: 'Paper 3', tier: 'Core', title: 'Theory (Core)', mins: 75, blocks: 11 }, ext: { name: 'Paper 4', tier: 'Extended', title: 'Theory (Extended)', mins: 75, blocks: 10 } };
+const TH_CLUSTERS = [['meas', 'motion'], ['density', 'forces', 'momentum'], ['energy'], ['pressure', 'particles', 'thermprop'], ['thermal'], ['waves', 'sound'], ['light'], ['emspec'], ['static', 'comps'], ['circuits'], ['magnet'], ['nuclear'], ['space']];
+function buildTheory(type){
+  const P = TH_PAPERS[type], ext = type === 'ext', seen = store.thseen = store.thseen || {};
+  const pools = TH_CLUSTERS.map(ks => { const p = []; ks.forEach(k => CH[k].exam.forEach((q, i) => { if (ext || (!q.x && !MC_EXT_CH.includes(k))) p.push({ k, i, m: q.m }); })); return p; });
+  const a = 80 / P.blocks / 3.1; let best = null;
+  for (let n = 0; n < 40000 && !best; n++) {
+    const keep = shuffle(pools.map((_, i) => i).filter(i => pools[i].length)).slice(0, P.blocks).sort((x, y) => x - y);
+    let total = 0, ok = true; const blocks = [];
+    for (const ci of keep) {
+      let c = Math.floor(a) + (Math.random() < a - Math.floor(a) ? 1 : 0); if (Math.random() < 0.15) c += Math.random() < 0.5 ? -1 : 1; c = Math.max(1, Math.min(4, c, pools[ci].length));
+      const picked = pools[ci].map(x => ({ x, s: (seen[x.k + '-' + x.i] || 0) * 2 + Math.random() * 4 })).sort((p, q) => p.s - q.s).slice(0, c).map(y => y.x).sort((p, q) => p.m - q.m);
+      const bm = picked.reduce((s, x) => s + x.m, 0); if (bm < 4 || bm > 12) { ok = false; break; } total += bm; blocks.push(picked);
+    }
+    if (ok && total === 80) best = blocks;
+  }
+  const parts = []; (best || []).forEach((b, bi) => { const qm = b.reduce((s, x) => s + x.m, 0); b.forEach((x, pi) => { seen[x.k + '-' + x.i] = (seen[x.k + '-' + x.i] || 0) + 1; parts.push([x.k, x.i, bi + 1, b.length > 1 ? 'abcd'[pi] : '', qm]); }); });
+  return parts;
+}
+let THQ = [];
+const thRebuild = parts => parts.map(([k, i, qn, lab, qm]) => Object.assign({}, CH[k].exam[i], { ch: k, qn, lab, qm, lbl: qn + (lab ? ' (' + lab + ')' : '') }));
+function drawTheory(type){
+  type = TH_PAPERS[type] ? type : (TH_PAPERS[store.thtype] ? store.thtype : 'core');
+  const parts = buildTheory(type); store.thtype = type; store.thq = parts; THQ = thRebuild(parts); left = TH_PAPERS[type].mins * 60;
+  Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save();
+}
+(function(){ if (Array.isArray(store.thq) && TH_PAPERS[store.thtype] && store.thq.length && store.thq.every(([k, i]) => CH[k] && CH[k].exam[i])) THQ = thRebuild(store.thq); })();
+
 
 /* ---------- state ---------- */
-const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['waves','Topic 3','Waves'],['light','Topic 3','Light'],['emspec','Topic 3','EM spectrum'],['circuits','Topic 4','Circuits'],['magnet','Topic 4','Magnetism'],['meas','Topic 1','Measurement'],['momentum','Topic 1','Momentum'],['thermprop','Topic 2','Thermal props'],['nuclear','Topic 5','Radioactivity'],['space','Topic 6','Space'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['density','Ch 9','Density'],['thermal','Ch 10','Thermal'],['sound','Ch 11','Sound'],['motion','Topic 1','Motion'],['forces','Topic 1','Forces'],['energy','Topic 1','Energy'],['pressure','Topic 1','Pressure'],['particles','Topic 2','Particles'],['waves','Topic 3','Waves'],['light','Topic 3','Light'],['emspec','Topic 3','EM spectrum'],['circuits','Topic 4','Circuits'],['static','Topic 4','Static electricity'],['comps','Topic 4','Components'],['magnet','Topic 4','Magnetism'],['meas','Topic 1','Measurement'],['momentum','Topic 1','Momentum'],['thermprop','Topic 2','Thermal props'],['nuclear','Topic 5','Radioactivity'],['space','Topic 6','Space'],['mc','','MC paper'],['mock','','Theory paper']];
 let cur = 'start'; let sub = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1691,12 +2246,13 @@ function render(){
   const v = document.getElementById('view');
   if (cur === 'start') v.innerHTML = renderStart();
   else if (cur === 'mock') v.innerHTML = renderMock();
+  else if (cur === 'mc') v.innerHTML = renderMC();
   else v.innerHTML = renderChapter(cur);
   bindView();
 }
 
 function renderStart(){
-  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles','waves','light','emspec','circuits','magnet','meas','momentum','thermprop','nuclear','space'].map(k => {
+  const rows = ['density','thermal','sound','motion','forces','energy','pressure','particles','waves','light','emspec','circuits','static','comps','magnet','meas','momentum','thermprop','nuclear','space'].map(k => {
     const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz best ${qb}/${qt}</span></div>
       <div class="bar"><i style="width:${Math.round(100*qb/qt)}%"></i></div>
@@ -1704,7 +2260,7 @@ function renderStart(){
       <div class="bar"><i style="width:${Math.round(100*g/t)}%;background:var(--good)"></i></div></div>`;
   }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Physics: the whole syllabus</h2>
-  <p class="lede">The Term 1 chapters (Density, Thermal energy transfer, Sound) are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">The Term 1 chapters (Density, Thermal energy transfer, Sound) are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the multiple-choice paper and the theory paper.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each chapter</h3>
     <div class="plan">
@@ -1852,7 +2408,7 @@ function renderChapter(k){
 function examCard(key, q, i){
   const ticks = store.ticks[key] || [];
   const open = store.ticks['open-'+key];
-  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${i+1}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
+  return `<div class="card" data-exam="${key}" data-max="${q.m}"><div class="qhead"><span class="eyebrow">Question ${q.lbl || (i+1)}</span><span class="marks">[${q.m} mark${q.m>1?'s':''}]</span></div>
     <p class="q">${q.q}</p>
     <div class="row"><button class="btn primary" data-ms>${open?'Hide mark scheme':'Show mark scheme'}</button><span class="got">${ticks.length?Math.min(ticks.length,q.m)+'/'+q.m:''}</span></div>
     <div class="ms" ${open?'':'hidden'}><p class="ms-intro">Tap each point you included${q.p.length>q.m?` (any ${q.m} of these ${q.p.length} points)`:''}:</p>
@@ -1866,18 +2422,27 @@ function renderQuiz(k){
       <div class="opts">${q.o.map((o,j) => `<button class="opt" data-o="${j}">${o}</button>`).join('')}</div><p class="why" hidden>${fmt(q.w)}</p></div>`).join('');
 }
 
-/* mock */
-let timer = null, left = 35*60;
+/* theory paper */
+let timer = null, left = 75*60;
 function renderMock(){
-  const list = MOCK.map(([k,i]) => CH[k].exam[i]);
-  const [g,t] = examScore('mock', list);
-  return `<div class="chhead fadein"><span class="eyebrow">All three chapters</span><h2>Mini mock</h2>
-    <p class="lede">${t} marks of structured questions, like your school paper. Set the timer, answer on paper, then mark yourself with the mark schemes.</p></div>
+  if (!THQ.length) drawTheory(store.thtype || 'core');
+  const P = TH_PAPERS[store.thtype], list = THQ, [g,t] = examScore('mock', list), perMin = (P.mins / t).toFixed(2);
+  const types = Object.keys(TH_PAPERS).map(k => `<button class="btn ${k === store.thtype ? 'primary' : 'ghost'}" data-ptype="${k}">${TH_PAPERS[k].name} · ${TH_PAPERS[k].tier}</button>`).join('');
+  let last = 0; const cards = list.map((q, i) => { let h = ''; if (q.qn !== last) { last = q.qn; const names = [...new Set(list.filter(x => x.qn === q.qn).map(x => CH[x.ch].name))].join(', '); h = `<h3 class="qgroup">Question ${q.qn} <span class="pm">[${q.qm} marks]</span><small>${names}</small></h3>`; } return h + examCard('mock-' + i, q, i); }).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0625 pattern</span><h2>Theory paper</h2>
+    <p class="lede">${P.name} style, ${P.title}: ${t} marks, ${P.mins} minutes, ${list[list.length-1].qn} questions with parts, in the order of the syllabus, like the real paper.</p></div>
     <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Core questions are mostly short recall and simple calculations. Extended adds harder calculations and explanations. Ask your teacher which tier you sit.</p></div>
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>Time allowed: ==1 hour 15 minutes==. Total: ==${t} marks==.</li>
+      <li>Answer ==all== the questions on paper. The marks for each part are shown in brackets.</li>
+      <li>You ==may use a calculator==. ==Show all your working== and use the ==correct units==.</li>
+      <li>Take the weight of 1.0 kg to be ==9.8 N== (acceleration of free fall = 9.8 m/s²).</li>
+      <li>That is about ${perMin} minutes per mark.</li></ul></div>
     <div class="card"><div class="scorebar"><div class="timer" id="clock">${fmtTime(left)}</div><div class="big-score" id="exscore">${g}/${t}</div></div>
-      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New mock (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div>
-      <p class="note">35 minutes. About 1 minute per mark, plus time to check.</p></div>
-    ${list.map((q,i) => examCard('mock-'+i, q, i)).join('')}</div>`;
+      <div class="row"><button class="btn primary" id="tgo">${timer?'Pause':'Start timer'}</button><button class="btn ghost" id="treset">Reset timer</button><button class="btn ghost" id="mnew">New paper (different questions)</button><button class="btn ghost" id="mclear">Clear my marks</button></div></div>
+    ${cards}</div>`.replace(/==(.+?)==/g,'<mark class="kw">$1</mark>');
 }
 const fmtTime = s => String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
 
@@ -1886,7 +2451,8 @@ let quizScore = 0;
 function bindView(){
   const v = document.getElementById('view');
   quizScore = 0;
-  if (cur !== 'start' && cur !== 'mock' && sub === 'drill') newDrill();
+  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && sub === 'drill') newDrill();
+  if (cur === 'mc') bindMC();
   if (cur === 'mock') {
     document.getElementById('tgo').onclick = () => {
       if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }
@@ -1895,8 +2461,9 @@ function bindView(){
         if (c) { c.textContent = left ? fmtTime(left) : 'Time up'; c.classList.toggle('low', left < 300); }
         if (!left) { clearInterval(timer); timer = null; } }, 1000);
     };
-    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = 35*60; render(); };
-    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); drawMock(); render(); };
+    document.getElementById('treset').onclick = () => { clearInterval(timer); timer = null; left = TH_PAPERS[store.thtype].mins*60; render(); };
+    document.getElementById('mnew').onclick = () => { clearInterval(timer); timer = null; drawTheory(store.thtype); render(); };
+    document.getElementById('view').querySelectorAll('[data-ptype]').forEach(b => b.onclick = () => { clearInterval(timer); timer = null; drawTheory(b.dataset.ptype); render(); });
     document.getElementById('mclear').onclick = () => { Object.keys(store.ticks).forEach(k => { if (k.includes('mock-')) delete store.ticks[k]; }); save(); render(); };
   }
 }
@@ -1939,7 +2506,7 @@ document.getElementById('view').addEventListener('click', e => {
       store.ticks[key] = arr; save();
       pt.setAttribute('aria-pressed', arr.includes(j));
       ex.querySelector('.got').textContent = arr.length ? Math.min(arr.length, max) + '/' + max : '';
-      const list = cur === 'mock' ? MOCK.map(([k,i]) => CH[k].exam[i]) : CH[cur].exam;
+      const list = cur === 'mock' ? THQ : CH[cur].exam;
       const [g,tt] = examScore(cur === 'mock' ? 'mock' : cur, list);
       const sc = document.getElementById('exscore'); if (sc) sc.textContent = g + '/' + tt;
     }

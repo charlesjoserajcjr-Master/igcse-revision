@@ -87,3 +87,14 @@ Still to do for Chemistry: the question pools are thin for some topics (states o
 
 ## Term 1 School mock (3 Oct 2026, user-approved exception to the freeze)
 `physics.html`, `chemistry.html`, `cs.html`: the Mini mock became a **School mock** following the school's own paper format, not Cambridge's. `MODES` holds marks and minutes. Physics and Chemistry: 'Your share of the Science paper' (33 marks, 30 min, drawn so the total is exact) or 'Every question' (Physics 48 marks / 42 min, Chemistry 76 / 68), split into Section A (questions of 3 marks or fewer) and Section B. CS: all 25 questions = exactly 80 marks, 120 min; New mock changes the order. Stored in `store.smock`. The exact Paper 1 / Paper 2 layout of the school paper is not known; refine if a sample paper is shared.
+
+
+## Physics papers and the Cambridge 0625 pattern (3 Oct 2026)
+The user shared 55 past papers in a Drive folder named QUESTION PAPERS (Physics 0625, Chemistry 0620, Biology 0610, CS 0478). They are copyrighted and are read through the Drive connector only; none are stored in the repo. Order of work: Physics, then Biology, then the Chemistry theory mock.
+
+Measured from Physics May/June 2026 papers 11, 21, 31 and 41:
+- **Paper 1 (Core) and Paper 2 (Extended)**: multiple choice, 40 questions, 40 marks, 45 minutes, syllabus order (measurement, motion, forces, density, energy, pressure; particles and thermal; waves and light; magnetism and electricity; radioactivity; space). Core 10/7/8/10/3/2 questions per area; Extended 9/7/8/9/5/2.
+- **Paper 3 (Core) and Paper 4 (Extended)**: structured theory, 80 marks, 1 h 15. Core has 11 questions, Extended 10, each 4 to 12 marks with parts, in syllabus order. g = 9.8 N/kg is stated on the paper.
+- `physics-year.html` now has an **MC paper** tab (`MC_TOPICS`, `buildMC`, `renderMC`, ported from `chemistry-year.html`; 20 topics, about 290 questions in the pool; items flagged `x:1` and the `momentum` chapter are Extended-only) and a **Theory paper** tab (`TH_PAPERS`, `TH_CLUSTERS`, `buildTheory`, `drawTheory`) that assembles 80 marks from the exam banks, grouping 1 to 4 questions into a numbered question of 4 to 12 marks. About 45 new exam questions (`EXTRA`) were added.
+- New chapters from the gaps the papers showed: **Static electricity** (`static`) and **Circuit components** (`comps`: thermistor, LDR, diode, potential divider, e.m.f.).
+- Known mismatch: older Physics chapters and drills use g = 10 N/kg while Cambridge papers say 9.8. The MC paper states 9.8. Review drills when convenient.
