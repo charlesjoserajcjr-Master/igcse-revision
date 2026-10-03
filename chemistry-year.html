@@ -124,6 +124,7 @@ svg .mono{font-family:var(--mono)}
 .stat{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px}
 .opt{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 14px;font-weight:400}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
 .opt.right{border-color:var(--good);background:var(--good-soft);font-weight:700}
 .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
 .opt:disabled{cursor:default}
@@ -253,7 +254,8 @@ function covalent(cx, cy, c, others){
 const legendDX = (x, y, a, b) => `${eCross(x, y-4)}<text x="${x+10}" y="${y}">${a}</text>${eDot(x+190, y-4)}<text x="${x+200}" y="${y}">${b}</text>`;
 function arrowDefs(id){
   return `<defs><marker id="a-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="inkf"/></marker>
-  <marker id="b-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="accf"/></marker></defs>`;
+  <marker id="b-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="accf"/></marker>
+  <marker id="h-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="hotf"/></marker></defs>`;
 }
 
 /* ---------- diagrams ---------- */
@@ -491,6 +493,85 @@ function svgGasTests(){
   ${rows.map((r, i) => `${T(40, 70 + i * 40, r[0], 'mono')}${T(300, 70 + i * 40, r[1], '')}${T(560, 70 + i * 40, r[2], 'mono acct')}<line x1="30" y1="${82 + i * 40}" x2="820" y2="${82 + i * 40}" class="thin" style="opacity:.4"/>`).join('')}</svg>`;
 }
 
+function svgStates(){
+  const box = (x, kind) => {
+    let d = '';
+    if (kind === 's') for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) d += `<circle cx="${x + 24 + c * 26}" cy="${100 + r * 26}" r="10" class="accf" style="fill-opacity:.55;stroke:var(--accent)"/>`;
+    if (kind === 'l') [[30, 100], [62, 112], [96, 98], [128, 118], [44, 140], [80, 150], [112, 148], [26, 176], [60, 184], [98, 180], [130, 176], [140, 142]].forEach(([a, b]) => d += `<circle cx="${x + a}" cy="${b}" r="10" class="accf" style="fill-opacity:.55;stroke:var(--accent)"/>`);
+    if (kind === 'g') [[30, 82], [118, 96], [80, 126], [40, 170], [130, 176], [96, 70], [60, 100]].forEach(([a, b]) => d += `<circle cx="${x + a}" cy="${b}" r="10" class="hotf" style="fill-opacity:.5;stroke:var(--hot)"/>`);
+    return `<rect x="${x}" y="70" width="156" height="140" class="cardf" style="stroke:var(--ink);stroke-width:1.5"/>${d}`;
+  };
+  return `<svg viewBox="0 0 860 330" role="img" aria-label="Particle arrangement in a solid, a liquid and a gas">
+  ${box(30, 's')}${box(300, 'l')}${box(570, 'g')}
+  ${T(108, 58, 'SOLID', 'mid lbl')}${T(378, 58, 'LIQUID', 'mid lbl')}${T(648, 58, 'GAS', 'mid lbl')}
+  ${T(108, 232, 'close together,', 'mid mut')}${T(108, 250, 'regular pattern,', 'mid mut')}${T(108, 268, 'vibrate in place', 'mid mut')}
+  ${T(378, 232, 'close together,', 'mid mut')}${T(378, 250, 'random pattern,', 'mid mut')}${T(378, 268, 'slide past each other', 'mid mut')}
+  ${T(648, 232, 'far apart,', 'mid mut')}${T(648, 250, 'random pattern,', 'mid mut')}${T(648, 268, 'move fast everywhere', 'mid mut')}
+  ${T(430, 308, 'Fixed shape and volume · fixed volume, no fixed shape · no fixed shape or volume', 'mid lbl')}</svg>`;
+}
+function svgHeatCurve(){
+  const X = t => 70 + t * 3.2, Y = v => 250 - v * 1.7;
+  const pts = [[0, -10], [20, 0], [60, 0], [100, 60], [140, 100], [200, 100], [230, 130]];
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="Heating curve of a pure substance showing melting and boiling">
+  <line x1="70" y1="270" x2="${X(235)}" y2="270" class="ln"/><line x1="70" y1="270" x2="70" y2="30" class="ln"/>
+  <polyline points="${pts.map(([t, v]) => `${X(t)},${Y(v)}`).join(' ')}" class="acc" fill="none" style="stroke-width:3"/>
+  ${T(X(40), Y(0) - 12, 'melting: solid + liquid', 'mid hott')}${T(X(170), Y(100) - 12, 'boiling: liquid + gas', 'mid hott')}
+  ${T(X(8), Y(-10) + 22, 'solid', 'mid lbl')}${T(X(100), Y(40), 'liquid', 'mid lbl')}${T(X(225), Y(130) - 14, 'gas', 'mid lbl')}
+  ${T(30, 20, 'temperature', 'lbl')}${T(X(235), 292, 'time (heating)', 'end lbl')}
+  ${T(150, 70, 'Flat parts: the energy goes into breaking', 'lbl')}${T(150, 90, 'the forces between particles, not into', 'lbl')}${T(150, 110, 'raising the temperature.', 'lbl')}</svg>`;
+}
+function svgRedox(){
+  return `<svg viewBox="0 0 860 280" role="img" aria-label="Oxidation is loss of electrons and reduction is gain of electrons">${arrowDefs('rx')}
+  <rect x="60" y="60" width="240" height="90" rx="12" class="metal" style="stroke:var(--ink);stroke-width:1.8"/>${T(180, 96, 'Mg', 'mid lbl')}${T(180, 126, 'is OXIDISED', 'mid acct')}
+  <rect x="560" y="60" width="240" height="90" rx="12" class="nonmetal" style="stroke:var(--ink);stroke-width:1.8"/>${T(680, 96, 'Cu²⁺', 'mid lbl')}${T(680, 126, 'is REDUCED', 'mid hott')}
+  <line x1="310" y1="105" x2="550" y2="105" class="hotl" marker-end="url(#h-rx)"/>${T(430, 92, '2 electrons', 'mid hott')}${T(430, 130, 'Mg → Mg²⁺ + 2e⁻', 'mid mono acct')}
+  ${T(430, 200, 'OIL RIG:  Oxidation Is Loss (of electrons),  Reduction Is Gain.', 'mid lbl')}${T(430, 230, 'The substance that is oxidised is the REDUCING AGENT (Mg).', 'mid mut')}${T(430, 252, 'The substance that is reduced is the OXIDISING AGENT (Cu²⁺).', 'mid mut')}</svg>`;
+}
+function svgHaber(){
+  const b = (x, y, w, h, t, s, cls = 'metal') => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" class="${cls}" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + w / 2, y + 26, t, 'mid lbl')}${(Array.isArray(s) ? s : s ? [s] : []).map((l, i) => T(x + w / 2, y + 46 + i * 16, l, 'mid mut')).join('')}`;
+  return `<svg viewBox="0 0 860 300" role="img" aria-label="The Haber process">${arrowDefs('hb')}
+  ${b(20, 60, 140, 70, 'N₂ + H₂', ['from air and', 'natural gas'], 'nonmetal')}${b(230, 40, 190, 110, 'Reactor', ['iron catalyst', '450 °C, 200 atm'])}${b(490, 60, 140, 70, 'Condenser', ['cooled so that', 'NH₃ liquefies'])}${b(700, 60, 140, 70, 'NH₃ (liquid)', 'product', 'nonmetal')}
+  ${[160, 420, 630].map(x => `<line x1="${x}" y1="95" x2="${x + 68}" y2="95" class="ln" marker-end="url(#a-hb)"/>`).join('')}
+  <path d="M560 130 V220 H325 V152" class="hotl" fill="none" marker-end="url(#h-hb)"/>${T(440, 244, 'unreacted N₂ and H₂ are recycled', 'mid hott')}
+  ${T(430, 24, 'N₂ + 3H₂ ⇌ 2NH₃   (the reaction is reversible)', 'mid mono lbl')}${T(430, 278, 'Fertilisers are made from the ammonia.', 'mid mut')}</svg>`;
+}
+const PT_SYM = ['', 'H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra'];
+const PT_AR = { 1: 1, 2: 4, 3: 7, 4: 9, 5: 11, 6: 12, 7: 14, 8: 16, 9: 19, 10: 20, 11: 23, 12: 24, 13: 27, 14: 28, 15: 31, 16: 32, 17: 35.5, 18: 40, 19: 39, 20: 40, 21: 45, 22: 48, 23: 51, 24: 52, 25: 55, 26: 56, 27: 59, 28: 59, 29: 64, 30: 65, 31: 70, 32: 73, 33: 75, 34: 79, 35: 80, 36: 84, 37: 85, 38: 88, 39: 89, 40: 91, 41: 93, 42: 96, 44: 101, 45: 103, 46: 106, 47: 108, 48: 112, 49: 115, 50: 119, 51: 122, 52: 128, 53: 127, 54: 131, 55: 133, 56: 137, 57: 139, 72: 178, 73: 181, 74: 184, 75: 186, 76: 190, 77: 192, 78: 195, 79: 197, 80: 201, 81: 204, 82: 207, 83: 209 };
+function periodicFull(){
+  const cw = 44, ch = 50, x0 = 30, y0 = 28; const pos = z => { if (z === 1) return [1, 1]; if (z === 2) return [1, 18]; if (z <= 4) return [2, z - 2]; if (z <= 10) return [2, z + 8]; if (z <= 12) return [3, z - 10]; if (z <= 18) return [3, z]; if (z <= 36) return [4, z - 18]; if (z <= 54) return [5, z - 36]; if (z <= 56) return [6, z - 54]; if (z === 57) return [6, 3]; if (z <= 86) return [6, z - 68]; return [7, z - 86]; };
+  const noble = [2, 10, 18, 36, 54, 86], nonm = [1, 6, 7, 8, 9, 15, 16, 17, 34, 35, 53, 85];
+  let s = `<svg viewBox="0 0 ${x0 + 18 * cw + 10} ${y0 + 7 * ch + 40}" role="img" aria-label="The Periodic Table with proton numbers, symbols and relative atomic masses" style="min-width:640px">`;
+  for (let g = 1; g <= 18; g++) s += `<text x="${x0 + (g - 1) * cw + cw / 2}" y="18" class="mid mut" style="font-size:10px">${g}</text>`;
+  for (let z = 1; z <= 88; z++) { if (z > 57 && z < 72) continue; const [p, g] = pos(z); const x = x0 + (g - 1) * cw, y = y0 + (p - 1) * ch, cls = noble.includes(z) ? 'noble' : nonm.includes(z) ? 'nonmetal' : 'metal';
+    s += `<rect x="${x + 1}" y="${y + 1}" width="${cw - 2}" height="${ch - 2}" rx="3" class="${cls}" style="stroke:var(--line)"/><text x="${x + 5}" y="${y + 12}" class="mut" style="font-size:9px">${z}</text><text x="${x + cw / 2}" y="${y + 30}" class="mid lbl" style="font-size:14px">${PT_SYM[z]}</text>${PT_AR[z] ? `<text x="${x + cw / 2}" y="${y + 44}" class="mid mut" style="font-size:9px">${PT_AR[z]}</text>` : ''}`; }
+  s += `<text x="${x0}" y="${y0 + 7 * ch + 28}" class="mut" style="font-size:11px">Top number: proton number. Middle: symbol. Bottom: relative atomic mass. Lanthanoids and actinoids are not shown.</text></svg>`;
+  return s;
+}
+
+function svgEmpirical(){
+  const b = (x, t, s, n) => `<rect x="${x}" y="40" width="190" height="96" rx="10" class="${n % 2 ? 'metal' : 'nonmetal'}" style="stroke:var(--ink);stroke-width:1.6"/>${T(x + 95, 66, t, 'mid lbl')}${T(x + 95, 92, s[0], 'mid mono')}${T(x + 95, 112, s[1], 'mid mono')}`;
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="Four steps to an empirical formula">${arrowDefs('em')}
+  ${b(10, '1  masses', ['C 40.0', 'H 6.7  O 53.3'], 1)}${b(225, '2  ÷ Ar', ['C 3.33  H 6.7', 'O 3.33'], 2)}${b(440, '3  ÷ smallest', ['C 1  H 2', 'O 1'], 3)}${b(655, '4  whole numbers', ['ratio 1 : 2 : 1', 'CH₂O'], 4)}
+  ${[200, 415, 630].map(x => `<line x1="${x}" y1="88" x2="${x + 22}" y2="88" class="ln" marker-end="url(#a-em)"/>`).join('')}
+  ${T(430, 180, 'If you get 1 : 1.5, multiply everything by 2 to get 2 : 3.', 'mid lbl')}${T(430, 208, 'Molecular formula = n × empirical formula,  n = Mr ÷ empirical formula mass.', 'mid mut')}</svg>`;
+}
+function svgEutroChem(){
+  const b = (x, t, s) => `<rect x="${x}" y="30" width="190" height="80" rx="8" class="metal" style="stroke:var(--ink);stroke-width:1.5"/>${T(x + 95, 62, t, 'mid')}${T(x + 95, 84, s, 'mid mut')}`;
+  return `<svg viewBox="0 0 860 250" role="img" aria-label="The steps of eutrophication">${arrowDefs('eu')}
+  ${b(10, 'fertiliser runs off', 'nitrates, phosphates')}${b(225, 'algae grow fast', 'algal bloom')}${b(440, 'light blocked', 'plants below die')}${b(655, 'bacteria decay', 'dead plants and algae')}
+  ${[200, 415, 630].map(x => `<line x1="${x}" y1="70" x2="${x + 22}" y2="70" class="ln" marker-end="url(#a-eu)"/>`).join('')}
+  <line x1="750" y1="112" x2="750" y2="150" class="ln" marker-end="url(#a-eu)"/>
+  <rect x="560" y="152" width="280" height="64" rx="8" class="hotf" style="fill-opacity:.25;stroke:var(--hot);stroke-width:1.6"/>${T(700, 180, 'bacteria use up the oxygen', 'mid hott')}${T(700, 202, 'fish and other animals die', 'mid hott')}
+  ${T(30, 180, 'Use less fertiliser and apply it carefully.', 'lbl')}</svg>`;
+}
+function svgPoly(){
+  return `<svg viewBox="0 0 860 240" role="img" aria-label="Many ethene molecules join to form poly(ethene)">${arrowDefs('po')}
+  ${T(110, 70, 'CH₂=CH₂', 'mid mono lbl')}${T(110, 96, 'ethene (monomer)', 'mid mut')}${T(110, 124, 'has a C=C double bond', 'mid mut')}
+  ${T(260, 74, '+  many more', 'mid mono')}
+  <line x1="350" y1="70" x2="440" y2="70" class="acc" marker-end="url(#b-po)"/>${T(395, 56, 'high pressure,', 'mid mut')}${T(395, 98, 'catalyst', 'mid mut')}
+  ${T(650, 70, '–CH₂–CH₂–CH₂–CH₂–CH₂–CH₂–', 'mid mono lbl')}${T(650, 96, 'poly(ethene) (polymer)', 'mid mut')}${T(650, 124, 'no C=C: all single bonds', 'mid mut')}
+  ${T(430, 176, 'Addition polymerisation: only ONE product, the polymer.', 'mid lbl')}${T(430, 204, 'Repeat unit: –CH₂–CH₂–', 'mid mono acct')}</svg>`;
+}
 const CH = {
 atoms: {
   code: 'Ch 4', name: 'Atoms and the periodic table',
@@ -1270,8 +1351,356 @@ analysis: {
     { q: 'Describe how you would test for chloride ions in a solution of sodium chloride.', m: 3,
       p: ['Add ==dilute nitric acid==', 'Then add ==silver nitrate== solution', 'A ==white precipitate== forms'] }
   ]
+},
+states: {
+  code: 'Topic 1', name: 'States of matter and diffusion',
+  lede: 'How particles are arranged and move in solids, liquids and gases, what happens at melting and boiling, why gases have pressure, and how diffusion works.',
+  learn: [
+    { h: 'Solids, liquids and gases', table: [['', 'Solid', 'Liquid', 'Gas'], ['arrangement', '==close together, regular pattern==', '==close together, random==', '==far apart, random=='], ['movement', '==vibrate about fixed positions==', '==slide past each other==', '==move fast in all directions=='], ['shape', 'fixed', 'takes the shape of the container', 'fills the container'], ['volume', 'fixed', 'fixed', 'not fixed'], ['compressed?', 'no', 'no (almost)', '==yes== (big gaps between particles)']], list: ['The ==kinetic particle theory== says all matter is made of ==tiny particles that are always moving==.', 'When the temperature rises, the particles gain ==kinetic energy== and move ==faster==.'] },
+    { h: 'Changes of state', list: ['==Melting==: solid → liquid at the ==melting point==. ==Freezing==: liquid → solid.', '==Boiling==: liquid → gas ==throughout the liquid== at the ==boiling point==. ==Evaporation==: liquid → gas at the ==surface== at any temperature below the boiling point. ==Condensation==: gas → liquid.', '==Sublimation==: solid → gas without becoming a liquid (iodine, dry ice).', 'On a ==heating curve== the temperature stays ==constant== (flat part) while a substance melts or boils. The energy is used to ==break the forces between particles==, not to raise the temperature.', 'A ==pure substance== melts at a ==sharp melting point==. An ==impure substance== melts over a ==range of temperatures== and at a ==lower temperature==.'] },
+    { h: 'Gas pressure', list: ['Gas particles move randomly and ==collide with the walls of the container==. These collisions cause ==gas pressure==.', '==Higher temperature==: particles move ==faster==, hit the walls ==harder and more often==, so the pressure ==increases== (volume fixed).', '==Smaller volume==: the same particles hit the walls ==more often==, so the pressure ==increases== (temperature fixed).', 'A gas can be ==compressed== because there are ==large spaces== between its particles.'] },
+    { h: 'Diffusion', list: ['==Diffusion== is the ==net movement of particles from a region of higher concentration to a region of lower concentration==, because of their ==random movement==.', 'Diffusion is ==faster== at a ==higher temperature==.', 'Gases with a ==smaller relative molecular mass== (==lighter particles==) diffuse ==faster==. Hydrogen diffuses faster than oxygen.', 'Evidence: a drop of ink spreads out in water; brown ==bromine== vapour spreads through a jar of air.', 'Ammonia (Mr 17) and hydrogen chloride (Mr 36.5) in a tube: a ==white ring of ammonium chloride== forms ==closer to the hydrogen chloride end==, because the ==lighter ammonia diffuses faster==.'] }
+  ],
+  mistakes: ['Saying ==particles expand== when heated. They move faster and spread out; the particles themselves do not expand.', 'Saying the ==temperature rises== during melting. It stays constant.', 'Saying ==gas particles are lighter than liquid particles==. The particles are the same; only the arrangement and energy differ.', 'Mixing up ==evaporation== (surface, any temperature) and ==boiling== (throughout, at the boiling point).', 'Saying ==diffusion needs a force==. It happens because of random movement.'],
+  diagrams: [
+    { svg: svgStates, cap: 'The ==arrangement and movement== of particles in solids, liquids and gases.' },
+    { svg: svgHeatCurve, cap: 'A ==heating curve==: flat parts are ==melting== and ==boiling==.' }
+  ],
+  worked: [
+    W('Describe and explain the shape of the heating curve of a pure solid as it is heated until it boils.', 'Look for the ==rising== parts and the ==flat== parts.', 'Say what the energy is doing on the flat parts.', 'rise, flat, rise, flat, rise',
+      [['Solid heated', 'The temperature rises. The particles vibrate faster.', ''], ['Melting', 'The temperature stays constant at the melting point.', 'The energy breaks the forces between the particles.'], ['Liquid heated', 'The temperature rises again.', ''], ['Boiling', 'The temperature stays constant at the boiling point.', 'The energy separates the particles completely.'], ['Gas heated', 'The temperature rises again.', '']],
+      [['Solid', 'rises', 0], ['Melting', 'flat', 1], ['Liquid', 'rises', 2], ['Boiling', 'flat', 3], ['Gas', 'rises', 4]], true),
+    W('Explain why the pressure of a gas in a sealed container increases when the temperature is raised.', 'Link ==temperature== to ==particle speed== to ==collisions==.', 'Say the volume is fixed.', 'faster → more collisions',
+      [['Temperature rises', 'The gas particles gain kinetic energy.', ''], ['Faster', 'They move faster.', ''], ['Collisions', 'They hit the walls of the container harder and more often.', 'The volume is fixed.'], ['Result', 'The pressure increases.', '']],
+      [['Temperature', 'up', 0], ['Particles', 'faster', 1], ['Collisions', 'harder, more often', 2], ['Pressure', 'increases', 3]], true),
+    W('Cotton wool soaked in ammonia solution is placed at one end of a long tube and cotton wool soaked in hydrochloric acid at the other end. A white ring forms. Explain where the ring forms and why.', 'Compare the ==relative masses== of the two gases.', 'The lighter gas travels further.', 'lighter = faster',
+      [['Gases', 'Ammonia (Mr = 17) and hydrogen chloride (Mr = 36.5) diffuse along the tube.', ''], ['Faster gas', 'Ammonia particles are lighter, so they diffuse faster.', ''], ['Where they meet', 'The gases meet nearer the hydrochloric acid end.', ''], ['Ring', 'A white ring of ammonium chloride forms there.', '']],
+      [['Ammonia Mr', '17', 0], ['HCl Mr', '36.5', 0], ['Faster', 'ammonia', 1], ['Ring', 'nearer the HCl end', 2]], true),
+    W('A student heats a sample of wax. It starts to melt at 45 °C and finishes melting at 49 °C. What does this show about the wax?', 'A pure substance has a ==sharp== melting point.', 'Say what it means for purity.', 'range = impure',
+      [['Observation', 'It melts over a range of 4 °C (45 to 49 °C).', ''], ['Pure substance', 'A pure substance melts at one exact temperature.', ''], ['Conclusion', 'The wax is impure (a mixture).', 'Impurities also lower the melting point.']],
+      [['Range', '45 to 49 °C', 0], ['Pure?', 'sharp melting point', 1], ['Wax', 'impure', 2]], true),
+    W('Explain the difference between evaporation and boiling.', 'Compare ==where== and ==what temperature==.', 'Use two pairs of statements.', 'surface v whole liquid',
+      [['Where', 'Evaporation happens at the surface only. Boiling happens throughout the liquid, with bubbles.', ''], ['Temperature', 'Evaporation happens at any temperature below the boiling point. Boiling happens only at the boiling point.', ''], ['Energy', 'In evaporation the fastest particles escape from the surface.', '']],
+      [['Where', 'surface v throughout', 0], ['Temperature', 'any v boiling point', 1]], true)
+  ],
+  drill: 'states',
+  quiz: [
+    { q: 'Which statement describes the particles in a liquid?', o: ['close together and vibrating in fixed positions', 'close together and able to slide past each other', 'far apart and moving randomly', 'far apart in a regular pattern'], a: 1, w: 'Liquid particles are ==close together== and ==slide past each other==.' },
+    { q: 'What happens to the temperature while a pure solid is melting?', o: ['It rises steadily', 'It stays constant', 'It falls', 'It rises and then falls'], a: 1, w: 'It ==stays constant== at the melting point.' },
+    { q: 'Which change of state is sublimation?', o: ['liquid to gas', 'gas to liquid', 'solid to gas', 'liquid to solid'], a: 2, w: '==Solid to gas== without becoming a liquid.' },
+    { q: 'Why does a gas in a sealed container exert pressure?', o: ['The particles are heavy', 'The particles collide with the walls', 'The particles attract each other', 'The particles are close together'], a: 1, w: 'Particles ==collide with the walls==.' },
+    { q: 'A gas is heated in a sealed container of fixed volume. The pressure rises because the particles…', o: ['become larger', 'move faster and hit the walls more often', 'move more slowly', 'become heavier'], a: 1, w: 'They ==move faster and hit the walls harder and more often==.' },
+    { q: 'Which gas diffuses fastest at the same temperature?', o: ['hydrogen', 'oxygen', 'carbon dioxide', 'chlorine'], a: 0, w: '==Hydrogen== has the smallest Mr, so it diffuses fastest.' },
+    { q: 'Evaporation differs from boiling because evaporation…', o: ['occurs only at the boiling point', 'occurs at the surface at any temperature below boiling point', 'needs no energy', 'occurs throughout the liquid'], a: 1, w: 'Evaporation: ==surface, any temperature below the boiling point==.' },
+    { q: 'A substance melts between 70 °C and 74 °C. It is probably…', o: ['a pure element', 'a pure compound', 'impure', 'a gas'], a: 2, w: 'A melting range means it is ==impure==.' }
+  ],
+  exam: [
+    { q: 'Describe the arrangement and movement of the particles in a gas, and explain why a gas can be compressed.', m: 4,
+      p: ['particles are ==far apart==', 'particles are in ==random arrangement==', 'particles ==move quickly in all directions==', 'a gas can be compressed because there are ==large gaps between the particles=='] },
+    { q: 'Explain, using ideas about particles, why the pressure of a fixed volume of gas increases when it is heated.', m: 3,
+      p: ['the particles gain ==kinetic energy / move faster==', 'they ==collide with the container walls more often==', '==with greater force==, so the pressure increases'] },
+    { q: 'Define the term diffusion and explain why hydrogen diffuses faster than oxygen.', m: 4,
+      p: ['the ==net movement of particles from a region of higher concentration to a region of lower concentration==', 'caused by ==random movement== of the particles', 'hydrogen has a ==smaller relative molecular mass== / lighter particles', 'so its particles ==move faster== at the same temperature'] }
+  ]
+},
+redox: {
+  code: 'Topic 7', name: 'Redox, reversible reactions and industry',
+  lede: 'Oxidation and reduction as electron transfer, how to spot oxidising and reducing agents, reversible reactions, the Haber and Contact processes, and hydrogen fuel cells.',
+  learn: [
+    { h: 'Oxidation and reduction', list: ['==Oxidation== is the ==gain of oxygen== or the ==loss of electrons==. ==Reduction== is the ==loss of oxygen== or the ==gain of electrons==. Remember ==OIL RIG==: Oxidation Is Loss, Reduction Is Gain (of electrons).', 'They always happen ==together==: a ==redox reaction==.', 'Example: ' + 'CuO' + ' + H₂ → Cu + H₂O. Copper oxide ==loses oxygen== (it is ==reduced==). Hydrogen ==gains oxygen== (it is ==oxidised==).', 'Example with electrons: Mg + Cu²⁺ → Mg²⁺ + Cu. Mg ==loses== 2 electrons (oxidised). Cu²⁺ ==gains== 2 electrons (reduced).'] },
+    { h: 'Oxidising and reducing agents', list: ['An ==oxidising agent== ==oxidises== another substance. It is ==itself reduced== (it gains electrons).', 'A ==reducing agent== ==reduces== another substance. It is ==itself oxidised== (it loses electrons).', 'In the blast furnace, ==carbon monoxide== is the reducing agent: it reduces iron(III) oxide to iron.', '==Test for a reducing agent==: acidified ==potassium manganate(VII)== changes from ==purple to colourless==.', '==Test for an oxidising agent==: ==potassium iodide== solution changes from ==colourless to brown==.'] },
+    { h: 'Reversible reactions', list: ['In a ==reversible reaction== the products can react to form the reactants again. The sign is ==⇌==.', 'Example: ==hydrated copper(II) sulfate (blue) ⇌ anhydrous copper(II) sulfate (white) + water==. Heating drives it one way; adding water drives it back.', 'Example: ammonium chloride ⇌ ammonia + hydrogen chloride.', 'In a ==closed system== the reaction reaches ==equilibrium==: the ==forward and reverse reactions happen at the same rate==, so the ==concentrations stay constant==.'] },
+    { h: 'The Haber process and the Contact process', table: [['', 'Haber process', 'Contact process'], ['makes', '==ammonia (NH₃)==', '==sulfuric acid (H₂SO₄)=='], ['reaction', 'N₂ + 3H₂ ⇌ 2NH₃', '2SO₂ + O₂ ⇌ 2SO₃'], ['temperature', '==450 °C==', '==450 °C=='], ['pressure', '==200 atm==', '==2 atm== (low)'], ['catalyst', '==iron==', '==vanadium(V) oxide==']], list: ['Haber: nitrogen from the ==air==, hydrogen from ==natural gas==. ==Unreacted gases are recycled==. Ammonia is ==cooled and liquefied==.', 'Contact: sulfur (or sulfide ores) is burned to make ==sulfur dioxide==. After the reaction, SO₃ is dissolved in ==concentrated sulfuric acid== to make ==oleum==, which is then diluted with water.', '(Extended) A ==higher pressure== gives more ammonia, but is expensive. A ==higher temperature== is ==faster== but gives ==less ammonia== because the forward reaction is exothermic: 450 °C is a ==compromise==.', 'Uses: ammonia for ==fertilisers==; sulfuric acid for ==fertilisers, detergents, paints and batteries==.'] },
+    { h: 'Hydrogen–oxygen fuel cells', list: ['A ==fuel cell== uses the reaction between ==hydrogen and oxygen== to make ==electricity==: 2H₂ + O₂ → 2H₂O.', 'The ==only product is water==, so there is no carbon dioxide or air pollution at the point of use.', '==Advantages==: efficient, ==no pollutants==, quiet. ==Disadvantages==: hydrogen is ==flammable== and ==hard to store==, and making hydrogen needs energy.'] }
+  ],
+  mistakes: ['Saying ==oxidation is gain of electrons==. Remember OIL RIG: Oxidation Is ==Loss==.', 'Saying the ==oxidising agent is oxidised==. It is ==reduced==.', 'Saying ==the reaction stops at equilibrium==. Both reactions continue at the same rate.', 'Mixing up the ==catalysts==: Haber = iron; Contact = vanadium(V) oxide.', 'Saying a fuel cell ==burns== hydrogen. It reacts hydrogen with oxygen to give electricity.'],
+  diagrams: [
+    { svg: svgRedox, cap: '==Oxidation is loss== of electrons. ==Reduction is gain==.' },
+    { svg: svgHaber, cap: 'The ==Haber process==: the reaction is ==reversible== and ==unreacted gases are recycled==.' }
+  ],
+  worked: [
+    W('In the reaction Fe₂O₃ + 3CO → 2Fe + 3CO₂, state which substance is oxidised and which is reduced. Name the reducing agent.', 'Follow the ==oxygen==. Which substance ==loses== it, which ==gains== it?', 'The reducing agent is the one that is oxidised.', 'lose oxygen = reduced',
+      [['Iron(III) oxide', 'Fe₂O₃ loses oxygen to become Fe.', 'Loss of oxygen is reduction.'], ['Carbon monoxide', 'CO gains oxygen to become CO₂.', 'Gain of oxygen is oxidation.'], ['Reduced', 'Fe₂O₃ is reduced.', ''], ['Oxidised', 'CO is oxidised.', ''], ['Reducing agent', 'CO, because it is oxidised and reduces the iron oxide.', '']],
+      [['Fe₂O₃', 'reduced', 2], ['CO', 'oxidised', 3], ['Reducing agent', 'CO', 4]], true),
+    W('Magnesium is added to aqueous copper(II) sulfate. The ionic equation is Mg + Cu²⁺ → Mg²⁺ + Cu. Use electrons to explain which species is oxidised and which is reduced.', 'Write the ==half-equations== and count electrons.', 'Loss of electrons = oxidation.', 'OIL RIG',
+      [['Magnesium', 'Mg → Mg²⁺ + 2e⁻. Mg loses two electrons.', 'Loss of electrons: oxidation.'], ['Copper ions', 'Cu²⁺ + 2e⁻ → Cu. Cu²⁺ gains two electrons.', 'Gain of electrons: reduction.'], ['Conclusion', 'Mg is oxidised. Cu²⁺ is reduced.', ''], ['Agents', 'Mg is the reducing agent. Cu²⁺ is the oxidising agent.', '']],
+      [['Mg', 'loses 2e⁻, oxidised', 0], ['Cu²⁺', 'gains 2e⁻, reduced', 1], ['Reducing agent', 'Mg', 3]], true),
+    W('Acidified potassium manganate(VII) is added to a solution of substance X. The purple colour disappears. What does this show?', 'The change is ==purple → colourless==.', 'Say what kind of agent X is.', 'purple → colourless = reducing agent',
+      [['Observation', 'Purple changes to colourless.', ''], ['Meaning', 'Manganate(VII) is reduced (it gains electrons).', ''], ['Conclusion', 'X is a reducing agent: it is oxidised.', 'It gave electrons to the manganate(VII).']],
+      [['Colour', 'purple → colourless', 0], ['MnO₄⁻', 'reduced', 1], ['X', 'reducing agent', 2]], true),
+    W('State the conditions used in the Haber process and give a reason for each.', 'Give ==temperature, pressure and catalyst== and say why.', 'Mention recycling.', 'N₂ + 3H₂ ⇌ 2NH₃',
+      [['Temperature', '450 °C. A high temperature gives a fast rate, but too high gives less ammonia.', 'A compromise.'], ['Pressure', '200 atm. High pressure gives more ammonia and a faster rate.', 'Very high pressure is too expensive.'], ['Catalyst', 'Iron. It speeds up the reaction without being used up.', ''], ['Recycling', 'Unreacted nitrogen and hydrogen are recycled to save raw materials.', '']],
+      [['Temperature', '450 °C', 0], ['Pressure', '200 atm', 1], ['Catalyst', 'iron', 2], ['Recycle', 'unreacted gases', 3]], true),
+    W('Give two advantages and one disadvantage of a hydrogen–oxygen fuel cell car compared with a petrol car.', 'Think about ==pollution==, ==efficiency== and ==storing hydrogen==.', 'Each point needs a reason.', 'water only',
+      [['Advantage 1', 'The only product is water, so no carbon dioxide or pollutants are made by the car.', ''], ['Advantage 2', 'Fuel cells are more efficient / quieter than a petrol engine.', ''], ['Disadvantage', 'Hydrogen is flammable and difficult to store, and it takes energy to make.', '']],
+      [['Advantage 1', 'no CO₂', 0], ['Advantage 2', 'efficient', 1], ['Disadvantage', 'hydrogen storage', 2]], true)
+  ],
+  drill: 'redox',
+  quiz: [
+    { q: 'Oxidation is…', o: ['gain of electrons', 'loss of electrons', 'loss of oxygen', 'gain of hydrogen'], a: 1, w: 'OIL RIG: Oxidation Is ==Loss== of electrons.' },
+    { q: 'In CuO + H₂ → Cu + H₂O, which substance is reduced?', o: ['CuO', 'H₂', 'Cu', 'H₂O'], a: 0, w: 'CuO ==loses oxygen==: reduced.' },
+    { q: 'Acidified potassium manganate(VII) turns from purple to colourless. This shows a…', o: ['oxidising agent', 'reducing agent', 'base', 'catalyst'], a: 1, w: 'A ==reducing agent== is present.' },
+    { q: 'The catalyst in the Haber process is…', o: ['vanadium(V) oxide', 'iron', 'platinum', 'nickel'], a: 1, w: '==Iron==.' },
+    { q: 'The symbol ⇌ shows that a reaction is…', o: ['very fast', 'reversible', 'exothermic', 'complete'], a: 1, w: '==Reversible==.' },
+    { q: 'The only product of a hydrogen–oxygen fuel cell is…', o: ['carbon dioxide', 'water', 'ammonia', 'hydrogen peroxide'], a: 1, w: '==Water==.' },
+    { q: 'At equilibrium in a closed system…', o: ['the reactions stop', 'the forward and reverse rates are equal', 'only the forward reaction happens', 'the reactants are used up'], a: 1, w: 'The ==rates are equal==.' },
+    { q: 'Sulfuric acid is made in the…', o: ['Haber process', 'Contact process', 'Blast furnace', 'Cracking process'], a: 1, w: 'The ==Contact process==.' }
+  ],
+  exam: [
+    { q: 'Define oxidation and reduction in terms of electrons. Give a reaction that shows both.', m: 4,
+      p: ['oxidation is ==loss of electrons==', 'reduction is ==gain of electrons==', 'an example such as Mg + Cu²⁺ → Mg²⁺ + Cu', 'identifies which species is oxidised and which is reduced'] },
+    { q: 'Describe the manufacture of ammonia by the Haber process. Include the conditions and what happens to unreacted gases.', m: 5,
+      p: ['==nitrogen and hydrogen== are the reactants', '==iron catalyst==', '==450 °C==', '==200 atm== / high pressure', '==unreacted gases are recycled== and ammonia is liquefied by cooling'] },
+    { q: 'Explain what is meant by a reversible reaction and give one example.', m: 3,
+      p: ['the products can ==react to form the reactants== again', 'the reaction can go in ==both directions== (⇌)', 'example: hydrated copper(II) sulfate ⇌ anhydrous copper(II) sulfate + water (or ammonium chloride ⇌ ammonia + hydrogen chloride)'] }
+  ]
+},
+emp: {
+  code: 'Topic 3', name: 'Empirical formulae and percentage calculations',
+  lede: 'Find the percentage of an element in a compound, work out an empirical formula from masses or percentages, find the molecular formula, and calculate percentage yield and purity. (Extended)',
+  learn: [
+    { h: 'Percentage by mass of an element', f: ['% of an element = (Ar × number of atoms) ÷ Mr × 100'], list: ['First work out the ==relative formula mass (Mr)== by adding the Ar values.', 'Example: ammonium nitrate NH₄NO₃: Mr = 14 + 4 + 14 + 48 = ==80==. Nitrogen: (14 × 2) ÷ 80 × 100 = ==35 %==.', 'Check: the percentages of all the elements ==add up to 100 %==.', 'Mass of an element in a sample = ==percentage × mass of sample==.'] },
+    { h: 'Empirical formula', list: ['The ==empirical formula== is the ==simplest whole-number ratio of atoms== of each element in a compound.', 'Method: 1. Write the ==masses== (or percentages). 2. ==Divide each by its Ar== to get moles. 3. ==Divide all by the smallest== number. 4. If needed, ==multiply== to get whole numbers (1.5 → ×2).', 'The ==molecular formula== is the ==actual number of atoms== in one molecule. ==molecular formula = n × empirical formula==, where ==n = Mr ÷ empirical formula mass==.', 'Example: empirical formula CH₂ (mass 14) and Mr 56: n = 56 ÷ 14 = 4, so the molecular formula is ==C₄H₈==.'] },
+    { h: 'Percentage yield and purity', f: ['% yield = actual yield ÷ theoretical yield × 100', '% purity = mass of pure substance ÷ mass of sample × 100'], list: ['The ==theoretical yield== is the maximum mass possible from the equation. The ==actual yield== is what you really get.', 'The yield is always ==less than 100 %== in practice: the reaction may be ==reversible==, some product is ==lost== in transfers, or there are ==side reactions==.', '==Purity== tells you how much of a sample is the wanted substance.'] }
+  ],
+  mistakes: ['Dividing by ==Mr instead of Ar== when finding moles of each element.', 'Forgetting to ==divide by the smallest== number.', 'Writing ==1.5 : 1== as the answer instead of ==3 : 2==.', 'Using the ==empirical formula mass== as Mr.', 'Writing a ==yield over 100 %== without checking.'],
+  diagrams: [{ svg: svgEmpirical, cap: '==Empirical formula== in four steps.' }],
+  worked: [
+    W('Calculate the percentage by mass of nitrogen in ammonium nitrate, NH₄NO₃. (Ar: H = 1, N = 14, O = 16)', 'Work out ==Mr== first, then use the formula.', 'There are two N atoms in the formula.', '% = Ar × atoms ÷ Mr × 100',
+      [['Mr', '14 + (4 × 1) + 14 + (3 × 16) = 80', 'NH₄NO₃ has 2 N, 4 H and 3 O.'], ['N in the formula', '2 × 14 = 28', ''], ['Fraction', '28 ÷ 80', ''], ['Percentage', '28 ÷ 80 × 100 = 35 %', '']],
+      [['Mr', '80', 0], ['Mass of N', '28', 1], ['% N', '35 %', 3]]),
+    W('A compound contains 40.0 % carbon, 6.7 % hydrogen and 53.3 % oxygen by mass. Find its empirical formula. (Ar: H = 1, C = 12, O = 16)', '==Divide by Ar==, then ==divide by the smallest==.', 'Treat each percentage as a mass in 100 g.', 'ratio of moles',
+      [['Moles of C', '40.0 ÷ 12 = 3.33', ''], ['Moles of H', '6.7 ÷ 1 = 6.7', ''], ['Moles of O', '53.3 ÷ 16 = 3.33', ''], ['Divide by the smallest (3.33)', 'C : H : O = 1 : 2 : 1', ''], ['Empirical formula', 'CH₂O', '']],
+      [['C', '3.33', 0], ['H', '6.7', 1], ['O', '3.33', 2], ['Ratio', '1 : 2 : 1', 3], ['Formula', 'CH₂O', 4]]),
+    W('A sample of an iron oxide contains 70 % iron and 30 % oxygen by mass. Find its empirical formula. (Ar: Fe = 56, O = 16)', 'The ratio is not whole numbers after dividing, so ==multiply==.', 'Look for 1.5 and multiply by 2.', '1 : 1.5 → 2 : 3',
+      [['Moles of Fe', '70 ÷ 56 = 1.25', ''], ['Moles of O', '30 ÷ 16 = 1.875', ''], ['Divide by 1.25', 'Fe : O = 1 : 1.5', ''], ['Multiply by 2', 'Fe : O = 2 : 3', 'Whole numbers.'], ['Formula', 'Fe₂O₃', '']],
+      [['Fe', '1.25', 0], ['O', '1.875', 1], ['Ratio', '1 : 1.5', 2], ['×2', '2 : 3', 3], ['Formula', 'Fe₂O₃', 4]]),
+    W('A hydrocarbon has the empirical formula CH₂ and a relative molecular mass of 56. Find its molecular formula.', 'Find ==n== = Mr ÷ mass of the empirical formula.', 'Then multiply every number in the formula by n.', 'n = Mr ÷ empirical mass',
+      [['Empirical formula mass', 'CH₂: 12 + 2 = 14', ''], ['n', '56 ÷ 14 = 4', ''], ['Molecular formula', '4 × CH₂ = C₄H₈', '']],
+      [['Empirical mass', '14', 0], ['n', '4', 1], ['Formula', 'C₄H₈', 2]]),
+    W('In an experiment, the theoretical yield of a product is 25.0 g. The actual yield is 20.0 g. Calculate the percentage yield. Give one reason it is less than 100 %.', 'Use ==actual ÷ theoretical × 100==.', 'Give a reason.', '% yield = actual ÷ theoretical × 100',
+      [['Formula', '% yield = actual yield ÷ theoretical yield × 100', ''], ['Substitute', '20.0 ÷ 25.0 × 100', ''], ['Answer', '80 %', ''], ['Reason', 'Some product was lost during filtering and transfers (or the reaction is reversible).', '']],
+      [['Actual', '20.0 g', -1], ['Theoretical', '25.0 g', -1], ['% yield', '80 %', 2]]),
+    W('What mass of magnesium is in 15 g of magnesium oxide, MgO? (Ar: Mg = 24, O = 16)', 'Find the ==percentage== of Mg first.', 'Then take that percentage of the sample.', '% × mass',
+      [['Mr of MgO', '24 + 16 = 40', ''], ['% Mg', '24 ÷ 40 × 100 = 60 %', ''], ['Mass of Mg', '60 % × 15 g = 0.60 × 15', ''], ['Answer', '9.0 g', '']],
+      [['Mr', '40', 0], ['% Mg', '60 %', 1], ['Mass of Mg', '9.0 g', 3]])
+  ],
+  drill: 'emp',
+  quiz: [
+    { q: 'The empirical formula is…', o: ['the actual number of atoms in a molecule', 'the simplest whole-number ratio of atoms', 'the relative formula mass', 'the number of moles'], a: 1, w: 'The ==simplest whole-number ratio==.' },
+    { q: 'To find the empirical formula you divide the masses by…', o: ['Mr', 'Ar', '100', 'the volume'], a: 1, w: 'By ==Ar== of each element.' },
+    { q: 'A ratio of 1 : 1.5 becomes…', o: ['1 : 3', '2 : 3', '3 : 2', '1 : 2'], a: 1, w: 'Multiply by 2: ==2 : 3==.' },
+    { q: 'The empirical formula is CH and Mr = 78. The molecular formula is…', o: ['CH', 'C₂H₂', 'C₆H₆', 'C₈H₈'], a: 2, w: '78 ÷ 13 = 6: ==C₆H₆==.' },
+    { q: 'The theoretical yield is 40 g and 30 g is made. The percentage yield is…', o: ['25 %', '75 %', '133 %', '10 %'], a: 1, w: '30 ÷ 40 × 100 = ==75 %==.' },
+    { q: 'The percentage of oxygen in MgO (Ar Mg = 24, O = 16) is…', o: ['40 %', '60 %', '50 %', '16 %'], a: 0, w: '16 ÷ 40 × 100 = ==40 %==.' }
+  ],
+  exam: [
+    { q: 'A compound contains 2.4 g of magnesium and 1.6 g of oxygen only. Calculate its empirical formula. (Ar: Mg = 24, O = 16)', m: 3,
+      p: ['moles Mg = 2.4 ÷ 24 = ==0.1==; moles O = 1.6 ÷ 16 = ==0.1==', 'ratio ==1 : 1==', '==MgO=='] },
+    { q: 'Calculate the percentage by mass of iron in iron(III) oxide, Fe₂O₃. (Ar: Fe = 56, O = 16)', m: 3,
+      p: ['Mr = ==160==', 'iron = 2 × 56 = ==112==', '112 ÷ 160 × 100 = ==70 %=='] },
+    { q: 'A reaction should give 12.5 g of product. The student obtains 9.0 g. Calculate the percentage yield and suggest one reason why it is less than 100 %.', m: 3,
+      p: ['9.0 ÷ 12.5 × 100', '==72 %==', 'reason: ==product lost during transfer / reaction reversible / side reactions=='] }
+  ]
+},
+fert: {
+  code: 'Topic 10', name: 'Fertilisers and the environment',
+  lede: 'Why plants need nitrogen, phosphorus and potassium, how fertilisers are made, and the damage they cause to rivers when too much is used.',
+  learn: [
+    { h: 'NPK fertilisers', list: ['Plants need ==nitrogen (N)==, ==phosphorus (P)== and ==potassium (K)== to grow well. Fertilisers supply them. A fertiliser containing all three is an ==NPK fertiliser==.', '==Nitrogen== makes ==proteins== and leaf growth. ==Phosphorus== helps ==root growth== and energy. ==Potassium== helps ==flowers, fruit== and resistance to disease.', 'Common fertilisers: ==ammonium nitrate NH₄NO₃== (35 % N), ==ammonium sulfate (NH₄)₂SO₄==, ==urea CO(NH₂)₂==, ==potassium nitrate KNO₃== (N and K), ==ammonium phosphate== (N and P), ==potassium chloride KCl== (K).', 'Soluble compounds are needed so that the nutrients ==dissolve in water in the soil== and can be absorbed by roots.'] },
+    { h: 'Making fertilisers', list: ['Ammonium salts are made by ==neutralising== ammonia (an alkali) with an acid.', '==ammonia + nitric acid → ammonium nitrate==: NH₃ + HNO₃ → NH₄NO₃.', '==ammonia + sulfuric acid → ammonium sulfate==: 2NH₃ + H₂SO₄ → (NH₄)₂SO₄.', 'The ammonia is made in the ==Haber process==.', '==Do not mix ammonium fertilisers with lime== (calcium oxide or hydroxide). The alkali ==releases ammonia gas==, so ==nitrogen is lost== from the soil.'] },
+    { h: 'Eutrophication', list: ['==Too much fertiliser== is washed (==runoff==) into rivers and lakes. ==Nitrates and phosphates== make ==algae== grow very fast (an ==algal bloom==).', 'The algae ==block the light==, so plants under the surface ==die==. ==Bacteria decompose== the dead plants and algae and ==use up the oxygen== in the water.', 'Fish and other animals ==die from lack of oxygen==. This is ==eutrophication==.', 'Reducing the problem: use ==less fertiliser==, apply it ==at the right time==, avoid spreading near water.'] }
+  ],
+  mistakes: ['Saying ==fertilisers kill fish directly==. The oxygen shortage kills them.', 'Mixing up the ==roles== of N, P and K.', 'Forgetting to say ==bacteria use up oxygen== in eutrophication.', 'Writing ==ammonium nitrate is made by adding nitrogen to ammonia==. It is made by neutralisation.', 'Saying ==ammonium fertiliser can be mixed with lime==.'],
+  diagrams: [{ svg: svgEutroChem, cap: '==Eutrophication==: from fertiliser to dead fish.' }],
+  worked: [
+    W('State why plants need nitrogen, phosphorus and potassium.', 'Give one ==use== of each.', 'Use the memory N for leaves, P for roots, K for flowers.', 'N, P, K',
+      [['Nitrogen', 'To make proteins and for healthy leaf growth.', ''], ['Phosphorus', 'For root growth and energy transfer.', ''], ['Potassium', 'For flowers and fruit and to resist disease.', '']],
+      [['N', 'proteins, leaves', 0], ['P', 'roots, energy', 1], ['K', 'flowers, fruit', 2]], true),
+    W('Write the equation for the formation of ammonium nitrate from ammonia and nitric acid. Name the type of reaction.', 'Ammonia is an ==alkali==, nitric acid is an ==acid==.', 'Balance it: 1 NH₃ with 1 HNO₃.', 'alkali + acid → salt',
+      [['Reactants', 'NH₃ and HNO₃', ''], ['Product', 'The salt ammonium nitrate, NH₄NO₃', ''], ['Equation', 'NH₃ + HNO₃ → NH₄NO₃', 'Already balanced.'], ['Type', 'Neutralisation', 'Acid + alkali → salt.']],
+      [['Reactants', 'NH₃ + HNO₃', 0], ['Equation', 'NH₃ + HNO₃ → NH₄NO₃', 2], ['Type', 'neutralisation', 3]], true),
+    W('Explain why a farmer should not add lime and ammonium sulfate to the soil at the same time.', 'Lime is a ==base==. Ammonium salts react with ==bases==.', 'Say what is lost.', 'base + ammonium salt → ammonia',
+      [['Lime', 'Lime (calcium oxide or hydroxide) is a base.', ''], ['Reaction', 'Ammonium salts react with a base to release ammonia gas.', ''], ['Result', 'The ammonia escapes into the air, so the nitrogen is lost from the soil.', 'The fertiliser is wasted.']],
+      [['Lime', 'a base', 0], ['Reaction', 'releases NH₃', 1], ['Result', 'nitrogen lost', 2]], true),
+    W('Explain how too much fertiliser in a river can kill fish.', 'Follow the ==chain==: nutrients → algae → light → decay → oxygen.', 'Use the words bacteria and oxygen.', 'eutrophication',
+      [['Runoff', 'Fertiliser is washed into the river.', ''], ['Algae', 'Nitrates and phosphates make algae grow very fast.', ''], ['Light', 'The algae block light, so plants below die.', ''], ['Decay', 'Bacteria decompose the dead plants and use up the oxygen.', ''], ['Fish', 'Fish die because of the lack of oxygen.', '']],
+      [['Runoff', 'fertiliser', 0], ['Algae', 'bloom', 1], ['Plants', 'die', 2], ['Oxygen', 'used by bacteria', 3], ['Fish', 'die', 4]], true),
+    W('Calculate the percentage by mass of nitrogen in urea, CO(NH₂)₂. (Ar: H = 1, C = 12, N = 14, O = 16)', 'Count the ==two N atoms== in the formula.', 'Mr first.', '% N = 28 ÷ Mr × 100',
+      [['Mr', '12 + 16 + 2 × (14 + 2) = 60', 'CO(NH₂)₂ has 1 C, 1 O, 2 N, 4 H.'], ['N', '2 × 14 = 28', ''], ['Percentage', '28 ÷ 60 × 100 = 46.7 %', '3 s.f.']],
+      [['Mr', '60', 0], ['N', '28', 1], ['% N', '46.7 %', 2]])
+  ],
+  drill: 'fert',
+  quiz: [
+    { q: 'Which element in fertilisers helps root growth?', o: ['nitrogen', 'phosphorus', 'potassium', 'sulfur'], a: 1, w: '==Phosphorus==.' },
+    { q: 'Which fertiliser contains both nitrogen and potassium?', o: ['ammonium nitrate', 'potassium chloride', 'potassium nitrate', 'ammonium sulfate'], a: 2, w: '==Potassium nitrate== (KNO₃).' },
+    { q: 'Ammonium nitrate is made by reacting ammonia with…', o: ['nitric acid', 'sulfuric acid', 'hydrochloric acid', 'sodium hydroxide'], a: 0, w: '==Nitric acid==.' },
+    { q: 'What causes the oxygen level in a river to fall in eutrophication?', o: ['fish breathing', 'bacteria decomposing dead plants and algae', 'algae making oxygen', 'rain'], a: 1, w: '==Bacteria== decomposing dead material use up oxygen.' },
+    { q: 'Why should ammonium fertilisers not be mixed with lime?', o: ['they form a precipitate', 'ammonia gas is released, so nitrogen is lost', 'they explode', 'lime is not soluble'], a: 1, w: 'Ammonia gas is released: ==nitrogen is lost==.' },
+    { q: 'Which pair are the nutrients most needed in an NPK fertiliser?', o: ['sodium and chlorine', 'nitrogen, phosphorus and potassium', 'carbon, hydrogen and oxygen', 'iron and zinc'], a: 1, w: '==N, P and K==.' }
+  ],
+  exam: [
+    { q: 'Explain why farmers use fertilisers containing nitrogen, phosphorus and potassium.', m: 3,
+      p: ['plants need these elements to ==grow healthily==', '==nitrogen== for proteins / leaves; ==phosphorus== for roots', '==potassium== for flowers or fruit; fertilisers replace nutrients removed from the soil by crops'] },
+    { q: 'Describe how fertilisers can cause the death of fish in a river.', m: 4,
+      p: ['fertiliser is ==washed into the river== (runoff)', 'nitrates / phosphates make ==algae grow quickly==', 'algae and plants die and ==bacteria decompose== them', 'bacteria ==use up the oxygen==, so fish die'] },
+    { q: 'Write the equation for the reaction of ammonia with sulfuric acid to make ammonium sulfate.', m: 2,
+      p: ['reactants ==NH₃ and H₂SO₄==', '==2NH₃ + H₂SO₄ → (NH₄)₂SO₄== (balanced)'] }
+  ]
+},
+macro: {
+  code: 'Topic 11', name: 'Polymers, proteins and plastics',
+  lede: 'How addition and condensation polymers are made, what proteins are, and the environmental problems caused by plastics.',
+  learn: [
+    { h: 'Addition polymers', list: ['A ==polymer== is a ==very long molecule== made by joining many small molecules, called ==monomers==.', '==Addition polymerisation==: many ==alkene monomers (with a C=C double bond)== join. The double bond opens. ==Only one product== is made: the polymer.', 'Ethene → ==poly(ethene)==; propene → ==poly(propene)==; chloroethene → ==poly(chloroethene) (PVC)==.', 'The ==repeat unit== of poly(ethene) is –CH₂–CH₂–. It has ==no C=C== in the polymer, so it is ==saturated==.'] },
+    { h: 'Condensation polymers', list: ['==Condensation polymerisation==: two different monomers join and a ==small molecule, usually water==, is lost at each link.', '==Nylon== is made from a ==diamine== and a ==dicarboxylic acid==. The link is an ==amide link (–CONH–)==. Nylon is a ==polyamide==.', '==PET (polyester)== is made from a ==diol== and a ==dicarboxylic acid==. The link is an ==ester link (–COO–)==.', '==Difference==: addition makes ==only the polymer==; condensation makes ==a polymer plus water== (or another small molecule).'] },
+    { h: 'Proteins', list: ['==Proteins== are ==natural polymers== (polyamides) made from ==amino acids==.', 'An ==amino acid== has an ==amino group (–NH₂)== and a ==carboxylic acid group (–COOH)==. Glycine is NH₂CH₂COOH. Alanine is NH₂CH(CH₃)COOH.', 'Amino acids join by ==condensation polymerisation==, losing ==water== at each link. The link is an ==amide (peptide) link==.', 'In digestion, ==enzymes break protein down== (hydrolysis) into ==amino acids==.'] },
+    { h: 'Plastics and the environment', list: ['Most plastics are ==not biodegradable==: ==bacteria cannot break them down==.', 'Problems: ==landfill sites fill up==, ==litter harms animals==, plastics in the sea harm ==marine life==.', '==Burning plastics== makes ==carbon dioxide== (greenhouse gas) and ==toxic gases== such as carbon monoxide, and hydrogen chloride from PVC.', 'Solutions: ==recycling==, ==reusing==, ==biodegradable plastics==, using fewer plastic items.'] }
+  ],
+  mistakes: ['Saying ==addition polymers lose water==. Only condensation polymers do.', 'Drawing the repeat unit ==with the C=C double bond==. It becomes a single bond.', 'Saying ==plastics rot==. Most are not biodegradable.', 'Mixing up the ==amide link== (nylon, proteins) and the ==ester link== (PET).', 'Saying ==proteins are made from fatty acids==. They are made from amino acids.'],
+  diagrams: [{ svg: svgPoly, cap: '==Addition polymerisation==: ethene molecules join to make poly(ethene).' }],
+  worked: [
+    W('Explain what happens when ethene forms poly(ethene). Name the type of polymerisation.', 'Think about the ==double bond== and the number of ==products==.', 'The double bond opens.', 'many monomers → one polymer',
+      [['Monomer', 'Ethene, CH₂=CH₂, has a C=C double bond.', ''], ['The bond opens', 'The double bond opens and each ethene molecule joins to the next.', ''], ['Product', 'A very long chain, poly(ethene), with repeat unit –CH₂–CH₂–.', 'Only one product is made.'], ['Type', 'Addition polymerisation.', '']],
+      [['Monomer', 'ethene', 0], ['C=C', 'opens', 1], ['Product', 'poly(ethene)', 2], ['Type', 'addition', 3]], true),
+    W('State two differences between addition polymerisation and condensation polymerisation.', 'Compare the ==monomers== and the ==products==.', 'Use pairs.', 'one product v two',
+      [['Monomers', 'Addition: one type of monomer with a C=C bond. Condensation: usually two different monomers, each with two functional groups.', ''], ['Products', 'Addition: only the polymer. Condensation: the polymer and a small molecule such as water.', '']],
+      [['Monomers', 'alkene v two types', 0], ['Products', 'polymer only v + water', 1]], true),
+    W('Draw or describe the structure of alanine, NH₂CH(CH₃)COOH, and state what happens when amino acids form a protein.', 'Name the ==two functional groups==.', 'Mention water.', '–NH₂ and –COOH',
+      [['Functional groups', 'An amino group (–NH₂) at one end and a carboxylic acid group (–COOH) at the other.', ''], ['Joining', 'The –NH₂ of one amino acid reacts with the –COOH of the next.', ''], ['Loss', 'A molecule of water is lost at each link.', 'Condensation polymerisation.'], ['Link', 'An amide (peptide) link –CONH– forms.', '']],
+      [['Groups', '–NH₂ and –COOH', 0], ['Joining', 'NH₂ with COOH', 1], ['Lost', 'water', 2], ['Link', 'amide', 3]], true),
+    W('Describe two environmental problems caused by the disposal of plastics.', 'Think about ==what plastics do== in the ground and the sea.', 'Give a problem and a reason.', 'not biodegradable',
+      [['Landfill', 'Plastics are not biodegradable, so they stay in landfill for hundreds of years.', ''], ['Pollution of the sea', 'Plastic litter harms marine animals that swallow it or become trapped.', ''], ['Burning', 'Burning plastics gives carbon dioxide and toxic gases.', '']],
+      [['Problem 1', 'landfill, not biodegradable', 0], ['Problem 2', 'harms marine life', 1]], true)
+  ],
+  drill: 'macro',
+  quiz: [
+    { q: 'Which monomer forms poly(ethene)?', o: ['ethane', 'ethene', 'ethanol', 'ethanoic acid'], a: 1, w: '==Ethene==.' },
+    { q: 'Addition polymerisation makes…', o: ['a polymer and water', 'only a polymer', 'two polymers', 'a monomer'], a: 1, w: '==Only the polymer==.' },
+    { q: 'The link in nylon is…', o: ['an ester link', 'an amide link', 'a C=C link', 'an ionic link'], a: 1, w: 'An ==amide link==.' },
+    { q: 'Proteins are polymers of…', o: ['sugars', 'amino acids', 'fatty acids', 'alkenes'], a: 1, w: '==Amino acids==.' },
+    { q: 'Which small molecule is lost in condensation polymerisation?', o: ['carbon dioxide', 'water', 'hydrogen', 'oxygen'], a: 1, w: '==Water==.' },
+    { q: 'A problem with most plastics is that they are…', o: ['soluble', 'not biodegradable', 'too light', 'too soft'], a: 1, w: 'They are ==not biodegradable==.' }
+  ],
+  exam: [
+    { q: 'Describe how poly(propene) is made from propene.', m: 3,
+      p: ['many ==propene molecules== (monomers) join together', 'the ==C=C double bond opens== / breaks', 'forms a ==long chain== (addition polymerisation); no other product'] },
+    { q: 'Explain how a protein is formed from amino acids.', m: 4,
+      p: ['amino acids have an ==–NH₂== group and a ==–COOH== group', 'the –NH₂ of one reacts with the –COOH of another', '==water is lost== (condensation polymerisation)', 'forming an ==amide (peptide) link== in a long chain'] },
+    { q: 'State two environmental problems caused by the disposal of plastics.', m: 2,
+      p: ['plastics are ==not biodegradable== / stay in landfill', 'litter / ==harm to marine animals== / burning releases toxic gases or CO₂'] }
+  ]
 }
 };
+/* ---------- extra multiple-choice questions in the Cambridge 0620 style (merged into each chapter's quiz) ---------- */
+const MQ = (q, c, wr, w, x) => { const o = shuffle([c, ...wr]); return Object.assign({ q, o, a: o.indexOf(c), w }, x || {}); };
+const MCX = {
+  atoms: [
+    MQ('The relative masses of a proton, a neutron and an electron are:', '1, 1, 1/1840', ['1, 1, 1', '1, 0, 1', '0, 1, 1/1840'], 'Proton ==1==, neutron ==1==, electron ==1/1840==.'),
+    MQ('An atom has 17 protons, 18 neutrons and 17 electrons. What is its nucleon number?', '35', ['17', '34', '52'], 'Nucleon number = protons + neutrons = 17 + 18 = ==35==.'),
+    MQ('Which electronic configuration is that of an element in Group VI?', '2,8,6', ['2,8,4', '2,8,8', '2,8,2'], 'The ==last number== is the group number: ==6==.'),
+    MQ('Which pair are isotopes of the same element?', 'chlorine-35 and chlorine-37', ['carbon-14 and nitrogen-14', 'argon-40 and potassium-40', 'oxygen-16 and fluorine-19'], 'Isotopes have the ==same proton number== but ==different neutron numbers==.'),
+    MQ('An ion has 11 protons, 12 neutrons and 10 electrons. What is its charge?', '1+', ['1−', '2+', '0'], '11 protons − 10 electrons = ==1+==.'),
+    MQ('Element X has two isotopes: 63X (70 %) and 65X (30 %). What is its relative atomic mass?', '63.6', ['64.0', '63.0', '64.4'], '(0.70 × 63) + (0.30 × 65) = ==63.6==.', { x: 1 }),
+    MQ('Which statement about the nucleus of an atom is correct?', 'It contains protons and neutrons.', ['It contains protons and electrons.', 'It contains neutrons and electrons.', 'It contains only protons.'], 'The nucleus holds ==protons and neutrons==.')
+  ],
+  bonding: [
+    MQ('Which properties are shown by an ionic compound such as sodium chloride?', 'high melting point; conducts electricity when molten', ['low melting point; conducts electricity when solid', 'high melting point; does not conduct when molten', 'low melting point; does not conduct electricity'], 'Ionic compounds have ==high melting points== and conduct ==when molten or dissolved== (the ions are free to move).'),
+    MQ('Why does a simple molecular substance such as methane have a low melting point?', 'The forces between the molecules are weak.', ['The covalent bonds are weak.', 'It contains ions.', 'It has a giant structure.'], 'Only the ==weak forces between molecules== are overcome, not the covalent bonds.'),
+    MQ('Why is diamond very hard?', 'Each carbon atom is held by strong covalent bonds in a giant structure.', ['The carbon atoms form layers that slide.', 'It contains delocalised electrons.', 'It has weak forces between molecules.'], 'Diamond has a ==giant covalent structure== with ==strong covalent bonds== in all directions.'),
+    MQ('Which statement describes metallic bonding?', 'positive ions in a sea of delocalised electrons', ['positive and negative ions held by attraction', 'shared pairs of electrons between atoms', 'molecules held by weak forces'], 'Metals: ==positive ions in a ‘sea’ of delocalised electrons==.'),
+    MQ('What is the total number of electrons shared in one molecule of carbon dioxide, CO₂?', '8', ['2', '4', '6'], 'Two double bonds = 4 shared pairs = ==8== shared electrons.')
+  ],
+  eqn: [
+    MQ('What is the relative formula mass of calcium carbonate, CaCO₃? (Ar: C = 12, O = 16, Ca = 40)', '100', ['68', '84', '116'], '40 + 12 + (3 × 16) = ==100==.'),
+    MQ('What are the balancing numbers in the equation  _H₂ + _O₂ → _H₂O ?', '2, 1, 2', ['1, 1, 1', '2, 2, 1', '1, 2, 2'], '==2H₂ + O₂ → 2H₂O==.'),
+    MQ('Magnesium is burned in air. The mass of the white solid is greater than the mass of magnesium. Why?', 'Oxygen from the air has joined with the magnesium.', ['Magnesium atoms get heavier.', 'Mass is created when it burns.', 'Water is added.'], 'The product is ==magnesium oxide==: oxygen has been added.'),
+    MQ('What is the relative formula mass of magnesium hydroxide, Mg(OH)₂? (Ar: H = 1, O = 16, Mg = 24)', '58', ['41', '42', '82'], '24 + 2 × (16 + 1) = ==58==.')
+  ],
+  mole: [
+    MQ('How many moles are in 11 g of carbon dioxide, CO₂? (Ar: C = 12, O = 16)', '0.25', ['0.5', '4', '11'], 'Mr = 44. Moles = 11 ÷ 44 = ==0.25==.', { x: 1 }),
+    MQ('How many moles of NaOH are in 250 cm³ of a solution of concentration 0.10 mol/dm³?', '0.025', ['0.25', '2.5', '0.0025'], '0.25 dm³ × 0.10 = ==0.025==.', { x: 1 }),
+    MQ('What is the mass of 0.50 mol of sodium hydroxide, NaOH? (Ar: H = 1, O = 16, Na = 23)', '20 g', ['40 g', '10 g', '80 g'], 'Mr = 40. Mass = 0.50 × 40 = ==20 g==.', { x: 1 }),
+    MQ('What volume does 0.05 mol of a gas occupy at room temperature and pressure? (1 mol = 24 dm³)', '1.2 dm³', ['0.48 dm³', '12 dm³', '120 dm³'], '0.05 × 24 = ==1.2 dm³==.', { x: 1 })
+  ],
+  electro: [
+    MQ('Molten lead(II) bromide is electrolysed. What is formed at each electrode?', 'lead at the cathode, bromine at the anode', ['bromine at the cathode, lead at the anode', 'hydrogen at the cathode, bromine at the anode', 'lead at the cathode, oxygen at the anode'], '==Metals go to the cathode== (negative); ==non-metals go to the anode==.'),
+    MQ('In electrolysis the anode is the…', 'positive electrode', ['negative electrode', 'electrolyte', 'source of electrons'], 'The ==anode is positive==.'),
+    MQ('Which products are formed when concentrated aqueous sodium chloride is electrolysed?', 'hydrogen, chlorine and sodium hydroxide solution', ['sodium and chlorine', 'hydrogen and oxygen', 'sodium and oxygen'], 'Hydrogen at the cathode, ==chlorine at the anode==, and ==NaOH(aq)== is left.'),
+    MQ('Copper is refined by electrolysis. Which electrode is made of impure copper?', 'the anode', ['the cathode', 'the electrolyte', 'both electrodes'], 'The ==impure copper is the anode==; pure copper builds up on the cathode.'),
+    MQ('An iron spoon is electroplated with silver. The spoon is the…', 'cathode', ['anode', 'electrolyte', 'salt bridge'], 'The object to be plated is the ==cathode==.')
+  ],
+  energ: [
+    MQ('Which statement describes an exothermic reaction?', 'Energy is transferred to the surroundings.', ['Energy is absorbed from the surroundings.', 'The temperature of the surroundings falls.', 'The reactants have less energy than the products.'], 'Exothermic: ==energy released==, temperature of the surroundings ==rises==.'),
+    MQ('Which process is endothermic?', 'breaking chemical bonds', ['forming chemical bonds', 'burning methane', 'neutralisation'], '==Bond breaking absorbs energy==.'),
+    MQ('Which change in a reaction pathway diagram shows an exothermic reaction?', 'The products are at a lower energy than the reactants.', ['The products are at a higher energy than the reactants.', 'The energy stays the same.', 'There is no activation energy.'], 'Exothermic: ==products lower== than reactants.')
+  ],
+  rates: [
+    MQ('Why does increasing the temperature increase the rate of a reaction?', 'More particles have enough energy to react, and collisions are more frequent.', ['The activation energy decreases.', 'There are more particles.', 'The particles get bigger.'], 'Particles move ==faster==, collide ==more often== and more have ==enough energy==.'),
+    MQ('What does a catalyst do?', 'It provides an alternative pathway with a lower activation energy.', ['It is used up in the reaction.', 'It increases the temperature.', 'It increases the amount of product.'], 'A catalyst ==lowers the activation energy== and is ==not used up==.'),
+    MQ('Why does powdered marble react faster with acid than marble chips?', 'It has a larger surface area.', ['It has a higher temperature.', 'It is a different compound.', 'It has more mass.'], 'A ==larger surface area== means more collisions.')
+  ],
+  salts: [
+    MQ('Which pH value is shown by an acid?', '3', ['7', '9', '13'], 'Acids have a pH ==below 7==.'),
+    MQ('Which products are formed when dilute hydrochloric acid reacts with calcium carbonate?', 'calcium chloride, water and carbon dioxide', ['calcium chloride and hydrogen', 'calcium oxide and water', 'calcium chloride and water only'], 'Acid + carbonate → ==salt + water + carbon dioxide==.'),
+    MQ('Which equation represents neutralisation?', 'H⁺ + OH⁻ → H₂O', ['H₂ + O₂ → H₂O', 'Na⁺ + Cl⁻ → NaCl', 'Mg + 2H⁺ → Mg²⁺ + H₂'], 'Neutralisation: ==H⁺ + OH⁻ → H₂O==.'),
+    MQ('How is insoluble silver chloride made?', 'by mixing aqueous silver nitrate and aqueous sodium chloride', ['by titrating silver with chlorine', 'by electrolysing silver nitrate', 'by heating silver in chlorine water'], '==Precipitation==: two soluble solutions react to form an insoluble solid.'),
+    MQ('A strong acid is one that…', 'is completely ionised in water', ['has a high concentration', 'is partly ionised in water', 'reacts with every metal'], 'A strong acid ==ionises completely==.', { x: 1 })
+  ],
+  periodic: [],
+  metals: [
+    MQ('Why is aluminium extracted by electrolysis and not by heating with carbon?', 'Aluminium is more reactive than carbon.', ['Aluminium is less reactive than carbon.', 'Aluminium has a low melting point.', 'Carbon is too expensive.'], 'Only metals ==less reactive than carbon== can be extracted by reduction with carbon.'),
+    MQ('Which two substances are needed for iron to rust?', 'oxygen and water', ['oxygen and carbon dioxide', 'water and nitrogen', 'carbon dioxide and water'], 'Rusting needs ==oxygen and water==.'),
+    MQ('Why is an alloy harder than the pure metal?', 'The different sized atoms stop the layers sliding.', ['The atoms are all the same size.', 'It has more electrons.', 'It has a lower melting point.'], 'Atoms of ==different sizes== disrupt the regular layers.'),
+    MQ('Which metal reacts with cold water?', 'calcium', ['copper', 'iron', 'zinc'], '==Calcium== is above magnesium and reacts with cold water.')
+  ],
+  displace: [
+    MQ('Zinc is added to aqueous copper(II) sulfate. Why does a reaction occur?', 'Zinc is more reactive than copper.', ['Zinc is less reactive than copper.', 'Zinc is a transition element.', 'Zinc is insoluble.'], 'A ==more reactive metal displaces a less reactive metal==.'),
+    MQ('Aqueous chlorine is added to aqueous potassium bromide. What is formed?', 'bromine', ['iodine', 'potassium', 'hydrogen'], 'Chlorine is ==more reactive== than bromine, so bromine is displaced.')
+  ],
+  air: [
+    MQ('Approximately what percentage of clean, dry air is nitrogen?', '78 %', ['21 %', '1 %', '99 %'], 'Air is about ==78 % nitrogen== and 21 % oxygen.'),
+    MQ('Which pair of gases are greenhouse gases?', 'carbon dioxide and methane', ['nitrogen and oxygen', 'argon and neon', 'hydrogen and helium'], '==Carbon dioxide and methane==.'),
+    MQ('A catalytic converter changes carbon monoxide and nitrogen oxides into…', 'carbon dioxide and nitrogen', ['carbon and oxygen', 'methane and water', 'sulfur dioxide'], 'Into ==carbon dioxide and nitrogen==.'),
+    MQ('Why is chlorine added to the water supply?', 'to kill bacteria', ['to remove dissolved salts', 'to make the water taste nicer', 'to remove solids'], 'Chlorine ==kills bacteria==.')
+  ],
+  hydro: [
+    MQ('What is the general formula of the alkanes?', 'CₙH₂ₙ₊₂', ['CₙH₂ₙ', 'CₙH₂ₙ₋₂', 'CₙHₙ'], 'Alkanes: ==CₙH₂ₙ₊₂==.'),
+    MQ('Which test shows that a hydrocarbon is an alkene?', 'It decolourises aqueous bromine.', ['It turns limewater milky.', 'It turns litmus red.', 'It forms a white precipitate.'], 'Alkenes ==decolourise bromine water== (orange → colourless).'),
+    MQ('What does cracking produce?', 'shorter alkanes and alkenes', ['longer alkanes', 'only carbon dioxide', 'only alcohols'], 'Cracking breaks long alkanes into ==shorter alkanes and alkenes==.'),
+    MQ('Complete combustion of a hydrocarbon produces…', 'carbon dioxide and water', ['carbon monoxide and water', 'carbon and hydrogen', 'carbon dioxide only'], 'Complete combustion: ==CO₂ + H₂O==.'),
+    MQ('Crude oil is separated into fractions by…', 'fractional distillation', ['filtration', 'crystallisation', 'chromatography'], 'Fractions have different ==boiling points==.')
+  ],
+  organics: [
+    MQ('Which method is used to make ethanol from sugar?', 'fermentation using yeast', ['cracking', 'electrolysis', 'neutralisation'], '==Fermentation== by yeast (no oxygen, about 30 °C).'),
+    MQ('What is formed when ethanoic acid reacts with sodium carbonate?', 'a salt, water and carbon dioxide', ['an alcohol and water', 'hydrogen only', 'an alkane'], 'A carboxylic acid behaves like an acid: ==salt + water + CO₂==.'),
+    MQ('What is a homologous series?', 'compounds with the same functional group and general formula', ['compounds with the same molecular formula', 'compounds with the same boiling point', 'elements in the same group'], 'Same ==functional group== and ==general formula==.'),
+    MQ('Ethene is converted into ethanol by reaction with…', 'steam', ['oxygen', 'hydrogen', 'sodium'], 'Ethene + ==steam== (catalyst, high temperature and pressure).')
+  ],
+  sepn: [
+    MQ('Which method separates a mixture of two miscible liquids with different boiling points?', 'fractional distillation', ['filtration', 'crystallisation', 'decanting'], 'Use ==fractional distillation==.'),
+    MQ('How do you separate sand from a mixture of sand and water?', 'filtration', ['evaporation', 'distillation', 'chromatography'], '==Filtration== separates an insoluble solid from a liquid.'),
+    MQ('Which method is used to obtain pure water from a salt solution?', 'distillation', ['filtration', 'crystallisation', 'chromatography'], '==Distillation== boils off the water and condenses it, leaving the salt behind.')
+  ],
+  analysis: [
+    MQ('What is the Rf value of a spot that moves 3.0 cm when the solvent front moves 6.0 cm?', '0.5', ['2.0', '3.0', '18'], 'Rf = 3.0 ÷ 6.0 = ==0.5==.'),
+    MQ('Which gas turns limewater milky?', 'carbon dioxide', ['oxygen', 'hydrogen', 'chlorine'], '==Carbon dioxide==.'),
+    MQ('Aqueous sodium hydroxide gives a blue precipitate with which ion?', 'copper(II)', ['iron(II)', 'iron(III)', 'zinc'], '==Copper(II)== gives a ==blue== precipitate.'),
+    MQ('Which reagent is used to test for chloride ions?', 'acidified aqueous silver nitrate', ['aqueous sodium hydroxide', 'limewater', 'aqueous barium chloride'], 'Acidified ==silver nitrate== gives a ==white precipitate== with chloride.')
+  ]
+};
+MCX.periodic = [
+  MQ('Which trend is shown by the Group I metals going down the group?', 'reactivity increases', ['reactivity decreases', 'melting point increases', 'density decreases'], 'Reactivity ==increases== down Group I.'),
+  MQ('What are the physical states of chlorine, bromine and iodine at room temperature?', 'gas, liquid, solid', ['solid, liquid, gas', 'gas, gas, liquid', 'liquid, gas, solid'], '==Cl₂ gas, Br₂ liquid, I₂ solid==.'),
+  MQ('Which statement about transition elements is correct?', 'They form coloured compounds and are often used as catalysts.', ['They are all gases.', 'They form only white compounds.', 'They are in Group VIII.'], 'Transition elements: ==coloured compounds==, ==catalysts==, high melting points.'),
+  MQ('Why are the noble gases unreactive?', 'They have full outer shells of electrons.', ['They have one outer electron.', 'They are all metals.', 'They have no electrons.'], 'A ==full outer shell== means no need to gain or lose electrons.'),
+  MQ('Across a period of the Periodic Table from left to right, the number of outer electrons…', 'increases by one each time', ['stays the same', 'decreases by one each time', 'doubles each time'], 'It ==increases by one== each element.'),
+  MQ('An element in Group VI has how many outer-shell electrons?', '6', ['2', '4', '8'], 'Group number = ==outer electrons==: 6.'),
+  MQ('Which element is a transition element?', 'cobalt', ['sodium', 'chlorine', 'calcium'], '==Cobalt== is in the central block.'),
+  MQ('Which property decreases down Group I?', 'melting point', ['reactivity', 'atomic radius', 'number of shells'], 'Group I ==melting points decrease== down the group.', { x: 1 })
+].map(q => Object.assign(q, { t: 'periodic' }));
+for (const k in MCX) if (CH[k]) CH[k].quiz.push(...MCX[k].filter(q => !q.t));
+CH.atoms.quiz.push(...MCX.periodic);
 
 /* ---------- drill generators ---------- */
 const sup = q => (q === 1 ? '' : '⁰¹²³⁴⁵⁶⁷⁸⁹'[q]);
@@ -1477,6 +1906,74 @@ const DRILLS = {
       return choiceItem(`What colour is the flame for ${f[0]} ions?`, f[1], ['red', 'yellow', 'lilac', 'orange-red', 'blue-green'].filter(x => x !== f[1]).slice(0, 3), [['Flame test', f[0] + ' = ' + f[1]]]); },
     () => { const a = pick([['carbonate', 'dilute acid: fizzing, CO₂ turns limewater milky'], ['chloride', 'dilute nitric acid then silver nitrate: white precipitate'], ['bromide', 'dilute nitric acid then silver nitrate: cream precipitate'], ['iodide', 'dilute nitric acid then silver nitrate: yellow precipitate'], ['sulfate', 'dilute hydrochloric acid then barium chloride: white precipitate']]);
       return choiceItem(`Which test shows ${a[0]} ions?`, a[1], ['dilute acid: fizzing, CO₂ turns limewater milky', 'dilute nitric acid then silver nitrate: white precipitate', 'dilute nitric acid then silver nitrate: cream precipitate', 'dilute nitric acid then silver nitrate: yellow precipitate', 'dilute hydrochloric acid then barium chloride: white precipitate'].filter(x => x !== a[1]).slice(0, 3), [['Test', a[1]]]); }
+  ],
+  states: [
+    () => { const it = pick([['solid', 'close together in a regular pattern and vibrating'], ['liquid', 'close together in a random pattern and sliding past each other'], ['gas', 'far apart and moving quickly in all directions']]);
+      return choiceItem(`Which describes the particles in a ${it[0]}?`, it[1], ['close together in a regular pattern and vibrating', 'close together in a random pattern and sliding past each other', 'far apart and moving quickly in all directions'].filter(x => x !== it[1]), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['solid to liquid', 'melting'], ['liquid to gas at the boiling point', 'boiling'], ['gas to liquid', 'condensation'], ['liquid to solid', 'freezing'], ['solid to gas', 'sublimation'], ['liquid to gas at the surface below the boiling point', 'evaporation']]);
+      return choiceItem(`What is the change of state ${it[0]}?`, it[1], ['melting', 'boiling', 'condensation', 'freezing', 'sublimation', 'evaporation'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[1] + ': ' + it[0]]]); },
+    () => { const g = pick([['hydrogen', 2], ['helium', 4], ['methane', 16], ['oxygen', 32], ['carbon dioxide', 44], ['chlorine', 71]]), h = pick([['ammonia', 17], ['nitrogen', 28], ['argon', 40], ['bromine', 160]]);
+      const f = g[1] < h[1] ? g : h, sl = g[1] < h[1] ? h : g;
+      return choiceItem(`Which gas diffuses faster at the same temperature: ${g[0]} (Mr ${g[1]}) or ${h[0]} (Mr ${h[1]})?`, f[0], [sl[0]], [['Rule', 'the gas with the smaller Mr diffuses faster']]); },
+    () => { const it = pick([['the temperature is raised (fixed volume)', 'increases'], ['the volume is made smaller (fixed temperature)', 'increases'], ['the temperature is lowered (fixed volume)', 'decreases'], ['the volume is made larger (fixed temperature)', 'decreases']]);
+      return choiceItem(`What happens to gas pressure when ${it[0]}?`, it[1], ['increases', 'decreases'].filter(x => x !== it[1]), [['Reason', 'pressure = particle collisions with the walls']]); },
+    () => { const it = pick([['a pure solid melts', 'stays constant'], ['a pure liquid boils', 'stays constant'], ['a solid is heated below its melting point', 'rises'], ['a gas is heated', 'rises']]);
+      return choiceItem(`What happens to the temperature when ${it[0]}?`, it[1], ['stays constant', 'rises'].filter(x => x !== it[1]), [['Heating curve', 'flat parts: melting and boiling']]); },
+    () => { const it = pick([['a pure substance', 'a sharp melting point'], ['an impure substance', 'a melting range and a lower melting point']]);
+      return choiceItem(`Which describes the melting of ${it[0]}?`, it[1], ['a sharp melting point', 'a melting range and a lower melting point'].filter(x => x !== it[1]), [['Purity', 'impure: range, lower']]); }
+  ],
+  redox: [
+    () => { const it = pick([['CuO + H₂ → Cu + H₂O', 'CuO', 'H₂'], ['Fe₂O₃ + 3CO → 2Fe + 3CO₂', 'Fe₂O₃', 'CO'], ['ZnO + C → Zn + CO', 'ZnO', 'C'], ['PbO + H₂ → Pb + H₂O', 'PbO', 'H₂'], ['2Mg + O₂ → 2MgO', 'O₂', 'Mg']]), red = Math.random() < 0.5;
+      const all = ['CuO', 'H₂', 'Fe₂O₃', 'CO', 'ZnO', 'C', 'PbO', 'O₂', 'Mg'];
+      return choiceItem(`In the reaction ${it[0]}, which substance is ${red ? 'reduced' : 'oxidised'}?`, red ? it[1] : it[2], [red ? it[2] : it[1], ...all.filter(x => !it[0].includes(x)).slice(0, 2)], [['Rule', 'loss of oxygen = reduced; gain of oxygen = oxidised']]); },
+    () => { const it = pick([['loss of electrons', 'oxidation'], ['gain of electrons', 'reduction'], ['gain of oxygen', 'oxidation'], ['loss of oxygen', 'reduction']]);
+      return choiceItem(`${it[0][0].toUpperCase() + it[0].slice(1)} is…`, it[1], ['oxidation', 'reduction'].filter(x => x !== it[1]), [['OIL RIG', 'Oxidation Is Loss, Reduction Is Gain (of electrons)']]); },
+    () => { const it = pick([['acidified potassium manganate(VII) turns from purple to colourless', 'a reducing agent'], ['potassium iodide solution turns from colourless to brown', 'an oxidising agent']]);
+      return choiceItem(`A test shows that ${it[0]}. What is present?`, it[1], ['a reducing agent', 'an oxidising agent'].filter(x => x !== it[1]).concat(['an acid']), [['Tests', 'KMnO₄ decolourised = reducing agent; KI brown = oxidising agent']]); },
+    () => { const it = pick([['iron catalyst', 'Haber process'], ['vanadium(V) oxide catalyst', 'Contact process'], ['200 atm', 'Haber process'], ['2 atm', 'Contact process'], ['ammonia is made', 'Haber process'], ['sulfuric acid is made', 'Contact process']]);
+      return choiceItem(`Which industrial process uses: ${it[0]}?`, it[1], ['Haber process', 'Contact process', 'cracking', 'fractional distillation'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['hydrated copper(II) sulfate (blue)', 'anhydrous copper(II) sulfate (white) + water'], ['ammonium chloride', 'ammonia + hydrogen chloride']]);
+      return choiceItem(`A reversible reaction: ${it[0]} ⇌ …`, it[1], ['anhydrous copper(II) sulfate (white) + water', 'ammonia + hydrogen chloride', 'copper + sulfur', 'carbon dioxide + water'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ' ⇌ ' + it[1]]]); },
+    () => { const it = pick([['a hydrogen fuel cell', 'water'], ['burning petrol', 'carbon dioxide and water']]);
+      return choiceItem(`What is released by ${it[0]}?`, it[1], ['water', 'carbon dioxide and water', 'ammonia'].filter(x => x !== it[1]), [['Fuel cell', '2H₂ + O₂ → 2H₂O only']]); }
+  ],
+  emp: [
+    () => { const it = pick([['CaCO₃', 100, 'Ca', 40], ['CaCO₃', 100, 'O', 48], ['MgO', 40, 'Mg', 60], ['MgO', 40, 'O', 40], ['NH₄NO₃', 80, 'N', 35], ['NH₄NO₃', 80, 'O', 60], ['Fe₂O₃', 160, 'Fe', 70], ['Fe₂O₃', 160, 'O', 30], ['CuSO₄', 160, 'Cu', 40], ['CuSO₄', 160, 'S', 20], ['NaOH', 40, 'Na', 57.5], ['SO₃', 80, 'S', 40], ['SO₃', 80, 'O', 60]]);
+      return { kind:'num', q:`Calculate the percentage by mass of ${it[2]} in ${it[0]}. (Ar: H = 1, C = 12, N = 14, O = 16, Na = 23, Mg = 24, S = 32, Ca = 40, Fe = 56, Cu = 64)`, ans:it[3], tol:0.5, s:[['Mr', String(it[1])], ['Percentage', `${it[2]} makes up ${it[3]} % of the mass`]] }; },
+    () => { const it = pick([['CH₂', 14, [28, 42, 56, 70, 84]], ['CH', 13, [26, 52, 78]], ['CH₂O', 30, [60, 90, 180]], ['NO₂', 46, [92, 138]]]), mr = pick(it[2]), n = mr / it[1];
+      return { kind:'num', q:`The empirical formula of a compound is ${it[0]} and its relative molecular mass is ${mr}. What is n in (${it[0]})ₙ?`, ans:n, tol:0, s:[['Empirical formula mass', String(it[1])], ['n', `${mr} ÷ ${it[1]} = ${n}`]] }; },
+    () => { const t = pick([20, 25, 40, 50, 80]), p = pick([60, 70, 75, 80, 85, 90]), a = t * p / 100;
+      return { kind:'num', q:`The theoretical yield of a product is ${t} g and the actual yield is ${a} g. Calculate the percentage yield.`, ans:p, tol:0.1, s:[['Formula', 'actual ÷ theoretical × 100'], ['Answer', `${a} ÷ ${t} × 100 = ${p} %`]] }; },
+    () => { const t = pick([5, 8, 10, 20, 25]), p = pick([60, 70, 80, 90, 95]), pure = t * p / 100;
+      return { kind:'num', q:`A ${t} g sample of limestone contains ${pure} g of pure calcium carbonate. Calculate the percentage purity.`, ans:p, tol:0.1, s:[['Formula', 'pure mass ÷ sample mass × 100'], ['Answer', `${pure} ÷ ${t} × 100 = ${p} %`]] }; },
+    () => { const it = pick([['Mg 2.4 g, O 1.6 g', 'MgO'], ['Ca 4.0 g, O 1.6 g', 'CaO'], ['S 3.2 g, O 4.8 g', 'SO₃'], ['Fe 5.6 g, Cl 10.65 g', 'FeCl₃'], ['Al 2.7 g, O 2.4 g', 'Al₂O₃'], ['C 3.0 g, H 0.5 g', 'CH₂']]);
+      return choiceItem(`A compound contains ${it[0]}. What is its empirical formula? (Ar: H = 1, C = 12, O = 16, Mg = 24, Al = 27, S = 32, Cl = 35.5, Ca = 40, Fe = 56)`, it[1], ['MgO', 'CaO', 'SO₃', 'FeCl₃', 'Al₂O₃', 'CH₂', 'CH', 'FeCl₂', 'SO₂'].filter(x => x !== it[1]).slice(0, 3), [['Method', 'divide masses by Ar, then by the smallest, then make whole numbers'], ['Answer', it[1]]]); },
+    () => { const m = rint(2, 9) * 5, p = pick([20, 40, 50, 60, 70, 80]), a = m * p / 100;
+      return { kind:'num', q:`A compound is ${p} % by mass of one element. How many grams of that element are in a ${m} g sample?`, ans:a, tol:0.05, s:[['Percentage of the sample', `${p} % × ${m} = ${a} g`]] }; }
+  ],
+  fert: [
+    () => { const it = pick([['helps root growth', 'phosphorus'], ['makes proteins and leaf growth', 'nitrogen'], ['helps flowers and fruit', 'potassium']]);
+      return choiceItem(`Which element in fertilisers ${it[0]}?`, it[1], ['nitrogen', 'phosphorus', 'potassium', 'sulfur'].filter(x => x !== it[1]).slice(0, 3), [['NPK', 'N: leaves, proteins; P: roots; K: flowers, fruit']]); },
+    () => { const it = pick([['NH₄NO₃', 80, 28, 35], ['(NH₄)₂SO₄', 132, 28, 21.21], ['CO(NH₂)₂', 60, 28, 46.67], ['KNO₃', 101, 14, 13.86]]);
+      return { kind:'num', q:`Calculate the percentage by mass of nitrogen in ${it[0]}. (Ar: H = 1, C = 12, N = 14, O = 16, S = 32, K = 39)`, ans:it[3], tol:0.1, s:[['Mr', String(it[1])], ['N in the formula', String(it[2])], ['Percentage', `${it[2]} ÷ ${it[1]} × 100 = ${it[3]} %`]] }; },
+    () => { const o = ['fertiliser is washed into the river', 'algae grow very fast', 'light is blocked and plants die', 'bacteria use up the oxygen'], k = rint(0, 2);
+      return choiceItem(`In eutrophication, what happens straight after: ${o[k]}?`, o[k + 1], o.filter((x, i) => i !== k + 1 && i !== k).concat(['fish numbers increase']).slice(0, 3), [['Order', o.join(' → ') + ' → fish die']]); },
+    () => { const it = pick([['nitric acid', 'ammonium nitrate'], ['sulfuric acid', 'ammonium sulfate'], ['phosphoric acid', 'ammonium phosphate']]);
+      return choiceItem(`Which fertiliser is made by reacting ammonia with ${it[0]}?`, it[1], ['ammonium nitrate', 'ammonium sulfate', 'ammonium phosphate', 'potassium chloride'].filter(x => x !== it[1]).slice(0, 3), [['Neutralisation', 'ammonia + acid → ammonium salt']]); },
+    () => { const it = pick([['ammonium nitrate', 'nitrogen only'], ['potassium chloride', 'potassium only'], ['potassium nitrate', 'nitrogen and potassium'], ['ammonium phosphate', 'nitrogen and phosphorus']]);
+      return choiceItem(`Which nutrients does ${it[0]} supply?`, it[1], ['nitrogen only', 'potassium only', 'nitrogen and potassium', 'nitrogen and phosphorus'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
+  ],
+  macro: [
+    () => { const it = pick([['ethene', 'poly(ethene)'], ['propene', 'poly(propene)'], ['chloroethene', 'poly(chloroethene) (PVC)']]);
+      return choiceItem(`Which polymer is made from ${it[0]}?`, it[1], ['poly(ethene)', 'poly(propene)', 'poly(chloroethene) (PVC)', 'nylon'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ' → ' + it[1]]]); },
+    () => { const it = pick([['nylon', 'amide link'], ['proteins', 'amide (peptide) link'], ['PET (polyester)', 'ester link'], ['poly(ethene)', 'only C–C single bonds']]);
+      return choiceItem(`What is the main link in ${it[0]}?`, it[1], ['amide link', 'amide (peptide) link', 'ester link', 'only C–C single bonds'].filter(x => x !== it[1] && !(it[1].startsWith('amide') && x.startsWith('amide'))).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['addition polymerisation', 'only the polymer'], ['condensation polymerisation', 'the polymer and water']]);
+      return choiceItem(`What is made in ${it[0]}?`, it[1], ['only the polymer', 'the polymer and water'].filter(x => x !== it[1]), [['Rule', 'addition: one product; condensation: polymer + small molecule']]); },
+    () => { const it = pick([['proteins', 'amino acids'], ['nylon', 'a diamine and a dicarboxylic acid'], ['PET', 'a diol and a dicarboxylic acid'], ['poly(ethene)', 'ethene']]);
+      return choiceItem(`Which monomers make ${it[0]}?`, it[1], ['amino acids', 'a diamine and a dicarboxylic acid', 'a diol and a dicarboxylic acid', 'ethene'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); },
+    () => { const it = pick([['has a –NH₂ group and a –COOH group', 'an amino acid'], ['has a C=C double bond', 'an alkene monomer'], ['is a very long molecule made of many repeat units', 'a polymer']]);
+      return choiceItem(`Which describes a molecule that ${it[0]}?`, it[1], ['an amino acid', 'an alkene monomer', 'a polymer', 'an alkane'].filter(x => x !== it[1]).slice(0, 3), [['Match', it[0] + ': ' + it[1]]]); }
   ]
 };
 
@@ -1490,8 +1987,73 @@ function drawMock(){
 }
 if (Array.isArray(store.mock) && store.mock.length === MOCK_N && store.mock.every(([k, i]) => CH[k] && CH[k].exam[i])) MOCK = store.mock;
 
+/* ---------- multiple-choice papers in the Cambridge 0620 pattern ---------- */
+/* Measured from five 2025 and 2026 papers: Paper 1 (Core) and Paper 2 (Extended), 40 questions, 40 marks, 45 minutes, one mark each.
+   Questions follow the syllabus order: states of matter, atoms, bonding, stoichiometry, electrochemistry, energetics, reactions, acids, periodic table, metals, environment, organic chemistry, experimental techniques and analysis. */
+const MC_TOPICS = [
+  { k: 'states', n: 'States of matter', core: 1, ext: 3 }, { k: 'atoms', n: 'Atoms and ions', core: 3, ext: 3 }, { k: 'bonding', n: 'Bonding and structure', core: 3, ext: 2 },
+  { k: 'stoich', n: 'Formulae and the mole', core: 3, ext: 3 }, { k: 'electro', n: 'Electrochemistry', core: 3, ext: 3 }, { k: 'energy', n: 'Energetics', core: 2, ext: 2 },
+  { k: 'reactions', n: 'Rates, redox and reversible reactions', core: 3, ext: 3 }, { k: 'acids', n: 'Acids, bases and salts', core: 3, ext: 4 }, { k: 'periodic', n: 'The Periodic Table', core: 3, ext: 2 },
+  { k: 'metals', n: 'Metals', core: 3, ext: 3 }, { k: 'environ', n: 'Chemistry of the environment', core: 3, ext: 3 }, { k: 'organic', n: 'Organic chemistry', core: 6, ext: 7 }, { k: 'expt', n: 'Experimental techniques and analysis', core: 4, ext: 2 }
+];
+const MC_PAPERS = { core: { name: 'Paper 1', tier: 'Core', mins: 45 }, ext: { name: 'Paper 2', tier: 'Extended', mins: 45 } };
+const MC_CT = { states: 'states', atoms: 'atoms', bonding: 'bonding', eqn: 'stoich', mole: 'stoich', emp: 'stoich', electro: 'electro', energ: 'energy', rates: 'reactions', redox: 'reactions', salts: 'acids', displace: 'metals', metals: 'metals', air: 'environ', fert: 'environ', hydro: 'organic', organics: 'organic', macro: 'organic', sepn: 'expt', analysis: 'expt' };
+const MC_EXT_CH = ['mole', 'emp'];
+const MC_POOL = {}; Object.keys(CH).forEach(k => CH[k].quiz.forEach((q, i) => { const t = q.t || MC_CT[k]; if (!t) return; (MC_POOL[t] = MC_POOL[t] || []).push({ k, i, q, ext: !!q.x || MC_EXT_CH.includes(k) }); }));
+function buildMC(type){ let q; for (let i = 0; i < 12; i++) { q = buildMCOnce(type); if (q.length === 40 && new Set(q.map(x => x.q)).size === 40) break; } return q; }
+function buildMCOnce(type){
+  const tier = MC_PAPERS[type].tier, seen = store.mcseen = store.mcseen || {}, out = [], spare = [];
+  MC_TOPICS.forEach(t => { const n = tier === 'Core' ? t.core : t.ext; const pool = (MC_POOL[t.k] || []).filter(x => tier === 'Extended' || !x.ext)
+      .map(x => ({ x, s: (seen[x.k + '-' + x.i] || 0) * 2 - (tier === 'Extended' && x.ext ? 1 : 0) + Math.random() * 0.9 })).sort((a, b) => a.s - b.s).map(y => y.x);
+    pool.slice(0, n).forEach(x => out.push({ x, t: t.k })); pool.slice(n).forEach(x => spare.push({ x, t: t.k })); const short = n - Math.min(n, pool.length); for (let j = 0; j < short; j++) out.push({ x: null, t: t.k }); });
+  const used = new Set(out.filter(o => o.x).map(o => o.x.k + '-' + o.x.i)); const fill = shuffle(spare.filter(s => !used.has(s.x.k + '-' + s.x.i)));
+  const items = out.map(o => { const e = o.x || (fill.length ? fill.shift().x : null); return e && { e, t: o.t }; }).filter(Boolean);
+  return items.map(({ e, t }) => { const q = e.q, right = q.o[q.a], o = shuffle(q.o); seen[e.k + '-' + e.i] = (seen[e.k + '-' + e.i] || 0) + 1; return { q: q.q, o, a: o.indexOf(right), w: q.w, ch: e.k, t }; });
+}
+let MCQ = [], mcTimer = null, mcLeft = 45 * 60;
+function drawMC(type){
+  type = MC_PAPERS[type] ? type : (MC_PAPERS[store.mctype] ? store.mctype : 'core');
+  MCQ = buildMC(type); store.mctype = type; store.mcq = MCQ; store.mcans = MCQ.map(() => null); store.mcdone = false; mcLeft = MC_PAPERS[type].mins * 60; save();
+}
+if (Array.isArray(store.mcq) && store.mcq.length === 40 && MC_PAPERS[store.mctype] && Array.isArray(store.mcans)) MCQ = store.mcq; else drawMC(store.mctype || 'core');
+function renderMC(){
+  const P = MC_PAPERS[store.mctype], types = Object.keys(MC_PAPERS).map(k => `<button class="btn ${k === store.mctype ? 'primary' : 'ghost'}" data-mctype="${k}">${MC_PAPERS[k].name} · ${MC_PAPERS[k].tier}</button>`).join('');
+  const done = store.mcdone, score = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0), answered = store.mcans.filter(x => x != null).length;
+  const byTopic = MC_TOPICS.map(t => { const idx = MCQ.map((q, i) => [q, i]).filter(([q]) => q.t === t.k); return [t.n, idx.filter(([q, i]) => store.mcans[i] === q.a).length, idx.length]; }).filter(r => r[2]);
+  const cards = MCQ.map((q, i) => `<div class="card" data-mcq="${i}"><span class="eyebrow">Question ${i + 1}</span><p class="q">${q.q}</p><div class="opts">${q.o.map((o, j) => `<button class="opt${store.mcans[i] === j ? ' sel' : ''}${done && j === q.a ? ' right' : ''}${done && store.mcans[i] === j && j !== q.a ? ' wrong' : ''}" data-mco="${j}" ${done ? 'disabled' : ''}><b>${'ABCD'[j]}</b> ${o}</button>`).join('')}</div>${done ? `<p class="why">${store.mcans[i] == null ? 'Not answered. ' : ''}${fmt(q.w)}</p>` : ''}</div>`).join('');
+  return `<div class="chhead fadein"><span class="eyebrow">Cambridge 0620 pattern</span><h2>Multiple-choice paper</h2>
+    <p class="lede">${P.name} style, ${P.tier}: 40 questions, 40 marks, ${P.mins} minutes. The questions follow the syllabus order, as in the real paper.</p></div>
+    <div class="stack" style="margin-top:20px">
+    <div class="card"><h3>Choose a paper</h3><div class="row" style="flex-wrap:wrap">${types}</div>
+      <p class="note">Core: simpler facts and no mole calculations. Extended: more calculations and explanations. Ask your teacher which tier you sit.</p></div>
+    <div class="card"><h3>Instructions</h3><ul>
+      <li>There are ==forty questions==. Answer all of them.</li>
+      <li>Each question has ==four possible answers A, B, C and D==. Choose the one you think is correct.</li>
+      <li>Each correct answer scores ==one mark==. No marks are taken off for a wrong answer.</li>
+      <li>You ==may use a calculator==. Rough working goes on paper.</li>
+      <li>The Periodic Table is below, as in the real paper.</li></ul>
+      <details><summary><b>Periodic Table</b></summary><div style="overflow-x:auto;margin-top:8px">${periodicFull()}</div></details></div>
+    <div class="card"><div class="scorebar"><div class="timer" id="mclock">${fmtTime(mcLeft)}</div><div class="big-score">${done ? score + '/40' : answered + '/40 answered'}</div></div>
+      <div class="row"><button class="btn primary" id="mcgo">${mcTimer ? 'Pause' : 'Start timer'}</button><button class="btn ghost" id="mcmark">${done ? 'Marked' : 'Finish and mark my paper'}</button><button class="btn ghost" id="mcnew">New paper (different questions)</button></div></div>
+    ${done ? `<div class="card"><h3>Your result: ${score} out of 40</h3><p class="note">${score >= 32 ? 'Excellent.' : score >= 24 ? 'Good. Read the explanations for the ones you missed.' : 'Keep practising. Read the explanations, then revise the chapters shown below.'}</p>${byTopic.map(r => `<div class="prog"><div class="pl"><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div><div class="bar"><i style="width:${Math.round(100 * r[1] / r[2])}%"></i></div></div>`).join('')}</div>` : ''}
+    ${cards}</div>`.replace(/==(.+?)==/g, '<mark class="kw">$1</mark>');
+}
+function bindMC(){
+  const v = document.getElementById('view');
+  document.getElementById('mcgo').onclick = () => {
+    if (mcTimer) { clearInterval(mcTimer); mcTimer = null; document.getElementById('mcgo').textContent = 'Resume'; return; }
+    document.getElementById('mcgo').textContent = 'Pause';
+    mcTimer = setInterval(() => { mcLeft = Math.max(0, mcLeft - 1); const c = document.getElementById('mclock'); if (c) { c.textContent = mcLeft ? fmtTime(mcLeft) : 'Time up'; c.classList.toggle('low', mcLeft < 300); } if (!mcLeft) { clearInterval(mcTimer); mcTimer = null; } }, 1000);
+  };
+  document.getElementById('mcmark').onclick = () => { if (store.mcdone) return; clearInterval(mcTimer); mcTimer = null; store.mcdone = true; const sc = MCQ.reduce((s, q, i) => s + (store.mcans[i] === q.a ? 1 : 0), 0); store.mcbest = Math.max(store.mcbest || 0, sc); save(); render(); window.scrollTo(0, 0); };
+  document.getElementById('mcnew').onclick = () => { clearInterval(mcTimer); mcTimer = null; drawMC(store.mctype); render(); window.scrollTo(0, 0); };
+  v.querySelectorAll('[data-mctype]').forEach(b => b.onclick = () => { clearInterval(mcTimer); mcTimer = null; drawMC(b.dataset.mctype); render(); });
+  v.querySelectorAll('[data-mco]').forEach(b => b.onclick = () => { if (store.mcdone) return; const i = +b.closest('[data-mcq]').dataset.mcq, j = +b.dataset.mco; store.mcans[i] = store.mcans[i] === j ? null : j; save();
+    b.closest('.opts').querySelectorAll('.opt').forEach((x, k) => x.classList.toggle('sel', store.mcans[i] === k)); document.querySelector('.big-score').textContent = store.mcans.filter(x => x != null).length + '/40 answered'; });
+}
+
 /* ---------- state & rendering ---------- */
-const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['rates','Topic 6','Rates'],['energ','Topic 5','Energetics'],['electro','Topic 4','Electrolysis'],['metals','Topic 9','Metals'],['air','Topic 10','Air and water'],['hydro','Topic 11','Hydrocarbons'],['organics','Topic 11','Alcohols, polymers'],['analysis','Topic 12','Analysis'],['mock','','Mini mock']];
+const TABS = [['start','','Start here'],['atoms','Ch 4','Atoms'],['bonding','Ch 5','Bonding'],['displace','Ch 6','Displacement'],['salts','Ch 7','Salts'],['states','Topic 1','States of matter'],['sepn','Topic 1','Separation'],['eqn','Topic 3','Equations'],['mole','Topic 3','The mole'],['emp','Topic 3','Empirical formulae'],['rates','Topic 6','Rates'],['redox','Topic 7','Redox, industry'],['energ','Topic 5','Energetics'],['electro','Topic 4','Electrolysis'],['metals','Topic 9','Metals'],['air','Topic 10','Air and water'],['fert','Topic 10','Fertilisers'],['hydro','Topic 11','Hydrocarbons'],['organics','Topic 11','Alcohols, polymers'],['macro','Topic 11','Proteins, plastics'],['analysis','Topic 12','Analysis'],['mc','','MC paper'],['mock','','Theory mock']];
 let cur = 'start', sub_ = 'learn';
 try { const h = location.hash.replace('#',''); if (TABS.some(t => t[0] === h)) cur = h; } catch(e) {}
 
@@ -1505,15 +2067,15 @@ document.getElementById('tabs').addEventListener('click', e => {
 function examScore(key, list){ let got = 0, tot = 0; list.forEach((q,i) => { tot += q.m; got += Math.min(q.m, (store.ticks[key+'-'+i] || []).length); }); return [got, tot]; }
 function render(){
   const v = document.getElementById('view');
-  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : renderChapter(cur);
+  v.innerHTML = cur === 'start' ? renderStart() : cur === 'mock' ? renderMock() : cur === 'mc' ? renderMC() : renderChapter(cur);
   bindView();
 }
 function renderStart(){
-  const rows = ['atoms','bonding','displace','salts','sepn','eqn','mole','rates','energ','electro','metals','air','hydro','organics','analysis'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
+  const rows = ['states','atoms','bonding','displace','salts','sepn','eqn','mole','emp','rates','redox','energ','electro','metals','air','fert','hydro','organics','macro','analysis'].map(k => { const c = CH[k]; const [g,t] = examScore(k, c.exam); const qb = store.quiz[k] || 0; const qt = c.quiz.length;
     return `<div class="prog"><div class="pl"><span><b>${c.name}</b></span><span>quiz ${qb}/${qt} · exam ${g}/${t}</span></div>
       <div class="bar"><i style="width:${Math.round(50*qb/qt + 50*g/t)}%"></i></div></div>`; }).join('');
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · Full year</span><h2>Chemistry: the whole syllabus</h2>
-  <p class="lede">The Term 1 chapters are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the mini mock.</p></div>
+  <p class="lede">The Term 1 chapters are included first. More chapters are added in Cambridge syllabus order. Work through each chapter tab from left to right, then try the multiple-choice paper and the theory mock.</p></div>
   <div class="stack" style="margin-top:20px">
   <div class="card"><h3>How to use each chapter</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords examiners look for. Use them in your answers.</div>
@@ -1714,7 +2276,8 @@ function renderMock(){
 let quizScore = 0;
 function bindView(){
   quizScore = 0;
-  if (cur !== 'start' && cur !== 'mock' && sub_ === 'drill') newDrill();
+  if (cur !== 'start' && cur !== 'mock' && cur !== 'mc' && sub_ === 'drill') newDrill();
+  if (cur === 'mc') bindMC();
   if (cur === 'mock') {
     document.getElementById('tgo').onclick = () => {
       if (timer) { clearInterval(timer); timer = null; document.getElementById('tgo').textContent = 'Resume'; return; }

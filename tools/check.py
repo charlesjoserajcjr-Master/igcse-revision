@@ -43,7 +43,7 @@ with sync_playwright() as p:
     print(f'drill items checked: {n}'); print('bad drills:', bad)
     tabs = [t.get_attribute('data-tab') for t in pg.query_selector_all('[data-tab]')]
     for tab in tabs:
-        if tab in ('start', 'mock'): continue
+        if tab in ('start', 'mock', 'mc'): continue
         pg.click(f'[data-tab={tab}]')
         for s in ['learn', 'diagrams', 'lab', 'worked', 'drill', 'quiz', 'exam']:
             if not pg.query_selector(f'[data-sub={s}]'): continue
@@ -77,6 +77,12 @@ with sync_playwright() as p:
               const seen = new Set(); q.forEach(x => { if (seen.has(x.q)) bad.push([t, 'duplicate', x.q.slice(0, 40)]); seen.add(x.q); if (typeof NOCALC_OUT !== 'undefined' && !P.calc && NOCALC_OUT.includes(x.ch)) bad.push([t, 'calculator topic', x.ch]); if (typeof NC_BAD !== 'undefined' && !P.calc && x.ch !== 'round' && NC_BAD.test(x.q)) bad.push([t, 'calculator wording', x.q.slice(0, 50)]); if (!x.p.length) bad.push([t, 'no mark scheme', x.q.slice(0, 40)]); }); } }
           return bad.slice(0, 10); }""")
         print('bad mock papers:', bad)
+    # Cambridge-pattern multiple-choice papers (chemistry pack): 40 unique questions, four options each
+    if pg.evaluate("typeof buildMC !== 'undefined'"):
+        badmc = pg.evaluate("""() => { const bad = []; for (const t of Object.keys(MC_PAPERS)) for (let n = 0; n < 60; n++) { const q = buildMC(t);
+          if (q.length !== 40) bad.push([t, 'length', q.length]); if (new Set(q.map(x => x.q)).size !== q.length) bad.push([t, 'duplicate question']);
+          q.forEach(x => { if (x.o.length !== 4 || new Set(x.o).size !== 4 || !(x.a >= 0)) bad.push([t, 'options', x.q.slice(0, 40)]); }); } return bad.slice(0, 10); }""")
+        print('bad MC papers:', badmc)
     pg.set_viewport_size({'width': 400, 'height': 900})
     width = pg.evaluate('document.documentElement.scrollWidth')
     print('page width at 400px viewport:', width, '(OK)' if width <= 400 else '(SIDEWAYS SCROLL!)')
