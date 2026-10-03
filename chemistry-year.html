@@ -1699,6 +1699,34 @@ MCX.periodic = [
   MQ('Which element is a transition element?', 'cobalt', ['sodium', 'chlorine', 'calcium'], '==Cobalt== is in the central block.'),
   MQ('Which property decreases down Group I?', 'melting point', ['reactivity', 'atomic radius', 'number of shells'], 'Group I ==melting points decrease== down the group.', { x: 1 })
 ].map(q => Object.assign(q, { t: 'periodic' }));
+MCX.states = [];
+MCX.hydro.push(
+  MQ('The names of organic compounds with seven carbon atoms in a chain start with…', 'hept', ['pent', 'hex', 'oct'], 'Prefixes: meth 1, eth 2, prop 3, but 4, pent 5, hex 6, ==hept 7==, oct 8.'),
+  MQ('Which equation represents a substitution reaction?', 'CH₄ + Cl₂ → CH₃Cl + HCl', ['C₂H₄ + H₂ → C₂H₆', 'C₂H₄ + Br₂ → C₂H₄Br₂', 'C₂H₅OH → C₂H₄ + H₂O'], 'In ==substitution== one atom is ==replaced== by another (alkanes with chlorine and ultraviolet light).', { x: 1 }));
+MCX.metals.push(
+  MQ('Why is stainless steel used to make cutlery?', 'It does not rust and is hard.', ['It has a low density.', 'It is a good conductor of electricity.', 'It has a low melting point.'], 'Stainless steel is an ==alloy== that ==resists rusting== and is ==hard==.'),
+  MQ('What is the main compound in the iron ore hematite?', 'iron(III) oxide', ['aluminium oxide', 'iron(II) sulfide', 'calcium carbonate'], 'Hematite is ==iron(III) oxide, Fe₂O₃==.'));
+MCX.analysis.push(
+  MQ('Anhydrous cobalt(II) chloride is used to test for water. What is the colour change?', 'blue to pink', ['pink to blue', 'white to blue', 'blue to white'], 'Cobalt(II) chloride: ==blue → pink== with water.'),
+  MQ('Which metal ion gives a lilac flame?', 'potassium', ['sodium', 'calcium', 'lithium'], '==Potassium== gives a lilac flame (sodium yellow, calcium orange-red, lithium red).'));
+MCX.air.push(
+  MQ('Which process removes carbon dioxide from the atmosphere?', 'photosynthesis', ['respiration', 'burning fossil fuels', 'rusting'], '==Photosynthesis== takes in carbon dioxide.'),
+  MQ('Which is a strategy for reducing global warming?', 'using renewable energy instead of fossil fuels', ['burning more coal', 'clearing forests for farmland', 'using more petrol cars'], '==Renewable energy== gives less carbon dioxide.'));
+MCX.states.push(
+  MQ('The smell of cooking spreads across a room. Which process causes this?', 'diffusion', ['evaporation only', 'condensation', 'sublimation'], 'Particles ==diffuse== from high to low concentration.'),
+  MQ('Which statement about the particles in a gas is correct?', 'They are far apart and move randomly.', ['They are close together in a regular pattern.', 'They vibrate about fixed positions.', 'They are close together and slide past each other.'], 'Gas particles are ==far apart== and move ==randomly==.'));
+MCX.energ.push(
+  MQ('Which process is exothermic?', 'neutralisation', ['thermal decomposition of calcium carbonate', 'dissolving ammonium nitrate in water', 'photosynthesis'], 'Neutralisation ==releases== energy; the others absorb energy.'),
+  MQ('In a chemical reaction, more energy is released when bonds form than is absorbed when bonds break. The reaction is…', 'exothermic', ['endothermic', 'reversible', 'neutral'], 'Net energy ==released==: exothermic.'),
+  MQ('What energy change takes place in a hydrogen fuel cell?', 'chemical to electrical', ['electrical to chemical', 'heat to light', 'kinetic to chemical'], 'Chemical energy → ==electrical energy==.'));
+MCX.electro.push(
+  MQ('What is the electrolyte in electrolysis?', 'an ionic compound that is molten or dissolved in water', ['the positive electrode', 'a solid metal', 'a covalent gas'], 'The ==electrolyte== is a ==molten or dissolved ionic compound== that conducts.'),
+  MQ('Dilute sulfuric acid is electrolysed using inert electrodes. What is formed at the cathode?', 'hydrogen', ['oxygen', 'sulfur', 'hydrogen and oxygen'], '==Hydrogen== is formed at the cathode (oxygen at the anode).'));
+MCX.periodic.push(...[
+  MQ('Which Group VII element is a liquid at room temperature?', 'bromine', ['chlorine', 'iodine', 'fluorine'], '==Bromine== is a red-brown liquid.'),
+  MQ('Group I metals react with water to form…', 'a metal hydroxide and hydrogen', ['a metal oxide and oxygen', 'a metal chloride and hydrogen', 'a salt and carbon dioxide'], '==Metal hydroxide + hydrogen==, an alkaline solution.'),
+  MQ('What do elements in the same group of the Periodic Table have in common?', 'the same number of outer-shell electrons', ['the same number of shells', 'the same proton number', 'the same melting point'], 'The same number of ==outer electrons==.')
+].map(q => Object.assign(q, { t: 'periodic' })));
 for (const k in MCX) if (CH[k]) CH[k].quiz.push(...MCX[k].filter(q => !q.t));
 CH.atoms.quiz.push(...MCX.periodic);
 
