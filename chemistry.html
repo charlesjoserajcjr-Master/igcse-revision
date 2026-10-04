@@ -180,6 +180,7 @@ a{color:var(--accent)}
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
 .qgroup{font-family:var(--display,inherit);font-size:1.05rem;margin:18px 0 -6px;color:var(--accent,inherit)}.qgroup .muted{font-weight:400;font-size:.85rem;color:var(--muted,inherit)}
+.rt{border-collapse:collapse;font-size:.92rem}.rt th,.rt td{border:1px solid var(--line);padding:6px 10px;text-align:left}.rt th{background:var(--accent-soft)}
 </style>
 </head>
 <body>
@@ -747,8 +748,34 @@ const DRILLS = {
   ]
 };
 
+/* ---------- textbook sub-sections added (Term 1 portion: Ch 4 to Ch 7) ---------- */
+CH.atoms.learn.push(
+  { h: '4.2 More about the periodic table', list: ['The ==period number== is the ==number of electron shells==. The ==group number== is the ==number of outer electrons== (Groups I to VII).', 'Across a period the elements change from ==metals== on the left to ==non-metals== on the right.', '==Down Group I== the metals get ==more reactive==. The outer electron is ==further from the nucleus==, so it is ==lost more easily==. The melting points ==decrease==.', '==Down Group VII== the halogens get ==less reactive==. The outer shell is further away, so it is ==harder to gain an electron==. The melting points ==increase== and the colour gets darker.', 'Elements in the ==same group== have ==similar properties== because they have the ==same number of outer electrons==.', 'The ==noble gases== (Group VIII) are ==unreactive== because they have a ==full outer shell==.'] }
+);
+CH.atoms.quiz.push(
+  { q: 'Sodium is in Period 3 and Group I. How many shells and outer electrons does it have?', o: ['1 shell, 3 outer electrons', '3 shells, 1 outer electron', '3 shells, 3 outer electrons', '1 shell, 1 outer electron'], a: 1, w: 'Period 3 means ==3 shells==. Group I means ==1 outer electron==.' },
+  { q: 'Why does reactivity increase down Group I?', o: ['more protons attract the electron', 'the outer electron is further from the nucleus so is lost more easily', 'the atoms get smaller', 'there are fewer shells'], a: 1, w: 'The outer electron is ==further away== and ==lost more easily==.' },
+  { q: 'Which statement about the halogens is correct?', o: ['reactivity increases down the group', 'chlorine is more reactive than bromine', 'they are all metals', 'they have one outer electron'], a: 1, w: 'Reactivity ==decreases== down Group VII, so chlorine is more reactive than bromine.' }
+);
+CH.atoms.exam.push(
+  { q: 'Explain why potassium is more reactive than lithium.', m: 3, p: ['Both have ==one outer electron==', 'In potassium the outer electron is ==further from the nucleus==', 'So it is ==lost more easily== (weaker attraction)'] }
+);
+CH.displace.learn.push(
+  { h: '6.1 Describing chemical reactions', list: ['In a chemical reaction the ==reactants== change into ==products==. ==New substances== are made.', '==Word equation==: magnesium + oxygen → magnesium oxide.', '==Symbol equation==: 2Mg + O₂ → 2MgO. It must be ==balanced==: the same number of each atom on both sides.', '==State symbols==: ==(s)== solid, ==(l)== liquid, ==(g)== gas, ==(aq)== dissolved in water.', 'Signs of a chemical reaction: ==a colour change==, ==a gas given off== (bubbles), ==a precipitate== forms, ==a temperature change==, light or flame.', 'To balance: write the ==correct formulae==, ==count the atoms== on each side, put ==numbers in front== of formulae (never change the small numbers), then ==check==.', '==Conservation of mass==: the total mass of the reactants equals the total mass of the products.'], f: ['Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)'] }
+);
+CH.displace.quiz.push(
+  { q: 'What does the state symbol (aq) mean?', o: ['solid', 'liquid', 'gas', 'dissolved in water'], a: 3, w: '==(aq)== means ==aqueous==: dissolved in water.' },
+  { q: 'Which is a sign that a chemical reaction has happened?', o: ['a solid melts', 'a gas is given off', 'sugar dissolves', 'water freezes'], a: 1, w: 'A ==gas given off== is a sign of a new substance. Melting, dissolving and freezing are physical changes.' },
+  { q: 'Balance: H₂ + O₂ → H₂O. The balanced equation is…', o: ['H₂ + O₂ → H₂O', '2H₂ + O₂ → 2H₂O', 'H₂ + 2O₂ → 2H₂O', '2H₂ + 2O₂ → 2H₂O'], a: 1, w: '==2H₂ + O₂ → 2H₂O== has 4 H and 2 O on each side.' }
+);
+CH.displace.exam.push(
+  { q: 'Write a balanced symbol equation, with state symbols, for the reaction of magnesium with hydrochloric acid.', m: 3, p: ['Reactants ==Mg and HCl== and products ==MgCl₂ and H₂==', 'Balanced: ==Mg + 2HCl → MgCl₂ + H₂==', 'State symbols ==(s), (aq), (aq), (g)=='] },
+  { q: 'State three signs that a chemical reaction has taken place.', m: 3, p: ['A ==colour change==', 'A ==gas== is given off / a ==precipitate== forms', 'A ==temperature change== / light or flame (any three)'] }
+);
+
 /* School-format mock: marks and time follow the school paper (Science 100 marks / 1 h 30; CS 80 marks / 2 h) */
 const MODES = { share:{label:'Your share of the Science paper', marks:33, mins:30, sec:true}, full:{label:'Every Chemistry question', marks:null, mins:68, sec:true} };
+(() => { const t = Object.values(CH).reduce((s, c) => s + c.exam.reduce((a, q) => a + q.m, 0), 0); MODES.full.mins = Math.round(t * 0.9); })();
 let MODE = 'share', MOCK = [];
 const MIN_LEFT = () => MODES[MODE].mins * 60;
 function drawMock(){
@@ -793,7 +820,8 @@ function renderStart(){
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · First term</span><h2>Chemistry for Monday’s Science paper</h2>
   <p class="lede">Four chapters: atoms and the periodic table, bonding, displacement reactions and salts. Work through each chapter tab from left to right, then try the school mock.</p></div>
   <div class="stack" style="margin-top:20px">
-  <div class="card"><h3>How to use each chapter</h3><div class="plan">
+<div class="card"><h3>Your textbook chapters and where they are</h3><p class="note">Every sub-section of your textbook chapters is covered. Open the tab, then the Learn page, and look for the card with that name.</p><div style="overflow-x:auto"><table class="rt"><thead><tr><th>Textbook</th><th>Where to find it</th></tr></thead><tbody><tr><td><b>Ch 4 · 4.1 The periodic table</b></td><td>Atoms tab: inside an atom, isotopes, electronic configuration, the periodic table, Groups I, VII, VIII, transition elements</td></tr><tr><td><b>4.2 More about the periodic table</b></td><td>Atoms tab: card 4.2</td></tr><tr><td><b>Ch 5 · 5.1 Chemical bonding</b></td><td>Bonding tab: Forming ions</td></tr><tr><td><b>5.2 Covalent bonding</b></td><td>Bonding tab: Covalent bonding</td></tr><tr><td><b>5.3 Ionic bonding</b></td><td>Bonding tab: Ionic bonding, writing formulae</td></tr><tr><td><b>5.4 Structures and properties of covalent and ionic substances</b></td><td>Bonding tab: properties of ionic compounds, simple molecular, giant covalent, metallic</td></tr><tr><td><b>Ch 6 · 6.1 Describing chemical reactions</b></td><td>Displacement tab: card 6.1</td></tr><tr><td><b>6.2 Displacement reactions</b></td><td>Displacement tab: reactivity series, displacement rule, experiments, redox, halogens</td></tr><tr><td><b>Ch 7 · 7.1 What are salts?</b></td><td>Salts tab: acids, bases and alkalis, what is a salt, general equations, solubility rules</td></tr><tr><td><b>7.2 How are salts prepared?</b></td><td>Salts tab: Methods A, B and C, hydrated salts</td></tr></tbody></table></div></div>
+    <div class="card"><h3>How to use each chapter</h3><div class="plan">
     <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords examiners look for. Use them in your answers.</div>
     <div><b>2 · Diagrams</b>Practise drawing these from memory, especially dot-and-cross diagrams.</div>
     <div><b>3 · Worked</b>Try the question first, then tap <i>Next step</i> to check each line.</div>

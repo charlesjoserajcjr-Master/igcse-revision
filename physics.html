@@ -26,6 +26,7 @@
 .tabarrow:hover{border-color:var(--accent);color:var(--accent)}
 .tabarrow[hidden]{display:none}
 .qgroup{font-family:var(--display,inherit);font-size:1.05rem;margin:18px 0 -6px;color:var(--accent,inherit)}.qgroup .muted{font-weight:400;font-size:.85rem;color:var(--muted,inherit)}
+.rt{border-collapse:collapse;font-size:.92rem}.rt th,.rt td{border:1px solid var(--line);padding:6px 10px;text-align:left}.rt th{background:var(--accent-soft)}
 </style>
 <title>Physics Term Exam Pack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -576,8 +577,63 @@ const DRILLS = {
   ]
 };
 
+/* ---------- textbook sub-sections added (Term 1 portion: Ch 9 to Ch 11) ---------- */
+CH.density.learn.push(
+  { h: '9.2 Densities of solids, liquids and gases', list: ['Different materials have different densities. ==Solids== are usually the densest. ==Gases== have ==very low densities==.', 'In a ==solid or liquid== the particles are ==close together==, so a lot of mass fits in a small volume.', 'In a ==gas== the particles are ==far apart==, so there is very little mass in each cm³.', 'When a gas is ==heated== it expands. The ==mass stays the same== but the ==volume increases==, so the ==density decreases==.', 'Water is unusual: ==ice (0.92 g/cm³) is less dense than liquid water (1.00 g/cm³)==, so ice floats.', '==1 g/cm³ = 1000 kg/m³==.'], table: [['Material', 'Density (g/cm³)', 'State'], ['air', '0.0012', 'gas'], ['pine wood', '0.5', 'solid'], ['oil', '0.8', 'liquid'], ['ice', '0.92', 'solid'], ['water', '1.00', 'liquid'], ['aluminium', '2.7', 'solid'], ['iron', '7.9', 'solid'], ['copper', '8.9', 'solid'], ['mercury', '13.6', 'liquid'], ['gold', '19.3', 'solid']] }
+);
+CH.density.quiz.push(
+  { q: 'Why is the density of a gas much lower than the density of a solid?', o: ['gas particles are heavier', 'gas particles are far apart', 'gas particles are larger', 'gas has more mass'], a: 1, w: 'The particles of a gas are ==far apart==, so there is little mass in each cm³.' },
+  { q: 'A gas is heated in a sealed balloon that can expand. What happens to its density?', o: ['it increases', 'it decreases', 'it stays the same', 'it becomes zero'], a: 1, w: 'The volume increases and the mass stays the same, so the density ==decreases==.' },
+  { q: '1 g/cm³ is the same as…', o: ['10 kg/m³', '100 kg/m³', '1000 kg/m³', '1 000 000 kg/m³'], a: 2, w: '==1 g/cm³ = 1000 kg/m³==.' }
+);
+CH.density.exam.push(
+  { q: 'Explain why the density of air is much less than the density of iron.', m: 3, p: ['The particles in air (a gas) are ==far apart==', 'The particles in iron (a solid) are ==close together==', 'So the same volume of iron has ==much more mass==, and density = mass ÷ volume'] },
+  { q: 'A balloon of air is heated and expands. Explain what happens to the density of the air in the balloon.', m: 2, p: ['The mass stays the same but the ==volume increases==', 'density = mass ÷ volume, so the density ==decreases=='] }
+);
+
+CH.thermal.learn.push(
+  { h: '10.1 Heat and temperature', list: ['==Temperature== tells you ==how hot== something is. It is measured in ==°C== with a thermometer.', '==Heat== (thermal energy) is ==energy transferred because of a temperature difference==. It is measured in ==joules (J)==.', 'Temperature is linked to the ==average kinetic energy== of the particles. Hotter means the particles move ==faster==.', 'Energy always flows from the ==hotter== object to the ==colder== object, until they reach the ==same temperature== (thermal equilibrium).', 'A ==large bath of warm water== can hold ==more thermal energy== than a ==small cup of hotter water==. Temperature and heat are ==not the same thing==.'] },
+  { h: '10.2 Energy conservation', list: ['Energy ==cannot be created or destroyed==. It can only be ==transferred== from one store to another.', 'The ==total energy stays the same==: energy in = useful energy out + wasted energy out.', 'Example: a ==lamp== transfers electrical energy to ==light== and ==thermal energy==.', 'Example: a hot drink cools. The energy is ==transferred to the cup and the air==, so it is not lost.', '==Efficiency = useful energy out ÷ total energy in × 100 %==.'], f: 'efficiency = useful energy out ÷ total energy in × 100 %' },
+  { h: '10.3 Heat dissipation', list: ['==Dissipation== means energy ==spreading out== into the surroundings.', 'Dissipated energy is ==wasted== because it is ==not useful== any more and is hard to collect again.', 'Examples: friction in a machine, a hot engine, a warm phone or lamp.', 'To ==reduce== dissipation: ==lubricate== moving parts, ==insulate== buildings and kettles.', 'To ==increase== dissipation where it is wanted: ==heat sinks with fins== in computers, radiators.'] },
+  { h: '10.5 Cooling by evaporation', list: ['==Evaporation== happens at the ==surface== of a liquid at ==any temperature==. The ==fastest, most energetic particles escape== as vapour.', 'The particles left behind have a ==lower average kinetic energy==, so the liquid ==cools down==.', 'Examples: ==sweating== cools the body, a wet cloth on a hot forehead, alcohol feels cold on the skin.', 'Evaporation is ==faster== with a ==higher temperature==, a ==larger surface area==, ==moving air== (wind) and ==dry air== (low humidity).', '==Boiling== is different: it happens ==throughout== the liquid, ==only at the boiling point==, with bubbles.'] }
+);
+CH.thermal.quiz.push(
+  { q: 'Heat is measured in…', o: ['°C', 'joules', 'watts', 'newtons'], a: 1, w: 'Heat (thermal energy) is measured in ==joules==. Temperature is in °C.' },
+  { q: 'Energy cannot be created or destroyed. This is the law of…', o: ['conduction', 'conservation of energy', 'convection', 'reflection'], a: 1, w: 'The ==conservation of energy==.' },
+  { q: 'When a liquid evaporates, which particles escape from the surface?', o: ['the slowest', 'the fastest', 'only the heaviest', 'all of them at once'], a: 1, w: 'The ==fastest== (most energetic) particles escape.' },
+  { q: 'Why does sweating cool the body?', o: ['sweat is cold', 'the most energetic particles escape and the rest have less energy', 'sweat adds water', 'it blocks the Sun'], a: 1, w: 'The fastest particles escape, so the ==average energy of the remaining liquid falls==.' },
+  { q: 'A lamp transfers 100 J of electrical energy and gives out 5 J as light. What is its efficiency?', o: ['5 %', '20 %', '95 %', '100 %'], a: 0, w: '5 ÷ 100 × 100 = ==5 %==. The rest (95 J) is wasted as thermal energy.' }
+);
+CH.thermal.exam.push(
+  { q: 'State the difference between heat and temperature.', m: 2, p: ['Temperature is ==how hot== something is (°C); it relates to the average kinetic energy of particles', 'Heat is ==energy transferred== because of a temperature difference (joules)'] },
+  { q: 'Explain why a wet towel on a hot forehead cools the person.', m: 3, p: ['The ==most energetic particles escape== from the water surface (evaporation)', 'The remaining water has a ==lower average kinetic energy== so it cools', 'Energy is taken from the ==body== so it cools'] },
+  { q: 'A kettle transfers 2000 J of electrical energy. 1800 J heats the water. Calculate the efficiency and state what happens to the rest of the energy.', m: 3, p: ['efficiency = ==useful ÷ total × 100==', '1800 ÷ 2000 × 100 = ==90 %==', 'The other 200 J is ==dissipated== (wasted as thermal energy to the surroundings)'] },
+  { q: 'State two ways of reducing the dissipation of thermal energy from a house.', m: 2, p: ['==Insulate== the roof and walls / double glazing', 'Draught-proof / ==reflective foil== (any two)'] }
+);
+
+CH.sound.learn.push(
+  { h: '11.1 Sound production', list: ['All sounds are made by ==vibrations== (back-and-forth movement).', 'Examples: a ==guitar string==, a ==drum skin==, ==vocal cords==, a ==tuning fork==, a ruler twanged on a desk.', 'The vibrating object pushes the ==air particles== next to it. This disturbance travels away as a ==sound wave==.', 'When the vibration stops, the ==sound stops==.'] },
+  { h: '11.2 Sound waves and waveforms', list: ['A sound wave is a ==longitudinal wave==: the particles vibrate ==parallel== to the direction the wave travels.', 'Regions where the particles are squashed are ==compressions== (high pressure). Regions where they are spread out are ==rarefactions== (low pressure).', 'A microphone and ==oscilloscope== show a ==waveform==: a graph of the sound against ==time==.', '==Amplitude== (height of the wave) gives the ==loudness==. ==Frequency== (waves per second, in Hz) gives the ==pitch==.', '==Period T = 1 ÷ f== is the time for one complete wave.'], f: 'T = 1 ÷ f     v = f × λ' },
+  { h: '11.3 Drawing waveform graphs', list: ['Draw ==time on the x-axis== and ==displacement (or pressure) on the y-axis==. Draw a smooth wave.', '==Louder sound==: the ==same shape but taller== (bigger amplitude).', '==Quieter sound==: the same shape but ==shorter==.', '==Higher pitch==: ==more waves in the same time== (waves closer together).', '==Lower pitch==: ==fewer waves== in the same time (waves further apart).', 'To find the period read the time for ==one complete wave==, then use ==f = 1 ÷ T==.', 'Example: 4 waves in 0.02 s gives T = 0.02 ÷ 4 = 0.005 s and ==f = 200 Hz==.'] },
+  { h: '11.4 Sound wave interference', list: ['When two waves ==overlap== their ==displacements add up==. This is ==interference== (superposition).', '==Constructive interference==: ==crest meets crest==. The waves are in step and the amplitude is ==bigger==, so the sound is ==louder==.', '==Destructive interference==: ==crest meets trough==. The waves are out of step and ==cancel==, so the sound is ==quieter or silent==.', 'Two loudspeakers playing the same note give ==loud and quiet places== in a room.', '==Noise-cancelling headphones== make a sound wave that is ==out of step== with the noise, so the two cancel.'] }
+);
+CH.sound.quiz.push(
+  { q: 'What produces all sounds?', o: ['light', 'vibrations', 'magnets', 'heat'], a: 1, w: 'All sounds come from ==vibrations==.' },
+  { q: 'On an oscilloscope, a louder sound of the same pitch shows a wave that is…', o: ['taller', 'closer together', 'further apart', 'shorter'], a: 0, w: 'Louder means larger ==amplitude==: a ==taller== wave.' },
+  { q: 'On an oscilloscope, a higher pitch of the same loudness shows…', o: ['a taller wave', 'more waves across the screen', 'fewer waves across the screen', 'a flat line'], a: 1, w: 'Higher pitch means higher ==frequency==: ==more waves== in the same time.' },
+  { q: 'Two sound waves meet crest to crest. What happens?', o: ['the sound is louder', 'the sound is quieter', 'there is silence', 'the pitch changes'], a: 0, w: '==Constructive interference==: bigger amplitude, ==louder==.' },
+  { q: 'Two sound waves meet crest to trough with equal amplitudes. What happens?', o: ['the sound is louder', 'the waves cancel', 'the pitch rises', 'nothing changes'], a: 1, w: '==Destructive interference==: the waves ==cancel==.' }
+);
+CH.sound.exam.push(
+  { q: 'Describe how a guitar string produces a sound that reaches your ear.', m: 3, p: ['The string ==vibrates==', 'It pushes the ==air particles== to make compressions and rarefactions', 'The ==sound wave travels through the air== to the ear'] },
+  { q: 'A waveform shows 5 complete waves in 0.050 s. Calculate the period and the frequency.', m: 3, p: ['period = 0.050 ÷ 5 = ==0.010 s==', 'f = ==1 ÷ T==', '==100 Hz=='] },
+  { q: 'Describe how the waveform on an oscilloscope changes when a note becomes louder and higher in pitch.', m: 2, p: ['It becomes ==taller== (larger amplitude)', 'There are ==more waves across the screen== (higher frequency)'] },
+  { q: 'Explain how noise-cancelling headphones reduce unwanted noise.', m: 3, p: ['They make a sound wave of the ==same amplitude== as the noise', 'It is ==out of step== (crest meets trough)', '==Destructive interference== cancels the noise'] }
+);
+
 /* School-format mock: marks and time follow the school paper (Science 100 marks / 1 h 30; CS 80 marks / 2 h) */
 const MODES = { share:{label:'Your share of the Science paper', marks:33, mins:30, sec:true}, full:{label:'Every Physics question', marks:null, mins:42, sec:true} };
+(() => { const t = Object.values(CH).reduce((s, c) => s + c.exam.reduce((a, q) => a + q.m, 0), 0); MODES.full.mins = Math.round(t * 0.9); })();
 let MODE = 'share', MOCK = [];
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const MIN_LEFT = () => MODES[MODE].mins * 60;
@@ -637,7 +693,8 @@ function renderStart(){
   return `<div class="chhead fadein"><span class="eyebrow">Grade 8 IGCSE · First term</span><h2>Physics for Monday’s Science paper</h2>
   <p class="lede">Your Physics portion is three chapters: Density, Transfer of thermal energy and Sound. Work through each chapter tab from left to right, then try the school mock.</p></div>
   <div class="stack" style="margin-top:20px">
-  <div class="card"><h3>How to use each chapter</h3>
+<div class="card"><h3>Your textbook chapters and where they are</h3><p class="note">Every sub-section of your textbook chapters is covered. Open the tab, then the Learn page, and look for the card with that name.</p><div style="overflow-x:auto"><table class="rt"><thead><tr><th>Textbook</th><th>Where to find it</th></tr></thead><tbody><tr><td><b>Ch 9 · 9.1 What is density?</b></td><td>Density tab: What density means, regular solid, irregular solid, density of a liquid</td></tr><tr><td><b>9.2 Densities of solids, liquids and gases</b></td><td>Density tab: card 9.2</td></tr><tr><td><b>9.3 Why objects float or sink</b></td><td>Density tab: Floating and sinking</td></tr><tr><td><b>Ch 10 · 10.1 Heat and temperature</b></td><td>Thermal tab: card 10.1</td></tr><tr><td><b>10.2 Energy conservation</b></td><td>Thermal tab: card 10.2</td></tr><tr><td><b>10.3 Heat dissipation</b></td><td>Thermal tab: card 10.3</td></tr><tr><td><b>10.4 How is thermal energy transferred?</b></td><td>Thermal tab: conduction, convection, radiation, surfaces and radiation, experiments</td></tr><tr><td><b>10.5 Cooling by evaporation</b></td><td>Thermal tab: card 10.5</td></tr><tr><td><b>Ch 11 · 11.1 Sound production</b></td><td>Sound tab: card 11.1 and What sound is</td></tr><tr><td><b>11.2 Sound waves and waveforms</b></td><td>Sound tab: card 11.2, speed of sound, pitch and loudness</td></tr><tr><td><b>11.3 Drawing waveform graphs</b></td><td>Sound tab: card 11.3 and the oscilloscope diagram</td></tr><tr><td><b>11.4 Sound wave interference</b></td><td>Sound tab: card 11.4</td></tr></tbody></table></div></div>
+    <div class="card"><h3>How to use each chapter</h3>
     <div class="plan">
       <div><b>1 · Learn</b>Read the notes. <mark class="kw">Yellow words</mark> are the keywords examiners look for. Use them in your answers.</div>
       <div><b>2 · Diagrams</b>Practise drawing and labelling these from memory.</div>
