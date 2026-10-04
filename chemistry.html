@@ -773,8 +773,24 @@ CH.displace.exam.push(
   { q: 'State three signs that a chemical reaction has taken place.', m: 3, p: ['A ==colour change==', 'A ==gas== is given off / a ==precipitate== forms', 'A ==temperature change== / light or flame (any three)'] }
 );
 
+/* ---------- Long Test style questions (original), Chemistry ---------- */
+CH.atoms.learn.push({ h: 'Exam skill: atom tables and group trends', list: ['From the number of ==protons== you know the number of ==electrons== (an atom is neutral). Write the electron shells, for example ==2,8,3==.', '==Group number== = electrons in the ==outer shell==. ==Period number== = ==number of shells==. Example: 2,8,3 is ==Group III, Period 3==.', '==Ion charge==: metals ==lose== outer electrons (positive ions: Group I +1, II +2, III +3). Non-metals ==gain== (Group VII −1, VI −2).', 'The central part of the atom is the ==nucleus==. Only the ==protons and neutrons== are in it.', '==Describe a trend== with a direction: “the melting point ==decreases== from lithium to rubidium”. To ==predict==, continue the pattern: the next value is lower still.', '==Down a group the atoms have more shells==, the outer electron is ==further from the nucleus== and is ==lost more easily==, so reactivity of metals ==increases==.'] });
+CH.atoms.exam.push(
+  { q: 'An atom of an element has 13 protons. It has 3 electron shells. Complete these statements: (a) the name of the central part of the atom, (b) the number of electrons, (c) the group number, (d) the period number, (e) the charge on the ion formed.', m: 5, p: ['==nucleus==', '==13== electrons', 'Group ==III== (3 outer electrons: 2,8,3)', 'Period ==3== (3 shells)', '==3+== (it loses 3 electrons)'] },
+  { q: 'The melting points of the Group I elements are: lithium 181 °C, sodium 98 °C, potassium 64 °C, rubidium 39 °C. (a) Describe the trend. (b) Predict the melting point of caesium, which is below rubidium. (c) Caesium is below potassium. Compare the reactivity of caesium and potassium with water.', m: 3, p: ['The melting point ==decreases== down the group', 'A value ==below 39 °C== (about 29 °C)', 'Caesium is ==more reactive== (reacts more violently) than potassium'] },
+  { q: 'Chlorine, bromine and iodine are in Group VII. Explain how their positions in the periodic table depend on their electronic configurations.', m: 2, p: ['They are all in ==Group VII== because they have ==seven outer electrons==', 'They are in ==different periods== because they have ==different numbers of shells== (3, 4 and 5)'] }
+);
+CH.bonding.exam.push(
+  { q: 'Magnesium oxide, MgO, is an ionic compound. (a) Describe the changes in the electronic configurations of magnesium (2,8,2) and oxygen (2,6) when they form ions. (b) Explain why solid magnesium oxide does not conduct electricity.', m: 4, p: ['Magnesium ==loses two electrons== to form Mg²⁺ (2,8)', 'Oxygen ==gains two electrons== to form O²⁻ (2,8)', 'In the solid the ==ions are fixed in the lattice== and cannot move', 'So there are ==no free charged particles== to carry the current'] },
+  { q: 'Draw a dot-and-cross diagram for a molecule of CH₃Br. Show only the outer electrons. Explain how you drew it.', m: 2, p: ['Carbon shares a pair with ==each of three hydrogens and one bromine== (four shared pairs)', 'Bromine has ==three non-bonding pairs== (8 outer electrons); each hydrogen has 2 electrons'] },
+  { q: 'Draw a dot-and-cross diagram for a molecule of ammonia, NH₃, showing outer electrons only.', m: 2, p: ['Nitrogen shares ==three pairs== with three hydrogen atoms', 'Nitrogen also has ==one lone pair== (8 outer electrons); each hydrogen has 2'] }
+);
+CH.displace.exam.push(
+  { q: 'The table shows the melting points of three halogens: chlorine −101 °C, bromine −7 °C, iodine 114 °C. (a) Describe the trend. (b) Predict the physical state of astatine at room temperature and explain. (c) Compare the reactivity of fluorine and chlorine.', m: 4, p: ['The melting point ==increases== down the group', 'Astatine is a ==solid== at room temperature', 'Its melting point is ==higher than iodine== (above 114 °C)', 'Fluorine is ==more reactive== than chlorine (reactivity decreases down the group)'] }
+);
+
 /* School-format mock: marks and time follow the school paper (Science 100 marks / 1 h 30; CS 80 marks / 2 h) */
-const MODES = { share:{label:'Your share of the Science paper', marks:33, mins:30, sec:true}, full:{label:'Every Chemistry question', marks:null, mins:68, sec:true} };
+const MODES = { lt:{label:'Long test share (school format)', marks:17, mins:20, sec:true}, share:{label:'Your share of the Science paper', marks:33, mins:30, sec:true}, full:{label:'Every Chemistry question', marks:null, mins:68, sec:true} };
 (() => { const t = Object.values(CH).reduce((s, c) => s + c.exam.reduce((a, q) => a + q.m, 0), 0); MODES.full.mins = Math.round(t * 0.9); })();
 let MODE = 'share', MOCK = [];
 const MIN_LEFT = () => MODES[MODE].mins * 60;

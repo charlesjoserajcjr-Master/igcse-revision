@@ -1833,8 +1833,25 @@ for (const k in EXTRA2) if (CH[k]) CH[k].exam.push(...EXTRA2[k]);
 const T1 = { plantnut: ['Ch 1.1', 'Photosynthesis'], transp: ['Ch 1.2', 'Water and mineral salts in plants'], excr: ['Ch 2', 'Excretion'], ecosys: ['Ch 13.3', 'Carbon cycle and ecosystems'], human: ['Ch 13.4', 'Climate change and human influences'] };
 Object.keys(CH).forEach(k => { if (!T1[k]) delete CH[k]; else { CH[k].code = T1[k][0]; CH[k].name = T1[k][1]; } });
 
+/* ---------- Long Test style questions (original), Biology ---------- */
+CH.plantnut.learn.push({ h: 'Exam skill: data tables with an anomalous result', list: ['An ==anomalous result== is one that ==does not fit the pattern== of the others. Circle it and say that it does not follow the trend.', 'Check ==every row== for a pattern first: for example the volume of oxygen should ==increase steadily== as the light gets brighter.', 'A ==rate per hour== from a 10 minute result: ==multiply by 6== (10 minutes × 6 = 60 minutes).', 'Photosynthesis happens in the ==chloroplasts==. They contain the green pigment ==chlorophyll==.'] });
+CH.plantnut.exam.push(
+  { q: 'A student measures the volume of oxygen made by a plant in 10 minutes at five light intensities (1 to 5): 5, 10, 8, 20, 25 cm³. (a) Circle the anomalous result and explain your choice. (b) Calculate the rate of oxygen production at light intensity 4 in cm³ per hour.', m: 3, p: ['==8 cm³== is anomalous', 'It ==does not fit the pattern== (it should be about 15, between 10 and 20)', 'rate = 20 × 6 = ==120 cm³/hour=='] },
+  { q: 'State the name and the function of the structures labelled (a) chloroplast, (b) cell wall and (c) permanent vacuole in a plant cell.', m: 3, p: ['==Chloroplast==: where photosynthesis takes place (contains chlorophyll)', '==Cell wall==: strengthens the cell and supports the plant (made of cellulose)', '==Permanent vacuole==: contains cell sap and keeps the cell firm (turgid)'] }
+);
+CH.transp.exam.push(
+  { q: 'The diagram of a tree shows water entering the roots and leaving the leaves. (a) Name the cells where water enters the plant. (b) Name the tissue that carries water up the stem. (c) Name the small pores in the leaves where water vapour leaves. (d) Name the process of water loss from the leaves.', m: 4, p: ['==Root hair cells==', '==Xylem==', '==Stomata==', '==Transpiration=='] },
+  { q: 'Describe how water enters a plant and name one other substance that enters with the water.', m: 3, p: ['Water enters the ==root hair cells== by ==osmosis==', 'It moves into the ==xylem== and up the plant', '==Mineral salts== (mineral ions) enter with the water'] },
+  { q: 'Explain why a plant loses water faster on a hot, windy day.', m: 2, p: ['A ==higher temperature== makes the water evaporate faster from the leaves', '==Wind== blows away the water vapour, so more water vapour diffuses out through the stomata'] }
+);
+CH.excr.learn.push({ h: 'Exam skill: the excretory system diagram', list: ['==Kidneys==: ==filter the blood== and remove ==urea==, excess water and salts to make urine.', '==Ureters==: tubes that ==carry urine from the kidneys to the bladder==.', '==Bladder==: ==stores urine== until it is released.', '==Urethra==: the tube that ==carries urine out of the body==.', 'For “name and give the function” questions, write ==both== the name and the job to earn both marks.'] });
+CH.excr.exam.push(
+  { q: 'The diagram shows the human excretory system. State the name and function of (a) the organ that filters blood, (b) the tubes that carry urine from the kidneys, (c) the organ that stores urine, (d) the tube that carries urine out of the body.', m: 8, p: ['==Kidney==', 'filters the blood and removes ==urea== and excess water', '==Ureter==', 'carries urine from the kidney to the ==bladder==', '==Bladder==', '==stores urine== until it is full', '==Urethra==', 'carries urine ==out of the body=='] }
+);
+
 /* School-format mock: marks and time follow the school paper (Science 100 marks / 1 h 30; CS 80 marks / 2 h) */
-const MODES = { share:{label:'Your share of the Science paper', marks:33, mins:30, sec:true}, full:{label:'Every Biology question', marks:null, mins:60, sec:true} };
+const MODES = { lt:{label:'Long test share (school format)', marks:17, mins:20, sec:true}, share:{label:'Your share of the Science paper', marks:33, mins:30, sec:true}, full:{label:'Every Biology question', marks:null, mins:60, sec:true} };
+(() => { const t = Object.values(CH).reduce((s, c) => s + c.exam.reduce((a, q) => a + q.m, 0), 0); MODES.full.mins = Math.round(t * 0.9); })();
 let MODE = 'share', MOCK = [];
 const MIN_LEFT = () => MODES[MODE].mins * 60;
 function drawMock(){
